@@ -1,0 +1,653 @@
+Received: from SJ0PR20MB6343.namprd20.prod.outlook.com (2603:10b6:a03:4ed::22)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Wed, 13 Sep 2023
+ 18:55:33 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=es/aTwrL9uk0Zmx4MpM7LOt+Y5+HH3852gfpfOPv31f89LDcbcizhVVDTXAvVFV1muVHTXY7d7d7A6AxuwRid/8UrkGNMh2hldEPd718jlGHL2xVdvZnHFvoOHdw592RDbdaPyM2U+UiCumzBuYQOSpCIpmpQ6ToBBhs7Tl03OmCPolP1wqKbnmuDDb9lYWch4PZPRiNoU/J3QfHrBB4YqJi8gjS/0wigRA0pBOb4eWwnSsDhrO0GFF8f31LA2kH3sgPjVFXNDl/T3jbMUbxxegZSJeOHHepYxug1eSZN80HHuZM0zu1hu5ETbxTrky+w7YYUnnNVN424Eqv9AfVRg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c1stP27Os9/HV0CrNS5rfs99YRBBC6yRfDl95tI8rFs=;
+ b=nKixZbSs6jCMI46rcLu8llQZXPQE8upLGSh0av9cqSsPfd15QN8OMXCihwGCLYMO1iLfju/KG0XaesM2ObE/j9Md2CVHSKuyf/A7DNeHmWDYElRdVsbq9UrPt9YezSutSfHa0KcMxRxv2i2zLXU0lbvgrbsIet9eC0+DPuuftbGpPc8yH6rNXx0kf9TrM0bxAryZq6RsEUu2OGGfbKBEGo3kkJQGexNWEfr40c3JqgiZQQvoyA4UVzfFOA0DAop1qvnlHdOh7IW6SZxJgVuRZzZ2BlHCK9YlaGYjrOf1lLtyZh/NhjYSVvfN7Ma2fSv+QxPD56NvOkbgkgKtr6d5xw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.166.43) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.s.kohls.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=s.kohls.com; dkim=pass (signature was verified)
+ header.d=s.kohls.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounce-28_html-555468654-884524-6249496-28057@bounce.s.kohls.com]
+ dkim=[1,1,header.i=@s.kohls.com] dmarc=[1,1,header.from=kohls.com])
+Received: from AM0PR01CA0103.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:10e::44) by SJ0PR20MB6343.namprd20.prod.outlook.com
+ (2603:10b6:a03:4ed::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34; Wed, 13 Sep
+ 2023 18:55:31 +0000
+Received: from AMS0EPF000001B6.eurprd05.prod.outlook.com
+ (2603:10a6:208:10e:cafe::8a) by AM0PR01CA0103.outlook.office365.com
+ (2603:10a6:208:10e::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.19 via Frontend
+ Transport; Wed, 13 Sep 2023 18:55:30 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.166.43)
+ smtp.mailfrom=bounce.s.kohls.com; dkim=pass (signature was verified)
+ header.d=s.kohls.com;dmarc=pass action=none
+ header.from=s.kohls.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of bounce.s.kohls.com does
+ not designate 209.85.166.43 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.166.43;
+ helo=mail-io1-f43.google.com;
+Received: from mail-io1-f43.google.com (209.85.166.43) by
+ AMS0EPF000001B6.mail.protection.outlook.com (10.167.16.170) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Wed, 13 Sep 2023 18:55:29 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:C89B1D26BC7DB1B87E8F823CB18131233F4CAACC72A784DE5657311CF5870B43;UpperCasedChecksum:9229575BE598F875FCD6F93C1378A173FE00A5D3A07AABDEC850CDDC4F7DE33D;SizeAsReceived:5940;Count:30
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7927952ca67so4305939f.2
+        for <tobinsilvestre@outlook.com>; Wed, 13 Sep 2023 11:55:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694631329; x=1695236129;
+        h=x-forwarded-for:message-id:list-id:reply-to:mime-version
+         :list-unsubscribe-post:list-unsubscribe:date:subject:to:from
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c1stP27Os9/HV0CrNS5rfs99YRBBC6yRfDl95tI8rFs=;
+        b=Vtxb1ClOaedp+V4iyAg/3ZiJKoruin1bo2oxBgdsNT5PQF0bAXxJEnpb6LEjHksmhl
+         x4npqtVKDGyM9ZhHn1TjxLNe8N2bXb6tMLviA9byS4FVZ3ddTV6l7DITZtBrp2v9ce1s
+         ZHXm2EhvQh4Vtt1rR+7eu5LgQn2oi1/rEhlaiGXkQBMdeiY4RYq55tyW8o+6iVzZfw19
+         5jJZZBAI6JBgLAm7LXkxML1tfaDqH2Mdswp62btiGkAEXePJprR/e3GEUbaHoaB5hKX8
+         NBRbZMdC55FhSUzoYldaUjB43w3n/wwwbzrDYa7YNCSnOqZmGSCftrnpYXNsaNlG2el4
+         Md3w==
+X-Gm-Message-State: AOJu0YyZ9nNCm8Lnh1dh7Y208/LI7esut7KPQwhWLccRyat0rwtkY70H
+	GLi3LUc1kkuyeFkt7yIQHYu61wxvKAj/xR0cFA==
+X-Google-Smtp-Source: AGHT+IGQM9RI58mHpdsXJjk/gOmmO8R5dROe09k22eWfQNyFGmT/k68pPP5I6oonkZ6nlr7UjT3IWBespI1Wb3Qq5xNjgUuX7lw=
+X-Received: by 2002:a92:c26f:0:b0:34c:ecc8:98eb with SMTP id h15-20020a92c26f000000b0034cecc898ebmr4195072ild.28.1694631329026;
+        Wed, 13 Sep 2023 11:55:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694631329; cv=none;
+        d=google.com; s=arc-20160816;
+        b=xuIKItIcoLU33M9ZstyOUho5xtTUvgtARPZhkSXJV0m6bcfCdebmwoCzhRbl8KazYF
+         9sUxJ1NxzNBRXfuREcZNwPNszDnA2yBQozYpQeh767u+JrFqEA/nl1bBtyaSmX4cPyjr
+         kvWNFL7DaM2WTqmDLweYhHbowj0YAWlvkdp7DmhNcplwPtxzAwd4TvVVMbm80Gn55jIn
+         /UeP4k+DiQ/fEub+V7owXtOSuPszMdoSR7eK/FeJtr2UOQQRHYxpYHUySL4Yti7X8hfx
+         RFg6vRgWEZl/CbygTw2SAi3KJCCIoBZz7wp7AhoHtbWq2gyNRXVgjHatxXboGD3DDAQh
+         aVMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=message-id:list-id:reply-to:mime-version:list-unsubscribe-post
+         :list-unsubscribe:date:subject:to:from:dkim-signature;
+        bh=c1stP27Os9/HV0CrNS5rfs99YRBBC6yRfDl95tI8rFs=;
+        fh=+F6wUBkr/gQIefBGgscKJMm1PN2pw/6gRSkSMNrZuso=;
+        b=l2H3/0r//JDb4/+sKjJ3AzCN4m+SRRwJ6RLKUzWwbl1+PkAz0Ty5TugJ3OiowQ50hf
+         J4S10btOJVpAkkwatnh3vCiMzFZEtioU4idbKLJ2LuzwZmkKvhdo3wcmwTCZVamLCErZ
+         RwQZtAQ44usmjRDaKSOgKBEvnrr8616kwtDEzHAOtRGsXBczzT+HlytJGebAoiMSMQbF
+         y2QXVvee7Y6tg4582xHXDYjmi8YXvc9K0sNbL/H8lYRdCLvNgB0i4vDWZpaqI1EuM1l+
+         st5TwKTf+wMEv6scDehTrwNys7fepYixbcwFnDBD0cgNFEi+uSBzmUosAe6EzDKM4okB
+         7Jew==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@s.kohls.com header.s=200608 header.b=ouNCbmJo;
+       spf=pass (google.com: domain of bounce-28_html-555468654-884524-6249496-28057@bounce.s.kohls.com designates 128.17.64.12 as permitted sender) smtp.mailfrom=bounce-28_HTML-555468654-884524-6249496-28057@bounce.s.kohls.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=kohls.com
+Return-Path: bounce-28_HTML-555468654-884524-6249496-28057@bounce.s.kohls.com
+Received: from mta49.s.kohls.com (mta49.s.kohls.com. [128.17.64.12])
+        by gmr-mx.google.com with ESMTPS id b9-20020a05663801a900b00430a46a98a8si1621090jaq.5.2023.09.13.11.55.28
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 Sep 2023 11:55:29 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-28_html-555468654-884524-6249496-28057@bounce.s.kohls.com designates 128.17.64.12 as permitted sender) client-ip=128.17.64.12;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@s.kohls.com header.s=200608 header.b=ouNCbmJo;       spf=pass
+ (google.com: domain of
+ bounce-28_html-555468654-884524-6249496-28057@bounce.s.kohls.com designates
+ 128.17.64.12 as permitted sender)
+ smtp.mailfrom=bounce-28_HTML-555468654-884524-6249496-28057@bounce.s.kohls.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=kohls.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=200608; d=s.kohls.com;
+ h=From:To:Subject:Date:List-Unsubscribe:List-Unsubscribe-Post:MIME-Version:
+ Reply-To:List-ID:X-CSA-Complaints:Message-ID:Content-Type; i=Kohls@s.kohls.com;
+ bh=c1stP27Os9/HV0CrNS5rfs99YRBBC6yRfDl95tI8rFs=;
+ b=ouNCbmJor6NG9JJJVzlOKv1J9368YM2YIz95DPmtp31eo4wlbUNSDhubFaOwTTlXyN4zqR7L0ccQ
+   4Nefc4lQItKqYo8HkjURH1UhUYTQB/cM4IVb2r39SRVaJsHh3NTaptL9ywA4/TDaH0NQ1CbS8YCf
+   PFZc8Bvsh/R96kUJApI=
+Received: by mta49.s.kohls.com id h082q02fmd4j for <tobinsilvestre034@sooners.us>; Wed, 13 Sep 2023 18:55:28 +0000 (envelope-from <bounce-28_HTML-555468654-884524-6249496-28057@bounce.s.kohls.com>)
+From: =?UTF-8?B?S29obOKAmXM=?=
+ <Kohls@s.kohls.com>
+To: <tobinsilvestre034@sooners.us>
+Subject: Complete this quick survey for a chance to win an awesome prize!
+Date: Wed, 13 Sep 2023 12:55:28 -0600
+List-Unsubscribe: <http://click.s.kohls.com/subscription_center.aspx?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWQiOiI2MjQ5NDk2IiwicyI6IjU1NTQ2ODY1NCIsImxpZCI6IjI4IiwiaiI6Ijg4NDUyNCIsImpiIjoiMjgwNTciLCJkIjoiNjAyMjIifQ.C4nk-6P5PLVR8-PBQ42QM1T6I_lfRYIhKXNe83FfFWs>, <mailto:leave-fd8116781a3c402029-fe1f117570600275731174-fec01c7871610679-fe871272716d007473-fef91678756103@leave.s.kohls.com>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+x-CSA-Compliance-Source: SFMC
+Reply-To: "Kohl's" <reply-fec01c7871610679-28_HTML-555468654-6249496-28057@s.kohls.com>
+List-ID: <6241319.xt.local>
+X-CSA-Complaints: csa-complaints@eco.de
+X-SFMC-Stack: 6
+x-job: 6249496_884524
+Message-ID: <7326bb10-ac86-43d7-b91f-dad3b03905d6@ind1s06mta1927.xt.local>
+Content-Type: multipart/alternative;
+	boundary="pRmAJ3AaCu0J=_?:"
+X-Forwarded-For: tobinsilvestre034@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 30
+X-MS-Exchange-Organization-ExpirationStartTime: 13 Sep 2023 18:55:30.1218
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 837c1c52-4300-4385-d40f-08dbb48b0047
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ AMS0EPF000001B6:EE_|SJ0PR20MB6343:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ AMS0EPF000001B6.eurprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/13/2023 6:16:15 PM
+X-MS-Office365-Filtering-Correlation-Id: 837c1c52-4300-4385-d40f-08dbb48b0047
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.166.43
+X-SID-PRA: KOHLS@S.KOHLS.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 2
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 18:55:29.9968
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 837c1c52-4300-4385-d40f-08dbb48b0047
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ AMS0EPF000001B6.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR20MB6343
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.1740889
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.005
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9910022)(9545005)(10170022)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPnv4iqCf5+tAno1Ztqy13CZWueDqcuE53LbRifD8FKGXQqF9mpEhlqBtuHlC40gvtpfXSNrlT6C0t+NPHdZM0dgazgznI7ELwKZbXKwq8Wi2MSO8wN9M5p/v3Z6+Iv76wZ2K6lT/2UxL4Wxj1KrMWs6KTKYMp4uS6cJAHf5EooozrN7AK20fmFFrf5gC0HCu1NOKKzgMAq08Q==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0wO0Q9MTtHRD0yO1NDTD0tMQ==
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?S1R5NWdiZUhDeHBlVkFnTGlvTXFENjBGZlFXNWtJUkZWaVpwaExqQWFTakZa?=
+ =?utf-8?B?RCtzcUo3TkNwZWNBN0dTOXNSWlluQ2V2ZGQwb2RvYU5leExUYmlFMTQ5cmMr?=
+ =?utf-8?B?VjA3UnpNUFFERTJiRnRzNjQvMDJvQ05PbEZZL0ZhWmdxQXdEV0thNk9TVWtP?=
+ =?utf-8?B?d1JDVUNidkRJb3RyQXNVUHZYOHNMSlRLK3NRSjNVd0xzM25PYjJTNUhaMDhv?=
+ =?utf-8?B?OUt5TU9HN3hGR2NZSno2M1Y0VVFIMFdvUlZiOEhyeklrOFNhUFdNc3BWaDM3?=
+ =?utf-8?B?SmphZzZweGJLa0xZRTZ5VFYvQUFYU2VnWmhMaFZQdlJ3ZEp4QTgvVXdBUmxs?=
+ =?utf-8?B?bjdFREVxWmNVUUZNVGhEMFhaUFRWWGNMaGVWN21LblNwZkV5MkhLckg4Mmpz?=
+ =?utf-8?B?RCt5enQxWWdiczJzM0Nhbzk2L0hjK2dEZE9pSm8wRCthL3RXaGl5anFqQlN0?=
+ =?utf-8?B?VHFtRjBTTWZLUjNxU3k4TGhRb2xFZGthNG52VG96blpIdVhNZHEvN1JRSFZZ?=
+ =?utf-8?B?cTBRZ2pWMkNURzBrM1lJRE1zaTFlRWZVY0JOak5DZldvRTM5enZhTytBQ2ww?=
+ =?utf-8?B?d0k4MUxoQ1lUNzk2R01mVjBmUy9OeXJFdWhTc0ZYdHltempFZzc1SlMxbWtq?=
+ =?utf-8?B?ckdYcmsyRmthcFllZ2VHMHBPNWxqdjAzelJMQzN6QkUvL1NCNUNVaFlTUGQx?=
+ =?utf-8?B?T3VHQ1ZrRWR2eDh3TTFFNjIzZDF1dVQvaXFPTHAwYWx6RkQvbElkclQ0Y0ps?=
+ =?utf-8?B?dlpoSmR0ZWs2RU00b0Y1Z2RSUi9GeThNWVl2WEZEaGJNRGIvNEIwaUx4dnVk?=
+ =?utf-8?B?aEZBZ2VncTdKc2d0WU1qUlM3S0I2Z0FkVnB4WGc0QmVWY053dTZZSnF5a0VM?=
+ =?utf-8?B?U2pDVkNob0lROEk1VWtMTzl4RmpDZzZXclhJaUptbm9JUmgzc21TMnhxblNE?=
+ =?utf-8?B?NFErTE5zU2E3d012VkJNVHNOakMreis1THc2Q09hczIwRzd1NzYrMHNlQVNZ?=
+ =?utf-8?B?aDMzQmw0YWRuMTlNQVJUeFM3aDduUDhpSXZlV3lUUHd4KytWQ1VRRnBKbFVn?=
+ =?utf-8?B?WGdoYUR6N1BqcjhrTmd0cW5jR3llRGZJd2VqNnc4NGRwMXppT1FJbS9mSkFr?=
+ =?utf-8?B?RzF2WStNVkVic1lnNmZucFN2RVV1ZGFPYTh0NHcweEZOTlVpTXZsOWZlUDJs?=
+ =?utf-8?B?SHpMZGhrUGVKMEpSK2VRNkF6RG5wSzlLZUR6TWNmYWh1R1RKSTJ1dnpyNjAw?=
+ =?utf-8?B?L1VJbFNJRFBpdEZ1OW8zSWg5VE11RGN0Z2lZU2VidlkwUTZYWkFCRjd5WWtZ?=
+ =?utf-8?B?L3hJMHVsOWhBSHU4Z1czQzhLZGxlZ3RqVjByM0dxdFVmZXkwYjJmQ1dhQzU3?=
+ =?utf-8?B?N3k5YjVYVzI4SUxQZmw0cE1LRXYxWVVoVVorbWZaUDVxaXdZMkhucTFmZjEr?=
+ =?utf-8?B?Y0IwT2pjaVRMUnRTV3dCVERmS1UwSWJBZEp3Vm9SSERRcXY4UHFmbXFWVXp3?=
+ =?utf-8?B?WVc5Vk40TEFFTmx4dFlpM1hyWWFoNUZoeEJBRkoxNXZQZHRiSzdJY05sNWxK?=
+ =?utf-8?B?akpybnVOalhwWGNCRGdKM2tXcStaeG0xaU1Nc1FRNVlkZzYyaEhIK2QzdXFB?=
+ =?utf-8?B?c1A1ZGpCd0hsNExKbDdqMk02SU9VTFlrc3VtVE1pYkk4MTd5MEI0czZ4WmFy?=
+ =?utf-8?B?eDRIQkpYdSt5eHl3WE1rYmd0WUpvYk04NlhmdjZFdHM5UjBSQlRGb2pXNjlZ?=
+ =?utf-8?B?TE1ZQnZHN0dVZDBVaHg4Nzl6TEtaVmNpUnBFY0ZZbmIxOW9PNUV6VXhlYjBl?=
+ =?utf-8?B?MUJucTUwaFF3RlpSTXgwM0JkcERLMnhCTXpnLzJNa3NoTHZmTE1UWTYrOE5F?=
+ =?utf-8?B?aG9wWTJwZllzUC9LckRnMEhrWXNMd3ZBT3Vlb1lPc1dxRTdrM2FXR3BQY25G?=
+ =?utf-8?B?VTR4US9FbnQ1S0NCQzRaZE9Kbmd3OWhoSVRXWnArTHV1b1BTRmJYTFZYUllr?=
+ =?utf-8?B?cGV1Uyt6cWdzTVFTdk12MWJkTUFOMmFqYlRLazdNT3ZaRnJsK1pOMlkvNmJ4?=
+ =?utf-8?B?dC9wUmRVUmE0NjZPdEhaUEpXVEIxRWhjZVBLcDhQNmxFbGliM3dOWkZRZVR1?=
+ =?utf-8?B?cXNLMElBNlVrSlp4ZTF3NHVzOEpxbDhPR2JodmFXdHdIMFNJTFQvaEpuRlRO?=
+ =?utf-8?B?b2plcDF4WEgvTWI2WExOb1lpTnRtZXRnN2FhV2d6T1hYeU5oVFRSVytZbUx6?=
+ =?utf-8?B?NGltZ0x0TnE0RWM2RFc2TnVEZG8ybitDelF0eHRFRFhzYUN3bGVnSUJrQWZE?=
+ =?utf-8?B?TEFLZWllU1RNNUp2elZHUlc4eHZ4ZGdWN2RJaDhkWDdLWWdYR2FJcUJ1NGRG?=
+ =?utf-8?B?Nk43OEVSV0Rzb0lVS29icGx2Z0JHdzdUT1ZFMnRxUEhQTElEMVptdG1udXcz?=
+ =?utf-8?B?MEVpcnhXRlc3Vkw1blNYcVJVMlltTzg4cVhwS0R0Z0Zsb0I3Z1A1ZzVjRStx?=
+ =?utf-8?B?S3Fzck42REJYTFdtcll3b2E3dEcyY09qNjUyWWlBN2N3R24wR2MxR241Y2lH?=
+ =?utf-8?B?d1h6N3N6NmFZS05tUEduSnB3SVlVdUwvK1dyaUdJd0Q5bDJhSDBkOWZvL3Nn?=
+ =?utf-8?Q?1xCbmx5+DxCs3LRA+fPi4w68jYfM=3D?=
+MIME-Version: 1.0
+
+--pRmAJ3AaCu0J=_?:
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+ 
+ 
+ 
+ 
+ 
+
+http://view.s.kohls.com/?qs=c7d8a30d277eed7ed10aff02582717a01ccd31c18aa3fd3b83850ca3fd037ebea944360e861bba74cd94fc7da760c7728339ea7b9419fe033c416db84cdd8a67678a7a9c989a1c7b08f671f96480cebb 
+
+ View in a browser
+  
+
+ 
+ 
+ 
+http://click.s.kohls.com/?qs=47ddd1a04d6cb609ed0f5f0a0f5706e46c529a7bb847ebe6b628bebdfea5863b6031502fe19fd64422afb6793ff24633fdf10797b140e926 
+
+http://click.s.kohls.com/?qs=47ddd1a04d6cb60914a03489dc1d79a7cce6d834dd40fdc2b19b400dae5743f4844a30d6b4544496d58b2253287829911673aa9b6da95092 
+
+http://click.s.kohls.com/?qs=47ddd1a04d6cb609c826b4d029c964ee84fe9fea0f5e02d954f0823eb23f8dced9c1acfe5ae35a213fb083ae9d808225c913c5925262043a 
+
+http://click.s.kohls.com/?qs=47ddd1a04d6cb609565ce4d19550743503312517a510c7c65166507ddf96f61e3301d9587c0c1df7e390f6822f6cf6ccb4e273f0afc07193 
+
+http://click.s.kohls.com/?qs=47ddd1a04d6cb6099cf5d8c34d85f4820dab87e07cb3a24ff5cb62683093da8452ed45dd82779205d19ca83db1320502e71c7a252d6827eb 
+
+http://click.s.kohls.com/?qs=47ddd1a04d6cb60913cc79a119e9374ae7bd749c6e303120fe2610602f3f2015474322f35112382b7502b964fa7e6b1b2edce1a34f1424ab 
+
+ 
+ 
+ 
+ 
+http://click.s.kohls.com/?qs=47ddd1a04d6cb6092bda054c7600c135110296394a4046c4428ebbca533c213f5ac56b0b8961497e6448baf5fa47371822956295de9a7f90 
+
+http://click.s.kohls.com/?qs=47ddd1a04d6cb6099d39c77a7e6cd97eb7438e9ddddb066d55502486cdd91b80fd9be35d9ad3dc4e12daaa0af606a374318781e9195023b3 
+
+
+ 
+ 
+ 
+http://click.s.kohls.com/?qs=47ddd1a04d6cb60964dfea823255614b676b76f016729994b539be3e8e7ed30fb74fd6365b7e30c9e76d5c48636dba80ce8a374781802d60 
+
+http://click.s.kohls.com/?qs=06ecfe9951b13936e05a23e8382a02e8b3c5cec8cd8d7c4878fc5bdb03096b4e01e13ae9d00ed50c4c3c6659ced04772848648eb8508888b 
+
+http://click.s.kohls.com/?qs=06ecfe9951b13936439ed3d995839abe173a5ed850760ef3f3d52b3993fdbf348676a6af0d3e842dce5fec5f58e73062d2dbd3b80bbcbc0f 
+
+http://click.s.kohls.com/?qs=06ecfe9951b13936b08544d8290012bee2b87eb0d170593c10ede92632aa78cddea09e1cf33bf387f1124a04c2ef3a6771bbcb8875956cc5 
+
+http://click.s.kohls.com/?qs=47ddd1a04d6cb609ed0f5f0a0f5706e46c529a7bb847ebe6b628bebdfea5863b6031502fe19fd64422afb6793ff24633fdf10797b140e926 
+
+http://click.s.kohls.com/?qs=06ecfe9951b13936b1389dc1ece93cc9465b63eba66d72701838d89bb19993a7c9eb559825741be603b523f3fad9755bdad3f41858974cfc 
+
+http://click.s.kohls.com/?qs=06ecfe9951b13936dacc400f8d76e3e4891791c0bbaeb8607aaa3d42db4b8ce7873985df82ea70ec735af944465998a70a32fda8a7708068 
+
+http://click.s.kohls.com/?qs=06ecfe9951b139368b2e3ca35ae6d5ac516851dd77d82d982908128a2c76f8adfc37506cfffa5aa35126d0ee1b4d01ab8a5ec7e20d5c8967 
+
+http://click.s.kohls.com/?qs=06ecfe9951b1393695af7937f8ee6d92059557589b401461b58699b652b7e728e99c54a7c7e3da79ffca8d84558cde773714537f178cfa77 
+
+http://click.s.kohls.com/?qs=06ecfe9951b1393600fb1989cf941aabeab5699c9be3fef8fac49f8404aa59e75742d7e59375eeec44c27c743945f884b477a3f66988d354 
+
+http://click.s.kohls.com/?qs=06ecfe9951b1393693bd900d9ba953d1e96b48dbbb2671092249cdd53f661f802924c5b48e4df1df726a94772c993e8eafacb076dc14303f 
+
+http://click.s.kohls.com/?qs=06ecfe9951b13936e1365a7af6354ed25d986f7d2ba9ac499e5e3819ddb8e79d25f27a7e96338d41cdbebb6092c4b2216774c586eaeaec93 
+
+ 
+ 
+ 
+  
+ 
+ 
+ 
+
+ This mailbox is unattended, so please do not reply to this message. If you no longer wish to receive emails from Kohls.com,
+ 
+http://click.s.kohls.com/?qs=06ecfe9951b139367738d85786edf3418cc310325e199972f0b1affb32ad783a2bfb0d37fdc4618153a5c45260728308197f7befd339ce90222f84b735e396fb 
+unsubscribe 
+ here. Please allow up to seven days for your email address to be removed. For other inquiries, visit cs.kohls.com, or write us at Kohl&apos;s, Attention: Customer Service, PO Box 3120, Milwaukee, WI 53201-3120.
+ 
+
+http://click.s.kohls.com/?qs=06ecfe9951b139365b9b798e1884a6110d1e816f919b061a6e703e780b7d2e210837822b7e1c8f9dbb63273f5c15a33e7ef7a8b8af925f43 
+
+ Find a Kohl&apos;s
+   
+ near you!
+ 
+
+
+ Was this forwarded from a friend? 
+http://click.s.kohls.com/?qs=06ecfe9951b139362b9bbad31a40356a7e6156e7131006334590110bbe01f5176ec19e24aedb4e880e305bf87a9624c54c8b66ac974ffae6 
+Click here to sign up  and we&apos;ll send Sale Alerts straight to your inbox. You&apos;ll also save 15% on your next purchase in store or online!
+ 
+
+ 
+ 
+
+ 
+
+ 
+ 
+
+
+--pRmAJ3AaCu0J=_?:
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+<!-- Open --><!-- ADD THE Doctype_Head_Template SNIPPET HERE --><!-- End Open --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div style="font-size:0; line-height:0;">
+        <img src="http://click.s.kohls.com/open.aspx?ffcb10-fec01c7871610679-fe291d717763057a711370-fe871272716d007473-ff951678-fe1f117570600275731174-fef91678756103&amp;d=60222&amp;bmt=0" width="1" height="1" alt="">
+    </div>
+    <table role="presentation" width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="center" valign="top">
+              <!-- Pre-Header -->
+                <table role="presentation" width="640" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="center" valign="top">
+                            
+          <!-- ADD THE Doctype_Head_Template SNIPPET HERE -->
+  
+  <table width="1" height="1" cellpadding="0" cellspacing="0" border="0">
+    &nbsp; <tr><td style="font-size:0px; line-height:0px;">
+    &nbsp; &nbsp; <img src="https://mi.kohls.com/p/up/88954bbbbcab3c0e/o.gif?mi_u=555468654&amp;mi_ecmp=88452428057" width="1" height="1" alt="" aria-hidden="true">
+    &nbsp; </td></tr>
+    </table>
+
+<table border="0" cellspacing="0" cellpadding="0" align="left">
+ <tr>
+
+    <td align="left" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#666666;padding-bottom:20px;padding-top:10px;">
+      <a href="http://view.s.kohls.com/?qs=c7d8a30d277eed7ed10aff02582717a01ccd31c18aa3fd3b83850ca3fd037ebea944360e861bba74cd94fc7da760c7728339ea7b9419fe033c416db84cdd8a67be2e44d551f9f8f90a61ad93058e631e" style="color:#666666!important;text-decoration:underline" target="_blank">
+            View in a browser
+            </a>
+        </td> 
+    </tr>
+ </table>
+                        </td>
+                    </tr>
+                </table>
+                <!-- End Pre-Header -->
+
+                <!-- Header -->
+                <table role="presentation" width="640" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="center" valign="top">                            
+                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+        <td align="center" valign="top">
+            <!-- Logo (s) -->
+            <table width="640" border="0" align="center" valign="top" cellpadding="0" cellspacing="0" height="51">
+                <tr>
+                    
+                        <!-- Kohl's Rewards Logo                              <td width="640" align="left" valign="top" style="font-size:0%;">       <table border="0" cellpadding="0" cellspacing="0" width="640" height="83">         <tr>           <td width="640" align="left" valign="top" style="font-size:0%;">             <a href="http://kohls.com" alias="Nav_LoyaltyLogo">               <img src="https://images.am.kohls.com/is/image/kohlsprod/35995819_1?scl=1" width="640" height="83" border="0" style="display:block;" title="" alt="Kohl's Rewards">             </a>           </td>         </tr>       </table>     </td>-->
+                    
+                        <!-- Kohl's Logo-->
+                        <td width="640" align="left" valign="top" style="font-size:0%;">
+      <table border="0" cellpadding="0" cellspacing="0" width="640" height="51">
+        <tr>
+          <td width="640" align="left" valign="top" style="font-size:0%;">
+            <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609c6190c35e09136b3c5aaed6a9bea413e19ce08ca9e758f81c5693d763b6314ed04ac044947fa709b677c6eda37826a6c">
+              <img src="https://images.am.kohls.com/is/image/kohlsprod/35371844_root?scl=1" width="640" height="51" border="0" style="display:block;" title="" alt="Shop Kohl's">
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+                    
+                </tr>
+            </table>
+            <!-- Navegation Bar -->
+            <table border="0" cellpadding="0" cellspacing="0" width="640" align="center" role="presentation">
+                <tr>
+                    <td>
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" style="display: block; width: 167px; height: 92px;" width="167" height="92">
+                            <tr>
+                                <td>
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb60974ab6939d5724182a1606ba7a7b23a29c8e7291df3adec7298acce9bc929b7ac9bf9b2621a3a5671e57a6ddcf7fbf58e">
+                                        <img src="https://images.am.kohls.com/is/image/kohlsprod/35371844_5?scl=1" width="167" height="92" border="0" style="display: block; width: 167px; height: 92px;" alt="Shop Home">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" style="display: block; width: 115px; height: 92px;" width="115" height="92" role="presentation">
+                            <tr>
+                                <td>
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609d44aaf3c1dacab06e798a520bd48145b2dce2c9d0b3dec305220397c65f934b47b96fa9f267c3ddcb47f5290c89be477">
+                                        <img src="https://images.am.kohls.com/is/image/kohlsprod/35371844_4?scl=1" width="115" height="92" border="0" style="display: block; width: 115px; height: 92px;" alt="Shop Womens">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" style="display: block; width: 88px; height: 92px;" width="88" height="92" role="presentation">
+                            <tr>
+                                <td>
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609587ea662cb672c838a0c0cb24fc9d645fe99747e4a91167fd00d0a93a2ddc104ed759a364279896f97f69646effa0422">
+                                        <img src="https://images.am.kohls.com/is/image/kohlsprod/35371844_3?scl=1" width="88" height="92" border="0" style="display: block; width: 88px; height: 92px;" alt="Shop Mens">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" style="display: block; width: 83px; height: 92px;" width="83" height="92" role="presentation">
+                            <tr>
+                                <td>
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609274fce757dd6ba97a4f1775908913325979f9533784b3f0b50e00c62b4c2ee2b7e945352435a1f24a8117da79b8be03b">
+                                        <img src="https://images.am.kohls.com/is/image/kohlsprod/35371844_2?scl=1" width="83" height="92" border="0" style="display: block; width: 83px; height: 92px;" alt="Shop Kids">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table align="left" border="0" cellpadding="0" cellspacing="0" style="display: block; width: 187px; height: 92px;" width="187" height="92" role="presentation">
+                            <tr>
+                                <td>
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609935448dbedb3207da863011e87a7ebf98579f1d5e069b8ce01dd464151f3cc8bf6c3142ae4abaeae6609a01094a22aa6">
+                                        <img src="https://images.am.kohls.com/is/image/kohlsprod/35371844_1?scl=1" width="187" height="92" border="0" style="display: block; width: 187px; height: 92px;" alt="Shop Clearance">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>                            
+                        </td>
+                    </tr>
+                </table>
+                <!-- End Header -->
+
+                <!-- Body -->
+                <table role="presentation" width="640" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="center" valign="top">                           
+                            <!-- Main Content -->
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+        <td align="center" valign="top">
+            <!-- Main Content -->
+            <table width="640" border="0" cellpadding="0" cellspacing="0" align="center" role="presentation">
+                <tr>
+                    <td align="center" valign="top">
+                      
+             <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb6099ff76eccfe2821b152a5b915636070951878d8d3c6918d13a99a403ec8730bd637023d61b3b189e63f160bfe5645a7f2" style="display: block"><img alt="congrats! you've been selected to participate in a brief survey. as a thank you for taking the survey you'll have a chance to win a prize. get started now." style="border: 0; display: block;" border="0" src="https://mi.kohls.com/p/rp/ecd729a3e791b14e.png?mi_u=555468654&amp;mi_ecmp=884524_2023913"></a>
+                      
+                      
+                      
+                    </td> 
+                  
+                  
+                </tr>
+              <tr>
+              
+              
+              
+              <td align="center" valign="top">
+                      
+                      <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb60935b2b8810aa0c48c0f933e191ec2ccba14fc7ae3ab31458de64828d7583277b684ff4f0ff1e3ef2b5bd2b4fad297183e" style="display: block"><img alt="click here for the official rules." style="border: 0; display: block;" border="0" src="https://mi.kohls.com/p/rp/6833e4c9be1df441.png?mi_u=555468654&amp;mi_ecmp=88452428057"></a>
+                      
+                      
+                    </td> 
+              
+              
+              </tr>
+            </table>  
+        </td>
+    </tr>
+</table>
+                        </td>
+                    </tr>
+                </table>   
+                <!-- End Body -->      
+              
+                <!-- Bottom -->
+                <table role="presentation" width="640" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="center" valign="top">                           
+                            <!-- Bottom -->
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+        <td align="center" valign="top">            
+            <table align="center" width="641" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                <tr>
+                    <td align="center" valign="top">
+                        <table bgcolor="#f0f0f0" width="640" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                            <tr>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609413ad5c9911ea8f5549126dd028dc468c0da182f6a06559d78e2ab25dbfce21b8115f0654fff64f2c15cf936d3bf1cf8" target="_blank">
+                                      <img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_11?scl=1" width="146" height="56" alt="Kohl's Card" border="0" style="display:block;"></a>
+                                </td>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb60931fc1404dd3ce4eb24478991c5d5e474b1a0bb7a80489d030a6cc04d4d41cb9e9a878d16b3a2a9644896035e1ec946dc" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_10?scl=1" width="181" height="56" alt="Customer Service" border="0" style="display:block;"></a>
+                                </td>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609d02db9fc3f946f1b05c36e233c869ccbe11dcf709892db44962ba762c51fa58ab6c2475de1eed8afb3dd9ae3237cdc2a" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_9?scl=1" width="136" height="56" alt="Find A Store" border="0" style="display:block;"></a>
+                                </td>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb6097cf83e011b6962270fc20024cb0aa76d2c434b71e43131ba5d204bd90ddb53f561bf4a2d47f8c869b42db71fb00f3074" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_root?scl=1" width="177" height="56" alt="Kohl's Coupons" border="0" style="display:block;"></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" valign="top">
+                        <table width="640" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                            <tr>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609b483c4cbf07a001161e38f513e0bc6c492f06054e1fe192c5d86a537e1f87c9d38ea95b79fb7b9c0ce1135bb85b4d03b" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_20x?scl=1" width="146" height="66" alt="" border="0" style="display:block;"></a>
+                                </td>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609c8885bd5eea0845c3df48fe8a7334d449a03f0e2d4d3ea60caf13a8341931ae8657ebcf53c4d6e7c5966490812e798e1" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_21x?scl=1" width="64" height="66" alt="Facebook icon" border="0" style="display:block;"></a>
+                                </td>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb6094c5c218865d117edf023b5cd0d587e89c6c743fe094450ea991f24fce26ca4ca5e05bef70512d44fb487d4692213066b" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_22x?scl=1" width="64" height="66" alt="TikTok icon" border="0" style="display:block;"></a>
+                                </td>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609d52d22ada507f19ed16682308e0dc00a92a835d1ffd4db66c47cfa9987a088020175e564f8264abf752e587eeb40a1cb" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_23x?scl=1" width="72" height="66" alt="Pinterest icon" border="0" style="display:block;"></a>
+                                </td>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb60952f7e73d93b1ed9af69b0c2e5fa3e49c8fb2fd01fe43702442f6571f2efba2e2f733af0e5722c010c6e6d900fdb02513" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_24x?scl=1" width="83" height="66" alt="Instagram Icon" border="0" style="display:block;"></a>
+                                </td>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609a0af7faa70df0f94e014c8c9c5c6eaf635536bce84edc8b5d850790ef656391619029cd1294b2386defa920b08a0f470" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_1x?scl=1" width="211" height="66" alt="Youtube Icon" border="0" style="display:block;"></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" valign="top">
+                        <table width="640" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                            <tr>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb60967669592fe4ee02048155527b00ed7d415a86807e9ed087b9fc573ac575a12864f4f8b3a2b036c45204e222ccb719716" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_25?scl=1" width="332" height="100" alt="Apple | Download on the App Store Icon" border="0" style="display:block;"></a>
+                                </td>
+                                <td align="center" valign="top">
+                                    <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb6094bb5f8e81533ce701e7e91edb10465b8bea6de08b1fdf191ea789c5ca8b8c5287bb362e12686cac072cd1d5213b4b985" target="_blank"><img src="https://images.am.kohls.com/is/image/kohlsprod/35995924_2?scl=1" width="308" height="100" alt="Android, Google Play and the Google Play logo are tradedmarks of Google Inc. App Store is a service mark of Apple Inc" border="0" style="display:block;"></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" valign="top" style="color:#999999;text-decoration:none;font-size:11px;border-top:1px #cccccc solid;">
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>                            
+                        </td>
+                    </tr>
+                </table>               
+                <!-- End Bottom --> 
+              
+                <!-- Disclosure -->
+                <table role="presentation" width="640" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="center" valign="top">                           
+                            <!-- Disclosure -->
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+        <td align="center" valign="top">
+            <table align="center" width="641" border="0" cellspacing="0" cellpadding="0" style="padding-top:10px;" role="presentation">
+                <tr>
+                    <td align="center" valign="top">
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>                          
+                        </td>
+                    </tr>
+                </table>               
+                <!-- End Bottom -->  
+
+              
+
+                <!-- footer -->
+                <table role="presentation" width="640" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="center" valign="top">                           
+                            <!-- Footer -->
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+        <td align="center" valign="top">
+            <table align="center" width="640" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                <tr>
+                    <td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#999999;font-weight:normal">
+                        <br>
+                        This mailbox is unattended, so please do not reply to this message. If you no longer wish to receive emails from Kohls.com,
+                        <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb609246b2a77777fcf1e31d0756a1644b8fbf86e3a82d9c7c74f38f7084b0e69258921417918227d6cab3352ded8318ba46967f72f87dd78e245" style="color:#666666;">unsubscribe</a>
+                        here. Please allow up to seven days for your email address to be removed. For other inquiries, visit cs.kohls.com, or write us at Kohl's, Attention: Customer Service, PO Box 3120, Milwaukee, WI 53201-3120.
+                        <br>
+                        <br>
+                        <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb6090a4459faa098b2143a440ac73d796d4e367d082f2a43c8da4f60db151aef5d9ade84cd0ef7f6ab00c4ed24f9c96d160d" style="color:#666666;">
+                           Find a Kohl's
+                        </a> 
+                        near you!
+                        <br>
+                        <br>
+                        Was this forwarded from a friend? <a href="http://click.s.kohls.com/?qs=47ddd1a04d6cb60917b96a7d39412b42166b05f066c8f75651da7ce57c1c64ab6d85e65d85303d0ba39f9200a7693250102ad3a53ab05e13" style="color:#666666;">Click here to sign up</a> and we'll send Sale Alerts straight to your inbox. You'll also save 15% on your next purchase in store or online!
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>                            
+                        </td>
+                    </tr>
+                </table>               
+                <!-- End footer -->
+            </td>
+        </tr>
+        <!-- ** Force Gmail App to stay in Desktop view -->
+        <tr>
+            <td align="center" class="block--hide" style="font-size:1px; line-height:1%; mso-line-height-rule:exactly; min-width:640px;" valign="top" width="640">&nbsp;</td>
+        </tr>
+        <tr>
+            <td align="center">
+                
+            </td>
+        </tr>
+    
+
+</body></html></table>
+
+--pRmAJ3AaCu0J=_?:--

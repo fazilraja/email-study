@@ -1,0 +1,832 @@
+Received: from BL3PR20MB6748.namprd20.prod.outlook.com (2603:10b6:208:3bf::12)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Mon, 2 Oct 2023
+ 17:34:40 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=nGN/igDhu/0eyC146fiSOAgyiC/L9YACYf6RioIf7ldGFGuzvXjB1v2tUuaP3FaHSgMaUe3J1MMFwhSw/JGVZNhqQfCA9X5znxivwnO4YcXyHWfhOiz/05SuFtvahJKzEBQ1HEgwq0V01p7t5ksxcSmm1IWF+miOkiKrQQBi4y6ueeuvrq0OoXZmYLuIeFET59FUBlRlqsoyacMV/yqqdVt2F/AKXIEnp0ZjXA5puMxld4HZ8LUjlpeUn8A2Wb7ToKnpGkYahCgTtUybsSrfCfwrI0tAOMUUIFcnKr4IyskoaYEuhC0FdClaRvL+z8ijh9CqvAoLoYmu14KlAMGcow==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0YcVr5AF2I1UJT9gCvG2iZPYinywLREOgqbOYP5Ctv8=;
+ b=YcnZMzUXMs9cbXatbavZXNWwKvPyW4KiNAqYDzvSg3GmCxuv1hRkp7SxEmmHGwoZphB0G/COVHYrgvo7BDhhLGRnzpjkJV1Tha3w/2pyvMDihr8ooQKRrWVnmXK7mG4yoCRqaJBR63s3/qmZztINotnghGkkkHWNTrySX0rTIV/GPW40BDAEGlczT/3KJjT7WeGuRTctFbiGu2n6ocAy35QEnY/DZHPSXYuIdarWJQ66GGcxJVN+X9sZkJeKQojd0eXDwQvzr4IFVpxvcoUxUGrNLKaznrcZbZlHkla4EkOy8OPAx1/17ZDDCowhZuga/bN9DofLl6mZhBG0vSav3Q==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.216.49) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=response.oracle-mail.com; dmarc=pass (p=reject sp=reject
+ pct=100) action=none header.from=oracle-mail.com; dkim=pass (signature was
+ verified) header.d=oracle-mail.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounces@response.oracle-mail.com]
+ dkim=[1,1,header.i=@oracle-mail.com] dmarc=[1,1,header.from=oracle-mail.com])
+Received: from DM6PR02CA0168.namprd02.prod.outlook.com (2603:10b6:5:332::35)
+ by BL3PR20MB6748.namprd20.prod.outlook.com (2603:10b6:208:3bf::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.30; Mon, 2 Oct
+ 2023 17:34:37 +0000
+Received: from DS3PEPF000099D8.namprd04.prod.outlook.com
+ (2603:10b6:5:332:cafe::4) by DM6PR02CA0168.outlook.office365.com
+ (2603:10b6:5:332::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.31 via Frontend
+ Transport; Mon, 2 Oct 2023 17:34:37 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.216.49)
+ smtp.mailfrom=response.oracle-mail.com; dkim=pass (signature was verified)
+ header.d=oracle-mail.com;dmarc=pass action=none
+ header.from=oracle-mail.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of response.oracle-mail.com
+ does not designate 209.85.216.49 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.216.49;
+ helo=mail-pj1-f49.google.com;
+Received: from mail-pj1-f49.google.com (209.85.216.49) by
+ DS3PEPF000099D8.mail.protection.outlook.com (10.167.17.9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.14 via Frontend Transport; Mon, 2 Oct 2023 17:34:37 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:D658878A940CBD4303E4A73B98C8D9D114F57CF2D17CBBE790AD2BCA1B059FC4;UpperCasedChecksum:A31C4054C7AFF55F30BCCB58098EC964FCB20ECA2F43C48F2A73F28B7A4BEF0A;SizeAsReceived:5162;Count:27
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-27777174297so11292a91.3
+        for <tobinsilvestre@outlook.com>; Mon, 02 Oct 2023 10:34:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696268077; x=1696872877;
+        h=x-forwarded-for:mime-version:date:subject:to:reply-to:from
+         :message-id:dkim-signature:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0YcVr5AF2I1UJT9gCvG2iZPYinywLREOgqbOYP5Ctv8=;
+        b=B++kwhqszRGJVLRYG4SedP0s2kDnyYizd7tlUinsPyFfFGE9wC3v7QsVKJdv2JTROq
+         LsXZmtzmhtKOJYmt0Gz4VLUgrq8+F/BBasfZzccuvlJW6dwnRj0qLcZnZAHrTEihO7oT
+         N6sVC8ovr/y4/OxlsGrHpFaWTtFfW5l8WggJyercU+O8EMnmEYtkjyYOXjBJZ7+BlNRC
+         D21IeZKknMmGxG9lOXPw5MYYwF/Q/EixIdOTkJaEwUFu9FZFbbrhwvSUszMT5oyCIFPR
+         CA0Zo7zAU4PC7S31XUMxTtwsKCjuR94b0l03SIsiE3NXIuD6yu6yYfEfEcpSuaWW57UV
+         bP7Q==
+X-Gm-Message-State: AOJu0YxMG+XgOu+FS2iPi1ENb/JXP3eDOJM8YDwBeHzViWVhu09avIpx
+	e1ygAo9CWp4NJDYkuNRmRtYc3bembbMG/89I1Q==
+X-Google-Smtp-Source: AGHT+IG0C77RYNRScs14Nj6gYvCUcv4PvQfOglAX7pE0PgEbPMPrlwSK+6F8Ys8aJAnfmYvIFi38NGH2tNbRk5yzVOIzzkbS978=
+X-Received: by 2002:a17:90a:7345:b0:271:8195:8 with SMTP id j5-20020a17090a734500b0027181950008mr9395740pjs.36.1696268077341;
+        Mon, 02 Oct 2023 10:34:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1696268077; cv=none;
+        d=google.com; s=arc-20160816;
+        b=JTJak77x5eOMhCna+yLd6UYiVOsUhSilGDnryNtinPOucFhBdZ8hmSB5qntIy1f2FI
+         Yd55u095WXYTJ7u1OREB1B9aVpSeHV3ACPDjElZTKm+HF7C9O5UR96vFL4kxbvzykajo
+         adm2JjFUipoOC6APeZVQgi5WqRMm3mNkiViNLrMjxfdsdzDQcu/ejbdg2JeN7UNz6eHi
+         qYaA4Z7OJvW5VfChnK+ixHZYiNIUm+AhSxFSeb/UJ4HImAZSj/X3jRAquBxAqygyOXri
+         USzDLSJWho3g02Cr2WLdAC6FOyZv4o4PupCyqGPxfJpRigBWcxthvBObH0T6xx3WVNtF
+         mOEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=mime-version:date:subject:to:reply-to:from:message-id
+         :dkim-signature;
+        bh=0YcVr5AF2I1UJT9gCvG2iZPYinywLREOgqbOYP5Ctv8=;
+        fh=roxu1gXY5nSMDK/GPYXunlLw6Id3o6SfISrnPIuQJdA=;
+        b=vE1jDF40rXmpG1dqMCSQrOpr/fiRIFap2HGKPFwV1vpgy77VPit9o1/WLaR7u7pBEF
+         uF60SEebSWAmvNbwg6GIOXK1MM/Sir0qd/iiu8HCeFmoeHH/BVoPHp+EF3LVn6EhrHLw
+         hSjL0DEGvDFk8dobSiVu5ngx/TvWCG3ndON/IGo3sBLM0qCQgz1R7tTbSCmPPR+QsCkP
+         hzbFonamOAJJEZxlfqHAvFnumXTiF6Wfl24+ezaOW1vCtSP23A/7uTX1ziLwemcZRc+X
+         Rz8KecqvGPv3v/gOQ0g9WRpg/+te1NYGL4Lxo8z/Cvwb07S1DN71g0eS0g3J8jI1qWB+
+         cw8Q==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@oracle-mail.com header.s=dk1024-2012 header.b="FU6dM/N/";
+       spf=pass (google.com: domain of bounces@response.oracle-mail.com designates 142.0.162.54 as permitted sender) smtp.mailfrom=bounces@response.oracle-mail.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=oracle-mail.com
+Return-Path: bounces@response.oracle-mail.com
+Received: from mail02.response.oracle-mail.com (mail02.response.oracle-mail.com. [142.0.162.54])
+        by gmr-mx.google.com with ESMTPS id ng11-20020a17090b1a8b00b0026b48d26530si1204639pjb.3.2023.10.02.10.34.37
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 10:34:37 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounces@response.oracle-mail.com designates 142.0.162.54 as permitted sender) client-ip=142.0.162.54;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@oracle-mail.com header.s=dk1024-2012 header.b="FU6dM/N/";
+       spf=pass (google.com: domain of bounces@response.oracle-mail.com
+ designates 142.0.162.54 as permitted sender)
+ smtp.mailfrom=bounces@response.oracle-mail.com;       dmarc=pass (p=REJECT
+ sp=REJECT dis=NONE) header.from=oracle-mail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=dk1024-2012; d=oracle-mail.com;
+ h=Message-ID:From:Reply-To:To:Subject:Date:MIME-Version:Content-Type;
+ i=replies@oracle-mail.com;
+ bh=0YcVr5AF2I1UJT9gCvG2iZPYinywLREOgqbOYP5Ctv8=;
+ b=FU6dM/N/7qjjxeDfkSb7ZoFJxwgi3eCEoPOLQJ4Ld5H40ZgCmko2sHig9SoFNKPwfAgVrbD9SUx8
+   3YqgQOjSOgzdiniYzeG0MIAbKwYLcsXt7nwxJ1mQHFtqy3T7E/jXkDOgWeSgW8I36A+wGREwScHw
+   jZZsqHvBVim+ZceFF9U=
+Received: from c03snj318 (10.50.136.32) by mail02.response.oracle-mail.com id h3bvio32dh4l for <tobinsilvestre026@sooners.us>; Mon, 2 Oct 2023 17:34:36 +0000 (envelope-from <bounces@response.oracle-mail.com>)
+Message-ID: <1e454e0518b44eda925d0c4570897aa0@1973398186>
+X-Binding: 1973398186
+X-elqSiteID: 1973398186
+X-elqPod: 0x21D08863C745073163D34BE0C79B139AC486138E417EA2383AC1764C08224397
+X-cid: 499652-247705
+From: Oracle Academy <replies@oracle-mail.com>
+Reply-To: Oracle Academy <replies@oracle-mail.com>
+To: tobinsilvestre026@sooners.us
+Subject: Attend our free webinar with NetSuite Founder Evan Goldberg
+Date: Mon, 02 Oct 2023 13:34:36 -0400
+Content-Type: multipart/alternative; boundary="=-7tUoqyhbwZqS1KHChrVK1w=="
+X-Forwarded-For: tobinsilvestre026@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 27
+X-MS-Exchange-Organization-ExpirationStartTime: 02 Oct 2023 17:34:37.7891
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 79e73818-aea0-42e1-e069-08dbc36dd9e9
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DS3PEPF000099D8:EE_|BL3PR20MB6748:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DS3PEPF000099D8.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 10/2/2023 2:19:06 PM
+X-MS-Office365-Filtering-Correlation-Id: 79e73818-aea0-42e1-e069-08dbc36dd9e9
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.216.49
+X-SID-PRA: REPLIES@ORACLE-MAIL.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Oct 2023 17:34:37.5548
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79e73818-aea0-42e1-e069-08dbc36dd9e9
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS3PEPF000099D8.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR20MB6748
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.0277366
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6838.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPlKKV/3w9K4MdikQNj0gLCfbp2/AuAx9hhBzgP6siqmlxsiUwevYd9sjJIl3mzBt+lA+Qmm3SvI2ZeJqZo3drMjL+cQHrVgUK851MaKu4EB60BeDUuKO3Ytj6b0t4pkK2H2jX129qZXny3jSFF7ArlIPiICU2wqusnsuPDFd0Cts4K220EujU6m/kT7nTSiK6M=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?S3d5eERGRWd3cDA5aTlzTVlINUtISEpKNi9Ud01mYTMrNHdqWi9MU0pKOTdm?=
+ =?utf-8?B?cjhNNHhzSEJvbWFLVTZkZFdyR0t2UmVZSmRoaHBkV2lDQWd6MXJyK21udzBr?=
+ =?utf-8?B?VDVWNzBieFBvVGdCRnJUWnFubFM4aW05dEZKZmNkcnFQamN5YTROWmNibnJT?=
+ =?utf-8?B?QUhFRldTaTE2dnErN2p6WmVRQzgzMEwxZk4wRkRnZFB4a256aGdYbEJ3Vy9s?=
+ =?utf-8?B?RDk5YklZazhpOXAyUFk5RjR5T3JOZnlLN2FFUTUxY296MWphSG9UclhTTmlM?=
+ =?utf-8?B?bHUzYzYzODhKS2dlRVpCTUhRMVBDM0xXYmdOSnZGRU4xcmZMbm5IVTlUano5?=
+ =?utf-8?B?YVh6Lysvb3NMSkllS080RW92WWhaSTRVYkVGMFdZdHROWnJXdXdqSWEzbU5w?=
+ =?utf-8?B?YjRkR3E2azFKdjljSVYvTzhhQ01meVNGa2VJZnNPYUhwbnc3QUtVcmlIVk1K?=
+ =?utf-8?B?UDZuOUQ4alI3NEZCTXl0d25qdFc2U2JPQ0FCeTFVZVhYSWZKRTd2SElSbldy?=
+ =?utf-8?B?OU95WElsQnlvaE9LWlJaSlArTnBxRVd0YnJXcFpRbXJUR3Y1NWRtblpKTFpi?=
+ =?utf-8?B?QXhTUkRvbnNrOE1IeDUySjFyelArSk9YQ1BCWm52dFdHTE4wNjk1L1lpM0lP?=
+ =?utf-8?B?Vkt0NENDYmZ6RWlMenZFd3prMHFZVHZ0Z0NYUi9lVXNiYXFzanAzNUQvRFpj?=
+ =?utf-8?B?YXNtcW15R0FwUVUvcHlnbEZnZmFYWG9UQk03U2pFYXdlY3N6U0RnOG9GT1c4?=
+ =?utf-8?B?MWNWZVNjSlhuWjVBditUdmJoVjV5Q28yL2JvU3ZwZmtaazdsbHlpRTdQenRZ?=
+ =?utf-8?B?U08rREI2RXI5QzV2T0VQREZHNzdoeDFSWGdzZStTYkRCRXRxMnZVVmQrZXpz?=
+ =?utf-8?B?ZDNRTFQ3RjgvbDFBVWVGOVYyU0N0Y0NmMFlibFZOdTUxeTlyZnlDRXE4dnlX?=
+ =?utf-8?B?d3Rna1FUQU9MMi9ZSDhNa1RLSStFZ1c2UXI5MnRaNXZ3R20yOGZ2anZSTENH?=
+ =?utf-8?B?aWpCRlVYZWkwaFpLeURvZXlqMmMweStvZDV3YWtxUndRZzJxdFczUUFnVnlq?=
+ =?utf-8?B?elMvSWxUSytxaWM2UGNia2RLLzh5TUNZZzdqVHlQUExKcit5RUgvUUlSdlZw?=
+ =?utf-8?B?L2JkdjYrdDY0c3BkekoxdCtOVENybWo5dERnMUFGaDE0WjNuT1dRZytwK2Fl?=
+ =?utf-8?B?ZTFBNGNiNTRHRk42SDhqZ3N4dlpSby8rVE5uWEZHWThlQWkvaVpnSis5bXBG?=
+ =?utf-8?B?M3hxS2RYeitSeDVES3dGSXhpMG9LWlRjdk9JOVBacUEwczk0M0drM2FhdE12?=
+ =?utf-8?B?UE1Bem53NldKZUxJWWRHMlZUUVgrV0lTZmhEWmZKalVRV1IrWjh0aUY0S3Nh?=
+ =?utf-8?B?eTZUcXRQaTBjTm1IckpyRDZWdnRxY0FkNUpOTXYvNXo0VWRWUU5iRW5VVHVm?=
+ =?utf-8?B?MHBlZ2tnTGxWSmF4MWEvMmpCUEthbmNYN1U5dkZDUE51TlJtOXJvcm9sZzRX?=
+ =?utf-8?B?amF3WGE4aC9lVzV2SzdtQ0Q2cmwwTWpJRU13V29FbjFtOHVvdVFuQUdteWxh?=
+ =?utf-8?B?L3YzWE1kbHpieGhGQy9POW9Rdk5OMERFTFFmVlBPTTBEZzZUMEk4VjYvZDhC?=
+ =?utf-8?B?d0IxTnQ2dy92aERkVDV5dXNwbllRMVNmU3B6SHoxdkNoZjlONlk3VitoNk1L?=
+ =?utf-8?B?N0JyTHE4S0dEQTdiR21obCtscEZEZTVGUHZTempTTFc4NDVNT3dFRFR2dnFQ?=
+ =?utf-8?B?R0FpYnhyWnZXVXJ0SUpmdmtGajN5OFVlek1nMkRXblN3TC9NM1pYK1o1ZS91?=
+ =?utf-8?B?SjB4RTRLMXNtMG05S0VuSzFSUEZBWDNWck9JajRXSkVIN3VZWXJqdnlJUHNt?=
+ =?utf-8?B?OHFrZWZmV0Z2Z01COXJIQUExbitJVEhGWHV5SVpwUG96T0F2ZGtTTDVsODRp?=
+ =?utf-8?B?NWNJQ0NUK3ZxZmliQ2lWbDYzcm1XM3JLeEVob0YrL2dwTDU3cVFxYW9QamN6?=
+ =?utf-8?B?STZuaUk2V3ZHZWdpVENFQlhRUk5EaVJPamNzdmZTK2tLU0dBVXROd25aLzN4?=
+ =?utf-8?B?UEcvV0VTMjFMbWRsRzZUV2xacDBWREk1ckh3MmhhUEFpUUF2VkYvRjRIQTVM?=
+ =?utf-8?B?ZVZoQXFYa09nOEU2RWJpemNIN2J4YTBTZ3VzL3gyNUpiM3E1anNleDFSRkNX?=
+ =?utf-8?Q?D+ebbXTFT5bZk68rL0dntEc=3D?=
+MIME-Version: 1.0
+
+--=-7tUoqyhbwZqS1KHChrVK1w==
+Content-Type: text/plain; charset=utf-8
+Content-Id: <1e7b3760-459a-4995-9677-2857d49f72c6>
+Content-Transfer-Encoding: base64
+
+T3JhY2xlIEFjYWRlbXkgICAgICANCk9yYWNsZSA8aHR0cHM6Ly93d3cub3JhY2xlLmNvbS9pbmRl
+eC5odG1sP2VscV9taWQ9MjQ3NzA1JnNoPSZjbWlkPUNPUlAyMzA5MTJQMDAwMzYmZWxxVHJhY2tJ
+ZD01ZTk0NGViYzg0MDA0ZmYyOWIyMzY5ZGY2NTMxMjFiYyZlbHE9MWU0NTRlMDUxOGI0NGVkYTky
+NWQwYzQ1NzA4OTdhYTAmZWxxYWlkPTI0NzcwNSZlbHFhdD0xJmVscUNhbXBhaWduSWQ9NDk5NjUy
+PiAgICAgIA0KVmlldyB0aGlzIG1lc3NhZ2UgaW4gYSBXZWIgYnJvd3NlciA8aHR0cHM6Ly9hcHAu
+cmVzcG9uc2Uub3JhY2xlLW1haWwuY29tL2UvZXI/ZWxxX21pZD0yNDc3MDUmc2g9JmNtaWQ9Q09S
+UDIzMDkxMlAwMDAzNiZzPTE5NzMzOTgxODYmbGlkPTU5MDU5MiZlbHFUcmFja0lkPTZhMGEwNjky
+ZDYzNzQwODU5OGJhNGJjZjRiOGIxNjgwJmVscT0xZTQ1NGUwNTE4YjQ0ZWRhOTI1ZDBjNDU3MDg5
+N2FhMCZlbHFhaWQ9MjQ3NzA1JmVscWF0PTE+ICAgICAgICAgIA0KDQoiT3JhY2xlIExvZ28iICAg
+ICAgICAgICAgDQoNCiJPcmFjbGUgQWNhZGVteSBMb2dvIiAgICAgICAgICAgIA0KDQpIZWFyIGZy
+b20gTmV0U3VpdGUgRm91bmRlciBhbmQgT3JhY2xlIEVWUCBFdmFuIEdvbGRiZXJnICAgICAgICAg
+ICAgICANCg0KIkdvbGRiZXJnIHRvIHNoYXJlIHRoZSBOZXRTdWl0ZSBqb3VybmV5IiAgICAgICAg
+IA0KIkdvbGRiZXJnIHRvIHNoYXJlIHRoZSBOZXRTdWl0ZSBqb3VybmV5IiAgICAgICAgDQoNCldl
+IGludml0ZSB5b3UgdG8gam9pbiBhbiBleGNsdXNpdmUgb25saW5lIGV2ZW50ICAgICAgICAgICAg
+ICANCg0KR29sZGJlcmcgdG8gc2hhcmUgdGhlIE5ldFN1aXRlIGpvdXJuZXkgICAgICAgICAgICAg
+IA0KYW5kIHdoYXQgaXQgdGFrZXMgdG8gYmUgYSBjcmVhdG9yIGFuZCBpbm5vdmF0b3IuICAgICAg
+ICAgICAgICANCg0KSGVhcmluZyBmcm9tIGNoYW5nZW1ha2VycyBhbmQgaW5ub3ZhdGl2ZSBsZWFk
+ZXJzIGNhbiBpbnNwaXJlIHN0dWRlbnRzIHRvIGJlY29tZSB0aGUgbGVhZGVycyBvZiB0b21vcnJv
+dy4gDQoNCkluIHRoaXMgZXhjbHVzaXZlIE9yYWNsZSBBY2FkZW15IGZpcmVzaWRlIGNoYXQgZXZl
+bnQsIEV2YW4gR29sZGJlcmcsIE5ldFN1aXRlIGZvdW5kZXIgYW5kIE9yYWNsZSBFeGVjdXRpdmUg
+VmljZSBQcmVzaWRlbnQsIHNwZWFrcyB3aXRoIE9yYWNsZSBBY2FkZW15IFZpY2UgUHJlc2lkZW50
+IFdpbGxpYW0gTWNDYWJlIGFib3V0IHdoYXQgaXTigJlzIGxpa2UgdG8gYmUgYSBsZWFkZXIgdG9k
+YXksIGFuZCB0aGUgc2tpbGxzIHN0dWRlbnRzIG5lZWQgdG8gc3VjY2VlZC4gICAgICAgICAgIA0K
+DQpBcyBOZXRTdWl0ZSBjZWxlYnJhdGVzIGl0cyAyNS15ZWFyIGFubml2ZXJzYXJ5IGFzIHRoZSBm
+aXJzdCBjbG91ZCBjb21wYW55LCBFdmFuIHdpbGwgYWxzbyB0YWxrIGFib3V0IHRoZSBjaGFsbGVu
+Z2VzIG9mIGJlaW5nIHRoZSBkaXNydXB0ZXIgYW5kIHdoYXQgaGUgdGhpbmtzIGlzIG5leHQgZm9y
+IHRoZSB0ZWNobm9sb2d5IGluZHVzdHJ5LiAgICAgICAgICAgDQoNClJlZ2lzdGVyIHRvZGF5IDxo
+dHRwczovL2FwcC5yZXNwb25zZS5vcmFjbGUtbWFpbC5jb20vZS9lcj9lbHFfbWlkPTI0NzcwNSZz
+aD0mY21pZD1DT1JQMjMwOTEyUDAwMDM2JnM9MTk3MzM5ODE4NiZsaWQ9NTkwNTkzJmVscVRyYWNr
+SWQ9M2ZjZGNlYTM0NGZhNDhjOTliYmEyY2U0MGI2MjE4MjgmZWxxPTFlNDU0ZTA1MThiNDRlZGE5
+MjVkMGM0NTcwODk3YWEwJmVscWFpZD0yNDc3MDUmZWxxYXQ9MT4gICAgICAgICAgICAgICAgIA0K
+DQoxMS8wOC8yMDIzIA0KOTowMCBhLm0uIFBTVCAgICAgICAgICAgICAgICAgDQoNCkZlYXR1cmVk
+IFNwZWFrZXIgICAgICAgICAgICAgIA0KDQoiRXZhbiBHb2xkYmVyZyIgICAgICAgICAgICAgICAg
+ICANCg0KRXZhbiBHb2xkYmVyZw0KRXhlY3V0aXZlIFZpY2UgUHJlc2lkZW50LCBPcmFjbGUgTmV0
+U3VpdGUgICAgICAgICAgICAgICAgICANCkV2YW4gbGVhZHMgT3JhY2xlIE5ldFN1aXRlLiBIZSBh
+bmQgaGlzIHRlYW0gYXJlIHJlc3BvbnNpYmxlIGZvciB0aGUgcHJvZHVjdCBzdHJhdGVneSwgZGV2
+ZWxvcG1lbnQsIGFuZCBkZWxpdmVyeSBvZiBOZXRTdWl0ZeKAmXMgdW5pZmllZCBidXNpbmVzcyBt
+YW5hZ2VtZW50IHN1aXRlLCBlbmNvbXBhc3NpbmcgRVJQL0ZpbmFuY2lhbHMsIENSTSwgZWNvbW1l
+cmNlLCBhbmQgbW9yZS4gSW4gMTk5OCwgRXZhbiBjby1mb3VuZGVkIE5ldFN1aXRlIOKAlCB0aGUg
+Zmlyc3QgY2xvdWQgY29tcHV0aW5nIGNvbXBhbnkuIFByaW9yIHRvIE9yYWNsZeKAmXMgYWNxdWlz
+aXRpb24gb2YgTmV0U3VpdGUsIEV2YW4gd2FzIENUTyBhbmQgQ2hhaXJtYW4gb2YgdGhlIE5ldFN1
+aXRlIGJvYXJkLiBCZWZvcmUgZm91bmRpbmcgTmV0U3VpdGUsIGhlIHNwZW50IGVpZ2h0IHllYXJz
+IGF0IE9yYWNsZSBDb3Jwb3JhdGlvbiwgd2hlcmUgaGUgc2VydmVkIGFzIGEgdmljZSBwcmVzaWRl
+bnQuIEhlIHdhcyBpbnZvbHZlZCBpbiBhIHZhcmlldHkgb2YgcHJvamVjdHMsIGFsbCBmb2N1c2Vk
+IG9uIG1ha2luZyBwb3dlcmZ1bCBkYXRhYmFzZSB0ZWNobm9sb2d5IG1vcmUgYWNjZXNzaWJsZSB0
+byB1c2Vycy4gRXZhbiBob2xkcyBhIEIuQS4gU3VtbWEgQ3VtIExhdWRlIGluIEFwcGxpZWQgTWF0
+aGVtYXRpY3MgZnJvbSBIYXJ2YXJkIENvbGxlZ2UuICAgICAgICAgICAgICAgICAgDQoNCkhvc3Qg
+ICAgICAgICAgICAgIA0KDQoiV2lsbGlhbSBNY0NhYmUiICAgICAgICAgICAgICAgICAgDQoNCldp
+bGxpYW0gTWNDYWJlDQpWaWNlIFByZXNpZGVudCwgT3JhY2xlIEFjYWRlbXkgICAgICAgICAgICAg
+ICAgICANCkluIGhpcyByb2xlLCBXaWxsaWUgYnJpbmdzIDMwIHllYXJzIG9mIGVkdWNhdGlvbiBl
+eHBlcmllbmNlIGluIGZ1cnRoZXIgYW5kIGhpZ2hlciBlZHVjYXRpb24gYW5kIGVkdWNhdGlvbiBw
+cm9ncmFtIG1hbmFnZW1lbnQuIFByaW9yIHRvIGpvaW5pbmcgT3JhY2xlIEFjYWRlbXksIGhlIHdh
+cyBhbiBlZHVjYXRvciBmb3IgMTggeWVhcnMgYW5kIHRydWx5IHVuZGVyc3RhbmRzIHRoZSBuZWVk
+cyBvZiBlZHVjYXRvcnMgdG8gZ3JvdyB0aGUgaW50ZXJlc3QsIGtub3dsZWRnZSwgZXhwZXJpZW5j
+ZSwgYW5kIGNyZWF0aXZpdHkgb2YgdGhlaXIgc3R1ZGVudHMuIFdpbGxpZSBpcyBwYXNzaW9uYXRl
+IGFib3V0IHN1cHBvcnRpbmcgZWR1Y2F0b3JzIGluIEstMTIgYW5kIGhpZ2hlciBlZHVjYXRpb24g
+aW5zdGl0dXRpb25zIGdsb2JhbGx5IHdpdGggYSBmb2N1cyBvbiBncm93aW5nIGFuIGVkdWNhdGlv
+biBwcm9ncmFtIHRoYXQgbWVldHMgdGhlIG5lZWRzIG9mIGVkdWNhdG9ycyBhbmQgc3R1ZGVudHMg
+Z2xvYmFsbHksIHByb3ZpZGluZyB0aGUgdG9vbHNldCBmb3IgZWR1Y2F0b3JzIHRvIGNvbmZpZGVu
+dGx5IHRha2UgY3VycmljdWx1bSBhbmQgdGVjaG5vbG9neSBpbnRvIHRoZSBjbGFzc3Jvb20uIFdp
+bGxpZeKAmXMgcGVyc29uYWwgbWlzc2lvbiBpcyBub3Qgb25seSB0byBoZWxwIGVkdWNhdG9ycyBi
+dXQgdWx0aW1hdGVseSBoZWxwIHRoZWlyIHN0dWRlbnRzIGRldmVsb3AgdGhlIHNraWxscyB0aGV5
+IG5lZWQgYXMgdGhleSBwcm9ncmVzcyB0aHJvdWdoIHRoZWlyIGZ1dHVyZXMuICAgICAgICAgICAg
+ICAgICAgDQoNClN0YXkgQ29ubmVjdGVkICAgICAgICAgICAgICAgICANCg0KIkZhY2Vib29rIiA8
+aHR0cHM6Ly9hcHAucmVzcG9uc2Uub3JhY2xlLW1haWwuY29tL2UvZXI/ZWxxX21pZD0yNDc3MDUm
+c2g9JmNtaWQ9Q09SUDIzMDkxMlAwMDAzNiZzPTE5NzMzOTgxODYmbGlkPTU5MDU5MSZlbHFUcmFj
+a0lkPWNjOTQyNTg4MTY3MjRkZWNhNDNjYWMzNWZhNGEwZTVhJmVscT0xZTQ1NGUwNTE4YjQ0ZWRh
+OTI1ZDBjNDU3MDg5N2FhMCZlbHFhaWQ9MjQ3NzA1JmVscWF0PTE+ICAgICAgICAgICAgICAgICAg
+IlR3aXR0ZXIiIDxodHRwczovL2FwcC5yZXNwb25zZS5vcmFjbGUtbWFpbC5jb20vZS9lcj9lbHFf
+bWlkPTI0NzcwNSZzaD0mY21pZD1DT1JQMjMwOTEyUDAwMDM2JnM9MTk3MzM5ODE4NiZsaWQ9NDc4
+MzA1JmVscVRyYWNrSWQ9NWY1OGY4NGY2YmRkNGFkMWJkMjhmZjdiMWM4YmU2NGEmZWxxPTFlNDU0
+ZTA1MThiNDRlZGE5MjVkMGM0NTcwODk3YWEwJmVscWFpZD0yNDc3MDUmZWxxYXQ9MT4gICAgICAg
+ICAgICAgICAgICAiWW91dHViZSIgPGh0dHBzOi8vYXBwLnJlc3BvbnNlLm9yYWNsZS1tYWlsLmNv
+bS9lL2VyP2VscV9taWQ9MjQ3NzA1JnNoPSZjbWlkPUNPUlAyMzA5MTJQMDAwMzYmcz0xOTczMzk4
+MTg2JmxpZD01NzA5NDEmZWxxVHJhY2tJZD1jM2MxMjcyNzQ3M2M0Mzc4YjQwZDdlYmU4YmFmZGJi
+YyZlbHE9MWU0NTRlMDUxOGI0NGVkYTkyNWQwYzQ1NzA4OTdhYTAmZWxxYWlkPTI0NzcwNSZlbHFh
+dD0xPiAgICAgICAgICAgICAgICAgICJJbnN0YWdyYW0iIDxodHRwczovL2FwcC5yZXNwb25zZS5v
+cmFjbGUtbWFpbC5jb20vZS9lcj9lbHFfbWlkPTI0NzcwNSZzaD0mY21pZD1DT1JQMjMwOTEyUDAw
+MDM2JnM9MTk3MzM5ODE4NiZsaWQ9MjE4MDM5JmVscVRyYWNrSWQ9NjcyNGQ0ZWY3OWU3NGYxNDky
+YjJiNWRmZDBkYTM1MjMmZWxxPTFlNDU0ZTA1MThiNDRlZGE5MjVkMGM0NTcwODk3YWEwJmVscWFp
+ZD0yNDc3MDUmZWxxYXQ9MT4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA0KDQo8
+Z3JhbW1hcmx5LWRlc2t0b3AtaW50ZWdyYXRpb24gZGF0YS1ncmFtbWFybHktc2hhZG93LXJvb3Q9
+InRydWUiPjwvZ3JhbW1hcmx5LWRlc2t0b3AtaW50ZWdyYXRpb24+ICANCg0KDQpUZXJtcyBvZiBV
+c2UgYW5kIFByaXZhY3kgPGh0dHBzOi8vd3d3Lm9yYWNsZS5jb20vbGVnYWwvcHJpdmFjeS9pbmRl
+eC5odG1sP2VscV9taWQ9MjQ3NzA1JnNoPSZjbWlkPUNPUlAyMzA5MTJQMDAwMzYmZWxxVHJhY2tJ
+ZD0zNzk0YzBkZmExM2Y0ZDg0YTg1Njg3OGFkZjZjZjM0YyZlbHE9MWU0NTRlMDUxOGI0NGVkYTky
+NWQwYzQ1NzA4OTdhYTAmZWxxYWlkPTI0NzcwNSZlbHFhdD0xJmVscUNhbXBhaWduSWQ9NDk5NjUy
+PiB8IFN1YnNjcmlwdGlvbnMgPGh0dHBzOi8vZ28ub3JhY2xlLmNvbS9zdWJzY3JpcHRpb25zP2Vs
+cV9taWQ9MjQ3NzA1JnNoPSZjbWlkPUNPUlAyMzA5MTJQMDAwMzYmbF9jb2RlPWVuLXVzJnNyYzE9
+RU06Rk8mZWxxVHJhY2tJZD0yMjlhYzU5YjUzZTQ0YTdiYWZhNWYzN2Y5ZTFkZjJjYiZlbHE9MWU0
+NTRlMDUxOGI0NGVkYTkyNWQwYzQ1NzA4OTdhYTAmZWxxYWlkPTI0NzcwNSZlbHFhdD0xJmVscUNh
+bXBhaWduSWQ9NDk5NjUyPiB8IFVuc3Vic2NyaWJlIDxodHRwczovL2dvLm9yYWNsZS5jb20vZG5l
+P2VscV9taWQ9MjQ3NzA1JnNoPSZjbWlkPUNPUlAyMzA5MTJQMDAwMzYmbF9jb2RlPWVuLXVzJmVs
+cVRyYWNrSWQ9NGVmZDY1ZDUwN2Y5NDBhODkxYTVjZmZlNWRjMjlmNzEmZWxxPTFlNDU0ZTA1MThi
+NDRlZGE5MjVkMGM0NTcwODk3YWEwJmVscWFpZD0yNDc3MDUmZWxxYXQ9MSZlbHFDYW1wYWlnbklk
+PTQ5OTY1Mj4gfCBDb250YWN0IFVzIDxodHRwczovL3d3dy5vcmFjbGUuY29tL2NvcnBvcmF0ZS9j
+b250YWN0L2dsb2JhbC5odG1sP2VscV9taWQ9MjQ3NzA1JnNoPSZjbWlkPUNPUlAyMzA5MTJQMDAw
+MzYmZWxxVHJhY2tJZD04MjFlYmRiMTQ2Zjk0YThlYjkzNWY5NGQ0NDU1MzY1OCZlbHE9MWU0NTRl
+MDUxOGI0NGVkYTkyNWQwYzQ1NzA4OTdhYTAmZWxxYWlkPTI0NzcwNSZlbHFhdD0xJmVscUNhbXBh
+aWduSWQ9NDk5NjUyPiAgICAgICAgICAgICAgICAgICAgICAgICANCkNvcHlyaWdodCDCqSAyMDIz
+LCBPcmFjbGUgYW5kL29yIGl0cyBhZmZpbGlhdGVzLiBBbGwgcmlnaHRzIHJlc2VydmVkLiBPcmFj
+bGUgQ29ycG9yYXRpb24gLSBXb3JsZHdpZGUgSGVhZHF1YXJ0ZXJzLCAyMzAwIE9yYWNsZSBXYXks
+IEF1c3RpbiwgVFggNzg3NDEsIFVuaXRlZCBTdGF0ZXMgICAgICAgICAgICAgICAgICAgICAgICAg
+DQoiT3JhY2xlIiA8aHR0cDovL3d3dy5vcmFjbGUuY29tL3VzL2NvcnBvcmF0ZS9pbmRleC5odG1s
+P2VscV9taWQ9MjQ3NzA1JnNoPSZjbWlkPUNPUlAyMzA5MTJQMDAwMzYmZWxxVHJhY2tJZD1iYmFj
+ODhhNzI1MTg0OTM2YTBjMzNjM2EzMjRkNzk2NCZlbHE9MWU0NTRlMDUxOGI0NGVkYTkyNWQwYzQ1
+NzA4OTdhYTAmZWxxYWlkPTI0NzcwNSZlbHFhdD0xJmVscUNhbXBhaWduSWQ9NDk5NjUyPiAgICAg
+ICAgICAgICAgICAgICAgICAgICANCg0K
+
+--=-7tUoqyhbwZqS1KHChrVK1w==
+Content-Type: text/html; charset=utf-8
+Content-Id: <4726abae-eec1-4df0-b4f4-6672ed453d9a>
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="ROBOTS" content="NOINDEX, NOFOLLOW"> 
+  <meta name="x-apple-disable-message-reformatting">
+ 
+  <meta name="color-scheme" content="light dark"> 
+  <meta name="supported-color-schemes" content="light dark"> 
+  <title>Attend our free webinar with NetSuite Founder Evan Goldberg</title> 
+  <link href="https://www.oracle.com/oce/dc/assets/CONT90096A93EBA646988FCB11EBA125B022/native/tb-oracle-sans-font.css?family=Oracle+Sans" rel="stylesheet" type="text/css"> <!--[if mso]>
+			<style type="text/css">
+			body,table,td,a,span
+ {font-family: Arial, sans-serif !important;}
+			.font-georgia {font-family: Georgia, Times New Roman, Arial !important;}
+			</style>
+		  <![endif]--> 
+  <style>@import
+
+ url('https://www.oracle.com/oce/dc/assets/CONT90096A93EBA646988FCB11EBA125B022/native/tb-oracle-sans-font.css?family=Oracle+Sans'); @media screen { @font-face { font-family: "Oracle Sans"; src: url("https://static.oracle.com/cdn/fonts/oraclesans.woff") format("woff"), url("https://static.oracle.com/cdn/fonts/oraclesans.woff2") format("woff2"); font-weight: 300; font-style: normal; -webkit-font-smoothing: antialiased; -moz-font-smoothing: antialiased; font-smoothing: antialiased; -moz-osx-font-smoothing: 
+grayscale;} } #outlook a {padding:0;} body {width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 20px 0px 0px 0px; padding: 0; background-color: #F3F3F2; -webkit-font-smoothing: antialiased; } img {outline: none; text-decoration: none; border: none; -ms-interpolation-mode: bicubic;} a img {border: none;} a {color: inherit; text-decoration: none;} 
+a:link {color: inherit; text-decoration: none; font-weight: inherit; line-height: inherit;} td a, td a:link, td 
+a:visited { color: inherit; text-decoration: none;} v:* { behavior: url(#default#VML); display: block; } a[x-apple-data-detectors] {color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important;} .hr-line{width: 24px !important;} </style> <style>
+
+ :root { color-scheme: light dark; supported-color-schemes: light dark; } @media (prefers-color-scheme: dark) { body {background-color: #101010 !important;} .prim-comp {background-color: #383838 !important; color: #F4F4F4 !important;} .secndry-comp {background-color: #313131 !important; color: #F4F4F4 !important;} .prim-cta {background-color: #F5F5F5 !important; color: #383838 !important;} .secndry-cta {background-color: #717171 !important; color: #F4F4F4 !important;} .black-txt {color: #383838 
+!important;} .white-txt {color: #F4F4F4 !important;} .bg-none {background-image: none !important;} .disc-bg {background-color: #292929 !important; color: #F4F4F4 !important; background-image: none !important;} .dark-bg {background-color: #292929 !important; color: #F4F4F4 !important; background-image: none !important;} } [data-ogsc] body {background-color: #101010 !important;} [data-ogsc] 
+.prim-comp {background-color: #383838 !important; color: #F4F4F4 !important;} [data-ogsc] .secndry-comp 
+{background-color: #313131 !important; color: #F4F4F4 !important;} [data-ogsc] .prim-cta {background-color: #F5F5F5 !important; color: #383838 !important;} [data-ogsc] .secndry-cta {background-color: #717171 !important; color: #F4F4F4 !important;} [data-ogsc] .black-txt {color: #383838 !important;} [data-ogsc] .white-txt {color: #F4F4F4 !important;} [data-ogsc] .bg-none {background-image: none !important;} [data-ogsc] .disc-bg {background-color: #292929 !important; color: #F4F4F4 !important; 
+background-image: none !important;} [data-ogsc] .dark-bg {background-color: #292929 !important; color: #F4F4F4 !important; background-image: none !important;} @media only screen and (max-width: 359px) { html, body {padding: 0 !important; height: 100% !important; width: 100% !important; 
+mso-line-height-rule: exactly !important; } .w124 {width: 124px; height: auto;} #mainTable{margin: 0 auto; display: block !important;} .img-fullwidth {width: 100% !important; height: auto !important;} .devicewidth 
+{text-align: center !important; padding-right: 0px !important; padding-left: 0px !important; float: none; width: 100% !important; max-width: 100% !important; margin: 0 auto !important;} .ow49s{width:100% !important; padding-right: 0px !important; padding-left: 0px !important; display: block;} .ow49p{width:100% !important; padding-right: 0px !important; padding-left: 0px !important; display: block;} } @media only screen and (max-width: 540px) { .img-fullwidth {width: 100% !important; height: auto 
+!important;} .devicewidth {width: 100% !important; text-align: center !important; padding-right: 0px !important; padding-left: 0px !important; float: none;} .fs14 {font-size: 14px 
+!important;} .fs23 {font-size: 23px !important;} .width0{width: 0px;} .wauto{width: auto;} .pad-t40 {padding-top: 40px !important;} .pad-t32 {padding-top: 32px !important; display:block;} .pad-t30 {padding-top: 30px !important;} .pad-t25 {padding-top: 25px !important;} .pad-t20 {padding-top: 20px !important;} .pad-t15 
+{padding-top: 15px !important;} .pad-t12 {padding-top: 12px !important;} .pad-t10 {padding-top: 10px !important;} .pad-t6 {padding-top: 6px !important;} .pad-t0 {padding-top: 0px !important;} .pad-b40 {padding-bottom: 40px !important;} .pad-b32 {padding-bottom: 32px !important; display:block;} .pad-b30 {padding-bottom: 30px !important;} .pad-b25 {padding-bottom: 25px !important;} .pad-b20 {padding-bottom: 20px !important;} .pad-b15 {padding-bottom: 15px !important;} .pad-b12 {padding-bottom: 12px 
+!important;} .pad-b10 {padding-bottom: 10px !important;} .pad-b0 
+{padding-bottom: 0px !important;} .pad-l30 {padding-left: 30px !important;} .pad-l25 {padding-left: 25px !important;} .pad-l24 {padding-left: 24px !important;} .pad-l20 {padding-left: 20px !important;} .pad-l15 {padding-left: 15px !important;} .pad-l10 {padding-left: 10px !important;} .pad-l0 {padding-left: 0px !important;} .pad-r30 {padding-right: 30px !important;} .pad-r25 {padding-right: 25px !important;} .pad-r24 {padding-right: 24px 
+!important;} .pad-r20 {padding-right: 20px !important;} .pad-r15 {padding-right: 15px !important;} .pad-r10 {padding-right: 10px !important;} .pad-r0 {padding-right: 0px !important;} .pad-tb40 {padding-top: 40px !important; padding-bottom: 40px !important;} .pad-tb30 {padding-top: 30px !important; padding-bottom: 30px !important;} .pad-tb28 {padding-top: 28px !important; padding-bottom: 28px !important;} .pad-tb24 {padding-top: 24px !important; 
+padding-bottom: 24px !important;} .pad-tb20 {padding-top: 
+20px !important; padding-bottom: 20px !important;} .pad-tb14 {padding-top: 14px !important; padding-bottom: 14px !important;} .pad-tb0 {padding-top: 0px !important; padding-bottom: 0px !important;} .pad-lr10 {padding-left: 10px !important; padding-right: 10px !important;} .pad-lr15 {padding-left: 15px !important; padding-right: 15px !important;} .pad-lr20 {padding-left: 20px !important; padding-right: 20px !important;} .pad-lr24 {padding-left: 24px !important; padding-right: 24px !important;} .pad-lr0 
+{padding-left: 0px !important; padding-right: 0px !important;} .pad-l0 {padding-left: 0px !important;} .pad-r0 {padding-right: 0px !important;} .pad15 {padding: 15px !important;} .pad0 {padding: 0px !important;} .mar-b30 {margin-bottom: 30px !important;} .mar-b25 {margin-bottom: 25px !important;} .mar-b20 {margin-bottom: 20px 
+!important;} .mar-b15 {margin-bottom: 15px !important;} .mar-b10 {margin-bottom: 10px !important;} .mar-b0 {margin-bottom: 0px !important;} .mar-t40 {margin-top: 40px !important;} 
+.mar-t30 {margin-top: 30px !important;} .mar-t25 {margin-top: 25px !important;} .mar-t20 {margin-top: 20px !important;} .mar-t15 {margin-top: 15px !important;} .mar-t10 {margin-top: 10px !important;} .mar-t0 {margin-top: 0px !important;} .mar-lr0 {margin-left: 0px !important; margin-right: 0px !important;} .mar-l0 {margin-left: 0px !important;} .mar-r0 {margin-right: 0px !important;} .no-bdr {border: none !important;} .mar-l24 {margin-left: 24px !important;} .mar-tb40 {margin-top: 40px !important; 
+margin-bottom: 40px !important;} .middle {margin: 0 auto !important;} .center {text-align: center !important; margin: auto !important;} .btn-center {text-align: center !important; margin: auto !important;} .txt-left 
+{ text-align: left !important;} .txt-right {text-align: right !important;} .txt-center {text-align: center !important;} .autoheight {height: auto !important;} .float-l {float: left !important;} .float-r {float: right !important;} .height0 {height: 0px !important;} .hide {display: none 
+!important;} .block {display: block !important;} .xs-overFlow {height: auto !important; overflow: inherit !important;float: none !important;} .ftr-link a, .ftr-link a:link, .ftr-link a:visited {color: inherit; text-decoration: none; } .mb-bnr{background-size:cover; height: auto;} .w45{width:45% !important;} .sc-bnr-hide {display: none !important;} .sc-bnr-show {display: block !important; width: auto !important; overflow: visible !important;} .sc-bnr-show img {width: 100% !important; height: auto 
+!important;} .mar-lr0{margin-left:-24px !important; margin-right: -24px !important;} .sp-text{float:left; width: 
+170px; padding-left: 24px !important; display:block;} .sp-img{float:left; width: 96px;} .sp-img img{float:left; width: 96px; height: 96px;} .logo150{width: 150px !important; height: auto !important; margin:auto;} .border-sep{border-collapse: separate !important;} .w124 {width: 124px; height: auto; float: left;} .txt-left-ar {text-align: right !important; float: right;} .sp-img-ar {float: 
+right; width: 96px;} .sp-img-ar img {float: right; width: 96px; height: 96px;} .pad-l0-ar {padding-right: 0px !important;} .pad-r0-ar {padding-left: 0px !important;} .sp-text-ar {float: right; width: 170px; padding-right: 24px !important; display: block; direction: rtl;} .float-r-ar{float:right;} .float-0-ar{float: none;} .mar-l24-ar { margin-right: 24px !important;} .mar-l0-ar{margin-right:0px !important;} .pad-b32-ar{padding-bottom: 32px !important; display: block;direction: rtl;} 
+
+.pad-t32-ar{padding-top: 32px !important; display: block;direction: rtl;} .pad-r24-ar {padding-left: 24px !important;} .hr-div{width: 24px;} .w150-blk{display: block !important; width:150px;} }</style> <!--[if (gte mso 15)|(IE)]>
+		<style type="text/css">		
+		.ow49s{width:48.4%
+ !important; }
+		.ow49p{width:48.4% !important; }
+		.ow62p{width:62% !important;}
+		.opd-tb20{padding-top:15.25pt !important; padding-bottom:15.50pt !important;}
+		.opd-t50{padding-top:50px !important;}
+		.opd-l30{padding-left:30px !important;}
+		.opds-r33{padding-right:15px !important;}
+		.opd-l20{padding-left:20px !important;}
+		.opd-l0{padding-left:0px !important;}
+		.opd-r0{padding-right:0px !important;}
+		.opd-b0{padding-bottom:0px !important;}
+		.opd-t0{padding-top:0px 
+!important;}
+		.sc-bnr-show{height:0px !important;}
+		.opad-0{padding:0px !important;}
+		.opd-r30{padding-right:30px !important;}
+        .opbnr-fix{padding-left:0px !important; padding-right:20px !important;}
+		</style>
+		<![endif]--> <!--[if gte mso 9]>
+		<xml>
+		<o:OfficeDocumentSettings>
+		<o:AllowPNG/>
+		<o:PixelsPerInch>96</o:PixelsPerInch>
+		</o:OfficeDocumentSettings>
+		</xml>
+	  <![endif]--> 
+ </head>
+
+<body style="background-color: rgb(243, 243, 242);" data-new-gr-c-s-check-loaded="14.1127.0" data-gr-ext-installed="">
+
+
+  
+  
+  <table id="mainTable" width="614" border="0" cellspacing="0" cellpadding="0" align="center" data-theme="Redwood" data-lang="EN-US" class="devicewidth"> 
+   <tbody> 
+    <tr> 
+     <td align="left" valign="top">
+ 
+      <table class="edtrBtnParent" data-unique-id="RWE900" role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" align="center" id="viewBrowser">
+       <tbody>
+        <tr>
+         <td align="center" style="font-size:10px; color:#312D2A; font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; padding-bottom:10px;"> 
+          <div id="donottrack" style="display:none"> 
+           <div class="preHeader">
+            Oracle Academy
+           </div>
+ <a href="https://www.oracle.com/index.html?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;elqTrackId=5e944ebc84004ff29b2369df653121bc&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1&amp;elqCampaignId=499652" target="_blank">Oracle</a> 
+          </div>
+ <a href="https://app.response.oracle-mail.com/e/er?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;s=1973398186&amp;lid=590592&amp;elqTrackId=6a0a0692d637408598ba4bcf4b8b1680&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1" target="_self" style="color:#3C6974;text-decoration: underline; display: inline-block;" class="white-txt tmpLink"> <span class="tmpAddRemoveText" style="display: none"><span class="tmpTextedtr" data-disable-text="true"></span></span> <span data-displaynone="true">
+<span class="tmpTextedtr" data-disable-text="true" id="tb_viewMessage">View this message in a Web browser</span></span></a> </td>
+        </tr>
+       </tbody>
+      </table> 
+      <table class="edtrBtnParent" data-unique-id="RWE901" role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" id="pm2" align="center"> 
+       <tbody> 
+        <tr>
+ 
+         <td class="pad-lr24 pad-tb14 dark-bg" style="padding:19px 55px; vertical-align: middle; background-color: #56504B;" valign="middle" align="left"> 
+          <table width="45%" border="0" cellspacing="0" cellpadding="0" align="left" class="devicewidth" style="display:inline-table;"> 
+           <tbody> 
+            <tr> 
+             <td valign="middle" align="left"><a name="top" id="top"></a>
+ <img src="https://www.oracle.com/oce/dc/assets/CONT01489EC078214170985966B7D8E5C11D/native/tb-oracle-white-123x16px.png" alt="Oracle Logo" style="display:block;" width="92" border="0"> </td> 
+            </tr> 
+           </tbody> 
+          </table> 
+          <table width="auto" border="0" cellspacing="0" cellpadding="0" align="right" class="devicewidth tmpProdctLogosTagline" style="float:right;"> 
+           <tbody> 
+            <tr>
+ 
+             <td valign="middle" align="right" class="txt-left pad-t6" data-id-logoclass="true"> <img src="https://www.oracle.com/oce/dc/assets/CONT83BD9DCE25B04F528627C31CA6379DFD/native/tb-oracle-identifier-oracle-academy.png" alt="Oracle Academy Logo" style="display:block;" width="auto" border="0" class="proLogoTagImage"> </td> 
+            </tr> 
+           </tbody> 
+          </table> </td> 
+        </tr> 
+       </tbody> 
+      </table>
+ 
+      <table class="edtrBtnParent" data-unique-id="RWE903" role="Presentation" id="webcast-m1" width="100%" cellspacing="0" cellpadding="0" border="0" align="center"> 
+       <tbody> 
+        <tr> 
+         <td id="rw-bx1" style="background-image:url(#img1#); background-repeat:repeat; background-color:#025E7E;" alt="Oracle" class="prim-comp mb-bnr" width="614" valign="middle" height="100" align="left"> <!--[if gte mso 9]>
+
+                <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false"
+                        style="width:460.5pt; height:75pt; background-repeat: no-repeat; mso-line-height-alt:0; mso-line-height-rule:exactly;">
+                    <v:fill type="tile"
+                            src="#img1#"
+                            color="#025E7E"></v:fill>
+
+                    <v:textbox inset="26pt,0,26pt,0"
+                               style="mso-fit-shape-to-text:true; padding-bottom:-14pt;">
+                <![endif]--> 
+          <table class="devicewidth" width="100%" cellspacing="0" cellpadding="0" border="0" align="left"> 
+           <tbody> 
+            <tr> 
+             <td style="padding:32px 55px 32px 55px;" class="opbnr-fix pad-lr24 pad-tb28" valign="middle" align="left">
+ 
+              <table class="opd-l20" width="100%" cellspacing="0" cellpadding="0" border="0"> 
+               <tbody> 
+                <tr> 
+                 <td class="fs23" style="font-family: Georgia, Times New Roman, Helvetica, Arial, Sans; font-size:35px; color:#FFFFFF; text-align: left;" valign="top" align="left"> <span class="font-georgia tmpTitle">Hear from NetSuite Founder and Oracle EVP Evan Goldberg</span> </td> 
+                </tr> 
+               </tbody> 
+              </table>
+ </td> 
+            </tr> 
+           </tbody> 
+          </table> <!--[if gte mso 9]></v:fill>
+            </v:rect>
+                <![endif]--></td> 
+        </tr> 
+       </tbody> 
+      </table> 
+      <table class="edtrBtnParent" data-unique-id="RWE113" role="Presentation" id="pm4" width="100%" cellspacing="0" cellpadding="0" border="0"> 
+       <tbody> 
+        <tr> 
+         <td style="background-color:#063C4E;" id="rw-bx1" class="swap-right prim-comp tmpSwap" align="left">
+ 
+          <table class="devicewidth swap" style="border:none; mso-table-lspace:0pt; mso-table-rspace:0pt; border-collapse:collapse; font-size:0;display:inline-table;" width="50%" cellspacing="0" cellpadding="0" border="0" align="right"> 
+           <tbody> 
+            <tr> 
+             <td class="width0 height0 _style tmpShowHide" style="padding-bottom: 0; line-height: 0; font-size: 0;" width="307" valign="top" align="right">
+ <img src="https://www.oracle.com/oce/dc/assets/CONT5A09DE4B0A1E45219BFFB52A4A89D1BF/native/tb-infastructure-5-image-component-desktop-w500px-h676px.png" style="display:block;" class="sc-bnr-hide tmpImage" alt="Goldberg to share the NetSuite journey" id="campaignImage" width="307" height="415" border="0"> <!--[if !mso]--> 
+              <div class="sc-bnr-show" style="display: none; mso-hide: all !important;" data-classtoremove="sc-bnr-show" data-classtoadd="sc-bnr-hide" data-mobile-image="true">
+ 
+               <img src="https://www.oracle.com/oce/dc/assets/CONTCD329B781AB044DF9B13D236201E6455/native/tb-infastructure-5-image-component-mobile-w360px-h210px.png" alt="Goldberg to share the NetSuite journey" style="display:block;" id="campaignImageMobile" mobile-helptext="Recommended 360 width x 210 height pixels" width="360" height="210" border="0"> 
+              </div> <!-- <![endif]--> </td> 
+            </tr> 
+           </tbody> 
+          </table>
+ 
+          <table class="ow49p devicewidth swap" style="border:none; mso-table-lspace:0pt; mso-table-rspace:0pt; border-collapse:collapse;display:inline-table;" width="50%" cellspacing="0" cellpadding="0" border="0" align="left" data-rtl-left="true" valign="top"> 
+           <tbody> 
+            <tr> 
+             <td style="padding:40px 36px 0px 55px;" class="opds-r33 pad-lr24 pad-b40" align="left" data-rtl-padding="true" valign="top">
+ 
+              <table width="100%" cellspacing="0" cellpadding="0" border="0"> 
+               <tbody> 
+                <tr> 
+                 <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:20px; color:#FFFFFF; line-height: 23px; font-weight:bold; mso-line-height-rule: exactly; mso-line-height:100%;" class="opad"> <span class="tmpTitle">We invite you to join an exclusive online event</span> </td> 
+                </tr>
+ 
+                <tr class="tmpdynamicImage" data-label="Add/remove line separator"> 
+                 <td style="padding-top:25px; font-size:0px; line-height: 0;" valign="top" align="left"> 
+                  <div class="hr-div"> 
+                   <hr style="background-color:#F3CD73; color:#F3CD73;height:2px; width:24px; border:0px; float: left;text-align: left" class="hr-line"> 
+                  </div> </td> 
+                </tr> 
+                <tr>
+ 
+                 <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:16px; color:#EDF6F9; font-weight: bold; line-height: 20px; mso-line-height-rule: exactly; mso-line-height:100%; padding-top:25px;" class=""> <span class="tmpTitle">Goldberg to share the NetSuite journey</span> </td> 
+                </tr> 
+                <tr>
+ 
+                 <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:16px; color:#FFFFFF; padding-top: 15px; line-height: 20px; mso-line-height-rule: exactly; mso-line-height:100%;" class="white-txt"> <span class="tmpTextedtr">and what it takes to be a creator and innovator.</span> </td> 
+                </tr> 
+                <tr class="tmpdynamiccta"></tr> 
+               </tbody> 
+              </table> </td> 
+            </tr> 
+           </tbody>
+ 
+          </table> </td> 
+        </tr> 
+       </tbody> 
+      </table> 
+      <table id="BodyTable" width="100%" border="0" cellspacing="0" cellpadding="0" align="center"> 
+       <tbody> 
+        <tr> 
+         <td class="ui-sortable"> 
+          <table class="edtrBtnParent" data-unique-id="RWE001" role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" id="module1"> 
+           <tbody> 
+            <tr class="tmpMultiAddRemove">
+ 
+             <td style="padding:40px 55px; background-color: #ffffff;" class="pad-lr24 secndry-comp"> <span class="tmpTitle"></span><span class="tmpTitle"></span>
+              <table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+               <tbody> 
+                <tr class="tmpAddRemoveText" style="display: none;"></tr> 
+                <tr class="tmpAddRemoveText" style="display: none;"></tr> 
+                <tr>
+ 
+                 <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:16px; color:#161513; text-align: left;" class="white-txt"> <span class="tmpTextedtr">Hearing from changemakers and innovative leaders can inspire students to become the leaders of tomorrow. <br><br>In
+ this exclusive Oracle Academy fireside chat event, Evan Goldberg, NetSuite founder and Oracle Executive Vice President, speaks with Oracle Academy Vice President William McCabe about what it’s like to be a leader today, and the skills students need to succeed. 
+                   <div> 
+                    <br> 
+                   </div> 
+                   <div>
+
+                     As NetSuite celebrates its 25-year anniversary as the first cloud company, Evan will also talk about the challenges of being the disrupter and what he thinks is next for the technology industry. 
+                   </div></span> </td> 
+                </tr> 
+                <tr class="tmpdynamiccta"></tr> 
+               </tbody> 
+              </table> </td> 
+            </tr> 
+           </tbody> 
+          </table>
+ 
+          <table class="edtrBtnParent" data-unique-id="RWE300" role="Presentation" width="100%" cellspacing="0" cellpadding="0" border="0"> 
+           <tbody> 
+            <tr> 
+             <td bgcolor="#F1EFED" align="left" class="dark-bg"> 
+              <table class="devicewidth" style="border:none; mso-table-lspace:0px; mso-table-rspace:0px; border-collapse:collapse;display:inline-table;" width="252" cellspacing="0" cellpadding="0" border="0" align="right" valign="top">
+ 
+               <tbody> 
+                <tr> 
+                 <td style="padding:0px 40px 0px 40px; height: 134px;" class="pad-lr24 height0 pad-t40 pad-b40" valign="middle" bgcolor="#D3CFCB" align="left"> 
+                  <table class="center" width="150" cellspacing="0" cellpadding="0" border="0" align="center"> 
+                   <tbody> 
+                    <tr>
+ 
+                     <td style="padding:10px 16px 10px 16px; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;" bgcolor="#377E55"> 
+                      <table style="margin: 0px; padding: 0px;" width="100%" cellspacing="0" cellpadding="0" border="0" align="center"> 
+                       <tbody> 
+                        <tr>
+ 
+                         <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:14px; font-weight: bold;" valign="middle" align="center">
+<a href="https://app.response.oracle-mail.com/e/er?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;s=1973398186&amp;lid=590593&amp;elqTrackId=3fcdcea344fa48c99bba2ce40b621828&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1" target="_blank" style="text-decoration:none; font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; color:#ffffff;" class="tmpLink"> <span class="tmpBtn">Register today</span> </a></td> 
+                        </tr> 
+                       </tbody>
+ 
+                      </table> </td> 
+                    </tr> 
+                   </tbody> 
+                  </table><!--[if mso 16]><div style="font-size: 0;">&nbsp;</div><![endif]--> </td> 
+                </tr> 
+               </tbody> 
+              </table> 
+              <table class="devicewidth" style="border:none; mso-table-lspace:0px; mso-table-rspace:0px; border-collapse:collapse;display:inline-table;" width="355" cellspacing="0" cellpadding="0" border="0" align="left">
+ 
+               <tbody> 
+                <tr> 
+                 <td style="padding:40px 55px 40px 55px;" class="dark-bg pad-lr24" valign="middle" bgcolor="#F1EFED" align="left"> 
+                  <table width="100%" cellspacing="0" cellpadding="0" border="0"> 
+                   <tbody> 
+                    <tr>
+ 
+                     <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:14px; color:#161513;" class="white-txt height0" valign="middle" height="54" align="center"> <span class="tmpTextedtr"> <strong> <span data-merge-id="ON24_Q4">11/08/2023</span> <br> <span data-merge-id="ON24_Q5">9:00 a.m. PST</span> </strong> </span> </td> 
+                    </tr> 
+                   </tbody> 
+                  </table> </td> 
+                </tr> 
+               </tbody>
+ 
+              </table> </td> 
+            </tr> 
+           </tbody> 
+          </table> 
+          <table class="edtrBtnParent" data-unique-id="RWE307" role="Presentation" width="100%" cellspacing="0" cellpadding="0" border="0"> 
+           <tbody> 
+            <tr class="tmpMultiAddRemove"> 
+             <td style="padding:40px 55px; background-color: #ffffff;" class="secndry-comp pad-lr24">
+ 
+              <table width="100%" cellspacing="0" cellpadding="0" border="0" class="tmpRadioSwitch" etitle="Speaker Layout"> 
+               <tbody> 
+                <tr class="tmpAddRemoveText"> 
+                 <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:20px; color:#161513; text-align: left; font-weight: bold; padding-bottom:24px;" class="white-txt"> <span class="tmpTitle">Featured Speaker</span> </td> 
+                </tr>
+ 
+                <tr data-radio-switch="true" data-radioset="{&quot;label&quot;:&quot;One Speaker&quot;,&quot;name&quot;:&quot;One Speaker&quot;,&quot;value&quot;:&quot;One Speaker&quot;}"> 
+                 <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; text-align: left;"> 
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" align="right" class="devicewidth"> 
+                   <tbody> 
+                    <tr> 
+                     <td>
+ 
+                      <table width="auto" border="0" cellspacing="0" cellpadding="0" class="sp-img" align="left" style="border:none; mso-table-lspace:0px; mso-table-rspace:0px; border-collapse:collapse;display:inline-table;" data-rtl-spkclass="true"> 
+                       <tbody> 
+                        <tr> 
+                         <td align="left" valign="top">
+ <img src="https://www.oracle.com/oce/dc/assets/CONT097C9C13F83245B881ADD5C49162EF59/native/oer400308945-evan-goldberg.png" style="display: block; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;" width="139" height="144" border="0" alt="Evan Goldberg" class="tmpImage" data-image-set="S025"> </td> 
+                        </tr> 
+                       </tbody> 
+                      </table>
+ 
+                      <table width="328" border="0" cellspacing="0" cellpadding="0" class="sp-text" align="left" style="border:none; mso-table-lspace:0px; mso-table-rspace:0px; padding-left: 32px;display:inline-table;" data-rtl-spkclass="true" data-rtl-spkpadding="true" valign="top"> 
+                       <tbody> 
+                        <tr>
+ 
+                         <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:16px; color:#161513; text-align: left; font-weight: bold;" class="white-txt fs14 pad-l0"> <span class="tmpTextedtr">Evan Goldberg<br>Executive Vice President, Oracle NetSuite</span> </td> 
+                        </tr> 
+                        <tr class="tmpAddRemoveText">
+ 
+                         <td style="padding-top: 12px; font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:12px; color:#161513; text-align: left;" class="white-txt pad-t12 fs14 pad-l0" valign="top"> <span class="tmpTextedtr">Evan
+
+ leads Oracle NetSuite. He and his team are responsible for the product strategy, development, and delivery of NetSuite’s unified business management suite, encompassing ERP/Financials, CRM, ecommerce, and more. In 1998, Evan co-founded NetSuite — the first cloud computing company. Prior to Oracle’s acquisition of NetSuite, Evan was CTO and Chairman of the NetSuite board. Before founding NetSuite, he spent eight years at Oracle Corporation, where he served as a vice president. He was 
+involved in a variety of projects, all focused on making powerful database technology more accessible to users. Evan holds a B.A. Summa Cum Laude in Applied Mathematics from Harvard College.</span> </td> 
+                        </tr> 
+                       </tbody> 
+                      </table> </td> 
+                    </tr> 
+                   </tbody> 
+                  </table> </td> 
+                </tr>   
+               </tbody> 
+              </table> </td> 
+            </tr>
+ 
+           </tbody> 
+          </table> 
+          <table class="edtrBtnParent" data-unique-id="RWE307" role="Presentation" width="100%" cellspacing="0" cellpadding="0" border="0"> 
+           <tbody> 
+            <tr class="tmpMultiAddRemove"> 
+             <td style="padding:40px 55px; background-color: #ffffff;" class="secndry-comp pad-lr24"> 
+              <table width="100%" cellspacing="0" cellpadding="0" border="0" class="tmpRadioSwitch" etitle="Speaker Layout"> 
+               <tbody>
+ 
+                <tr class="tmpAddRemoveText"> 
+                 <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:20px; color:#161513; text-align: left; font-weight: bold; padding-bottom:24px;" class="white-txt"> <span class="tmpTitle">Host</span> </td> 
+                </tr> 
+                <tr data-radio-switch="true" data-radioset="{&quot;label&quot;:&quot;One Speaker&quot;,&quot;name&quot;:&quot;One Speaker&quot;,&quot;value&quot;:&quot;One Speaker&quot;}">
+ 
+                 <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; text-align: left;"> 
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" align="right" class="devicewidth"> 
+                   <tbody> 
+                    <tr> 
+                     <td>
+ 
+                      <table width="auto" border="0" cellspacing="0" cellpadding="0" class="sp-img" align="left" style="border:none; mso-table-lspace:0px; mso-table-rspace:0px; border-collapse:collapse;display:inline-table;" data-rtl-spkclass="true"> 
+                       <tbody> 
+                        <tr> 
+                         <td align="left" valign="top">
+ <img src="https://www.oracle.com/oce/dc/assets/CONT335DB8CEFA6B43FB9DA0EABA21B91428/native/oer400308945-william-mccabe.png" style="display: block; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;" width="140" height="144" border="0" alt="William McCabe" class="tmpImage" data-image-set="S025"> </td> 
+                        </tr> 
+                       </tbody> 
+                      </table>
+ 
+                      <table width="328" border="0" cellspacing="0" cellpadding="0" class="sp-text" align="left" style="border:none; mso-table-lspace:0px; mso-table-rspace:0px; padding-left: 32px;display:inline-table;" data-rtl-spkclass="true" data-rtl-spkpadding="true" valign="top"> 
+                       <tbody> 
+                        <tr>
+ 
+                         <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:16px; color:#161513; text-align: left; font-weight: bold;" class="white-txt fs14 pad-l0"> <span class="tmpTextedtr">William McCabe<br>Vice President, Oracle Academy</span> </td> 
+                        </tr> 
+                        <tr class="tmpAddRemoveText">
+ 
+                         <td style="padding-top: 12px; font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:12px; color:#161513; text-align: left;" class="white-txt pad-t12 fs14 pad-l0" valign="top"> <span class="tmpTextedtr">In
+
+ his role, Willie brings 30 years of education experience in further and higher education and education program management. Prior to joining Oracle Academy, he was an educator for 18 years and truly understands the needs of educators to grow the interest, knowledge, experience, and creativity of their students. Willie is passionate about supporting educators in K-12 and higher education institutions globally with a focus on growing an education program that meets the needs of educators and students 
+globally, providing the toolset for educators to confidently take curriculum and technology into the classroom. Willie’s personal mission is not only to help educators but ultimately help their students develop the skills they need as they progress through their futures. </span> </td> 
+                        </tr> 
+                       </tbody> 
+                      </table> </td> 
+                    </tr> 
+                   </tbody> 
+                  </table> </td>
+ 
+                </tr>   
+               </tbody> 
+              </table> </td> 
+            </tr> 
+           </tbody> 
+          </table>  
+          <table class="edtrBtnParent" data-unique-id="RWE203" role="presentation" id="module 8" width="100%" cellspacing="0" cellpadding="0" border="0" align="center"> 
+           <tbody> 
+            <tr> 
+             <td style="padding:24px 55px; background-color: #ffffff;" class="pad-tb40 pad-lr24 secndry-comp" valign="top" align="left">
+ 
+              <table class="tmpStayConnect" width="100%" cellspacing="0" cellpadding="0" border="0"> 
+               <tbody> 
+                <tr> 
+                 <td valign="top" align="left"> 
+                  <table class="devicewidth" width="65%" cellspacing="0" cellpadding="0" border="0" align="left" style="display:inline-table;"> 
+                   <tbody> 
+                    <tr> 
+                     <td valign="top">
+ 
+                      <table width="100%" cellspacing="0" cellpadding="0" border="0"> 
+                       <tbody> 
+                        <tr> 
+                         <td style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:18px; color:#161513; text-align: left; font-weight: bold; height: 24px; padding-right: 36px;" class="white-txt center pad-r0 UserSCLabel" valign="middle" align="left" data-rtl-scpadding="true"><span class="SCTrans" id="stayConnected">Stay
+ Connected</span></td> 
+                        </tr> 
+                       </tbody> 
+                      </table></td> 
+                    </tr> 
+                    <tr> 
+                     <td> 
+                      <table class="SCHashtagTbl" style="display:none" cellspacing="0" cellpadding="0" border="0" data-rtl-scaddcls="true"> 
+                       <tbody> 
+                        <tr>
+ 
+                         <td class="SCHashtag txt-center pad-r0" style="font-family:'Oracle Sans', Arial, Helvetica, sans-serif; font-size:16px; color:#000000; padding:8px 0px 0px 0px; padding-right: 36px;" data-rtl-scpadding="true" align="left" data-rtl-right="true"></td> 
+                        </tr> 
+                       </tbody> 
+                      </table></td> 
+                    </tr> 
+                   </tbody> 
+                  </table>
+ 
+                  <table class="center devicewidth" cellspacing="0" cellpadding="0" border="0" align="right" data-rtl-left="true" style="display:inline-table;"> 
+                   <tbody> 
+                    <tr> 
+                     <td class="pad-t25" valign="top"> 
+                      <table class="SCPlaceHolder" cellspacing="0" cellpadding="0" border="0" align="center"> 
+                       <tbody> 
+                        <tr>
+ 
+                         <td style="padding-left:8px;" valign="top" align="left"><a href="https://app.response.oracle-mail.com/e/er?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;s=1973398186&amp;lid=590591&amp;elqTrackId=cc94258816724deca43cac35fa4a0e5a&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1" target="_blank"><img alt="Facebook" border="0" height="24" src="https://www.oracle.com/oce/dc/assets/CONT70B6D67F0C7E42A49AF3F8D9FEC48DF7/native/tb-icon-facebook.png" width="24"></a></td>
+ 
+                         <td style="padding-left:8px;" valign="top" align="left"><a href="https://app.response.oracle-mail.com/e/er?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;s=1973398186&amp;lid=478305&amp;elqTrackId=5f58f84f6bdd4ad1bd28ff7b1c8be64a&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1" target="_blank"><img alt="Twitter" border="0" height="24" src="https://www.oracle.com/oce/dc/assets/CONTC2EF93AE422A4C67A6C49444AD91F6D3/native/tb-icon-twitter.png" width="24"></a></td>
+ 
+                         <td style="padding-left:8px;" valign="top" align="left"><a href="https://app.response.oracle-mail.com/e/er?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;s=1973398186&amp;lid=570941&amp;elqTrackId=c3c12727473c4378b40d7ebe8bafdbbc&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1" target="_blank"><img alt="Youtube" border="0" height="24" src="https://www.oracle.com/oce/dc/assets/CONT172E1B5DC0CA4080910A375F769B1373/native/icon-youtube.png" width="24"></a></td>
+ 
+                         <td style="padding-left:8px;" valign="top" align="left"><a href="https://app.response.oracle-mail.com/e/er?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;s=1973398186&amp;lid=218039&amp;elqTrackId=6724d4ef79e74f1492b2b5dfd0da3523&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1" target="_blank"><img alt="Instagram" border="0" height="24" src="https://www.oracle.com/oce/dc/assets/CONT6A05E3581499477A9D2832172FCC095F/native/icon-instagram.png" width="24"></a></td>
+ 
+                         <td style="padding-left:8px;" valign="top" align="left"></td> 
+                        </tr> 
+                       </tbody> 
+                      </table></td> 
+                    </tr> 
+                   </tbody> 
+                  </table></td> 
+                </tr> 
+               </tbody> 
+              </table></td> 
+            </tr> 
+           </tbody> 
+          </table> </td> 
+        </tr> 
+       </tbody> 
+      </table> </td> 
+    </tr>
+ 
+   </tbody> 
+  </table> <grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration><!-- TBID=CMP1000145366-EML1000448714 --><!-- Webinar ID = 940 2692 3626 --><!-- rpcampaign: SEV400308952 --><!-- GMSSNO: SEV400308952 -->
+ 
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="devicewidth" id="rwFooter" width="614">
+	<tbody>
+		<tr>
+			<td align="left" class="dark-bg" style="padding:0; background-color:#312D2A;" valign="top">
+			
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tbody>
+					<tr>
+						<td align="left" class="ftr-link pad-lr24" style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:10px; color:#FFFFFF;  word-break:break-all; padding: 40px 55px 0px 55px;">
+<a class="white-txt tbfooter" href="https://www.oracle.com/legal/privacy/index.html?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;elqTrackId=3794c0dfa13f4d84a856878adf6cf34c&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1&amp;elqCampaignId=499652" id="privacyLink" style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; color:#FFFFFF; text-decoration:none; word-break:break-all; white-space: nowrap;" target="_blank">Terms of Use and Privacy</a>
+ <span class="white-txt tbfooter" style="color:#FFFFFF;">|</span>
+ <a class="white-txt subscribe tbfooter" href="https://go.oracle.com/subscriptions?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;l_code=en-us&amp;src1=EM:FO&amp;elqTrackId=229ac59b53e44a7bafa5f37f9e1df2cb&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1&amp;elqCampaignId=499652" id="contactusLink" style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; color:#FFFFFF; text-decoration:none; word-break:break-all; white-space: nowrap;" target="_blank">Subscriptions</a>
+ <span class="white-txt subscribe tbfooter" style="color:#FFFFFF;">|</span> <a class="white-txt tbfooter" href="https://go.oracle.com/dne?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;l_code=en-us&amp;elqTrackId=4efd65d507f940a891a5cffe5dc29f71&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1&amp;elqCampaignId=499652" id="contactusLink" style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; color:#FFFFFF; text-decoration:none; word-break:break-all; white-space: nowrap;" target="_blank">Unsubscribe
+</a> <span class="white-txt tbfooter" style="color:#FFFFFF;">|</span> <a class="white-txt tbfooter" href="https://www.oracle.com/corporate/contact/global.html?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;elqTrackId=821ebdb146f94a8eb935f94d44553658&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1&amp;elqCampaignId=499652" id="contactusLink" style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; color:#FFFFFF; text-decoration:none; word-break:break-all; white-space: nowrap;" target="_blank">Contact
+ Us</a></td>
+					</tr>
+					<tr>
+						<td align="left" class="white-txt pad-lr24" style="font-family:'Oracle Sans', Noto Sans, Helvetica, Arial, Sans; font-size:10px; color:#FFFFFF; padding:15px 55px 0px 55px;">Copyright © 2023, Oracle and/or its affiliates. All rights reserved. Oracle Corporation - Worldwide Headquarters, 2300 Oracle Way, Austin, TX 78741, United States</td>
+					</tr>
+					<tr>
+						
+<td align="right" class="pad-t20 pad-l24" style="padding:4px 36px 0px 55px;" valign="bottom"><a href="http://www.oracle.com/us/corporate/index.html?elq_mid=247705&amp;sh=&amp;cmid=CORP230912P00036&amp;elqTrackId=bbac88a725184936a0c33c3a324d7964&amp;elq=1e454e0518b44eda925d0c4570897aa0&amp;elqaid=247705&amp;elqat=1&amp;elqCampaignId=499652" target="_blank">
+<img alt="Oracle" border="0" height="36" src="https://www.oracle.com/oce/dc/assets/CONTB612491B53E6487EB059715A421DE70F/native/tb-o-red-tag.png" style="display:block;" width="36"></a></td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<img src="https://app.response.oracle-mail.com/e/FooterImages/FooterImage1?elq=1e454e0518b44eda925d0c4570897aa0&amp;siteid=1973398186" alt="" border="0" width="1px" height="1px" style="display:block;"></body></html>
+--=-7tUoqyhbwZqS1KHChrVK1w==--

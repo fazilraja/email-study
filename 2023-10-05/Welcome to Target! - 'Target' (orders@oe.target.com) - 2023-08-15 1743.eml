@@ -1,0 +1,991 @@
+Received: from SA1PR20MB6174.namprd20.prod.outlook.com (2603:10b6:806:338::18)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Tue, 15 Aug 2023
+ 22:43:54 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=ON8d8/rxdp8G+A3jf48IeQ7FDjm+kTa/E+SoLAoppyIUXwZGilYwHazWpDmkF2QJQVtVRRQk+c8ty6DQvL4pVDDDU07myJC379MaFrkjOZAgXkgU9dhStsSsdHrT8aDZ244p/J6pQqExXzgdIjteO6Zgstoa8L7zagG3axR7d2BIM8yNKxoc32cQlXtibYHUNdHn97npBTQb/9hJbtDRnqeTHAvujVQ97SZXib6PM8RIc4EW6s3YELBx6r9pQsbG366anfS2gRPiTc4jU2rF558H5TPY6PYXCQC/kG/5wwIC5C0a7+tzognO0Yz833LFsGVyry6a2w0jLdwMup9/FA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=25J0vtGAAsb3grHFQMSGBFGuL+IhyMIAyJV/nNDjpLE=;
+ b=gIH0iQn9fPfBHr12VAYTk9f8C7LGDnQa2qWb8XGsfstYq1YKZNqsKvdV36X2mApMhhre6/U7lxR5ChdiA4t6CmfUuYWZDoRgnFJoz4V2aGRQ1uBwMRx8cMpvx5qSgBhAfOw9m3z50bPOoWShMFZpQB5xrR5sioMMIjStQyejkG87TVMgp/udvit7h7vQvhDsxpwNr04aGPvL6eX22B/0x8aM7K2d2ngGDvn3eulk+XbPVE4JrAPgfGHNedXDikJY+cRgKFtBzsPC3AMJ4DIEWfByG0z4H3oD656EY02+D0DyDTAtg/ZqyOHk0bObiuLrPmg2YlVZZNmInqoHNR3ePQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.219.179) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.oe.target.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=oe.target.com; dkim=pass (signature was verified)
+ header.d=oe.target.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounce-20_html-534069027-191058-7284873-620932@bounce.oe.target.com]
+ dkim=[1,1,header.i=@oe.target.com] dmarc=[1,1,header.from=oe.target.com])
+Received: from AS4P251CA0019.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:5d3::7)
+ by SA1PR20MB6174.namprd20.prod.outlook.com (2603:10b6:806:338::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.24; Tue, 15 Aug
+ 2023 22:43:52 +0000
+Received: from AM3PEPF00009BA2.eurprd04.prod.outlook.com
+ (2603:10a6:20b:5d3:cafe::e0) by AS4P251CA0019.outlook.office365.com
+ (2603:10a6:20b:5d3::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.33 via Frontend
+ Transport; Tue, 15 Aug 2023 22:43:51 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.219.179)
+ smtp.mailfrom=bounce.oe.target.com; dkim=pass (signature was verified)
+ header.d=oe.target.com;dmarc=pass action=none
+ header.from=oe.target.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of bounce.oe.target.com
+ does not designate 209.85.219.179 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.219.179;
+ helo=mail-yb1-f179.google.com;
+Received: from mail-yb1-f179.google.com (209.85.219.179) by
+ AM3PEPF00009BA2.mail.protection.outlook.com (10.167.16.27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.14 via Frontend Transport; Tue, 15 Aug 2023 22:43:51 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:870F9031112A6A0D9B325F4A0B4AACC3406C0A26E6CC7A47EE36FEB8FF3CB8CF;UpperCasedChecksum:74A032B553743163DE05097A7D5073A64A7C5B36F99047AFAD13CBDD05E4CCE3;SizeAsReceived:5726;Count:31
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-d299ed34bacso9809075276.1
+        for <tobinsilvestre@outlook.com>; Tue, 15 Aug 2023 15:43:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692139430; x=1692744230;
+        h=x-forwarded-for:message-id:list-id:reply-to:mime-version:list-help
+         :date:subject:to:from:dkim-signature:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=25J0vtGAAsb3grHFQMSGBFGuL+IhyMIAyJV/nNDjpLE=;
+        b=SBRXcpNvRizULDnVNb2AX2pQ+Qe7oPMPu+b2ZUYbK+hShazQw1st5dA/eRLBtnSf7S
+         ANpg1+JLgy8hg0cxUJp0Gh/d4J+HLg7/BRIx2w1koveywgZvyfc34rkXcvOSBBM/nCQJ
+         i/wHg72i6OXmg2mr4l1Ch7gtxfPBRR70bv6GT8n5l1F6dgf1msCcecB7gXW0Z/39Kxuu
+         NUVvkaDzoiZXN83IH3LxvFYxssg04sCDoGDDdapNjOW/EOOing88jC+vA1lsV3wiLDh5
+         Zjk/lsmeR6iZEmZdJh4oyvv0fpK4mMJWRvbeuxRcMR9v6sXzYae3Dm81KJUhwkWvVF4D
+         mWnw==
+X-Gm-Message-State: AOJu0YzDbKVxpyf/iiMN+EF7LbplrepxzNjCzHViMVI0oHxAAHi76JhX
+	OSfwqr3EES9RSlUUSC7qY3IQQmQ/f1STwzzVAQ==
+X-Google-Smtp-Source: AGHT+IHjaBDz7j1Uc5bp8K71veF7Igd7ORsGVE0EL1nsrpV3OD2GY4PIl6B/Qk+xab9jZH5b287sLRbNXARIA7GjviyaYI0Tvzs=
+X-Received: by 2002:a25:50ca:0:b0:d1c:5a9a:48d2 with SMTP id e193-20020a2550ca000000b00d1c5a9a48d2mr346484ybb.19.1692139430484;
+        Tue, 15 Aug 2023 15:43:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692139430; cv=none;
+        d=google.com; s=arc-20160816;
+        b=KFGFNjy9MApRulMWQF0fALaairXzoKd6BtQioguu/p10E9JmbOCaivS4lkpltxeRiJ
+         CZg4eqZLlK+ssAspvsNnofjb3yyj/FndyFBnOHLgHmMS6Z5Qq0Wtsk8HLftZMFXnfocY
+         SGd9mJU2+ka6LP35aBy7tQhZkmkXc0/E6YdUhwctGtVO3TD28FZva7Pi1J5V2G1QktNs
+         foknzv49O/gs872zKtBR3Ky1bdQKkcvY0JuJ06vkWxURy3zoBGa7BJwiNlgoHoHKVfg0
+         Ox9lhSrxRyGKy4kMXvOWy9dDaAsC/b8yEx005VGvH1GAUGQVHqsxnTFW1ovgqrfzP3Jp
+         t7Lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=message-id:list-id:reply-to:mime-version:list-help:date:subject:to
+         :from:dkim-signature;
+        bh=25J0vtGAAsb3grHFQMSGBFGuL+IhyMIAyJV/nNDjpLE=;
+        fh=v8MhuGv3X39cR10oBds1fHXXBttlUGZaQ1dqdw+8waQ=;
+        b=qXMzaC2JS7xn5tlv4PtG/gXHQml8l+Scn8p+F+ncAveJMgGw+4n01/qYShOClHslil
+         7BW4PS8r5CcbPsWyJTpgeVj3Nzv+mLcmjPxwTfrLtMAz+FbaH6vH2bnjnx6vBatHttB1
+         Ryvqx431FGvkM/5EZeoFO2qsol1xszaE4FJK6I7mksLb3qG251TemvzjWG6ATEbpt7kL
+         d+LpYIsHrduJQLUv/tsYS2Q4WXyX00Zrf+i2+rRFLWV0GJwll+Q56o0urrA8s+6zAKYd
+         wjTz48uhTto/pmzRUM0q9jf5g3IiF/VJb3bzztQnpl4DIxpMZM2QyvC8xuBPx5zy4maD
+         f4Xg==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@oe.target.com header.s=200608 header.b=Rf0rvNc8;
+       spf=pass (google.com: domain of bounce-20_html-534069027-191058-7284873-620932@bounce.oe.target.com designates 136.147.131.4 as permitted sender) smtp.mailfrom=bounce-20_HTML-534069027-191058-7284873-620932@bounce.oe.target.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=oe.target.com
+Return-Path:
+ bounce-20_HTML-534069027-191058-7284873-620932@bounce.oe.target.com
+Received: from mta.oe.target.com (mta.oe.target.com. [136.147.131.4])
+        by gmr-mx.google.com with ESMTPS id v7-20020a25ab87000000b00d36cc4f5201si878589ybi.3.2023.08.15.15.43.50
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 15 Aug 2023 15:43:50 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-20_html-534069027-191058-7284873-620932@bounce.oe.target.com designates 136.147.131.4 as permitted sender) client-ip=136.147.131.4;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@oe.target.com header.s=200608 header.b=Rf0rvNc8;       spf=pass
+ (google.com: domain of
+ bounce-20_html-534069027-191058-7284873-620932@bounce.oe.target.com
+ designates 136.147.131.4 as permitted sender)
+ smtp.mailfrom=bounce-20_HTML-534069027-191058-7284873-620932@bounce.oe.target.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=oe.target.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=200608; d=oe.target.com;
+ h=From:To:Subject:Date:List-Help:MIME-Version:Reply-To:List-ID:
+ X-CSA-Complaints:Message-ID:Content-Type; i=orders@oe.target.com;
+ bh=25J0vtGAAsb3grHFQMSGBFGuL+IhyMIAyJV/nNDjpLE=;
+ b=Rf0rvNc8vnPHHE0RmS4xE+pwnlx8PikcctbCROypZz/sd209Qza/kmOQqfLfhDLA/NgIwx7KNbzM
+   /DnzHUWwwvuLWRwFfn8AWqoqy9q6apR+Bb4u+bzq8qAppvEIzqwy72EttasaGgKXTv5cFinVmlG4
+   +d5I8Yvnr86CJzy9R0Y=
+Received: by mta.oe.target.com id hrfvqc2fmd4u for <tobinsilvestre010@sooners.us>; Tue, 15 Aug 2023 22:43:49 +0000 (envelope-from <bounce-20_HTML-534069027-191058-7284873-620932@bounce.oe.target.com>)
+From: "Target" <orders@oe.target.com>
+To: <tobinsilvestre010@sooners.us>
+Subject: Welcome to Target!
+Date: Tue, 15 Aug 2023 16:43:49 -0600
+List-Help: <https://click.oe.target.com/subscription_center.aspx?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWQiOiI3Mjg0ODczIiwicyI6IjUzNDA2OTAyNyIsImxpZCI6IjIwIiwiaiI6IjE5MTA1OCIsImpiIjoiNjIwOTMyIiwiZCI6IjcwMjA3In0.Y9A_4VQchSfcM0jojIj7XzP_r51Ve_ORmqBTSUINx5U>
+x-CSA-Compliance-Source: SFMC
+Reply-To: "Target" <reply-fec7157974640175-20_HTML-534069027-7284873-620932@oe.target.com>
+List-ID: <7282972.xt.local>
+X-CSA-Complaints: csa-complaints@eco.de
+x-messageKey: 083410f2-6a2e-4930-ad76-cb55233105fc
+X-Delivery: Transactional
+X-SFMC-Stack: 7
+x-job: 7284873_191058
+Message-ID: <4ffa6d8e-5383-4c90-93c3-edc4cf81131c@atl1s07mta2806.xt.local>
+Content-Type: multipart/alternative;
+	boundary="FubVAOBVVrec=_?:"
+X-Forwarded-For: tobinsilvestre010@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 31
+X-MS-Exchange-Organization-ExpirationStartTime: 15 Aug 2023 22:43:51.4224
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 41ee34e4-c8a3-4a41-a52b-08db9de118e9
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ AM3PEPF00009BA2:EE_|SA1PR20MB6174:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ AM3PEPF00009BA2.eurprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 8/15/2023 10:37:50 PM
+X-MS-Office365-Filtering-Correlation-Id: 41ee34e4-c8a3-4a41-a52b-08db9de118e9
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.219.179
+X-SID-PRA: ORDERS@OE.TARGET.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 2
+X-Microsoft-Antispam: BCL:2;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2023 22:43:51.3131
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41ee34e4-c8a3-4a41-a52b-08db9de118e9
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ AM3PEPF00009BA2.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR20MB6174
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.6558647
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6678.025
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:0;pcwl:0;kl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(90014020)(91030020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(8820095)(9910022)(9545005)(10170022)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPmLu1hK6v0EwMe1gNAIOG0p5pSaa5i/szr0wTmjMdq5zEKh7aQlqzbsKLHZ70TVOztSpKs8omXamqg9cYwkQSu/qpN1hceCsWOH1zAtMicoyMq8+AutE242FdCXbJdCxsNYvqNo4XMahOfKFo2BeIoaXm9McyC+ZFFz1gqFQKi05I0F1EjII13L2QyNtEJXRCm9BLi+zJqSGQ==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0tMQ==
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dWpwbWFPakhMQnpVKy9DdWE4RDQrMFBKays0cHpiVnJkVTlnMmFRNk5GL1BR?=
+ =?utf-8?B?cDFrdlVIb2M3cXpSR2RYTFBSMU9lZU9TSFFEQzM3UTZ0RVBlZTlUeGVmOWMw?=
+ =?utf-8?B?N3kwWTZkUDlFV3ppcEFKcCtDMXlCc1ozQmMyZFRZck4vVElUSGEwVWV0YW80?=
+ =?utf-8?B?di9qRHY5am12YWoyMU5PZVJMRnZRbGo1RlY3cVhBNFZOb2VKZG9VR0hMQ1Qx?=
+ =?utf-8?B?RVBNVWNFQS9hTVBseGVZMExIRDVMeGExblUyZGdwVGx0bHRvNkJORlNiZEdw?=
+ =?utf-8?B?RVFQV1Z0SG5abllDOEIyR3JndjJ1Q1dYVWdDb2RRUGFzVHdNd3NQUVc4Z0hK?=
+ =?utf-8?B?WjdQUVdqcGwwc1hrY1EzU245UkVJRHNyQk9OeHRaRFJKdDlnZThDOStJd2NQ?=
+ =?utf-8?B?SktMYXYxVUhmYndTalZ5R1JvcmUvRGc4NDgrVy9WMUtIOW81cjVzUEF5OUpO?=
+ =?utf-8?B?TWEvVVlybklRbFRIRHE1TU1CdTFFSEI5Y2M3Zi9SOTV1VHJrWUtiZU1YMUNE?=
+ =?utf-8?B?V0FFRy91TXVHcXQ5UjFpUUNVS3VZWDlJOWZydTR6WjRTVmpoOGg2S2o0cFBB?=
+ =?utf-8?B?R2Y2ekcwL3dVUzI0RmtNaUhjNWtKUi9PejNFQTdmc3R6bS9aTkJxSTcxUGVt?=
+ =?utf-8?B?Q2ZGVzR6bDhmQUZmSC96cXYrd3BzVk5XRTVYUGpUYTE0NmR1RkY2dXZzMHFT?=
+ =?utf-8?B?cFMybkV6TWNVYzcrYUlPS2dpaWt0bVloS1VwNVBpMnNOQ29GMktaL2ZQaWVu?=
+ =?utf-8?B?VjV1Umwwbi9XUE9hOG5MczZiaTlMNUxiaTEyaU92SjFlOEU2N01FZi9BSVV1?=
+ =?utf-8?B?R2lZdHlQemZSenlkS1pJa0Q3WlBKcWUyalQzWjJwOTdFc1ZFN05oRFVwSGsr?=
+ =?utf-8?B?THFIdGkrUXo1bExaREMxZFJOUUI4YlN4K0FHc1VscE13M3ZHdVdBMlJncCs3?=
+ =?utf-8?B?TnRRbTJVUmxhbFRjTXdVSkorNjhOYzlUZUhBeWdjZTlFR01YcjdUbXRzajNW?=
+ =?utf-8?B?UFNLcElTeHhnRyszYmhZMkdGZ2hDNEdObmRBK211K1FidDNSRngzUGFyVDFG?=
+ =?utf-8?B?THJRVnVMVzVDNW9udEpkaVE1MlMrcEJVRGpkT3hNQ2txUW9QVXcwbkpnT3Zw?=
+ =?utf-8?B?SFJCRFQ2VS9rRU53VGZPOWVTY215WWtrNzA5dnFxNUtaUkpxMUs2VnhUaUs5?=
+ =?utf-8?B?cVVLdkZXc1FoWWw5WmQydk1YSitiNG9WajNkQ2d2UUtUcVVCL2dGOW1sdXZz?=
+ =?utf-8?B?ZHFZNTJrRVh0YW1FL0lJUk4rMHg0RkxoMDNaZG1CSEdndjlkZldRc280UUJ0?=
+ =?utf-8?B?c3cyd25uaWdNc2xOVVJ1czYvK0M4T1d6ZW9kQlAzd2dtZ1lGa3FIRkNwY0l3?=
+ =?utf-8?B?ZnJpZ0UxVzNDL1JLRkZOTlViVzB6UzlUNXliUmZBVzJYQk4vcjVhOGkwc2NH?=
+ =?utf-8?B?WERLcHhYN1BYWjdzajY0L1c3RVBXRzJoaG94NEZlT0gzVkVhTHMwUjM5bFJn?=
+ =?utf-8?B?MU1VSDFHTVh3VmVIb01CWWM2d3JRSFFNZmI4d1hvL2pISmp6d1ZYVDNIaVor?=
+ =?utf-8?B?MGN0NG5CcGxuRmZucW9VM3E2ZXVPKzBzWFBYaHRwUDdWZHNJOW1uNjdlNWor?=
+ =?utf-8?B?aUVtSkZURFZSZUVsS0xjWFFTa0pnNS80b1NEMWVHV0tsUjUwWkNRR050Qmti?=
+ =?utf-8?B?MGNSVmF1RU5yOFp0WHZDVWhoRTVKL3FYcXQ2YXd6MW9sWnhZYUszV1RlWmV1?=
+ =?utf-8?B?b3hoY3Jxbks5SlNqaW1tWHY2WWRwZ3VXTnorZlN3ZXRMQTZXRXI3UWxRSXN4?=
+ =?utf-8?B?S0hvNEYvVzQxd09hTFBhd2JxZ0EyQmpnTDRqY2loTEJVOHNUZ0M3VDZEeElW?=
+ =?utf-8?B?b2pLY283MzNmWmNGY1h1eVdxeU1MT2JZOXBZbnJPbmdYUzl2dzIwSUlyT2tx?=
+ =?utf-8?B?bEdhL0sybDJaa0h3dkR6cEt2cldWcEZBVlJicThUc1dUSlFZb2JuOEkyVElZ?=
+ =?utf-8?B?UDd3ekc4RjJ6cTVQWXIzM04xSUd2RW4xZnFzYjNxMk1xd0RPU282bkQ4U2Mr?=
+ =?utf-8?B?MUVqa1FLOTA2WlRyYkxsZVEvNFR5bU5vVTd4M0srQ1lMWDRKelIxTE9sbFky?=
+ =?utf-8?B?S0Z0bDRWQ3VVUk9xNzFTVnNFM2FZKzlOOFJ6d2pqVEgyMlNlaW53bUFvWWlI?=
+ =?utf-8?B?NytsSUI0Zk56V1cxZ2Z6ZnA5aW85TEJXS1VPdkd1YmlwdWVPNUt6d3V2TVho?=
+ =?utf-8?B?RjVYcXdEZmhnVlNST1I2QkJ4ajlJQnY2VytBMkhON3gvcTRRZkp0b1AvL2o3?=
+ =?utf-8?B?U2lOWlowOHQ3aXNoOE96dFhnT2t3Q2JnK0h5cC9saWFzYXZ6aGtuaFlJdXM1?=
+ =?utf-8?B?bGdRTGlDMEI5b2thdTM1RGtwYUIxT3Eza2NaZ3lJY015Ym5HU0V3Ym1ZSmFV?=
+ =?utf-8?B?YllsUDJCUXdSTTJhckwrMlR3TlJWTEtaOTg4blFrYnAyQXVYanVVallzYlkz?=
+ =?utf-8?B?cXRmdUc4QWJNZWZla1BpVjI0ejN2NTI2THk2OWc3R0FBPT0=?=
+MIME-Version: 1.0
+
+--FubVAOBVVrec=_?:
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+
+
+Your new Target.com account
+
+
+  &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj;
+ &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj;
+
+
+ 
+https://click.oe.target.com/?qs=c14609db9a03a9e378cf09f9d8d91c6e142f30900637b34d8060c75a7eea55bcae59fb38a30e749b45dd8552d0b480bd66a76f68cb893d7289362f1b389ecb4b 
+
+
+ Welcome, Tobin !
+
+Thanks for creating a 
+https://click.oe.target.com/?qs=c14609db9a03a9e3ec94349de0dd0ca3c204bc6fd818fcc75b365d4021195166f57e4a412516c0e0f3987d468c485727b8f1c0be2f623b77c7f8b0495a22e8cb 
+Target.com  account! See how it can make shopping and saving at Target even easier, online or at the store.
+
+
+
+
+
+
+
+Get all of Target in one place
+
+Save time and money with the Target app. You can browse deals, plan your Target run, shop your Essentials, pay with Wallet and get your order with Drive Up!
+
+https://click.oe.target.com/?qs=c14609db9a03a9e35003036deb761626f6ff452ce167fefee7974cceefd6b3ef989ec7851801279affcf7c938199716d385b4c812c0300e5c642dabb5f47e6e7 
+
+https://click.oe.target.com/?qs=796853b4865adf054f2bb0f01f61198ae8dd0891e0e1880945336bfd4f6177ace9445c79cb420a82a50c9b061fb336ca8bbedf1286f45d0f169b49530f28d7d5 
+
+Try Drive Up, only in the Target app
+
+Order with Drive Up in the Target app and we’ll bring it out to your car for free.
+
+https://click.oe.target.com/?qs=c14609db9a03a9e30fc1255f6b167cd733a0738fdef115f300f1aa0fd460fe9b1dd32b76ff75d7491d402c059f1cd757b7af49051f1430114420d22ecf882599 
+Try Drive Up 
+
+Shop your store
+
+Set your store to see what’s in stock nearby and we’ll have it waiting for you.
+
+Manage your purchases
+
+View your online and in-store purchases to track packages, reorder items, start a return and more.
+
+https://click.oe.target.com/?qs=796853b4865adf057127b9b9f7d315a219845af2a4d83ad919485e9a9027938e5c758c39c6312ab9ab4ea1096d9e413462817f5384d7c27a9aa3654e7d0a4aa1 
+View orders 
+
+
+ 
+ 
+
+ 
+
+https://click.oe.target.com/?qs=c14609db9a03a9e30292882feafafb0eb7a9053e1b45f4c285da629b15dd74459d9f872fffaf361f75f17055c7b15e68666f4f67e8808370f5427636ceed8317 
+Help
+
+https://click.oe.target.com/?qs=c14609db9a03a9e33edbdf3c755be6057b80b7c1db2091ea4880156702474a439bd41acf85f45925b14f66d59acac2d29cc745ec31f531b304c026d59255c486 
+Returns
+
+https://click.oe.target.com/?qs=c14609db9a03a9e3d7ac3795f472ee35c63351f6b0eee9610c8873432676dac214d323bf39f08a2c024842fbf63348e9e2335101cad7fa8d51431acf9621bffb 
+Contact
+
+https://click.oe.target.com/?qs=c14609db9a03a9e3b99872abc814b27e65b88285b18d6e60506d48fc7030dba2383c7cb3cfb46933c95b8708135a70fcc868c36ec89dd5fdd67ee94b686a1a1f 
+Find a store 
+
+https://click.oe.target.com/?qs=c14609db9a03a9e32d4b7ae97897d099781421aa01c5cca4e442a1c4fd9b3683f768a99fa0662f068b2e80e886f8372fb7df3b98e398c2d20e5f325bfcac2954 
+Terms of use 
+
+https://click.oe.target.com/?qs=c14609db9a03a9e35a27f8319980e4e7254524a3f2900060799821f26e9b216efc4b94cb69e77ddaaede7e35ff5abdbf15308646be98db7d733e1effcdf15b21 
+Privacy
+
+https://click.oe.target.com/?qs=c14609db9a03a9e3eb77f7af3b366abd27ffb29c4fba9c05764d4e725f2888269247a4b909a3a9212bec03b1583f5a9eeb77764278946ebf1aaca9ee000e69e0 
+Target.com
+
+(c) 2023 Target Brands, Inc.
+
+
+ 
+ 
+ 
+
+
+
+--FubVAOBVVrec=_?:
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Your new Target.com account</title>
+  <!--[if !mso]><!-- -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--<![endif]-->
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type="text/css">
+ a {
+  text-decoration: none;
+    }  
+   
+    #outlook a {
+      padding: 0;
+    }
+
+    .ReadMsgBody {
+      width: 100%;
+    }
+
+    .ExternalClass {
+      width: 100%;
+    }
+
+    .ExternalClass * {
+      line-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+
+    table,
+    td {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    p {
+      display: block;
+      margin: 13px 0;
+    }
+  </style>
+  <!--[if !mso]><!-->
+  <style type="text/css">
+    @media only screen and (max-width:480px) {
+      @-ms-viewport {
+        width: 320px;
+      }
+      @viewport {
+        width: 320px;
+      }
+    }
+  </style>
+  <!--<![endif]-->
+  <!--[if mso]>         <xml>         <o:OfficeDocumentSettings>           <o:AllowPNG/>           <o:PixelsPerInch>96</o:PixelsPerInch>         </o:OfficeDocumentSettings>         </xml>         <![endif]-->
+  <!--[if mso]>         <style type="text/css">           .outlook-group-fix { width:100% !important; }     .tal-d {    text-align: left !important;    }         </style>         <![endif]-->
+  <style type="text/css">
+    @media only screen and (min-width:480px) {
+      .mj-column-per-100 {
+        width: 100% !important;
+        max-width: 100%;
+      }
+      .mj-column-px-600 {
+        width: 600px !important;
+        max-width: 600px;
+      }
+      .mj-column-per-40 {
+        width: 40% !important;
+        max-width: 40%;
+      }
+      .mj-column-per-60 {
+        width: 60% !important;
+        max-width: 60%;
+      }
+.mj-column-per-55 {
+ width: 55% !important;
+ max-width: 55%;
+}
+.mj-column-per-45 {
+ width: 45% !important;
+ max-width: 45%;
+}
+  .tal-d {
+  text-align: left !important;
+  }
+    }
+  </style>
+  <style type="text/css">
+    [owa] .mj-column-per-100 {
+      width: 100% !important;
+      max-width: 100%;
+    }
+
+    [owa] .mj-column-px-600 {
+      width: 600px !important;
+      max-width: 600px;
+    }
+
+    [owa] .mj-column-per-40 {
+      width: 40% !important;
+      max-width: 40%;
+    }
+
+    [owa] .mj-column-per-60 {
+      width: 60% !important;
+      max-width: 60%;
+    }
+ [owa] .mj-column-per-55 {
+  width: 55% !important;
+  max-width: 55%;
+ }
+ [owa] .mj-column-per-45 {
+  width: 45% !important;
+  max-width: 45%;
+ }
+  </style>
+  <style type="text/css">
+    @media only screen and (max-width:480px) {
+      table.full-width-mobile {
+        width: 100% !important;
+      }
+      td.full-width-mobile {
+        width: auto !important;
+      }
+    }
+  </style>
+  <style type="text/css">
+    /* Samsung link fix */
+
+    #MessageViewBody a {
+      color: inherit;
+      text-decoration: none;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: inherit;
+      line-height: inherit;
+    }
+
+    /* MOBILE STYLES - OPERATIONAL --------------------------- */
+
+    @media screen and (max-width: 480px) {
+      .wrapper {
+        width: 100% !important;
+      }
+      .wrapper90 {
+        width: 90% !important;
+      }
+      .wrapper80 {
+        width: 80% !important;
+      }
+      .mw-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .footer-border-bottom {
+        border-bottom: solid 1px #D6D6D6 !important;
+        height: 1px !important;
+        width: 100% !important;
+      }
+      .footer-border-top-bottom {
+        border-bottom: solid 1px #D6D6D6 !important;
+        height: 1px !important;
+        width: 100% !important;
+        border-top: solid 1px #D6D6D6 !important;
+      }
+      .footer-pad {
+        padding: 17px 0 17px 0 !important;
+        margin: 0px !important;
+      }
+      .footer-text {
+        font-size: 17px !important;
+        line-height: 20px !important;
+        text-align: center !important;
+        color: #666666 !important;
+      }
+      .footer-targetcom {
+        font-size: 20px !important;
+        line-height: 24px !important;
+      }
+      .footer-noborder {
+        display: none !important;
+        padding: 0px 0px 0px 0px !important;
+        border-bottom: solid 0px #FFFFFF;
+      }
+      /* Gmail iOS full-width fix */
+      /* The .full-wrap class needs to be added to a table of a content block */
+      u~div .full-wrap {
+        min-width: 100vw;
+      }
+      /* Gmail Android full-width fix */
+      div>u~div .full-wrap {
+        min-width: 100%;
+      }
+      /* Template Overrides */
+      .tal {
+        text-align: left !important
+      }
+      .tar {
+        text-align: right !important
+      }
+      .tac {
+        text-align: center !important
+      }
+      .mw85 {
+        max-width: 85%
+      }
+   .pl15 {
+        padding-left: 15px !important
+      }
+      .pr15 {
+        padding-right: 15px !important
+      }
+      .pl20 {
+        padding-left: 20px !important
+      }
+      .pr20 {
+        padding-right: 20px !important
+      }
+      .pl30 {
+        padding-left: 30px !important
+      }
+      .pr30 {
+        padding-right: 30px !important
+      }
+      .pl35 {
+        padding-left: 35px !important
+      }
+      .pr35 {
+        padding-right: 35px !important
+      }
+      .pl40 {
+        padding-left: 40px !important
+      }
+      .pr40 {
+        padding-right: 40px !important
+      }
+      .pl50 {
+        padding-left: 50px !important
+      }
+      .pr50 {
+        padding-right: 50px !important
+      }
+      .pl60 {
+        padding-left: 60px !important
+      }
+      .pr60 {
+        padding-right: 60px !important
+      }
+      .pl80 {
+        padding-left: 60px !important
+      }
+      .pr80 {
+        padding-right: 60px !important
+      }
+      .vam {
+        vertical-align: middle !important;
+      }
+/* Survey Smiley mobile spacing */
+.survey-column-per-100 {
+width: 100% !important;
+max-width: 100%;
+}
+.survey-column-per-30 {
+width: 12.5% !important;
+max-width: 12.5%;
+}
+.survey-column-per-9 {
+width: 18% !important;
+max-width: 18%;
+}
+.survey-column-per-6 {
+width: 10.5% !important;
+max-width: 10.5%;
+}
+.survey-column-per-26 {
+width: 12.5% !important;
+max-width: 12.5%;
+}
+.survey-column-per-18 {
+width: 18% !important;
+max-width: 18%;
+}
+.survey-column-per-12 {
+width: 39% !important;
+max-width: 39%;
+}
+    }
+  </style>
+</head>
+
+<body><style type="text/css">
+div.preheader 
+{ display: none !important; } 
+</style>
+<div class="preheader" style="font-size: 1px; display: none !important;">Try the Target app to get everything in one place</div>
+  <div style="">
+
+<table cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><!-- START: Preheader fix -->
+<div style="display: none; max-height: 0px; overflow: hidden;">
+ &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;
+‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌
+&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌</div>
+<!-- END: Preheader fix --></td></tr></table>
+
+    <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="table-layout: fixed">
+  
+  <!-- // START - Account Created HEADER -->
+  <tr>
+    <td align="center" valign="top" width="100%"><!--[if (gte mso 9)|(IE)]>       <table align="center" border="0" cellspacing="0" cellpadding="0" width="640" role="presentation">       <tr>       <td align="center" valign="top" width="640">       <![endif]-->
+      
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:640px;" role="presentation">
+        <tr>
+          <td bgcolor="#cc0000" align="center"><!-- MAIN BANNER IMAGE - 1 COLUMN --> 
+            <a href="https://click.oe.target.com/?qs=c14609db9a03a9e34813efdc2f45d4e107252de1bed36429e56f45990643cc4371b43a70d2112ff102c6d223dc0024ccc896daf61acc44b5fcfd876dc98dccaf" target="_blank"><img style="width: 100%; height: auto; max-width: 350px" src="http://target.scene7.com/is/content/Target/WelcomeConfetti?scl=1" width="350" height="149" alt="Target Logo with animated confetti"></a></td>
+        </tr>
+      </table>
+      
+      <!--[if (gte mso 9)|(IE)]>       </td>       </tr>       </table>       <![endif]--></td>
+  </tr>
+  <!-- END - Account Created HEADER // -->
+</table></td></tr></table>
+    <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><!-- START: Intro -->
+    <!--[if mso | IE]>       <table          align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:640px;" width="640"       >         <tr>           <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">       <![endif]-->
+    <div style="background:#FFFFFF;background-color:#FFFFFF;Margin:0px auto;max-width:640px;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
+        
+          <tr>
+            <td style="direction:ltr;font-size:0px;padding:20px 0;padding-bottom:0px;padding-left:20px;padding-right:20px;padding-top:45px;text-align:center;vertical-align:top;">
+              <!--[if mso | IE]>                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">                          <tr>                    <td                class="" style="vertical-align:top;width:600px;"             >           <![endif]-->
+              <div class="mj-column-px-600 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;padding-top:0px;padding-bottom: 5px;word-break:break-word;"><h1 style="mso-line-height-rule:exactly; Margin:0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:29px;font-weight:bold;line-height:32px;text-align:center;color:#333333;">Welcome, Tobin !</h1></td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;"><p style="Margin: 0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:normal;line-height:24px;text-align:center;color:#333333;">Thanks for creating a <a href="https://click.oe.target.com/?qs=c14609db9a03a9e36fef75e4f41d6e4a90373e8a4a7a6ac24bade3eb9c40df1137e98e8579af47d67c73f81fbd31fb357eae907cdca6517780588299374a12e2" style="color: #333333; text-decoration: underline;">Target.com</a> account! See how it can make shopping and saving at Target even easier, online or at the&nbsp;store.</p></td>
+                  </tr>
+                </table>
+              </div>
+              <!--[if mso | IE]>             </td>                    </tr>                          </table>                 <![endif]-->
+            </td>
+          </tr>
+        
+      </table>
+    </div>
+    <!--[if mso | IE]>           </td>         </tr>       </table>       <![endif]-->
+    <!-- END: Intro --></td></tr></table>
+
+
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner">
+<!-- START: Column RTL -->
+    <!--[if mso | IE]>       <table          align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:640px;" width="640"       >         <tr>           <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">       <![endif]-->
+    <div style="background:#FFFFFF;background-color:#FFFFFF;Margin:0px auto;max-width:640px;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
+        
+          <tr>
+            <td style="direction:rtl;font-size:0px;padding:20px 0;padding-left:20px;padding-right:20px;text-align:center;vertical-align:top;">
+              <!--[if mso | IE]>                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">                          <tr>                    <td                class="" style="vertical-align:middle;width:240px;"             >           <![endif]-->
+              <div class="mj-column-per-40 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+                        
+                          <tr>
+                            <td style="width:190px;"><img alt="Target app phone icon" height="auto" src="https://target.scene7.com/is/image/Target/TargetAppPhone2x?scl=1&amp;fmt=png-alpha" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="190"></td>
+                          </tr>
+                        
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <!--[if mso | IE]>             </td>                        <td                class="" style="vertical-align:middle;width:360px;"             >           <![endif]-->
+              <div class="mj-column-per-60 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:0px;word-break:break-word;"><h2 style="mso-line-height-rule:exactly; Margin:0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:19px;font-weight:bold;line-height:24px;text-align:left;color:#333333;">Get all of Target in one place</h2></td>
+                  </tr>
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"><p style="Margin: 0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:normal;line-height:24px;text-align:left;color:#333333;">Save time and money with the Target app. You can browse deals, plan your Target run, shop your Essentials, pay with Wallet and get your order with Drive Up!</p></td>
+                  </tr>
+   <!-- START: App icons -->
+                  <tr>
+                    <td class="tac" align="left" style="font-size:0px;padding:10px 25px;padding-right:20px;padding-left:20px; padding-top: 5px;word-break:break-word;"><!--[if mso | IE]>       <table          align="left" border="0" cellpadding="0" cellspacing="0" role="presentation"       >         <tr>                      <td>             <![endif]-->
+                      
+                      <table align="left" border="0" cellpadding="0" cellspacing="0" role="presentation" style="float:none;display:inline-table;">
+                        <tr>
+                          <td style="padding:4px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:104px;">
+                              <tr>
+                              <td style="font-size:0;height:35px;vertical-align:middle;width:104px;"><a href="https://click.oe.target.com/?qs=796853b4865adf05e84bbc91fe4d892a5571844756b2468c78d8e2b272d3aa2967471f3622e3762509285e674ea29d2b4432950f0c03d51406e55d68399f974a" target="_blank"> <img alt="App Store Download Button" height="35" src="https://target.scene7.com/is/image/Target/app_store_badge-310x104?scl=1&amp;fmt=png-alpha" style="max-width: 100%" width="104"> </a></td>
+                            </tr>
+                            </table></td>
+                        </tr>
+                      </table>
+                      
+                      <!--[if mso | IE]>               </td>                            <td>             <![endif]-->
+                      
+                      <table align="left" border="0" cellpadding="0" cellspacing="0" role="presentation" style="float:none;display:inline-table;">
+                        <tr>
+                          <td style="padding:4px;"><table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:118px;">
+                              <tr>
+                              <td style="font-size:0;height:35px;vertical-align:middle;width:118px;"><a href="https://click.oe.target.com/?qs=796853b4865adf05a081bb3b5434063dd0e9105856967107df74646947f535109372a61500561c05368e7a211bf36133e517618a26973c5db5e2f766d80556b8" target="_blank"> <img alt="Google Play Download Button" height="35" src="https://target.scene7.com/is/image/Target/google_play_badge-349x104?scl=1&amp;fmt=png-alpha" style="" width="118"> </a></td>
+                            </tr>
+                            </table></td>
+                        </tr>
+                      </table>
+                      
+                      <!--[if mso | IE]>               </td>                        </tr>         </table>       <![endif]--></td>
+                  </tr>
+                  <!-- End: App icons -->
+                </table>
+              </div>
+              <!--[if mso | IE]>             </td>                    </tr>                          </table>                 <![endif]-->
+            </td>
+          </tr>
+        
+      </table>
+    </div>
+    <!--[if mso | IE]>           </td>         </tr>       </table>       <![endif]-->
+    <!-- END: Column RTL -->
+<!-- START: Column LTR -->
+    <!--[if mso | IE]>       <table          align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:640px;" width="640"       >         <tr>           <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">       <![endif]-->
+    <div style="background:#FFFFFF;background-color:#FFFFFF;Margin:0px auto;max-width:640px;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
+        
+          <tr>
+            <td style="direction:ltr;font-size:0px;padding:20px 0;padding-left:20px;padding-right:20px;text-align:center;vertical-align:top;">
+              <!--[if mso | IE]>                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">                          <tr>                    <td                class="" style="vertical-align:middle;width:240px;"             >           <![endif]-->
+              <div class="mj-column-per-40 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+                        
+                          <tr>
+                            <td style="width:190px;"><img alt="Drive Up icon" height="auto" src="http://target.scene7.com/is/image/Target/DriveUpIcon2x?scl=1&amp;fmt=png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="190"></td>
+                          </tr>
+                        
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <!--[if mso | IE]>             </td>                        <td                class="" style="vertical-align:middle;width:360px;"             >           <![endif]-->
+              <div class="mj-column-per-60 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:0px;word-break:break-word;"><h2 style="mso-line-height-rule:exactly; Margin:0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:19px;font-weight:bold;line-height:24px;text-align:left;color:#333333;">Try Drive Up, only in the Target app</h2></td>
+                  </tr>
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"><p style="Margin: 0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:normal;line-height:24px;text-align:left;color:#333333;">Order with Drive Up in the Target app and we’ll bring it out to your car for <strong>free</strong>.</p></td>
+                  </tr>
+     <tr>
+                    <td class="tal-d" align="center" vertical-align="middle" style="font-size:0px;padding:10px 25px;word-break:break-word;"><!-- START: Outline button -->
+                      
+                      <table border="0" cellspacing="0" cellpadding="0" role="presentation">
+                        <tr>
+                          <td><table border="0" cellspacing="0" cellpadding="0" role="presentation">
+                              <tr>
+                              <td align="center" style="border-radius: 4px;" bgcolor="#CC0000"><a href="https://click.oe.target.com/?qs=796853b4865adf0537490833dcb3077683cc00cfea4146b76ce469277858e7affa55d2c3043f0c681d58a5944405a9e3f20b1fc0a737b575e7412f76c2603722" target="_blank" style="font-size:16px;font-weight:normal;line-height:24px; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; color: #FFFFFF; text-decoration: none; text-decoration: none;border-radius: 4px; padding: 10px 50px; border: 1px solid #CC0000; display: inline-block;">Try Drive Up</a></td>
+                            </tr>
+                            </table></td>
+                        </tr>
+                      </table>
+                      
+                      <!-- END: Outline button --></td>
+                  </tr>
+                </table>
+              </div>
+              <!--[if mso | IE]>             </td>                    </tr>                          </table>                 <![endif]-->
+            </td>
+          </tr>
+        
+      </table>
+    </div>
+    <!--[if mso | IE]>           </td>         </tr>       </table>       <![endif]-->
+    <!-- END: Column LTR -->
+<!-- START: Column RTL -->
+    <!--[if mso | IE]>       <table          align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:640px;" width="640"       >         <tr>           <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">       <![endif]-->
+    <div style="background:#FFFFFF;background-color:#FFFFFF;Margin:0px auto;max-width:640px;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
+        
+          <tr>
+            <td style="direction:rtl;font-size:0px;padding:20px 0;padding-left:20px;padding-right:20px;text-align:center;vertical-align:top;">
+              <!--[if mso | IE]>                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">                          <tr>                    <td                class="" style="vertical-align:middle;width:240px;"             >           <![endif]-->
+              <div class="mj-column-per-40 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+                        
+                          <tr>
+                            <td style="width:190px;"><img alt="Target store icon" height="auto" src="https://target.scene7.com/is/image/Target/target_store_varC_2x-v3?scl=1&amp;fmt=png-alpha" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="190"></td>
+                          </tr>
+                        
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <!--[if mso | IE]>             </td>                        <td                class="" style="vertical-align:middle;width:360px;"             >           <![endif]-->
+              <div class="mj-column-per-60 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:0px;word-break:break-word;"><h2 style="mso-line-height-rule:exactly; Margin:0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:19px;font-weight:bold;line-height:24px;text-align:left;color:#333333;">Shop your store</h2></td>
+                  </tr>
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"><p style="Margin: 0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:normal;line-height:24px;text-align:left;color:#333333;">Set your store to see what’s in stock nearby and we’ll have it waiting for you.</p></td>
+                  </tr>
+                </table>
+              </div>
+              <!--[if mso | IE]>             </td>                    </tr>                          </table>                 <![endif]-->
+            </td>
+          </tr>
+        
+      </table>
+    </div>
+    <!--[if mso | IE]>           </td>         </tr>       </table>       <![endif]-->
+    <!-- END: Column RTL -->
+<!-- START: Column LTR -->
+    <!--[if mso | IE]>       <table          align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:640px;" width="640"       >         <tr>           <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">       <![endif]-->
+    <div style="background:#FFFFFF;background-color:#FFFFFF;Margin:0px auto;max-width:640px;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
+        
+          <tr>
+            <td style="direction:ltr;font-size:0px;padding:20px 0;padding-left:20px;padding-right:20px;text-align:center;vertical-align:top;">
+              <!--[if mso | IE]>                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">                          <tr>                    <td                class="" style="vertical-align:middle;width:240px;"             >           <![endif]-->
+              <div class="mj-column-per-40 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+                  <tr>
+                    <td align="center" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:collapse;border-spacing:0px;">
+                        
+                          <tr>
+                            <td style="width:190px;"><img alt="Purchases" height="auto" src="http://target.scene7.com/is/image/Target/orders_varC_2x-v2?scl=1&amp;fmt=png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;" width="190"></td>
+                          </tr>
+                        
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <!--[if mso | IE]>             </td>                        <td                class="" style="vertical-align:middle;width:360px;"             >           <![endif]-->
+              <div class="mj-column-per-60 outlook-group-fix" style="font-size:13px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:middle;" width="100%">
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;padding-bottom:0px;word-break:break-word;"><h2 style="mso-line-height-rule:exactly; Margin:0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:19px;font-weight:bold;line-height:24px;text-align:left;color:#333333;">Manage your purchases</h2></td>
+                  </tr>
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;"><p style="Margin: 0;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;font-weight:normal;line-height:24px;text-align:left;color:#333333;">View your online and in-store purchases to track packages, reorder items, start a return and more.</p></td>
+                  </tr>
+     <tr>
+                    <td class="tal-d" align="center" vertical-align="middle" style="font-size:0px;padding:10px 25px;word-break:break-word;"><!-- START: Outline button -->
+                      
+                      <table border="0" cellspacing="0" cellpadding="0" role="presentation">
+                        <tr>
+                          <td><table border="0" cellspacing="0" cellpadding="0" role="presentation">
+                              <tr>
+                              <td align="center" style="border-radius: 4px;" bgcolor="#FFFFFF"><a href="https://click.oe.target.com/?qs=796853b4865adf05c818391d052f2819aba74bafec18886fa7d4b3e23c9938305649318535a09b23cc7034ff99183b07521209b363ee7da3bc86daf1f85a5dcb" target="_blank" style="font-size:16px;font-weight:normal;line-height:24px; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; text-decoration: none; text-decoration: none;border-radius: 4px; padding: 10px 50px; border: 1px solid #888888; display: inline-block;">View orders</a></td>
+                            </tr>
+                            </table></td>
+                        </tr>
+                      </table>
+                      
+                      <!-- END: Outline button --></td>
+                  </tr>
+                </table>
+              </div>
+              <!--[if mso | IE]>             </td>                    </tr>                          </table>                 <![endif]-->
+            </td>
+          </tr>
+        
+      </table>
+    </div>
+    <!--[if mso | IE]>           </td>         </tr>       </table>       <![endif]-->
+    <!-- END: Column LTR -->
+ </td></tr></table> 
+
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" align="center" role="presentation">
+  <tr>
+    <td align="center" style="padding:15px 0 0 0" class="footer-noborder">
+      <!-- HORIZONTAL LINE -->
+            <table border="0" cellpadding="0" cellspacing="0" width="640" style="width:640px;" align="center" role="presentation">
+              <tr>
+                <td style="background:none; border-bottom: solid 1px #D6D6D6; height:1px; width:100%; margin:0; padding-top:0; padding-bottom:0;" class="footer-noborder">&nbsp;</td>
+              </tr>
+            </table>
+      </td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" role="presentation">
+  <tr>
+    <td align="center" bgcolor="#ffffff" style="padding: 30px 0 0 0;">
+        <!-- WRAPPER TABLE -->
+      <table border="0" cellpadding="0" cellspacing="0" width="640" style="width:640px;" class="wrapper90" align="center" role="presentation">
+        <tr>
+          <td><!-- FOOTER LINKS - 5 COLUMN -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+              <tr>
+                <td><!-- COLUMN 1 - HELP LINK -->
+                  <table border="0" cellpadding="0" cellspacing="0" align="left" class="footer-border-top-bottom" role="presentation">
+                    <tr>
+                      <td style="padding: 0 25px;" class="footer-pad"><a href="https://click.oe.target.com/?qs=c14609db9a03a9e34ba9fb6368a30435735e603e5b78811caf4208f0cb2cfe8ae96bdf31b64aa696eebf1998371405c82ec65d8d8ac9e32e04990a8bbb17610f" align="center" style="text-decoration:none; display: block;"><span style="font-family: Arial, sans-serif; font-size:14px; font-weight: normal; line-height: 16px; color: #333333;" class="footer-text">Help</span></a></td>
+                    </tr>
+                  </table>
+                  <!-- COLUMN 2 - RETURNS LINK -->
+                  <table border="0" cellpadding="0" cellspacing="0" align="left" class="footer-border-bottom" role="presentation">
+                    <tr>
+                      <td style="padding: 0 25px;" class="footer-pad"><a href="https://click.oe.target.com/?qs=c14609db9a03a9e3b0b0a5bbd1c6dc66d36c6f4aa51bda85493e3389f5419a7ca21c6ac2f46ed2ee3c3213d8c33939ada2d46e11e1291174e7a2c7091b03631d" align="center" style="text-decoration:none; display: block;"><span style="font-family: Arial, sans-serif; font-size:14px; font-weight: normal; line-height: 16px; color: #333333;" class="footer-text">Returns</span></a></td>
+                    </tr>
+                  </table>
+                  <!-- COLUMN 3 - CONTACT LINK -->
+                  <table border="0" cellpadding="0" cellspacing="0" align="left" class="footer-border-bottom" role="presentation">
+                    <tr>
+                      <td style="padding: 0 25px;" class="footer-pad"><a href="https://click.oe.target.com/?qs=c14609db9a03a9e3a623c466c9835efb12e441aa5aee1d2127c18c06220bf054283cb5773792407a38223c02c52f81a8c2911c09cb2afe748783dc374c8e73f7" align="center" style="text-decoration:none; display: block;"><span style="font-family: Arial, sans-serif; font-size:14px; font-weight: normal; line-height: 16px; color: #333333;" class="footer-text">Contact</span></a></td>
+                    </tr>
+                  </table>
+                  <!-- COLUMN 4 - FIND A STORE LINK -->
+                  <table border="0" cellpadding="0" cellspacing="0" align="left" class="footer-border-bottom" role="presentation">
+                    <tr>
+                      <td style="padding: 0 25px;" class="footer-pad"><a href="https://click.oe.target.com/?qs=c14609db9a03a9e36a35d64f279c662acad8262d69e2633a8d1fdc017252a7118d61fbd692a3181b46d0140aacacf1d1411ce7889378710e9132dcdc415c2375" align="center" style="text-decoration:none; display: block;"><span style="font-family: Arial, sans-serif; font-size:14px; font-weight: normal; line-height: 16px; color: #333333;" class="footer-text">Find a store </span></a></td>
+                    </tr>
+                  </table>
+                  <!-- COLUMN 5 - TERMS OF USE LINK -->
+                  <table border="0" cellpadding="0" cellspacing="0" align="left" class="footer-border-bottom" role="presentation">
+                    <tr>
+                      <td style="padding: 0 25px;" class="footer-pad"><a href="https://click.oe.target.com/?qs=c14609db9a03a9e3df8d12031aefb6cc2fe783896fe9e522365726dc751687c351fdb0f1a08d2669f3ad467441540f888e21939d57cced0acf5cb1997c8ee35f" align="center" style="text-decoration:none; display: block;"><span style="font-family: Arial, sans-serif; font-size:14px; font-weight: normal; line-height: 16px; color: #333333;" class="footer-text">Terms of use </span></a></td>
+                    </tr>
+                  </table>
+                  <!-- COLUMN 6 - PRIVACY LINK -->
+                  <table border="0" cellpadding="0" cellspacing="0" align="left" class="footer-border-bottom" role="presentation">
+                    <tr>
+                      <td style="padding: 0 25px;" class="footer-pad"><a href="https://click.oe.target.com/?qs=c14609db9a03a9e3ced26291b356e884329c9508bc3eef8117c63c4edda43d9aa48a06715a18dd0e0bea0aecbc42d526350136252df297d37dab8e9d33e8743c" align="center" style="text-decoration:none; display: block;"><span style="font-family: Arial, sans-serif; font-size:14px; font-weight: normal; line-height: 16px; color: #333333;" class="footer-text">Privacy</span></a></td>
+                    </tr>
+                  </table></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td><table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+              <tr>
+                <td style="padding: 30px 0 0 0;" align="center"><a href="https://click.oe.target.com/?qs=c14609db9a03a9e33b44364e43463225ed1921be77059b7e4e4f9f71f91593bfd0dca8f42ed86d65a595fa5dbf1401024bd417c80937e36e6a197542fce296a1" style="text-decoration:none; display: block;"><span style="font-family: Arial, sans-serif; font-size:17px; font-weight: normal; line-height: 22px; color: #CC0000;" class="footer-targetcom">Target.com</span></a></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td style="padding:5px 0 20px 0"><table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+              <tr>
+                <td align="center" style="padding: 0; color: #000000; font-family: Arial, sans-serif; font-weight: normal; font-size: 13px; line-height: 15px;">© 2023 Target Brands, Inc.</td>
+              </tr>
+            </table></td>
+        </tr>
+      </table></td>
+  </tr>
+</table></td></tr></table>
+   
+    <!-- START: Tracking Code --><img src="https://click.oe.target.com/open.aspx?ffcb10-fec7157974640175-fe0f15737465067d70157275-fe8813727d600c7a76-ff9d1670-fe2b117371640274751677-fec91272756d077f&amp;d=70207&amp;bmt=0" width="1" height="1" alt=""> 
+    <!-- END: Tracking Code -->
+  <!-- START: Subject and preheader -->
+
+<!-- END: Subject and preheader -->
+  </div>
+</body>
+
+</html>
+
+--FubVAOBVVrec=_?:--

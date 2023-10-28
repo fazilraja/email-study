@@ -1,0 +1,1473 @@
+Received: from DS0PR20MB5962.namprd20.prod.outlook.com (2603:10b6:8:14c::22)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Mon, 11 Sep 2023
+ 20:06:41 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=ct7H+E/B/4nHNlSFDLaGs4DMwsKu2DOclbsuZ4vG1sL3MSmQa6e19BSMPp0ZI4VSeR69FYtUTMUkRG7/yMPRCDej8x7hoHvgl0Dh2OCRTI2RPAbwQq6mbX/T4zaFuNyxFa2GcPvf4nNjyo18MI/UhtmhDaXpb40cLBVbZvrjmQ7KBckyvz8xt+kplTFZuEnFyeiWW6djmAen737q0kZNmC7NNOvr5/HLirHX1gzJ01h2oJoUbLnKlyCw6OdI4mdiGBkMbIKc9pnkvne4iE9rg1OZoCBPnZa5OEftlsr7tO8wZP5rLhXO0NVBUaPOAtTR/OyR4/U8ShAFSBwUdrS78Q==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qQsqmEQR7URVQfHLe2YTopU/ecOcoO3mEzKcWaejxiQ=;
+ b=JVAZKQftf5GHXn6vBZWgMuYxrkftxtyMYjcXeKW7i6AUVR0e95bhQcunt2ThxTw4zj96II0H29fNhfs/HdPk/0dGV60ZBNr6k6+N4Wi9l96pQQZ34VKs/OZKhc7Joc4a2og8mzrqnS6Nqf0jfPN0mrI8fJyEUxYo2P4jnQf1xRvoyi/GLm9vWUAZ4BBRSWbq7Qnykx0yfX4BJQsSO4jV10qiCrv/Ts2tWxo2S0bpiDMI5m+9gWk3T9N3CbjFz4Xxc0ohH7JK2Iw/5sLqc12rYim1nw0yRSbgiGQ7Ml1L+/BF4U5NwgLouP9ndxxa98hYXTjA8aCgzdcbHQjtNsnfnw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.166.42) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.codepen.io; dmarc=pass (p=quarantine sp=quarantine
+ pct=100) action=none header.from=codepen.io; dkim=pass (signature was
+ verified) header.d=codepen.io; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=msprvs1=19618btcke60e=bounces-17534@bounce.codepen.io]
+ dkim=[1,1,header.i=@codepen.io] dmarc=[1,1,header.from=codepen.io])
+Received: from BLAPR03CA0016.namprd03.prod.outlook.com (2603:10b6:208:32b::21)
+ by DS0PR20MB5962.namprd20.prod.outlook.com (2603:10b6:8:14c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.36; Mon, 11 Sep
+ 2023 20:06:38 +0000
+Received: from MN1PEPF0000ECD5.namprd02.prod.outlook.com
+ (2603:10b6:208:32b:cafe::73) by BLAPR03CA0016.outlook.office365.com
+ (2603:10b6:208:32b::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.35 via Frontend
+ Transport; Mon, 11 Sep 2023 20:06:38 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.166.42)
+ smtp.mailfrom=bounce.codepen.io; dkim=pass (signature was verified)
+ header.d=codepen.io;dmarc=pass action=none
+ header.from=codepen.io;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ bounce.codepen.io discourages use of 209.85.166.42 as permitted sender)
+Received: from mail-io1-f42.google.com (209.85.166.42) by
+ MN1PEPF0000ECD5.mail.protection.outlook.com (10.167.242.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.17 via Frontend Transport; Mon, 11 Sep 2023 20:06:38 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:B30FEDD9A1A64B558E6DE67893BC0DF7455724F25985385B1A2877E09A3F40FC;UpperCasedChecksum:DFCFD64D25897407A9652A65AF74CC23F7780E44E06A5AE61CDE169225C9C9A4;SizeAsReceived:5688;Count:26
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-794d98181f0so175682239f.2
+        for <tobinsilvestre@outlook.com>; Mon, 11 Sep 2023 13:06:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694462798; x=1695067598;
+        h=x-forwarded-for:list-id:list-unsubscribe:from:subject:reply-to
+         :mime-version:date:message-id:to:content-transfer-encoding
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qQsqmEQR7URVQfHLe2YTopU/ecOcoO3mEzKcWaejxiQ=;
+        b=SFNolmODb4lagIBm2e2xi6FOh103dcztRSKPx9r94DgPfU6B1kyTZVc25F0BSm2rnQ
+         I7ZNHQmqyH1RgLuVxkxYa+zBxNXCsd/cJnEJVbbbVJRwX2sy+ARs2xwe3ZDwhWJCN1IC
+         JJGG9acdfs1sV77yaImfISeYnXEts16vm5woIVYEv6c8CbTmYGbAEwGZ0BknrtO9d4km
+         cGqSkSV9mFbH8LDpeEQ+9kUjFQ48KM4WoZAJbKBPTVZk68Aco3SawETNf6fBlY+ij1iG
+         873caLBsEMRXOtoRFTQf8MHvOFgcF4TlF4C392eXCkb0jyQhRBgyIxRASJvjZEQT6WXc
+         LZNg==
+X-Gm-Message-State: AOJu0YyheCQz5ZGfYQEJD22NqdH4oVrWEA8OOyqJXuD9NNG5E5RvcG8k
+	d2OEfDe/ShRUq4pYKcRd82Lm8uK89bR59yc7ig==
+X-Google-Smtp-Source: AGHT+IE1vZszgE6VLyMVcSz2R2O7DnTUFJVyeTdBD36IjQx2L03ya4bg+Sh+9HZWpMlbnW3d/1xI3MBd6Y3aJ83SWik28MVqE4U=
+X-Received: by 2002:a92:ca0f:0:b0:34f:6f8a:7f02 with SMTP id j15-20020a92ca0f000000b0034f6f8a7f02mr7291184ils.31.1694462798297;
+        Mon, 11 Sep 2023 13:06:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694462798; cv=none;
+        d=google.com; s=arc-20160816;
+        b=omCteiVHEH99WS7YDEeA9ziuE0Ur2+3fGnK7B3j0i/fAB3lfnNoqY+iCLuLib5x+LF
+         t7HXPRnpZKuvKp9DIiSvjJ3De13nv15ajQiZB087nUfK47FM5tBjLKptImFrNZ7IxAPv
+         mQbHeQCSpHjNOQhPxlMPp90Kn8xukzjCQ4eEg0EWaJFB0gFdQjwQnifbVx6JlNAhX7ln
+         m8MkxJ/0oi52BlpfUhDC2xpYVp1m9FCajERunMF5cdlHk1gFqjtaZRiwx1kvb11WHShv
+         odXYdtuCughJ9VZJ60Oc9nWuQgnUo/I1UZegw2DxLY61c3oKtRhVB25Rc1P8oRJ2KIB1
+         Cv9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-id:list-unsubscribe:from:subject:reply-to:mime-version:date
+         :message-id:to:content-transfer-encoding:dkim-signature;
+        bh=qQsqmEQR7URVQfHLe2YTopU/ecOcoO3mEzKcWaejxiQ=;
+        fh=TlBqePmUoP1mo7OtoBHiLsm9ijWYJg6wpq7S5L9t5IQ=;
+        b=oKRxqaVRhzuym1aXht1rsmgOJ5eG1jgiikCiwcgJucNQmJo2pD9XdEgUy65u1F3ThN
+         ELZsga1VHNfD8fmFEKEa6kfiofAKLFMUtCd6D4m02LZE2BkUDbthQVh7+TU1YtGFnSi/
+         /qLhVIcpXu3/Q0JEtlnId35I0fDrNJ8AJwTnhEdJePvtF+luDv9lsKme3yZ9GxkwLjb7
+         R4Lzy6GGnM6/VqZCr6IEJidae06tjem5x8I/T0YIGTcwROFOHdj1/86kLcZWsYLEDFJz
+         rNr7/Q9SEMuUigMZWi3J/3G964JHVug2a/nw76yskmaBTrsjqwIqgFOhMl1hjBU604Xo
+         pSXQ==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@codepen.io header.s=scph0416 header.b="RJ5/jMTr";
+       spf=pass (google.com: domain of msprvs1=19618btcke60e=bounces-17534@bounce.codepen.io designates 147.253.211.76 as permitted sender) smtp.mailfrom="msprvs1=19618bTcKe60e=bounces-17534@bounce.codepen.io";
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=codepen.io
+Return-Path: msprvs1=19618bTcKe60e=bounces-17534@bounce.codepen.io
+Received: from mta-253-211-76.smtp-out.sparkpostmail.com (mta-253-211-76.smtp-out.sparkpostmail.com. [147.253.211.76])
+        by gmr-mx.google.com with ESMTPS id x20-20020a923014000000b00349a5e508b7si1006434ile.0.2023.09.11.13.06.34
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 11 Sep 2023 13:06:38 -0700 (PDT)
+Received-SPF: pass (google.com: domain of msprvs1=19618btcke60e=bounces-17534@bounce.codepen.io designates 147.253.211.76 as permitted sender) client-ip=147.253.211.76;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@codepen.io header.s=scph0416 header.b="RJ5/jMTr";       spf=pass
+ (google.com: domain of msprvs1=19618btcke60e=bounces-17534@bounce.codepen.io
+ designates 147.253.211.76 as permitted sender)
+ smtp.mailfrom="msprvs1=19618bTcKe60e=bounces-17534@bounce.codepen.io";
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=codepen.io
+X-MSFBL: J+wz/wAn+aUPOAVXss2bbbA3CkzpHW1xr/ejAOpkGpA=|eyJzdWJhY2NvdW50X2l
+	kIjoiMCIsInRlbmFudF9pZCI6InNwYyIsIm1lc3NhZ2VfaWQiOiI2NGY5MmU3M2Z
+	mNjRmOGY1ZTA2MCIsInIiOiJ0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzIiw
+	iY3VzdG9tZXJfaWQiOiIxNzUzNCJ9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codepen.io;
+	s=scph0416; t=1694462766; i=@codepen.io;
+	bh=qQsqmEQR7URVQfHLe2YTopU/ecOcoO3mEzKcWaejxiQ=;
+	h=Content-Type:To:Message-ID:Date:Subject:From:List-Unsubscribe:
+	 From:To:Cc:Subject;
+	b=RJ5/jMTrogtHtziPHtSydPaoTsz4ahwTYq7S/Q/7f0qtw4SYWkmH6m5b0aHFqspIP
+	 S0LkyuIpKvZpW6j+TkUeqxzIfM4UBh1JbpQqv6+6zQnEI3hLk4GNgzdLlGYrGxpbz1
+	 2Fo6XC7HnAhtjKH5uT4/kB5KHkcBUbEOTM0DAsFs=
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="UTF-8"
+To: tobinsilvestre044@sooners.us
+Message-ID: <0E.06.32566.E237FF46@gl.mta1vrest.cc.prd.sparkpost>
+Date: Mon, 11 Sep 2023 20:05:59 +0000
+Reply-To: CodePen<newsletter@codepen.io>
+Subject: View Transitions, Stylish Shadows, and a Pixelated Waterfall
+From: CodePen<support@codepen.io>
+List-Unsubscribe: <mailto:unsubscribe@unsub.spmta.com?subject=unsubscribe:E9Qq9K3x86nrP6xoSmdM84vzj_TTtZnLwKny87mqfjo~|eyAicmNwdF90byI6ICJ0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzIiwgInRlbmFudF9pZCI6ICJzcGMiLCAiY3VzdG9tZXJfaWQiOiAiMTc1MzQiLCAibWVzc2FnZV9pZCI6ICI2NGY5MmU3M2ZmNjRmOGY1ZTA2MCIsICJzdWJhY2NvdW50X2lkIjogIjAiIH0~>
+List-Id: <spc.17534.0.sparkpostmail.com>
+X-Forwarded-For: tobinsilvestre044@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 26
+X-MS-Exchange-Organization-ExpirationStartTime: 11 Sep 2023 20:06:38.6844
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 609db2be-cb8d-4c77-4a78-08dbb3029bb7
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ MN1PEPF0000ECD5:EE_|DS0PR20MB5962:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ MN1PEPF0000ECD5.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/11/2023 3:43:43 AM
+X-MS-Office365-Filtering-Correlation-Id: 609db2be-cb8d-4c77-4a78-08dbb3029bb7
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.166.42
+X-SID-PRA: SUPPORT@CODEPEN.IO
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2023 20:06:38.6374
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 609db2be-cb8d-4c77-4a78-08dbb3029bb7
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ MN1PEPF0000ECD5.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR20MB5962
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.4753714
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6768.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPmGdFSt1kefStXfeuRYQzg/9u+HgtyFHFxqo7L5ftF/6cSYc9byHk4W1tQ/O9YfIxUd6dMcCvoweFCDJE/B2Yp77Pcb/lznZ1xOQ95LoH3vgMIqiH+54l+8v3UR1H0HBEkQV6m/aDC9c5kaNqeYBslp4uSxtw2cQcvtV52gxr2kz8zH0jhJdUV7K8nqEy5U/JvBrLu00wsaSQ==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?azBPZXY3V3I0WXd5bjlYZWlya0tBTy9hckcvMC9leVpLYk5lNVdoZTlwQWx2?=
+ =?utf-8?B?TlVVQ2VMQlFHVzI4cGMxRzFxVnVqY2VvUEJVYXgyM0RGQzRzNXZ4Sk85RjFX?=
+ =?utf-8?B?dmh5MnlKS2VYdnNPVG5DV2tDd3VTK2JHNU1LQmFzbmVRdWc0cDVzOHQ2azVU?=
+ =?utf-8?B?QjhtbTVnZitzN2R4WTdFL0JrdUdnTHZCL0VEZVN5Z2dBS0FvN0Z1MmNZZytV?=
+ =?utf-8?B?UFk4eGUxMGFSbnhsZlNVemxCZmlsN2RVNC9jaWFkWDJKbThjV3BYVzFpODRY?=
+ =?utf-8?B?ZDY2WkdWRGJVSGxUWUNjUGJsNlVyMnNDN09ISFZPYmVlWGdjNmU3Z3BRY1dx?=
+ =?utf-8?B?ckx5dFhVYy9yRUxpVFlEUCtudExJVVYrQzdWZTE5WnZiRmgrelhDUUEzL0M5?=
+ =?utf-8?B?RGdQNmU1L0NxZDAzYUJPMkx4SFIyaFB0WjdRVm1ZNzJ5akpyV2l3eHJUNXZV?=
+ =?utf-8?B?eGhTRjZXbkRFZmZ0WWtIc2pZTzF2RkwraFYvVVUwUExvd1ZtQ1JPUnB6OHFL?=
+ =?utf-8?B?ZzJaOEFOTHJmcDhNQm1YdkQvcWZvR1NSTUlqVzd4U0dqK2xzaXM4aXl6RlFj?=
+ =?utf-8?B?UTk0Q3oxZ0dVVldDRlhwbUhvZTVhVlg2TGlTRUJPRjVrZk9QZkJpV2JURTZD?=
+ =?utf-8?B?Z3luOUZzMEZFNEgyeUtCWStPU2hGK3N0TWZzQW5adEg1VnBCRVZuaml1Yy9U?=
+ =?utf-8?B?dHZqYkplZzZGdUVIVjc0RXA2enJCUjV3d04vQkxUZnpNT3FiWkVvbXJZaEpm?=
+ =?utf-8?B?ZGpNZThTd2tOdm5PbWpUT2hUQXBwWjVkcDBNVVJhRGxTTUpNK2xYdHFCRVY2?=
+ =?utf-8?B?N0ZOdGpkV2dlSUcwSDJJb1ZTQXh3T3RPdHVtZHJsRU56L2tqempKOFl5dU94?=
+ =?utf-8?B?My84TzJ6eHVwWmNkNUgrQkpUZ3NwTjNZeW5NMkZ1QXZPY2NZdktsMlNZRE1O?=
+ =?utf-8?B?N2lnRlQvTlBxcmdUanhULzNDREZnMzFKMTFqTnVrUGJjMFlQZTJxdTFwVm9K?=
+ =?utf-8?B?blJHWEQ3K3RQdnFJRXdDcnVzdy9qaDlwaVVmRkdNQXhPZXJqNk4wQkJ2Njc1?=
+ =?utf-8?B?WkJNYTZMbCt6MFRJM0NEVDNDQUJMR210YXRrV1dJRER4T0VzdWs1OXVCaTlE?=
+ =?utf-8?B?N0FlMG53cTRpbG5LMU5URlpJRC9FenJwei90NGxOWVhocnBSdkpWeGtXTGZJ?=
+ =?utf-8?B?YlprMnhrMXl6YlBzRVRsWFZkbkpwb0hNVXA5eXQ0S3BSYTc2NUhwVzZ1djlh?=
+ =?utf-8?B?bWx4TmhpNWI1dGpONGxXbmY0OWUyaFFieWs2T1FzQWNIZVZySWVwekEwQzhT?=
+ =?utf-8?B?THJmR0d0MFltb0VwWFlmTUprZXNTNlpIM1gzbzhUYmV0K3FuM0Q0Y1dpL0do?=
+ =?utf-8?B?ejRTVDJnVnVDSWtoSEhNYXhGeDFHempUdDR0VUFSUlU5ektOUnFjN21Sb0JO?=
+ =?utf-8?B?UWJRWWtRYUVrVlB2VHdlWitSMlBRaForUnZTckowRGsyR2c0VUM1QWtZaGVp?=
+ =?utf-8?B?T21lMXdlL3FDSjByTUtUQ05UaFVxZTBHckhYS0tIaEc2V1gzUjJXcGU1Qloz?=
+ =?utf-8?B?TFJRNHIwRklHSis1RkIzcGdBakg4MHplMHBySzZCcXFHVDVGeUpqK2VreFZV?=
+ =?utf-8?B?aS9mOUw5WEZuMU50MWZqRHZSZFRZbytoQTJGaFUvZEU4QXYvVkt0MGVJTnhG?=
+ =?utf-8?B?WGRBTmJ4OENQYkNySlFZdlRYV2JGbzQyQlJCOTlvRndhWkZvdDhtUXF5NzM4?=
+ =?utf-8?B?cG9pVWs0cGJXSHQ3YXJSNkFmRnFGQlNYVlhNY1h6OENNbi9haGNyVWZSbkFs?=
+ =?utf-8?B?Ry9hV3N0ZnA0bVNmSlgrUmYyNDRkSU9GNVQxUmx2QmFrQVlZb0dVSEhlOVE1?=
+ =?utf-8?B?TkVMeGh1V0tiRGRaSDlwSHRuQThUem0zWmw5Q0YxUmZ4cDl2dW8ycmhsV0Z1?=
+ =?utf-8?B?cW9DQVZZNUg5empHNW8vcHFlQkJsb0dIM01aQ21nZXZuaHByMHNtampoYWdM?=
+ =?utf-8?B?ZG9GemV2dllIMmFrbjQ0MHpBdUc5YlM1MS9SOXBLd1l2Ly9pdHJCWTY1NVIz?=
+ =?utf-8?B?VkRkcVhwLzgyL3Nnem9UNWptZ0xUS3RwVXRsQW5qcXdTRFErOXVEbUswYXVi?=
+ =?utf-8?B?cHJlZ2N0dFNKYnJhc2NPVGJ6ZCtxQ2h2bWhPVVNoVjNQV2xMZDZTVXRBOTgw?=
+ =?utf-8?B?eXc9PQ==?=
+MIME-Version: 1.0
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>
+  </title>
+  <!--[if !mso]><!-->
+  <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+  <!--<![endif]-->
+ =20
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1">
+  <style type=3D"text/css">
+    #outlook a {
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+
+    table,
+    td {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    p {
+      display: block;
+      margin: 13px 0;
+    }
+
+  </style>
+  <!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]-->
+  <!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]-->
+  <!--[if !mso]><!-->
+  <style type=3D"text/css">
+    @import url(https://fonts.googleapis.com/css?family=3DLato:300,400,500,=
+700);
+
+  </style>
+  <!--<![endif]-->
+  <style type=3D"text/css">
+    @media only screen and (min-width:480px) {
+      .mj-column-per-100 {
+        width: 100% !important;
+        max-width: 100%;
+      }
+
+      .mj-column-per-50 {
+        width: 50% !important;
+        max-width: 50%;
+      }
+    }
+
+  </style>
+  <style media=3D"screen and (min-width:480px)">
+    .moz-text-html .mj-column-per-100 {
+      width: 100% !important;
+      max-width: 100%;
+    }
+
+    .moz-text-html .mj-column-per-50 {
+      width: 50% !important;
+      max-width: 50%;
+    }
+
+  </style>
+  <style type=3D"text/css">
+    @media only screen and (max-width:480px) {
+      table.mj-full-width-mobile {
+        width: 100% !important;
+      }
+
+      td.mj-full-width-mobile {
+        width: auto !important;
+      }
+    }
+
+  </style>
+  <style type=3D"text/css">
+    @media screen {
+      @font-face {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Lato Regular'), local('Lato-Regular'),
+          url(https://fonts.gstatic.com/s/lato/v11/qIIYRU-oROkIk8vfvxw6Qves=
+ZW2xOQ-xsNqO47m55DA.woff) format('woff');
+      }
+
+      @font-face {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Lato Bold'), local('Lato-Bold'),
+          url(https://fonts.gstatic.com/s/lato/v11/qdgUG4U09HnJwhYI-uK18wLU=
+uEpTyoUstqEm5AMlJo4.woff) format('woff');
+      }
+
+      @font-face {
+        font-family: 'Lato';
+        font-style: italic;
+        font-weight: 400;
+        src: local('Lato Italic'), local('Lato-Italic'),
+          url(https://fonts.gstatic.com/s/lato/v11/RYyZNoeFgb0l7W3Vu1aSWOvv=
+Din1pK8aKteLpeZ5c0A.woff) format('woff');
+      }
+
+      @font-face {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 900;
+        src: local('Lato Black'), local('Lato-Black'),
+          url(https://fonts.gstatic.com/s/lato/v14/S6u9w4BMUTPHh50XSwiPGQ3q=
+5d0.woff2) format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Telefon Black';
+        font-style: normal;
+        font-weight: 900;
+        src: url(https://assets.codepen.io/t-1/telefon-black.woff2) format(=
+'woff2');
+      }
+    }
+
+    body {
+      font-family: Lato, 'Lucida Grande', 'Lucida Sans Unicode', Tahoma, sa=
+ns-serif;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #e3e4e8;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      max-width: 100%;
+    }
+
+    p,
+    li {
+      color: #e3e4e8;
+      line-height: 1.5;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    blockquote {
+      background: none;
+      border-left: 1px solid gray;
+      padding-left: 10px;
+      margin: 0 0 15px 10px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: white;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: 24px;
+      margin: 20px 0 10px 0;
+      line-height: 1.2;
+    }
+
+    .intro-description a,
+    .news-content a,
+    .spark-item a,
+    .subscription-details a,
+    .pro-content a {
+      text-decoration: none;
+      color: #76adff;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      line-height: 1.8;
+      font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, mono=
+space;
+    }
+
+    .view-on-web-link.view-on-web-link {
+      color: #74c5ff;
+      text-transform: uppercase;
+      display: block;
+      padding: 5px 10px;
+      background: #383b43;
+      width: 66%;
+      margin: 0 auto;
+      clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+      text-decoration: none;
+    }
+
+    .dedicated-hero-area-copy {
+      padding: 20px;
+    }
+
+    .dedicated-hero-area-copy h2 {
+      font-family: 'Telefon Black', system-ui, Lato, sans-serif;
+      text-align: center;
+      margin: 0 0 20px 0;
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .spark-item {
+      margin-bottom: 50px;
+    }
+
+    .spark-item[data-type=3D'sponsor'] .spark-item-type {
+      color: #fedd41;
+    }
+
+    .spark-item-type {
+      color: #99a3bc;
+      padding-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 10px;
+    }
+
+    .spark-title {
+      font-weight: bold;
+      color: #505050;
+      padding: 5px 0 5px 0;
+      font-size: 20px;
+    }
+
+    .spark-desc {
+      padding-top: 4px;
+      color: #cccfdc;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .spark-thumb {
+      border: 0;
+      display: block;
+      height: auto;
+      max-width: 100%;
+      outline: none;
+      text-decoration: none;
+      margin: 0 0 10px 0;
+    }
+
+    .news-header {
+      font-family: 'Telefon Black', system-ui, Lato, sans-serif;
+      margin: 0 0 5px 0;
+      font-size: 36px;
+      text-align: left;
+      color: white;
+    }
+
+    .news-bar {
+      height: 5px;
+      border-radius: 100px;
+      background: white;
+      background: linear-gradient(92.63deg,
+          #769aff 8.23%,
+          #ffdd40 25.83%,
+          #f19994 51.91%,
+          #47cf73 68.56%);
+      width: 70%;
+      margin: 0 0 10px 0;
+    }
+
+    .news-content img {
+      display: block;
+      margin: 13px 0;
+    }
+
+    .news-content hr {
+      border: 0;
+      border-top: 4px solid #383b43;
+      margin: 33px auto;
+      width: 200px;
+    }
+
+    .pro-bar {
+      height: 5px;
+      border-radius: 100px;
+      background: #ffdb00;
+      width: 70%;
+      margin: 0 0 10px 0;
+    }
+
+    .pro-header {
+      text-align: left;
+    }
+
+    .pro-header a {
+      color: #ffdb00;
+      text-decoration: none;
+    }
+
+    .footer-bar {
+      height: 10px;
+      background: linear-gradient(92.63deg,
+          #769aff 8.23%,
+          #ffdd40 25.83%,
+          #f19994 51.91%,
+          #47cf73 68.56%);
+    }
+
+    @media only screen and (max-width: 400px) {
+      h1 {
+        font-size: 22px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      .spark-thumb {
+        display: block;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }
+
+  </style>
+</head>
+
+<body style=3D"word-spacing:normal;background-color:#1c1d22;">
+<div style=3D"color:transparent;visibility:hidden;opacity:0;font-size:0px;b=
+order:0;max-height:1px;width:1px;margin:0px;padding:0px;border-width:0px!im=
+portant;display:none!important;line-height:0px!important;"><img border=3D"0=
+" width=3D"1" height=3D"1" src=3D"http://post.spmailtechnolo.com/q/lNSFjlL5=
+6kJs42vUCvFtMA~~/AABEfgA~/RgRm4fgnPVcDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc=
+3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA" alt=3D""></div>
+
+  <div style=3D"background-color:#1c1d22;">
+    <!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px;"=
+ width=3D"600" bgcolor=3D"#434857" ><tr><td style=3D"line-height:0px;font-s=
+ize:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"background:#434857;background-color:#434857;margin:0px au=
+to;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"background:#434857;background-color:#434=
+857;width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:0;text-align:c=
+enter;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:600px;" ><![endif]-->
+              <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"vertical-align:top;" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td align=3D"center" style=3D"font-size:0px;padding:0=
+;word-break:break-word;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"border-collapse:collapse;border-spaci=
+ng:0px;">
+                          <tbody>
+                            <tr>
+                              <td style=3D"width:600px;">
+                                <img height=3D"auto" src=3D"https://res.clo=
+udinary.com/css-tricks/image/upload/c_scale,f_auto,q_auto,w_1100/v163854529=
+6/codepen-spark-header-2022_oih61t.png" style=3D"border:0;display:block;out=
+line:none;text-decoration:none;height:auto;width:100%;font-size:13px;" widt=
+h=3D"600">
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align=3D"center" style=3D"font-size:0px;padding:0=
+;word-break:break-word;">
+                        <div style=3D"font-family:Lato, system-ui, sans-ser=
+if;font-size:10px;line-height:1;text-align:center;color:#e3e4e8;"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/7V1uR4jnFDq7IZWw5vWYFg~~/AABEfgA~/Rg=
+Rm4fgnP0QcaHR0cHM6Ly9jb2RlcGVuLmlvL3NwYXJrLzM1NlcDc3BjQgpk-S5z_2T49eBgUhx0b=
+2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA" class=3D"view-on-web-link">Vie=
+w this issue on CodePen</a></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align=3D"left" style=3D"font-size:0px;padding:10p=
+x 25px;padding-top:30px;padding-right:35px;padding-bottom:0;padding-left:35=
+px;word-break:break-word;">
+                        <div style=3D"font-family:'Telefon Black', system-u=
+i, sans-serif;font-size:13px;text-align:left;color:#e7f0ff;">
+                          <h1>View Transitions, Stylish Shadows, and a Pixe=
+lated Waterfall</h1>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align=3D"left" style=3D"font-size:0px;padding:10p=
+x 25px;padding-top:0;padding-right:35px;padding-left:35px;word-break:break-=
+word;">
+                        <div style=3D"font-family:Lato, system-ui, sans-ser=
+if;font-size:13px;line-height:1;text-align:left;color:white;">
+                          <div class=3D"intro-description">
+                            <p>This week's CodePen community highlights inc=
+ludes a big dose of the view transitions API: a bookmark app UI from Aysenu=
+r Turk, and a tremendous guide to the in-and-outs of the API from Mojtaba S=
+eyedi.</p>=0A=
+<p>Plus, Temani Afif and Adam Argyle share stylish image shadows, and Kit J=
+enson sends a barrel down a pixelated waterfall (that has a secret!)</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" styl=
+e=3D"width:600px;" width=3D"600" bgcolor=3D"#333845" ><tr><td style=3D"line=
+-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"background:#333845;background-color:#333845;margin:0px au=
+to;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"background:#333845;background-color:#333=
+845;width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:20px 0;text-al=
+ign:center;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:300px;" ><![endif]-->
+              <div class=3D"mj-column-per-50 mj-outlook-group-fix" style=3D=
+"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-=
+align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:15px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;line-height:1;text-align:left;color:#e3e4e8;">
+                                  <mj-raw>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/Lm7bGxiQ9G2vn_DHlbKpWQ~~/AABEfgA~/RgRm4fgnP0QnaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2prYW50bmVyL3Blbi9nT1pyT1FtVwNzcGNCCmT5LnP_ZPj14GBSHHRvYmluc2lsdmVzd=
+HJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/fYFLGNQOTaGfaK9cTlew_merging-letter-toggle.png" alt=3D"Merging Letter T=
+oggle" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/Lm7bGxiQ9G2vn_DHlbKpWQ~~/AABEfgA~/Rg=
+Rm4fgnP0QnaHR0cHM6Ly9jb2RlcGVuLmlvL2prYW50bmVyL3Blbi9nT1pyT1FtVwNzcGNCCmT5L=
+nP_ZPj14GBSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">Merging Letter=
+ Toggle</a></div>
+                                        <div class=3D"spark-desc">&quot;A t=
+oggle switch combined with FF or N to spell =E2=80=9COFF=E2=80=9D or =E2=80=
+=9CON=E2=80=9D, and the letters merge or split depending on the state.&quot=
+; From Jon Kantner.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/aK9mEDe5XnMoXiO_26Lo0w~~/AABEfgA~/RgRm4fgnP0QqaHR0cHM6Ly9jb2RlcG=
+VuLmlvL1R1cmtBeXNlbnVyL3Blbi9CYXZMelBqVwNzcGNCCmT5LnP_ZPj14GBSHHRvYmluc2lsd=
+mVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/XG8YhGFSlW0fZay1HFPi_bookmark-app-view-transitions.png" alt=3D"Bookmark=
+ App - View Transitions" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/aK9mEDe5XnMoXiO_26Lo0w~~/AABEfgA~/Rg=
+Rm4fgnP0QqaHR0cHM6Ly9jb2RlcGVuLmlvL1R1cmtBeXNlbnVyL3Blbi9CYXZMelBqVwNzcGNCC=
+mT5LnP_ZPj14GBSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">Bookmark A=
+pp - View Transitions</a></div>
+                                        <div class=3D"spark-desc">Aysenur T=
+urk translates a <a href=3D"http://post.spmailtechnolo.com/f/a/BSP3-TzaVS4U=
+zKghR6ROxQ~~/AABEfgA~/RgRm4fgnP0Q9aHR0cHM6Ly9kcmliYmJsZS5jb20vc2hvdHMvMTE2N=
+jM5MTAtLUV4cGxvcmF0aW9uLUJvb2ttYXJrLUFwcFcDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNp=
+bHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">Dribbble shot by Dwinawan</a> to SCSS=
+ &amp; JS, and demonstrates the panache of the view transitions API in this=
+ irresistibly clickable Pen.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/J5YowlLOUVov9-jkK_chPA~~/AABEfgA~/RgRm4fgnP0QpaHR0cHM6Ly9jb2RlcG=
+VuLmlvL3NpbWV5ZG90bWUvcGVuL1dOTHh4dnhXA3NwY0IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2Z=
+XN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/LGtpBQAShu97zhHKNtrR_price-range-slider.png" alt=3D"(Svelte) Range Slid=
+er" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/J5YowlLOUVov9-jkK_chPA~~/AABEfgA~/Rg=
+Rm4fgnP0QpaHR0cHM6Ly9jb2RlcGVuLmlvL3NpbWV5ZG90bWUvcGVuL1dOTHh4dnhXA3NwY0IKZ=
+Pkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">(Svelte) R=
+ange Slider</a></div>
+                                        <div class=3D"spark-desc">Simon Goe=
+llner adds &quot;fancy, bouncy, floating labels&quot; that wave as you drag=
+ the pips along the range slider in this interactive Pen,=0A=
+inspired by <a href=3D"http://post.spmailtechnolo.com/f/a/6xQ6txrkITbtjsa_7=
+j5oug~~/AABEfgA~/RgRm4fgnP0RHaHR0cHM6Ly9kcmliYmJsZS5jb20vc2hvdHMvMjA1NjIwMi=
+1SYW5nZS1TZWxlY3Rpb24td2l0aC1GcmVxdWVuY3ktQ2hhcnRXA3NwY0IKZPkuc_9k-PXgYFIcd=
+G9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">a Dribble shot by Antonin =
+Kus</a>.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/5DnpFStk1dHuNcBV6xIerg~~/AABEfgA~/RgRm4fgnP0QlaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2FsaWcwMS9wZW4vV05MR29nVlcDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc3RyZ=
+TA0NEBzb29uZXJzLnVzWAQAAAAA">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/F1qIxvIGTGOwkZP0JCgY_gsap-mask-mouse.png" alt=3D"GSAP Mask Mouse Effect=
+" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/5DnpFStk1dHuNcBV6xIerg~~/AABEfgA~/Rg=
+Rm4fgnP0QlaHR0cHM6Ly9jb2RlcGVuLmlvL2FsaWcwMS9wZW4vV05MR29nVlcDc3BjQgpk-S5z_=
+2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">GSAP Mask Mouse Ef=
+fect</a></div>
+                                        <div class=3D"spark-desc">alig01 re=
+veals a hidden truth of the internet with a slick spotlight effect in this =
+GSAP-powered Pen.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"link">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/UOzuVEDCrfhn1PtkS6CKew~~/AABEfgA~/RgRm4fgnP0Q1aHR0cHM6Ly9iZWphbW=
+FzLmlvL2Jsb2cvd2hhdC1pcy12aWV3LXRyYW5zaXRpb25zLWFwaS9XA3NwY0IKZPkuc_9k-PXgY=
+FIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/viouSLVbSh6NMuQnIvrK_what-is-view-transitions.png" alt=3D"What is the V=
+iew Transitions API?" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">link=
+</div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/UOzuVEDCrfhn1PtkS6CKew~~/AABEfgA~/Rg=
+Rm4fgnP0Q1aHR0cHM6Ly9iZWphbWFzLmlvL2Jsb2cvd2hhdC1pcy12aWV3LXRyYW5zaXRpb25zL=
+WFwaS9XA3NwY0IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAA=
+AA~~">What is the View Transitions API?</a></div>
+                                        <div class=3D"spark-desc">Mojtaba S=
+eyedi wrote a comprehensive guide to the power of the View Transitions API,=
+ complete with lots of linked &amp; embedded Pens so you can jump right in =
+and try it yourself.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/AK5EI284n3rLSmH61FoyVg~~/AABEfgA~/RgRm4fgnP0QlaHR0cHM6Ly9jb2RlcG=
+VuLmlvL3RfYWZpZi9wZW4vWFdvTmRHS1cDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc3RyZ=
+TA0NEBzb29uZXJzLnVzWAQAAAAA">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/5Z9ZA6NLQnufinufsurR_infinite-image-shadow.png" alt=3D"Infinite Image S=
+hadow" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/AK5EI284n3rLSmH61FoyVg~~/AABEfgA~/Rg=
+Rm4fgnP0QlaHR0cHM6Ly9jb2RlcGVuLmlvL3RfYWZpZi9wZW4vWFdvTmRHS1cDc3BjQgpk-S5z_=
+2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">Infinite Image Sha=
+dow</a></div>
+                                        <div class=3D"spark-desc">In Temani=
+ Afif's Pen, photos cast colorful shadows that stretch onnnnnnnn and on for=
+ever =E2=80=94 in both square and rounded corner varieties.</div>
+                                      </div>
+                                   =20
+                                  </mj-raw>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td><td class=3D"" style=3D"vertical-align=
+:top;width:300px;" ><![endif]-->
+              <div class=3D"mj-column-per-50 mj-outlook-group-fix" style=3D=
+"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-=
+align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:15px 20px 0 5=
+px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;text-align:left;color:#e3e4e8;">
+                                  <mj-raw>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"collection">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/DLb3MrG6IThJcbY2BrKZZw~~/AABEfgA~/RgRm4fgnP0QkaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2NvbGxlY3Rpb24vZ1lkVndQVwNzcGNCCmT5LnP_ZPj14GBSHHRvYmluc2lsdmVzdHJlM=
+DQ0QHNvb25lcnMudXNYBAAAAAA~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/MdpO1bS6TNDv9p2XXKQK_cpc-pagination.png" alt=3D"#CodePenChallenge: Pagi=
+nation" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">coll=
+ection</div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/DLb3MrG6IThJcbY2BrKZZw~~/AABEfgA~/Rg=
+Rm4fgnP0QkaHR0cHM6Ly9jb2RlcGVuLmlvL2NvbGxlY3Rpb24vZ1lkVndQVwNzcGNCCmT5LnP_Z=
+Pj14GBSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">#CodePenChallenge:=
+ Pagination</a></div>
+                                        <div class=3D"spark-desc">September=
+'s challenge is all about navigation, and we started with pagination. Page =
+through our collection from week one, including Pens by <a href=3D"http://p=
+ost.spmailtechnolo.com/f/a/kUEqdsXuXw1wIDF-3y0uDA~~/AABEfgA~/RgRm4fgnP0QkaH=
+R0cHM6Ly9jb2RlcGVuLmlvL0dyYXNzL3Blbi9yTm9XZ09iVwNzcGNCCmT5LnP_ZPj14GBSHHRvY=
+mluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">Grass</a>, <a href=3D"http://p=
+ost.spmailtechnolo.com/f/a/yvHZPP5sk5WnoD_TiHhQOQ~~/AABEfgA~/RgRm4fgnP0QmaH=
+R0cHM6Ly9jb2RlcGVuLmlvL3BucGljb3QvcGVuL1BvWHBZV3BXA3NwY0IKZPkuc_9k-PXgYFIcd=
+G9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">Pierre-Nicolas Picot</a>, =
+<a href=3D"http://post.spmailtechnolo.com/f/a/-Q99feiAJg4HUgLTVPez7g~~/AABE=
+fgA~/RgRm4fgnP0QmaHR0cHM6Ly9jb2RlcGVuLmlvL2tvdEFuZHkvcGVuL09KcmJ5UllXA3NwY0=
+IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">kotAndy=
+</a>, and <a href=3D"http://post.spmailtechnolo.com/f/a/PB9ipokEmIZ0aAe-201=
+Zaw~~/AABEfgA~/RgRm4fgnP0QmaHR0cHM6Ly9jb2RlcGVuLmlvL2pvc2V0eHUvcGVuL3ZZdmdK=
+VkVXA3NwY0IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~=
+~">Josetxu</a>.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"sponsor">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/ewxjuSb8pNvGk05LqU_lCA~~/AABEfgA~/RgRm4fgnP0SCaHR0cHM6Ly9zcnYuYn=
+V5c2VsbGFkcy5jb20vYWRzL2xvbmcveC9UNlpOU0FENlRUVFRUVEgyVERTTlZUVFRUVFRaMk9YN=
+0tFVFRUVFRUNEREWFQ3VFRUVFRUVEtJNzVKU1dDRUJVVjJXSTVNUFoyNzc2S0tTQksyNDY2N0I3=
+NVFVVFcDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAA=
+A">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/kW43F7nrSDqFHkJac422_Updated Storyblok CodePen Image.jpg" alt=3D"Master=
+ Composable Web Architectures" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">spon=
+sor</div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/ewxjuSb8pNvGk05LqU_lCA~~/AABEfgA~/Rg=
+Rm4fgnP0SCaHR0cHM6Ly9zcnYuYnV5c2VsbGFkcy5jb20vYWRzL2xvbmcveC9UNlpOU0FENlRUV=
+FRUVEgyVERTTlZUVFRUVFRaMk9YN0tFVFRUVFRUNEREWFQ3VFRUVFRUVEtJNzVKU1dDRUJVVjJX=
+STVNUFoyNzc2S0tTQksyNDY2N0I3NVFVVFcDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc3R=
+yZTA0NEBzb29uZXJzLnVzWAQAAAAA">Master Composable Web Architectures</a></div=
+>
+                                        <div class=3D"spark-desc">Dive into=
+ O'Reilly's new report by Stefan Baumgartner, author of &quot;TypeScript in=
+ 50 Lessons,&quot; and explore frontend composability, serverless backends =
+&amp; modular design. Available for free, courtesy of Storyblok, the belove=
+d CMS committed to providing resources that empower you.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/eLaYwqyo9FH5k_2mY1U_1g~~/AABEfgA~/RgRm4fgnP0QqaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2RhdmlkZGFybmVzL3Blbi96WXlCV01tVwNzcGNCCmT5LnP_ZPj14GBSHHRvYmluc2lsd=
+mVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/r3dymdnVRVvK9RGYjInX_real-accordion.png" alt=3D"A &quot;real&quot; acco=
+rdion [AUDIO WARNING]" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/eLaYwqyo9FH5k_2mY1U_1g~~/AABEfgA~/Rg=
+Rm4fgnP0QqaHR0cHM6Ly9jb2RlcGVuLmlvL2RhdmlkZGFybmVzL3Blbi96WXlCV01tVwNzcGNCC=
+mT5LnP_ZPj14GBSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">A &quot;re=
+al&quot; accordion [AUDIO WARNING]</a></div>
+                                        <div class=3D"spark-desc">Depending=
+ on how you look at it, David Darnes either wrecks a perfectly good accordi=
+on menu, or makes a typical menu actually kinda fun in this playful Pen.</d=
+iv>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"sponsor">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/RT7y7wAaWgSd2XyXPY30gw~~/AABEfgA~/RgRm4fgnP0SCaHR0cHM6Ly9zcnYuYn=
+V5c2VsbGFkcy5jb20vYWRzL2xvbmcveC9UQ0lZN0FJNlRUVFRUVDZBQURCTlZUVFRUVFRDWVlYU=
+0tFVFRUVFRUV1RJRzY3VFRUVFRUVEtJWUM3SFdXSUxIUE1JRjZSWkVLSFBXNDJCRlEyQUZUU1o2=
+Q01CVFcDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAA=
+A">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/pkKFF8BQKeXYoQLxtKug_IG_1080x1080.png" alt=3D"How do I model a schema f=
+or my application?" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">spon=
+sor</div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/RT7y7wAaWgSd2XyXPY30gw~~/AABEfgA~/Rg=
+Rm4fgnP0SCaHR0cHM6Ly9zcnYuYnV5c2VsbGFkcy5jb20vYWRzL2xvbmcveC9UQ0lZN0FJNlRUV=
+FRUVDZBQURCTlZUVFRUVFRDWVlYU0tFVFRUVFRUV1RJRzY3VFRUVFRUVEtJWUM3SFdXSUxIUE1J=
+RjZSWkVLSFBXNDJCRlEyQUZUU1o2Q01CVFcDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc3R=
+yZTA0NEBzb29uZXJzLnVzWAQAAAAA">How do I model a schema for my application?<=
+/a></div>
+                                        <div class=3D"spark-desc">It's one =
+of the most common questions developers have when starting with MongoDB Atl=
+as. And the answer is, it depends. In this article, learn the basics of dat=
+a modeling you can use when designing the database schema for your applicat=
+ion.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/r1iJPblG-mEYho9m60pClQ~~/AABEfgA~/RgRm4fgnP0QoaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2tpdGplbnNvbi9wZW4vb05KQmVPdlcDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc=
+3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/Xk05bE1WTRSTsRLNy6ZH_waterfall-barrel.png" alt=3D"Waterfall &amp; Barre=
+l" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/r1iJPblG-mEYho9m60pClQ~~/AABEfgA~/Rg=
+Rm4fgnP0QoaHR0cHM6Ly9jb2RlcGVuLmlvL2tpdGplbnNvbi9wZW4vb05KQmVPdlcDc3BjQgpk-=
+S5z_2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">Waterfall &amp=
+; Barrel</a></div>
+                                        <div class=3D"spark-desc">&quot;A p=
+ixel-based waterfall. No reason... thought it would be a fun challenge. Of =
+course I couldn't leave it alone, so now there is a hidden cave and floatin=
+g barrel. Why, you ask? I don't know honestly.&quot; From Kit Jenson.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/IkY13zIxOdADqri9-OTMyA~~/AABEfgA~/RgRm4fgnP0QoaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2FyZ3lsZWluay9wZW4vUVd6R21YS1cDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc=
+3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/G9LTloltReSoFjynL0UN_highlight-compliment-text-shadow.png" alt=3D"highl=
+ight compliment to a text-shadow effect" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/IkY13zIxOdADqri9-OTMyA~~/AABEfgA~/Rg=
+Rm4fgnP0QoaHR0cHM6Ly9jb2RlcGVuLmlvL2FyZ3lsZWluay9wZW4vUVd6R21YS1cDc3BjQgpk-=
+S5z_2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">highlight comp=
+liment to a text-shadow effect</a></div>
+                                        <div class=3D"spark-desc">&quot;Tha=
+t 2px (almost) white highlight on the top of the text makes it seem as thou=
+gh there's a light source.&quot; From Adam Argyle.</div>
+                                      </div>
+                                   =20
+                                  </mj-raw>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" styl=
+e=3D"width:600px;" width=3D"600" bgcolor=3D"#131417" ><tr><td style=3D"line=
+-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"background:#131417;background-color:#131417;margin:0px au=
+to;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"background:#131417;background-color:#131=
+417;width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:20px 0;padding=
+-top:15px;text-align:center;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:600px;" ><![endif]-->
+              <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:15px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;text-align:left;color:#e3e4e8;">
+                                  <mj-raw>
+                                    <h2 class=3D"news-header" style=3D"marg=
+in: 0 0 5px 0;">
+                                      <img src=3D"https://assets.codepen.io=
+/t-1/chriscorner.png" style=3D"width: 65px;"> Chris=E2=80=99 Corner
+                                    </h2>
+                                    <p style=3D"color: #9dabc9; margin: 0 0=
+ 15px 0;font-size: 16px;">A collection of web design and development news a=
+nd thoughts from CodePen's own Chris Coyier.</p>
+                                    <div class=3D"news-bar"></div>
+                                  </mj-raw>
+                                  <mj-raw>
+                                    <div class=3D"news-content">
+                                      <p><a href=3D"http://post.spmailtechn=
+olo.com/f/a/hNDj4AVQVAcPoehGfPvWZg~~/AABEfgA~/RgRm4fgnP0QWaHR0cHM6Ly92aWV3c=
+G9ydHMuZnlpL1cDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVz=
+WAQAAAAA">I think the nail is in coffin now</a>: you should never design so=
+mething for the web with only one (or even a narrow set) of particular view=
+port sizes in mind. It=E2=80=99s just so <em>darn tempting</em> to think th=
+at way. You have a couple of pretty specific screen sizes in front of you r=
+ight now, you likely design toward those to some degree. Design tools often=
+ ask you to draw a rectangle that represent a screen to design for. Testing=
+ tools sometimes show you a site at a set of pre-set screen sizes. It can f=
+eel normal and fine to design toward, say, three sizes, and hone in on them=
+. Honestly, that might end up working fine, but it might not! It might lead=
+ to some awkward in-betweens, especially if you are very rigid in writing C=
+SS that only changes at those specific breakpoints only.</p>=0A=
+=0A=
+<p>That=E2=80=99s the thing, really. You just don=E2=80=99t have to think i=
+n really specific breakpoints anymore. Media query width breakpoints are st=
+ill a fine tool, but now we=E2=80=99ve got viewport units, container units,=
+ container queries, calc/min/max/clamp, and all sorts of other stuff that a=
+llow you to design components and pages that work well and look good at the=
+ size and under the conditions they are in. It=E2=80=99s just a better way =
+to code. But this stuff has only relatively recently arrived in CSS so it=
+=E2=80=99ll take a minute for it all to settle in.</p>=0A=
+=0A=
+<p>This isn=E2=80=99t even really <em>new</em> news. <a href=3D"http://post=
+.spmailtechnolo.com/f/a/T68uzixDNQuHyKuleMnzwg~~/AABEfgA~/RgRm4fgnP0RDaHR0c=
+HM6Ly9jc3MtdHJpY2tzLmNvbS9zY3JlZW4tcmVzb2x1dGlvbi1ub3RlcXVhbHRvLWJyb3dzZXIt=
+d2luZG93L1cDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQ=
+AAAAA">Over a decade ago</a>, I was like, yo, there are a ton of different =
+sizes that your site is getting viewed at. Deal with it. Now we can properl=
+y.</p>=0A=
+=0A=
+<hr>=0A=
+<marquee style=3D"background: black; color: white; border-block: 1px solid =
+black; margin: 40px 0; padding: 20px; text-transform: uppercase;">And now f=
+or something completely different</marquee>=0A=
+<hr>=0A=
+=0A=
+<p>Have websites gone to crap? Browse around <em>popular</em> sites, and I =
+think you=E2=80=99ll land on an easy yes. Especially on mobile, cripes. Jus=
+t to name a few: they are too slow to load, the ads and popups are too obtr=
+usive, and there is too much usage of fixed-position elements that reduce u=
+sable area.</p>=0A=
+<p>This website <a href=3D"http://post.spmailtechnolo.com/f/a/W4ZMMPhk6evnp=
+LrFNymeqQ~~/AABEfgA~/RgRm4fgnP0QjaHR0cHM6Ly91c2VyaW55ZXJmYWNlLmNvbS9nYW1lLm=
+h0bWxXA3NwY0IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAA=
+A~~">User Inyerface</a> satirized it recently, and it=E2=80=99s pretty funn=
+y (ya know, if being intentionally frustrated is your thing, gamers should =
+relate).</p>=0A=
+=0A=
+<p>People have been worried about this for ages, and it never seems to get =
+any better.</p>=0A=
+=0A=
+<ul>=0A=
+<li>Brad Frost called it <a href=3D"http://post.spmailtechnolo.com/f/a/Exgp=
+xt58mezo8sft3Nbi-g~~/AABEfgA~/RgRm4fgnP0QcaHR0cHM6Ly9kZWF0aHRvYnVsbHNoaXQuY=
+29tL1cDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA=
+">BS</a>.</li>=0A=
+<li>A couple folks made <a href=3D"http://post.spmailtechnolo.com/f/a/7Kajq=
+9z17yAoNkuCbxYUnA~~/AABEfgA~/RgRm4fgnP0QkaHR0cHM6Ly93d3cudGVybXNhbmRjb25kaX=
+Rpb25zLmdhbWUvVwNzcGNCCmT5LnP_ZPj14GBSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMud=
+XNYBAAAAAA~">termsandconditions.game</a> mining <a href=3D"http://post.spma=
+iltechnolo.com/f/a/jhwM7emVtc9zbsPR2uMajg~~/AABEfgA~/RgRm4fgnP0QqaHR0cHM6Ly=
+93d3cuZGVjZXB0aXZlLmRlc2lnbi9oYWxsLW9mLXNoYW1lVwNzcGNCCmT5LnP_ZPj14GBSHHRvY=
+mluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">these patterns</a> for ideas.<=
+/li>=0A=
+<li>Guangyi Li=E2=80=99s <a href=3D"http://post.spmailtechnolo.com/f/a/2GBy=
+ST11P1NWvRuWKgu_BQ~~/AABEfgA~/RgRm4fgnP0QnaHR0cHM6Ly9ob3ctaS1leHBlcmllbmNlL=
+XdlYi10b2RheS5jb20vVwNzcGNCCmT5LnP_ZPj14GBSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25l=
+cnMudXNYBAAAAAA~">how-i-experience-web-today.com</a> gets at the heart of t=
+he complete experience.</li>=0A=
+<li>Tracking is a big part of this story, and <a href=3D"http://post.spmail=
+technolo.com/f/a/tnEAQacVLUGSb8gHu1Ub0Q~~/AABEfgA~/RgRm4fgnP0QeaHR0cHM6Ly9j=
+bGlja2NsaWNrY2xpY2suY2xpY2svVwNzcGNCCmT5LnP_ZPj14GBSHHRvYmluc2lsdmVzdHJlMDQ=
+0QHNvb25lcnMudXNYBAAAAAA~">clickclickclick.click</a> pokes at that.</li>=0A=
+</ul>=0A=
+=0A=
+<p>This all just makes me sad. Fortunately, most things are <a href=3D"http=
+://post.spmailtechnolo.com/f/a/qJ1mw97zq46Z6CSBfMHFWA~~/AABEfgA~/RgRm4fgnP0=
+Q_aHR0cHM6Ly9jaHJpc2NveWllci5uZXQvMjAyMy8wOC8zMS9hLWxvdC1vZi1zdHVmZi1pcy1qd=
+XN0LWZpbmUvVwNzcGNCCmT5LnP_ZPj14GBSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNY=
+BAAAAAA~">fine</a>.</p>=0A=
+=0A=
+<hr>=0A=
+<marquee style=3D"background: black; color: white; border-block: 1px solid =
+black; margin: 40px 0; padding: 20px; text-transform: uppercase;">And now f=
+or something completely different</marquee>=0A=
+<hr>=0A=
+=0A=
+<p>Have you seen <a href=3D"http://post.spmailtechnolo.com/f/a/gnOzMbnkolDX=
+LGQY_tv4DA~~/AABEfgA~/RgRm4fgnP0Q6aHR0cHM6Ly9kZXZlbG9wZXIuY2hyb21lLmNvbS9ib=
+G9nL2ludHJvZHVjaW5nLXBvcG92ZXItYXBpL1cDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbHZl=
+c3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">the popover API</a>? It=E2=80=99s a neat =
+idea, already play-with-able in Chrome. Think styled tooltips. The idea is =
+that you connect some interaction (click of a button) to toggling another e=
+lement with more information or context. Amazingly, to me, this HTML totall=
+y works in Chrome with no CSS or JavaScript at all:</p>=0A=
+<pre><code>=0A=
+&lt;button popovertarget=3D&quot;my-popover&quot;&gt;Open Popover&lt;/butto=
+n&gt;=0A=
+=0A=
+&lt;div id=3D&quot;my-popover&quot; popover&gt;=0A=
+  &lt;p&gt;I am a popover with more information.&lt;/p&gt;=0A=
+&lt;/div&gt;</code></pre>=0A=
+=0A=
+<p>You can style stuff with CSS of course, but the basics of the interactio=
+n work without. Like a <code>&lt;details&gt;</code> element.</p>=0A=
+=0A=
+<p>Anytime we get any form of =E2=80=9Cstate management=E2=80=9D outside of=
+ JavaScript, the people will play! There are countless games made in CSS th=
+anks to the whole idea of the <code>:checked</code> selector in CSS and usi=
+ng the <code>~</code> combinator to select other elements.</p>=0A=
+=0A=
+<p>This time, leave it to <a href=3D"http://post.spmailtechnolo.com/f/a/rmN=
+pCUPgQcm0Pp5RMbbjKA~~/AABEfgA~/RgRm4fgnP0QwaHR0cHM6Ly9wb3J0c3dpZ2dlci5uZXQv=
+YmxvZy90aWMtdGFjLXRvZS1pbi1odG1sVwNzcGNCCmT5LnP_ZPj14GBSHHRvYmluc2lsdmVzdHJ=
+lMDQ0QHNvb25lcnMudXNYBAAAAAA~">Garth Heyes who has made Tic-Tac-Toe</a> ent=
+irely in HTML only. That=E2=80=99s gotta be a first.</p>=0A=
+=0A=
+<p>Wanna see it? Fair warning first. It=E2=80=99s 170 MB (!!) of HTML and =
+=E2=80=9Cover half a million nodes=E2=80=9D. Chrome really struggles with t=
+his. It took my machine maybe near a minute to even render the first page, =
+and each click took a while as well. If you=E2=80=99re down try it, <a href=
+=3D"http://post.spmailtechnolo.com/f/a/zCVt-hGtjqAmejb5JAgj4g~~/AABEfgA~/Rg=
+Rm4fgnP0QsaHR0cHM6Ly9nYXJldGhoZXllcy5jby51ay9nYW1lcy90aWMtdGFjLXRvZS9XA3NwY=
+0IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">see th=
+e demo</a>.</p>=0A=
+=0A=
+<hr>=0A=
+<marquee style=3D"background: black; color: white; border-block: 1px solid =
+black; margin: 40px 0; padding: 20px; text-transform: uppercase;">And now f=
+or something related but different</marquee><hr>=0A=
+=0A=
+<p>So now that we=E2=80=99ve looked at something you absolutely shouldn=E2=
+=80=99t do on the web, here=E2=80=99s <a href=3D"http://post.spmailtechnolo=
+.com/f/a/P_7TdVwtVPpTmk2R6WyOaw~~/AABEfgA~/RgRm4fgnP0Q_aHR0cHM6Ly9oZWF0aGVy=
+LWJ1Y2hlbC5jb20vYmxvZy8yMDIzLzA3L2p1c3Qtbm9ybWFsLXdlYi10aGluZ3MvVwNzcGNCCmT=
+5LnP_ZPj14GBSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">Heather Buch=
+el with some things you absolutely <em>should</em> do on the web</a>. Heath=
+er ain=E2=80=99t even mad that we=E2=80=99re building websites with newfang=
+led tech and trying to share code across platforms and all that, but, just,=
+ like, don=E2=80=99t break stuff. Don=E2=80=99t break <em>super duper basic=
+ stuff</em> that websites easily do and are good for everyone. I=E2=80=99ll=
+ hijack her whole list, but of course go read it for more context:</p>=0A=
+=0A=
+<ul>=0A=
+<li>Let me copy text so I can paste it.</li>=0A=
+<li>If something navigates like a link, let me do link things.</li>=0A=
+<li>Let me zoom in on my browser without the website getting all out of wha=
+ck.</li>=0A=
+<li>Do responsive things.</li>=0A=
+<li>Let me have hover styles.</li>=0A=
+<li>If the UI completely changes when I click on something, as if I=E2=80=
+=99ve navigated to a new page, give me a browser history update and a new U=
+RL.</li>=0A=
+<li>Let me see scroll bars.</li>=0A=
+<li>Stop hijacking my typical browser shortcuts for use in your own app.</l=
+i>=0A=
+</ul>=0A=
+=0A=
+<p>Reasonable asks, no?</p>=0A=
+=0A=
+<hr>=0A=
+<marquee style=3D"background: black; color: white; border-block: 1px solid =
+black; margin: 40px 0; padding: 20px; text-transform: uppercase;">And now f=
+or something along those same lines</marquee><hr>=0A=
+=0A=
+<p>Onnnnneeee more thing you should be really careful about doing on the we=
+b. Adam Silver: <a href=3D"http://post.spmailtechnolo.com/f/a/I4nM71ugF5m6j=
+J8PciT1CA~~/AABEfgA~/RgRm4fgnP0RQaHR0cHM6Ly9hZGFtc2lsdmVyLmlvL2Jsb2cvdGhlLX=
+Byb2JsZW0td2l0aC1zdGlja3ktbWVudXMtYW5kLXdoYXQtdG8tZG8taW5zdGVhZC9XA3NwY0IKZ=
+Pkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">The proble=
+m with sticky menus and what to do instead</a>.</p>=0A=
+=0A=
+<p>One problem is fairly obvious with sticky menus: they overlap stuff! The=
+y get in the dang way far too often.</p>=0A=
+<p>But there are other things that cause problems that you might not see ri=
+ght away. Adam mentions zooming. One little zoom or too might kick a sticky=
+/fixed element right off the page. Also, if something opens a sticky menu, =
+and that menu happens to be taller than the viewport, you=E2=80=99ve got is=
+sues. You either need <em>that</em> area to be scrollable (but nested scrol=
+ling sucks) or you require users to scroll likely further than they want to=
+ just to see more of the menu. Ughghadk.</p>=0A=
+=0A=
+<p>Adam lists three more that are just as bad or worse, and even less obvio=
+us at first glance. I=E2=80=99ll force you over there to see them. But I=E2=
+=80=99ll snag the good ending, featuring the alternatives:</p>=0A=
+=0A=
+<blockquote><ol>=0A=
+<li><strong>Keep pages short</strong>: Sticky menus are a symptom of long p=
+ages so fix the root cause.</li>=0A=
+<li><strong>Just let users scroll</strong>: It=E2=80=99s a myth that scroll=
+ing is a problem. Even on mobile, the top of the page is a flick or 2 away =
+mostly.</li>=0A=
+<li><strong>Put relevant links in context</strong>: For example, add a subs=
+cribe form to the end of a post or add a CTA to a pricing section.</li>=0A=
+<li><strong>Use a back-to-top link</strong>: They=E2=80=99re relatively uno=
+btrusive (but only do this once you exhaust the other options).</li>=0A=
+</ol></blockquote>
+                                     =20
+                                    </div>
+                                  </mj-raw>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" styl=
+e=3D"width:600px;" width=3D"600" bgcolor=3D"#333845" ><tr><td style=3D"line=
+-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"background:#333845;background-color:#333845;margin:0px au=
+to;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"background:#333845;background-color:#333=
+845;width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:20px 0;text-al=
+ign:center;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:600px;" ><![endif]-->
+              <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:15px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;line-height:1;text-align:left;color:#e3e4e8;">
+                                  <mj-raw>
+                                    <h2 class=3D"pro-header">
+                                      <a href=3D"http://post.spmailtechnolo=
+.com/f/a/2I2pojHaaQI74eCpz73rxA~~/AABEfgA~/RgRm4fgnP0QXaHR0cHM6Ly9jb2RlcGVu=
+LmlvL3Byby9XA3NwY0IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1g=
+EAAAAAA~~"> CodePen PRO </a>
+                                    </h2>
+                                    <div class=3D"pro-bar"></div>
+                                    <div class=3D"pro-content">
+                                      <p>Just tuck this into the ol' brain =
+bank: <a href=3D"http://post.spmailtechnolo.com/f/a/SY382wsc_INZWo-PKVLWjA~=
+~/AABEfgA~/RgRm4fgnP0QpaHR0cHM6Ly9jb2RlcGVuLmlvL2ZlYXR1cmVzL2Fzc2V0LWhvc3Rp=
+bmdXA3NwY0IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~=
+~">CodePen hosted assets, a PRO feature</a>, serve those assets with full C=
+ORS permissions. If they didn't, you'd be fighting against cross-origin bro=
+wser policies when you, for example, may want to <code>fetch</code> them in=
+ JavaScript. We just want to make that painless for you.</p>
+                                    </div>
+                                  </mj-raw>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" styl=
+e=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-siz=
+e:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"margin:0px auto;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:20px 0;text-al=
+ign:center;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:600px;" ><![endif]-->
+              <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:25px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;line-height:1;text-align:left;color:#eeeeee;">
+                                  <p class=3D"subscription-details"> You ca=
+n adjust your <a href=3D"http://post.spmailtechnolo.com/f/a/9oM-z-sCSgKlSTx=
+uGpFBhw~~/AABEfgA~/RgRm4fgnP0QpaHR0cHM6Ly9jb2RlcGVuLmlvL3NldHRpbmdzL25vdGlm=
+aWNhdGlvbnNXA3NwY0IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1g=
+EAAAAAA~~"> email preferences </a> any time, or <a href=3D"http://post.spma=
+iltechnolo.com/f/a/gYSVOqornTpN_DOCckAGWQ~~/AABEfgA~/RgRm4fgnP0TNaHR0cHM6Ly=
+9jb2RlcGVuLmlvL3NldHRpbmdzL25vdGlmaWNhdGlvbnMvb3B0b3V0P191bj1vbXR3Z0tzNXdxJ=
+TJCa0YzUWJoMnFoQmd3MkglMkJOZUZGaFhlUU0lMkYzaGk2MyUyQlFOek9ST21rJTJCU0xBeEZa=
+RVl4UkkxZnJXS05kbDR5TWpCZkVGdzZEdFpoRHZqSFNCTXk2JTJGOTJOS0xCaFRySjRrMXdrSUR=
+WeDgxWXljcEV6Z0tRQjhYWnhFejUyZyUzRCUzRFcDc3BjQgpk-S5z_2T49eBgUhx0b2JpbnNpbH=
+Zlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA"> instantly opt out </a> of emails of th=
+is kind. Need help with anything? Hit up <a href=3D"http://post.spmailtechn=
+olo.com/f/a/xIsP_hPzsMNjXmiCOSw6wQ~~/AABEfgA~/RgRm4fgnP0QaaHR0cHM6Ly9jb2Rlc=
+GVuLmlvL3N1cHBvcnRXA3NwY0IKZPkuc_9k-PXgYFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVy=
+cy51c1gEAAAAAA~~">support</a>. </p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td><![endif]-->
+              <div class=3D"footer-bar"></div>
+              <!--[if mso | IE]></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><![endif]-->
+  </div>
+
+<img border=3D"0" width=3D"1" height=3D"1" alt=3D"" src=3D"http://post.spma=
+iltechnolo.com/q/PHAvZ4_s03nAJVo352djmw~~/AABEfgA~/RgRm4fgnPlcDc3BjQgpk-S5z=
+_2T49eBgUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">
+</body>
+
+</html>
+

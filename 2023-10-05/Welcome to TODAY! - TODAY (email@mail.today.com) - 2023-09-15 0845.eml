@@ -1,0 +1,943 @@
+Received: from SA1PR20MB6011.namprd20.prod.outlook.com (2603:10b6:806:333::22)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Fri, 15 Sep 2023
+ 13:45:08 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=cC/ESYd7QWTxsIfr4on/A9ifQp2MGSl9R85G4hbLSZ/eqo/IfGs6KeURa7hrNdnE3L6yZcv6AkPU5vLxXrdP53ZAKgiRPoVuDBM07vdgexmDEhYdLwTD8BdeFQoCheyl7CUmka1kig6hLUjgdf35+FtqjM6e85xx7wsDDbcdVtTRIHPmJajov4MFn+Pn29jb+QW5Vzql/53wvEl+yPxoFDBW/MhRc+aHqTlD8LU1SJN5xGNS5GNJ//Xd0pubRl0yC0JOfcgtQmOStm/LzA/WZfWZGItfePCBmf9peDyVuvvy601fiTXzNP/ndetzr/JpQBwrSwtiMgFKAwirajFsNQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GbnRjExXJYJNf9NsXNIHjSEZbyr7gW8G5Hn8vght3BY=;
+ b=MAXyAGyFvBIIsemn6kigReiG2tCYzkljJY9MJXM4zVn21hl+S0Q/fl6JKyoIvpT9iPYdquRku8wx1GmP9iHJ98Pb4PgQdUKwqKAjzUaG1UJJpmLgCD8LYhX0jR7OGhKR6nxWIoKopZ3afftBhlXj2YRgOGji06NPdET/NeMQ12G3s8nkeCOYlU7xy3uEYrBB1QngmDYzhDMPDvqN24AIZIsE0vLtgKOzL2f9FdCY2YzLkm9bGuSdSTZuHXQDedGK8fwprXHgrOEYeXzlRlEl7/sJ4iO5nDRC41fOTDObSwIjzHc5S0+NtWqoxZZ9Q3BbCkDeBIgVatVLHnmMBF/fTQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.166.170) smtp.rcpttodomain=outlook.com smtp.mailfrom=mx.sailthru.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=mail.today.com;
+ dkim=pass (signature was verified) header.d=pmta.sailthru.com; dkim=pass
+ (signature was verified) header.d=mail.today.com; arc=pass (0 oda=1 ltdi=1
+ dkim=[1,1,header.i=@mail.today.com] dmarc=[1,1,header.from=mail.today.com])
+Received: from DM6PR21CA0020.namprd21.prod.outlook.com (2603:10b6:5:174::30)
+ by SA1PR20MB6011.namprd20.prod.outlook.com (2603:10b6:806:333::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.31; Fri, 15 Sep
+ 2023 13:45:06 +0000
+Received: from DS1PEPF0001709B.namprd05.prod.outlook.com
+ (2603:10b6:5:174:cafe::29) by DM6PR21CA0020.outlook.office365.com
+ (2603:10b6:5:174::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.9 via Frontend
+ Transport; Fri, 15 Sep 2023 13:45:06 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.166.170)
+ smtp.mailfrom=mx.sailthru.com; dkim=pass (signature was verified)
+ header.d=pmta.sailthru.com;dmarc=pass action=none
+ header.from=mail.today.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of mx.sailthru.com does not
+ designate 209.85.166.170 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.166.170;
+ helo=mail-il1-f170.google.com;
+Received: from mail-il1-f170.google.com (209.85.166.170) by
+ DS1PEPF0001709B.mail.protection.outlook.com (10.167.18.105) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Fri, 15 Sep 2023 13:45:06 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:C7E2E78C4C6CB8F81199244E8706DC0C0A3D7C05D5ECAE1DF0EF51DBB4565D01;UpperCasedChecksum:4CBD5116AD652437F16489CD9D066AFFB6FEAA453E2D46A5D9DC40F53EBD3575;SizeAsReceived:6194;Count:35
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-34df2a961a0so7449725ab.2
+        for <tobinsilvestre@outlook.com>; Fri, 15 Sep 2023 06:45:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694785506; x=1695390306;
+        h=x-forwarded-for:list-unsubscribe:mime-version:subject:message-id:to
+         :from:date:dkim-signature:dkim-signature:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GbnRjExXJYJNf9NsXNIHjSEZbyr7gW8G5Hn8vght3BY=;
+        b=OKEJHmHoVUgeFvZ80jdNMjahahfTpfK0CDHoNoi3Cqc55arNf38kmIx8ByBn3VQBsQ
+         v6T80MfOEojp1Uu1xIBqN90UeitbXEVfpz/AVEm2c8hQ/jp2r3pgknum1USDfP8h0VUG
+         uGAxrB5b8jpl0cWWYFhleMw+Jl8Bh6oxY/6UV85E0zsh/YGP+rXqDKfgcQ15uFa6WHy2
+         FTfxl3G4DhocHQRYjx7pZeDQfh51f4bfblydX0pWlbOSk/7Td06dy5dSXhqDsQfc4ldM
+         xYb3PV7Dp2Rw7SYqpCPAFsZ6TyrtNlP5srNek2KR5tjVIefUttYxYf5luYslQl72vSpY
+         yOnw==
+X-Gm-Message-State: AOJu0YxCfIH7jqug6ALTQ7GGuAb8e/+nsQxZ/qcg4mgX6wOhggBI6sfL
+	o1hV00mmlaM5Y5iN3fjaBGKkZtJhoiDN1fJ/7w==
+X-Google-Smtp-Source: AGHT+IF9O1KqTzd1gtu5APwgwc7B5p2pWolK8DJ5W9OmJZK44DLbR2ACo0anv1TjMrPdxI0owkBSv7Es2M10teojdHovtLKFANs=
+X-Received: by 2002:a05:6e02:b42:b0:34d:ec9c:7321 with SMTP id f2-20020a056e020b4200b0034dec9c7321mr2198250ilu.3.1694785505997;
+        Fri, 15 Sep 2023 06:45:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694785505; cv=none;
+        d=google.com; s=arc-20160816;
+        b=wyXXEYMTLyJc4uRPBMq1ERSZcoDzkvUjxeNQMs3LduRtKpzJ+hjCRMGi6YPqWgfF3/
+         GfPvkDY7RuSMQvBP/q2jcuM96TaqHHxnMKpAcTMdjEiTksBaAK7G/bY5Tq1ET8tZurAx
+         QD4AXpOsmKwW472ORA/KN0GqGHX+oOKGrh/2hArQ2rZ8wqARngJsMr/GkZKtiun60Hb7
+         yVd0vXRysw6+ckOyV2/Q72zOFEApcn7RWCbnDOao/izZ+L8xdkwIvtLzck6hLhEgQCPe
+         j7sR8Rvt3P3X4kadh9PFHBJUHv7Oo60KMcmAbwMshxW7Cs5S4h5oc84yxh4kZ8zH7INi
+         85qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-unsubscribe:mime-version:subject:message-id:to:from:date
+         :dkim-signature:dkim-signature;
+        bh=GbnRjExXJYJNf9NsXNIHjSEZbyr7gW8G5Hn8vght3BY=;
+        fh=A28b0e6MH4iESDLaaQ15gKXHRsjP4xWBTknUZC5K7ts=;
+        b=kEHtUMcgR3QFihfjyDpUJRM0vIFG0yDBPcSrX0F3aBrx3VL5owuQezYgqzQ/U2Y2Q6
+         oSAmt0rS8LgjVV/GJex7o5EOdh/NpEXdeGwn5faU4WAXpjrcCgfsAnz8B+CK3Tr/kT67
+         Hm3Ns5IN5nCoFBRodfb8E2htzLMY/8NWa2VEu/dR55K6p8+lCT/P5IvcCv0zbcJrFFMn
+         1bf4PSrKd2qAFCQlY9x8KUrXDtx6hAGD0OQnxRAgWUeiuwjNwrHwJEyUvg0ZBUu3YP8C
+         VWYOTqm8RcbTZfR0um4LRt4RDcWxiJhwVh9cQUmMOiZMBporEswpqXWRy6FqK6zalmz+
+         UuSQ==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@pmta.sailthru.com header.s=mt header.b="K9V/jq5h";
+       dkim=pass header.i=@mail.today.com header.s=sailthru header.b=tqHRBpE6;
+       spf=pass (google.com: domain of delivery@mx.sailthru.com designates 163.47.181.33 as permitted sender) smtp.mailfrom=delivery@mx.sailthru.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=mail.today.com
+Return-Path: delivery@mx.sailthru.com
+Received: from pmta181-33.sailthru.com (pmta181-33.sailthru.com. [163.47.181.33])
+        by gmr-mx.google.com with ESMTPS id v11-20020a056e02164b00b0034ac654c901si532770ilu.3.2023.09.15.06.45.05
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Sep 2023 06:45:05 -0700 (PDT)
+Received-SPF: pass (google.com: domain of delivery@mx.sailthru.com designates 163.47.181.33 as permitted sender) client-ip=163.47.181.33;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@pmta.sailthru.com header.s=mt header.b="K9V/jq5h";       dkim=pass
+ header.i=@mail.today.com header.s=sailthru header.b=tqHRBpE6;       spf=pass
+ (google.com: domain of delivery@mx.sailthru.com designates 163.47.181.33 as
+ permitted sender) smtp.mailfrom=delivery@mx.sailthru.com;       dmarc=pass
+ (p=NONE sp=NONE dis=NONE) header.from=mail.today.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; s=mt; d=pmta.sailthru.com;
+ h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:List-Unsubscribe;
+ bh=GbnRjExXJYJNf9NsXNIHjSEZbyr7gW8G5Hn8vght3BY=;
+ b=K9V/jq5hUHp6bldUpOJAz97wLk7tG+XdSKwY3n16xRAH0wMcIjHBzuvT551wBkEaqRXj+tWZT34R
+   RKBkBzgPEkWC3I2lN4v8z05VG9jE7PpDKMh6+PL/q/72hRUP2oHcgVZ+jzNoK1NFuEhTd2OhYElG
+   3uKrulv641pbAg1kCfY=
+Received: from ip-10-55-50-55.ec2.internal (10.55.50.55) by aws1-mta-relay10.sailthru.cloud id h0hfu01qqbs7 for <tobinsilvestre093@sooners.us>; Fri, 15 Sep 2023 08:45:04 -0500 (envelope-from <delivery@mx.sailthru.com>)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple; t=1694785504;
+	s=sailthru; d=mail.today.com;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:List-Unsubscribe;
+	bh=GbnRjExXJYJNf9NsXNIHjSEZbyr7gW8G5Hn8vght3BY=;
+	b=tqHRBpE6pjs9+K5FiTliAgre0yVvIYUcbGHg17UtphDflQOsI4xp2DSgTgl34U9H
+	WJjNUz1TUsKYRK2q8Vhsgo0d0FbjSmIYoB18ZJC9k/79ja4pEugzdXc3QCjXyauu8pL
+	y6lWEWkQufLRLR3Y0Oa4NyfotNag00S5vn48Jt+Y=
+Date: Fri, 15 Sep 2023 13:45:04 +0000 (UTC)
+From: TODAY <email@mail.today.com>
+To: tobinsilvestre093@sooners.us
+Message-ID: <20230915134504.65045fe005e9f60001cd12db@sailthru.com>
+Subject: Welcome to TODAY!
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_17248059_1164693934.1694785504606"
+x-job: 6930-transactional-20230915
+X-Feedback-ID: 6930:transactional:sailthru
+X-TM-ID: 20230915134504.65045fe005e9f60001cd12db
+X-Sail-Id: 6930.53044275.53044275
+X-Info: Message sent by sailthru.com customer NBCU - today.com
+X-Info: We do not permit unsolicited commercial email
+X-Info: Please report abuse by forwarding complete headers to
+X-Info: abuse@sailthru.com
+X-Mailer: sailthru.com
+X-JMailer: ip-10-55-50-55.ec2.internal
+X-Unsubscribe-Web: https://link.today.com/oc/65045fe0f70c8cedfe0bee9765045fe005e9f60001cd12db/1587413e
+List-Unsubscribe: <https://link.today.com/oc/65045fe0f70c8cedfe0bee9765045fe005e9f60001cd12db/1587413e>, <mailto:unsubscribe_20230915134504.65045fe005e9f60001cd12db@mx.sailthru.com>
+X-Forwarded-For: tobinsilvestre093@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 35
+X-MS-Exchange-Organization-ExpirationStartTime: 15 Sep 2023 13:45:06.2961
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 449cafd2-242c-49f9-0e7d-08dbb5f1f871
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DS1PEPF0001709B:EE_|SA1PR20MB6011:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DS1PEPF0001709B.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/15/2023 1:31:09 PM
+X-MS-Office365-Filtering-Correlation-Id: 449cafd2-242c-49f9-0e7d-08dbb5f1f871
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.166.170
+X-SID-PRA: EMAIL@MAIL.TODAY.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:2;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2023 13:45:06.2805
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 449cafd2-242c-49f9-0e7d-08dbb5f1f871
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS1PEPF0001709B.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR20MB6011
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.7064382
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPn0cioHKW755VRmx7dYMtUdp9JFbPCpeefwTVoVHGwQgVYtSvLchWADlEP47TzWBV3yBWTFUapA2Fa1eWcS+0hRqMivE2nmEKujDqv/DW7a6rv9fWfPQsgA05cHoO/MoY34O49gb75bdck1ISlvaDbbdpyHPKKrqHWjrJgXk8JGSnxo7Nyeed11XfSZoW2gKEPMNHIRQNeoCg==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UE12bnBpZlEzaUpBT2hMYWw1M1dhb3p3Y2VUeFB4ZEcySnlNU2VvZVZkSkZk?=
+ =?utf-8?B?OVU3MkREQzN5ZW5qRFlZckVYaTM3QklBbWtEazZKdU5adDBjMXZLeXk5TnZo?=
+ =?utf-8?B?MHA4SktQcmhHVXhoS1RLTHRsdmZTcVVESVRsdHBVVmJ5VnVqSlJsZ082NDZs?=
+ =?utf-8?B?QVZnNkRORStDQm83d05iYUMzY1lFVENBbkRURFIzWlZEaG01NEQwcjFaajJC?=
+ =?utf-8?B?RkZvWStSaVJrcHdPMGVGMXQ1YUhZZ1d6QlI4dnZEdTIzcWk1dWpqMTR5U0N5?=
+ =?utf-8?B?bGtyR3JwUWE1TzhvM0ZJdDBOKzZtMG5MYllPUlREdVd5TXdHZUowNU9oK2cy?=
+ =?utf-8?B?UVZPVWc2OU1IamR1QkFUYUtpR1lhbXQxRXRMak9nYk1PRFU2TGw2NlRkT0lU?=
+ =?utf-8?B?RmFSWVR0TGx3ejROM1MxWnB0UEJqdCtJOGprK2M2bWMrSURoZ2dWbnJUQi9v?=
+ =?utf-8?B?WVR4ZDJtR1B5aXFCYmVNd0dMTS9LY29UaGtjR2xnc0tpbWlEV0N5dHVzZVlp?=
+ =?utf-8?B?bG5VVlkwY05tbG1uVjA1TW9pZXBPeThkb05Ud0hySUVKa0UwbE90TGpYN3h2?=
+ =?utf-8?B?R2o4SHFrNDlCMFJuTm9LalZCenFnamJCb1VpdFJUOWR2dklaU1NaYmtTRzdB?=
+ =?utf-8?B?M3FBcEJickVVUndycmUwTWcxQzVQWkxwamd2bHhDWWJoMmVXaC9pekpPTWVG?=
+ =?utf-8?B?QUlNQmVpYkprWjhmM0tZaEZsUHdxdDhiOGNCTU9KNFZKSVJUR0NPdXYyUkU0?=
+ =?utf-8?B?YU5MRStyb3d6b0lxN0Rwem4wQXZWYmRVd2tQdmo5ZHJQSzJqU0U3d01QVWRZ?=
+ =?utf-8?B?SytaOWVSQWZieUtsOVhTV1RST3BWMStBU0xjci8yOS81ZWFueHBRTmtvZVFC?=
+ =?utf-8?B?bEF4RVZQenovdVlLYWdkRFVyMzRvU2tjcWdyNHg3VjF2VDRtQWlLNmRranNw?=
+ =?utf-8?B?NFhqbndQZzRKOW94Rm5MV3lsMUF0S2lKVG9DWE1vSHVSMjVmMW80NHpRL1Mr?=
+ =?utf-8?B?aldPMDFreC80aFBNOXYySmhrLzBBUnFMWXo1WnRqRkJpMUhueGh5SzhDRnNH?=
+ =?utf-8?B?Y0s3MjV0SDA1VlYxT0FjWS9kbm1FVGlDQ3VHZmdaaUV0YWIzWUhzd1g0Um9Q?=
+ =?utf-8?B?eGpXbmRPOExWYVZQY04yWmpaT0NRRHRrUThFSVBqYnRCTEFnZ1lyZXVwVUhV?=
+ =?utf-8?B?WG1vdU1BMFAzWnBXL2Q3VjAxWEFzNHlQQVEwNTFuUmhTRExzNGxPNXZQRzlN?=
+ =?utf-8?B?WURFdWxBUDArRW9KS2tlUEVkdXlZTUJQN25lemJDdkVnc1FISEp1bkxyZjFB?=
+ =?utf-8?B?cTROWUpFaktxWjlFVjJKL3dRSkJpaEdJL3ZXMUpoMDdEQkNqME9UK3lGLzVw?=
+ =?utf-8?B?ME0wVkMxQmswbmpBdFhzMWFTNnJIa0NRVXA0ME9xV2JVWFBpaDM0MkN0dSt1?=
+ =?utf-8?B?ZTNsdmNEcUhYVmJwVjdFd0x4ZHljN0NYSE9UckRpajRXZEM0c3JNOFc3UVZ4?=
+ =?utf-8?B?N1BnVnVYaXJyTDNFNzA0eUR1dzZVellwMWtnbzJIcDJUTlAwc3QzUFVFN0NE?=
+ =?utf-8?B?Q3Y0RWJVRnlCcUhjMFJxMExRWFQ5NUFLQjYrY3MwQ29JU05WL0NTd2hDWDF2?=
+ =?utf-8?B?ek1nNFFPd3plRndUcUhSNDUreGE2VURBeHdMY3hIbXVINlFjVlVFUjF4Yk9T?=
+ =?utf-8?B?cVJhUjF4Nk5JcVBNb2RkanpFdzNPQ2NGbHBCNHQxMDdZZXB0MTUwNWI1K3B1?=
+ =?utf-8?B?Y20xRTRvNVJ3emIwRGMxeHdCQnV5Rnd0eUtZUjVVNURITlZqTFQ1WWt2R2Z6?=
+ =?utf-8?B?dWNlcXVzSit0R3BYM2taOGpSTXNTN05zZWRRTHJMMlNLQVJ1eUNwZERQYW0r?=
+ =?utf-8?B?MlozQU1JcTcwemRRYmZWTmhUclFZUHZKeGtCcG9GVlNNemJTSDVMVzBvQmRZ?=
+ =?utf-8?B?YkNBTXQvMFB2aEhDOXVJQ1JxWTJkWnpMTGgzVWowTHgraE5oaG04MUE4LzhR?=
+ =?utf-8?B?MFFzNHZ0cyt2VkhlMElMblorbktxcjVwS2RGQzJ1ZEFldFlOQndZMVp2cTVY?=
+ =?utf-8?B?RUFPTlNvV05qMkhiUjZFOEhYWlZYams0amt3MTdYMUdoOHNYNWplMmlEQm9F?=
+ =?utf-8?B?NjdYTG1peWdWZ2txcTIwUGFLR05OclRtRGwxTTIwcERaL0Q4M1ZIM3dZRHh0?=
+ =?utf-8?B?ZkE9PQ==?=
+MIME-Version: 1.0
+
+------=_Part_17248059_1164693934.1694785504606
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"u=
+rn:schemas-microsoft-com:office:office" lang=3D"en"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle></title><meta name=3D"viewport" content=3D"width=3Ddevice-width,initia=
+l-scale=3D1"><!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>9=
+6</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]-=
+-><!--[if !mso]><!--><link href=3D"https://fonts.googleapis.com/css?family=
+=3DMontserrat" rel=3D"stylesheet" type=3D"text/css"><link href=3D"https://n=
+odeassets.nbcnews.com/assets/fonts/shared/fontface-today.css" rel=3D"styles=
+heet" type=3D"text/css"><!--<![endif]--><style>
+*{box-sizing:border-box}body{margin:0;padding:0}a[x-apple-data-detectors]{c=
+olor:inherit!important;text-decoration:inherit!important}#MessageViewBody a=
+{color:inherit;text-decoration:none}p{line-height:inherit}.desktop_hide,.de=
+sktop_hide table{mso-hide:all;display:none;max-height:0;overflow:hidden}.im=
+age_block img+div{display:none} @media (max-width:620px){.row-content{width=
+:100%!important}.mobile_hide{display:none}.stack .column{width:100%;display=
+:block}.mobile_hide{min-height:0;max-height:0;max-width:0;overflow:hidden;f=
+ont-size:0}.desktop_hide,.desktop_hide table{display:table!important;max-he=
+ight:none!important}.row-4 .column-1{padding:20px 0 15px!important}}
+</style></head><body style=3D"background-color:#fff;margin:0;padding:0;-web=
+kit-text-size-adjust:none;text-size-adjust:none"><div class=3D"sailthru-emc=
+o-preheader" style=3D"display: none; max-height: 0px; overflow: hidden;">Th=
+ank you for signing up for your TODAY account.</div><div style=3D"display:n=
+one"><a href=3D"https://link.today.com/click/65045fe005e9f60001cd12db/aHR0c=
+DovL3d3dy5tYWlsLnRvZGF5LmNvbQ/65045fe0f70c8cedfe0bee97B791986c4"><img src=
+=3D"https://link.today.com/img/65045fe0f70c8cedfe0bee9765045fe005e9f60001cd=
+12db/0909cbb7.gif" alt=3D"" border=3D"0"></a></div><table class=3D"nl-conta=
+iner" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;background=
+-color:#fff"><tbody><tr><td><table class=3D"row row-1 mobile_hide" align=3D=
+"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0"><tbody>=
+<tr><td>
+<table class=3D"row-content stack" align=3D"center" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0=
+;mso-table-rspace:0;background-color:#fff;border-radius:0;color:#000;width:=
+600px" width=3D"600"><tbody><tr><td class=3D"column column-1" width=3D"25%"=
+ style=3D"mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-align:=
+left;padding-bottom:5px;padding-left:15px;padding-top:5px;vertical-align:to=
+p;border-top:0;border-right:0;border-bottom:0;border-left:0"><table class=
+=3D"image_block block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-r=
+space:0"><tr><td class=3D"pad" style=3D"padding-bottom:5px;padding-top:8px;=
+width:100%;padding-right:0;padding-left:0"><div class=3D"alignment" align=
+=3D"left" style=3D"line-height:10px"><img src=3D"https://media.sailthru.com=
+/composer/images/sailthru-prod-5ci/Positive%20Full%20Color.png" style=3D"di=
+splay:block;height:auto;border:0;width:95px;max-width:100%" width=3D"95">
+</div></td></tr></table></td><td class=3D"column column-2" width=3D"75%" st=
+yle=3D"mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-align:lef=
+t;padding-bottom:5px;padding-right:15px;padding-top:5px;vertical-align:top;=
+border-top:0;border-right:0;border-bottom:0;border-left:0"><table class=3D"=
+text_block block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace=
+:0;word-break:break-word"><tr><td class=3D"pad" style=3D"padding-top:5px">
+<div style=3D"font-family:sans-serif"><div class=3D"" style=3D"font-size:14=
+px;font-family:Mada,undefined;mso-line-height-alt:16.8px;color:#000;line-he=
+ight:1.2"><p style=3D"margin:0;font-size:14px;text-align:right;mso-line-hei=
+ght-alt:16.8px;letter-spacing:normal">
+<span style=3D"font-size:11px;"><strong><span style=3D"color:#000000;">Sept=
+ember 15, 2023 | <a href=3D"https://link.today.com/view/65045fe0f70c8cedfe0=
+bee9765045fe005e9f60001cd12db/e8be372c" target=3D"_blank" style=3D"text-dec=
+oration: underline; color: #000000;" rel=3D"noopener">VIEW IN BROWSER</a></=
+span></strong></span></p></div></div></td></tr></table></td></tr></tbody></=
+table></td></tr></tbody></table><table class=3D"row row-2 mobile_hide" alig=
+n=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;back=
+ground-size:auto"><tbody><tr><td><table class=3D"row-content stack" align=
+=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presen=
+tation" style=3D"mso-table-lspace:0;mso-table-rspace:0;background-position:=
+top center;background-size:auto;background-repeat:no-repeat;background-imag=
+e:url(https://media.sailthru.com/composer/images/sailthru-prod-5ci/TODAYAcc=
+ount_Logo-BG-Desktop.png);color:#000;width:600px" width=3D"600"><tbody><tr>=
+<td class=3D"column column-1" width=3D"100%" style=3D"mso-table-lspace:0;ms=
+o-table-rspace:0;font-weight:400;text-align:left;padding-bottom:25px;paddin=
+g-top:30px;vertical-align:top;border-top:0;border-right:0;border-bottom:0;b=
+order-left:0"><table class=3D"text_block block-1" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0;word-break:break-word"><tr><td class=3D"pa=
+d" style=3D"padding-left:10px;padding-right:10px;padding-top:5px"><div styl=
+e=3D"font-family:sans-serif"><div class=3D"" style=3D"font-size:14px;font-f=
+amily:Prata,undefined;mso-line-height-alt:16.8px;color:#000;line-height:1.2=
+"><p style=3D"margin:0;font-size:14px;text-align:center;mso-line-height-alt=
+:16.8px"><span style=3D"font-size:34px;">Welcome to TODAY!</span></p></div>=
+</div></td></tr></table></td></tr></tbody></table></td></tr></tbody></table=
+><table class=3D"row row-3 desktop_hide" align=3D"center" width=3D"100%" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"mso-table-lspace:0;mso-table-rspace:0;mso-hide:all;display:none;max-hei=
+ght:0;overflow:hidden"><tbody><tr><td><table class=3D"row-content" align=3D=
+"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentat=
+ion" style=3D"mso-table-lspace:0;mso-table-rspace:0;mso-hide:all;display:no=
+ne;max-height:0;overflow:hidden;background-color:#fff;border-radius:0;color=
+:#000;width:600px" width=3D"600"><tbody><tr><td class=3D"column column-1" w=
+idth=3D"16.666666666666668%" style=3D"mso-table-lspace:0;mso-table-rspace:0=
+;font-weight:400;text-align:left;padding-bottom:5px;padding-left:10px;paddi=
+ng-top:5px;vertical-align:top;border-top:0;border-right:0;border-bottom:0;b=
+order-left:0"><table class=3D"image_block block-1" width=3D"100%" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0;mso-hide:all;display:none;max-height:0;ov=
+erflow:hidden"><tr><td class=3D"pad" style=3D"padding-bottom:5px;padding-to=
+p:8px;width:100%;padding-right:0;padding-left:0"><div class=3D"alignment" a=
+lign=3D"left" style=3D"line-height:10px"><img src=3D"https://media.sailthru=
+.com/composer/images/sailthru-prod-5ci/Positive%20Full%20Color.png" style=
+=3D"display:block;height:auto;border:0;width:63px;max-width:100%" width=3D"=
+63"></div></td></tr></table></td><td class=3D"column column-2" width=3D"83.=
+33333333333333%" style=3D"mso-table-lspace:0;mso-table-rspace:0;font-weight=
+:400;text-align:left;padding-bottom:5px;padding-right:10px;padding-top:5px;=
+vertical-align:top;border-top:0;border-right:0;border-bottom:0;border-left:=
+0"><table class=3D"text_block block-1" width=3D"100%" border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace=
+:0;mso-table-rspace:0;word-break:break-word;mso-hide:all;display:none;max-h=
+eight:0;overflow:hidden"><tr><td class=3D"pad" style=3D"padding-top:5px"><d=
+iv style=3D"font-family:sans-serif"><div class=3D"" style=3D"font-size:14px=
+;font-family:Mada,undefined;mso-line-height-alt:16.8px;color:#000;line-heig=
+ht:1.2"><p style=3D"margin:0;font-size:14px;text-align:right;mso-line-heigh=
+t-alt:16.8px;letter-spacing:normal">
+<span style=3D"font-size:10px;"><strong><span style=3D"color:#000000;">Sept=
+ember 15, 2023 | <a href=3D"https://link.today.com/view/65045fe0f70c8cedfe0=
+bee9765045fe005e9f60001cd12db/e8be372c" target=3D"_blank" style=3D"text-dec=
+oration: underline; color: #000000;" rel=3D"noopener">VIEW IN BROWSER</a></=
+span></strong></span></p></div></div></td></tr></table></td></tr></tbody></=
+table></td></tr></tbody></table><table class=3D"row row-4 desktop_hide" ali=
+gn=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;mso=
+-hide:all;display:none;max-height:0;overflow:hidden;background-size:auto"><=
+tbody><tr><td><table class=3D"row-content stack" align=3D"center" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0;mso-hide:all;display:none;max-height:0;ov=
+erflow:hidden;background-position:top center;background-size:auto;backgroun=
+d-repeat:no-repeat;background-image:url(https://media.sailthru.com/composer=
+/images/sailthru-prod-5ci/TODAYAccount_Logo-BG-Mobile.png);color:#000;width=
+:600px" width=3D"600"><tbody><tr><td class=3D"column column-1" width=3D"100=
+%" style=3D"mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-alig=
+n:left;padding-bottom:25px;padding-top:30px;vertical-align:top;border-top:0=
+;border-right:0;border-bottom:0;border-left:0"><table class=3D"text_block b=
+lock-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-brea=
+k:break-word;mso-hide:all;display:none;max-height:0;overflow:hidden"><tr><t=
+d class=3D"pad" style=3D"padding-left:10px;padding-right:10px;padding-top:5=
+px"><div style=3D"font-family:sans-serif"><div class=3D"" style=3D"font-siz=
+e:14px;font-family:Prata,undefined;mso-line-height-alt:16.8px;color:#000;li=
+ne-height:1.2"><p style=3D"margin:0;font-size:14px;text-align:center;mso-li=
+ne-height-alt:16.8px"><span style=3D"font-size:22px;">Welcome to TODAY!</sp=
+an></p></div></div></td></tr></table></td></tr></tbody></table></td></tr></=
+tbody></table><table class=3D"row row-5" align=3D"center" width=3D"100%" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"mso-table-lspace:0;mso-table-rspace:0"><tbody><tr><td><table class=3D"r=
+ow-content stack" align=3D"center" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace=
+:0;background-color:#fff;color:#000;width:600px" width=3D"600"><tbody><tr><=
+td class=3D"column column-1" width=3D"100%" style=3D"mso-table-lspace:0;mso=
+-table-rspace:0;font-weight:400;text-align:left;padding-bottom:20px;padding=
+-left:25px;padding-right:25px;padding-top:15px;vertical-align:top;border-to=
+p:0;border-right:0;border-bottom:0;border-left:0"><table class=3D"text_bloc=
+k block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-b=
+reak:break-word"><tr><td class=3D"pad"><div style=3D"font-family:Georgia,se=
+rif"><div class=3D"" style=3D"font-size:12px;font-family:CrimsonPro,Georgia=
+,Times,Times New Roman,serif;mso-line-height-alt:18px;color:#2a2a2a;line-he=
+ight:1.5"><p style=3D"margin:0;font-size:12px;mso-line-height-alt:27px">
+<span style=3D"font-size:18px;">Thank you for signing up for your TODAY acc=
+ount, we=E2=80=99re so glad you=E2=80=99re here! You can now start <strong>=
+saving your favorite TODAY articles, videos, and recipes</strong>, <strong>=
+personalize your newsletter subscriptions</strong> and <strong>get exclusiv=
+e discounts as part of Shop TODAY Perks</strong>.<br></span></p></div></div=
+></td></tr></table></td></tr></tbody></table></td></tr></tbody></table><tab=
+le class=3D"row row-6" align=3D"center" width=3D"100%" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspac=
+e:0;mso-table-rspace:0;background-size:auto"><tbody><tr><td><table class=3D=
+"row-content stack" align=3D"center" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspa=
+ce:0;background-color:#fff;background-size:auto;color:#000;width:600px" wid=
+th=3D"600"><tbody><tr><td class=3D"column column-1" width=3D"100%" style=3D=
+"mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-align:left;padd=
+ing-bottom:10px;padding-left:25px;padding-right:25px;padding-top:10px;verti=
+cal-align:top;border-top:0;border-right:0;border-bottom:0;border-left:0"><t=
+able class=3D"text_block block-1 mobile_hide" width=3D"100%" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table=
+-lspace:0;mso-table-rspace:0;word-break:break-word"><tr><td class=3D"pad" s=
+tyle=3D"padding-top:5px"><div style=3D"font-family:sans-serif">
+<div class=3D"" style=3D"font-size:12px;font-family:Prata,Geneva,sans-serif=
+;mso-line-height-alt:18px;color:#000;line-height:1.5"><p style=3D"margin:0;=
+font-size:12px;mso-line-height-alt:36px"><span style=3D"font-size:24px;"><s=
+pan style=3D"">Take Advantage of Exclusive Deals</span></span></p></div></d=
+iv></td></tr></table><table class=3D"text_block block-2 desktop_hide" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presenta=
+tion" style=3D"mso-table-lspace:0;mso-table-rspace:0;mso-hide:all;display:n=
+one;max-height:0;overflow:hidden;word-break:break-word"><tr><td class=3D"pa=
+d" style=3D"padding-top:5px"><div style=3D"font-family:sans-serif"><div cla=
+ss=3D"" style=3D"font-size:12px;font-family:Prata,Geneva,sans-serif;mso-lin=
+e-height-alt:18px;color:#2a2a2a;line-height:1.5"><p style=3D"margin:0;font-=
+size:12px;text-align:left;mso-line-height-alt:30px;letter-spacing:normal">
+<span style=3D"font-size:20px;"><span style=3D"">Take Advantage of Exclusiv=
+e Deals</span></span></p></div></div></td></tr></table><table class=3D"html=
+_block block-3" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0=
+"><tr><td class=3D"pad"><div style=3D"font-family:CrimsonPro,Georgia;text-a=
+lign:center" align=3D"center"><div class=3D"divider-orange"></div>
+<style>
+.divider-orange {
+background-color: #FFBAAD;
+clip-path: polygon(0 0, 100% 20%, 98% 70%, 0 100%);
+max-width: 160px;
+height: 14px;
+}
+</style></div></td></tr></table></td></tr></tbody></table></td></tr></tbody=
+></table><table class=3D"row row-7" align=3D"center" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"m=
+so-table-lspace:0;mso-table-rspace:0"><tbody><tr><td><table class=3D"row-co=
+ntent" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;backgrou=
+nd-color:#fff;color:#000;width:600px" width=3D"600"><tbody><tr><td class=3D=
+"column column-1" width=3D"100%" style=3D"mso-table-lspace:0;mso-table-rspa=
+ce:0;font-weight:400;text-align:left;padding-bottom:20px;padding-left:25px;=
+padding-right:25px;padding-top:5px;vertical-align:top;border-top:0;border-r=
+ight:0;border-bottom:0;border-left:0"><table class=3D"text_block block-1" w=
+idth=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pres=
+entation" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-break:break-w=
+ord"><tr><td class=3D"pad"><div style=3D"font-family:Georgia,serif"><div cl=
+ass=3D"" style=3D"font-size:12px;font-family:CrimsonPro,Georgia,Times,Times=
+ New Roman,serif;mso-line-height-alt:18px;color:#2a2a2a;line-height:1.5"><p=
+ style=3D"margin:0;font-size:12px;mso-line-height-alt:27px"><span style=3D"=
+font-size:18px;">Keep an eye on your inbox for <strong>exclusive discounts<=
+/strong>, early access to Steals &amp; Deals, giveaways and perks that are =
+only for TODAY account holders.<br></span></p></div></div></td></tr></table=
+></td></tr></tbody></table></td></tr></tbody></table><table class=3D"row ro=
+w-8" align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspa=
+ce:0"><tbody><tr><td><table class=3D"row-content stack" align=3D"center" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"mso-table-lspace:0;mso-table-rspace:0;background-repeat:no-repeat;backg=
+round-image:url(https://media.sailthru.com/composer/images/sailthru-prod-5c=
+i/Rectangle%20607.png);color:#000;width:600px" width=3D"600"><tbody>
+<tr><td class=3D"column column-1" width=3D"100%" style=3D"mso-table-lspace:=
+0;mso-table-rspace:0;font-weight:400;text-align:left;padding-bottom:10px;pa=
+dding-left:25px;padding-right:25px;padding-top:25px;vertical-align:top;bord=
+er-top:0;border-right:0;border-bottom:0;border-left:0"><table class=3D"text=
+_block block-1 mobile_hide" width=3D"100%" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-tabl=
+e-rspace:0;word-break:break-word"><tr><td class=3D"pad" style=3D"padding-to=
+p:5px"><div style=3D"font-family:sans-serif"><div class=3D"" style=3D"font-=
+size:12px;font-family:Prata,Geneva,sans-serif;mso-line-height-alt:18px;colo=
+r:#000;line-height:1.5"><p style=3D"margin:0;font-size:12px;mso-line-height=
+-alt:36px"><span style=3D"font-size:24px;"><span style=3D"">Save Your Faves=
+!</span></span></p></div></div></td></tr></table><table class=3D"text_block=
+ block-2 desktop_hide" width=3D"100%" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rsp=
+ace:0;mso-hide:all;display:none;max-height:0;overflow:hidden;word-break:bre=
+ak-word"><tr><td class=3D"pad" style=3D"padding-top:5px"><div style=3D"font=
+-family:sans-serif"><div class=3D"" style=3D"font-size:12px;font-family:Pra=
+ta,Geneva,sans-serif;mso-line-height-alt:18px;color:#2a2a2a;line-height:1.5=
+"><p style=3D"margin:0;font-size:12px;text-align:left;mso-line-height-alt:3=
+0px;letter-spacing:normal"><span style=3D"font-size:20px;"><span style=3D""=
+>Save Your Faves!</span></span>
+</p></div></div></td></tr></table><table class=3D"html_block block-3" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presenta=
+tion" style=3D"mso-table-lspace:0;mso-table-rspace:0"><tr><td class=3D"pad"=
+><div style=3D"font-family:CrimsonPro,Georgia;text-align:center" align=3D"c=
+enter"><div class=3D"divider-purple"></div>
+<style>
+.divider-purple {
+background-color: #7C4E9F;
+clip-path: polygon(0 0, 100% 20%, 98% 70%, 0 100%);
+max-width: 160px;
+height: 14px;
+}
+</style></div></td></tr></table></td></tr></tbody></table></td></tr></tbody=
+></table><table class=3D"row row-9" align=3D"center" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"m=
+so-table-lspace:0;mso-table-rspace:0"><tbody><tr><td><table class=3D"row-co=
+ntent stack" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;bo=
+rder-radius:0;color:#000;background-color:#f2f2f2;width:600px" width=3D"600=
+"><tbody><tr><td class=3D"column column-1" width=3D"50%" style=3D"mso-table=
+-lspace:0;mso-table-rspace:0;font-weight:400;text-align:left;padding-bottom=
+:20px;padding-left:25px;padding-right:20px;padding-top:10px;vertical-align:=
+top;border-top:0;border-right:0;border-bottom:0;border-left:0"><table class=
+=3D"image_block block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-r=
+space:0"><tr><td class=3D"pad" style=3D"width:100%;padding-right:0;padding-=
+left:0"><div class=3D"alignment" align=3D"center" style=3D"line-height:10px=
+"><img src=3D"https://media.sailthru.com/composer/images/sailthru-prod-5ci/=
+editor_images/favs_welcome_2.gif" style=3D"display:block;height:auto;border=
+:0;width:255px;max-width:100%" width=3D"255"></div></td></tr></table></td><=
+td class=3D"column column-2" width=3D"50%" style=3D"mso-table-lspace:0;mso-=
+table-rspace:0;font-weight:400;text-align:left;padding-bottom:20px;padding-=
+left:25px;padding-right:25px;padding-top:10px;vertical-align:top;border-top=
+:0;border-right:0;border-bottom:0;border-left:0"><table class=3D"text_block=
+ block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" r=
+ole=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-br=
+eak:break-word"><tr><td class=3D"pad"><div style=3D"font-family:Georgia,ser=
+if"><div class=3D"" style=3D"font-size:12px;font-family:CrimsonPro,Georgia,=
+Times,Times New Roman,serif;mso-line-height-alt:18px;color:#2a2a2a;line-hei=
+ght:1.5"><p style=3D"margin:0;font-size:12px;mso-line-height-alt:27px">
+<span style=3D"font-size:18px;">See a recipe you want to make? Loved the la=
+test Start TODAY workout? Save it for later! We're making it easier than ev=
+er to save recipes, wellness tips, workouts and more. &nbsp;You can find an=
+d manage them in your <a href=3D"https://link.today.com/click/65045fe005e9f=
+60001cd12db/aHR0cHM6Ly93d3cudG9kYXkuY29tL2FjY291bnQvc2F2ZWQ/65045fe0f70c8ce=
+dfe0bee97Bf2780969" target=3D"_blank" style=3D"text-decoration: underline; =
+color: #ff503c;" rel=3D"noopener">My Saved</a> page.</span></p></div></div>=
+</td></tr></table></td></tr></tbody></table></td></tr></tbody>
+</table><table class=3D"row row-10" align=3D"center" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"m=
+so-table-lspace:0;mso-table-rspace:0;background-size:auto"><tbody><tr><td><=
+table class=3D"row-content stack" align=3D"center" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;=
+mso-table-rspace:0;background-color:#fff;background-size:auto;color:#000;wi=
+dth:600px" width=3D"600"><tbody><tr><td class=3D"column column-1" width=3D"=
+100%" style=3D"mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-a=
+lign:left;padding-bottom:10px;padding-left:25px;padding-right:25px;padding-=
+top:20px;vertical-align:top;border-top:0;border-right:0;border-bottom:0;bor=
+der-left:0"><table class=3D"text_block block-1 mobile_hide" width=3D"100%" =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" styl=
+e=3D"mso-table-lspace:0;mso-table-rspace:0;word-break:break-word"><tr><td c=
+lass=3D"pad" style=3D"padding-top:5px"><div style=3D"font-family:sans-serif=
+">
+<div class=3D"" style=3D"font-size:12px;font-family:Prata,Geneva,sans-serif=
+;mso-line-height-alt:18px;color:#000;line-height:1.5"><p style=3D"margin:0;=
+font-size:12px;mso-line-height-alt:36px"><span style=3D"font-size:24px;"><s=
+pan style=3D"">Keep Up with the Latest</span></span></p></div></div></td></=
+tr></table><table class=3D"text_block block-2 desktop_hide" width=3D"100%" =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" styl=
+e=3D"mso-table-lspace:0;mso-table-rspace:0;mso-hide:all;display:none;max-he=
+ight:0;overflow:hidden;word-break:break-word"><tr><td class=3D"pad" style=
+=3D"padding-top:5px"><div style=3D"font-family:sans-serif"><div class=3D"" =
+style=3D"font-size:12px;font-family:Prata,Geneva,sans-serif;mso-line-height=
+-alt:18px;color:#2a2a2a;line-height:1.5"><p style=3D"margin:0;font-size:12p=
+x;text-align:left;mso-line-height-alt:30px;letter-spacing:normal">
+<span style=3D"font-size:20px;"><span style=3D"">Keep Up with the Latest</s=
+pan></span></p></div></div></td></tr></table><table class=3D"html_block blo=
+ck-3" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0"><tr><td c=
+lass=3D"pad"><div style=3D"font-family:CrimsonPro,Georgia;text-align:center=
+" align=3D"center"><div class=3D"divider-blue"></div>
+<style>
+.divider-blue {
+background-color: #81E4DE;
+clip-path: polygon(0 0, 100% 20%, 98% 70%, 0 100%);
+max-width: 160px;
+height: 14px;
+}
+</style></div></td></tr></table></td></tr></tbody></table></td></tr></tbody=
+></table><table class=3D"row row-11" align=3D"center" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"m=
+so-table-lspace:0;mso-table-rspace:0"><tbody><tr><td><table class=3D"row-co=
+ntent" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;backgrou=
+nd-color:#fff;color:#000;width:600px" width=3D"600"><tbody><tr><td class=3D=
+"column column-1" width=3D"100%" style=3D"mso-table-lspace:0;mso-table-rspa=
+ce:0;font-weight:400;text-align:left;padding-bottom:20px;padding-left:25px;=
+padding-right:25px;padding-top:5px;vertical-align:top;border-top:0;border-r=
+ight:0;border-bottom:0;border-left:0"><table class=3D"text_block block-1" w=
+idth=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pres=
+entation" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-break:break-w=
+ord"><tr><td class=3D"pad"><div style=3D"font-family:Georgia,serif"><div cl=
+ass=3D"" style=3D"font-size:12px;font-family:CrimsonPro,Georgia,Times,Times=
+ New Roman,serif;mso-line-height-alt:18px;color:#2a2a2a;line-height:1.5"><p=
+ style=3D"margin:0;font-size:12px;mso-line-height-alt:27px">
+<span style=3D"font-size:18px;">We=E2=80=99re excited to see you &nbsp;in y=
+our inbox each morning. Want more? <a href=3D"https://link.today.com/click/=
+65045fe005e9f60001cd12db/aHR0cHM6Ly9pZC5uYmNuZXdzLmNvbS9lbWFpbC1wcmVmZXJlbm=
+Nlcz9icmFuZD10b2RheQ/65045fe0f70c8cedfe0bee97B95c3f4d0" target=3D"_blank" s=
+tyle=3D"text-decoration: underline; color: #ff503c;" rel=3D"noopener">Subsc=
+ribe to our other newsletters</a> and get more of TODAY delivered to your i=
+nbox. Be sure to add <a href=3D"mailto:email@mail.today.com" target=3D"_bla=
+nk" title=3D"email@mail.nbcnews.com" rel=3D"noopener" style=3D"text-decorat=
+ion: underline; color: #ff503c;">email@mail.today.com</a> to your address b=
+ook so you don't miss a thing!
+<br></span></p></div></div></td></tr></table></td></tr></tbody></table></td=
+></tr></tbody></table><table class=3D"row row-12" align=3D"center" width=3D=
+"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentatio=
+n" style=3D"mso-table-lspace:0;mso-table-rspace:0"><tbody><tr><td><table cl=
+ass=3D"row-content" align=3D"center" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspa=
+ce:0;border-radius:0;color:#000;width:600px" width=3D"600"><tbody><tr><td c=
+lass=3D"column column-1" width=3D"41.666666666666664%" style=3D"mso-table-l=
+space:0;mso-table-rspace:0;font-weight:400;text-align:left;padding-bottom:1=
+5px;padding-left:25px;padding-right:10px;vertical-align:top;border-top:0;bo=
+rder-right:0;border-bottom:0;border-left:0"><table class=3D"image_block blo=
+ck-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0"><tr><td c=
+lass=3D"pad" style=3D"width:100%;padding-right:0;padding-left:0"><div class=
+=3D"alignment" align=3D"center" style=3D"line-height:10px"><img src=3D"http=
+s://media.sailthru.com/composer/images/sailthru-prod-5ci/editor_images/star=
+t-today-walking-streak-2x1-z-230605-%281%29.png" style=3D"display:block;hei=
+ght:auto;border:0;width:215px;max-width:100%" width=3D"215"></div></td></tr=
+></table></td><td class=3D"column column-2" width=3D"58.333333333333336%" s=
+tyle=3D"mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-align:le=
+ft;padding-bottom:15px;padding-left:10px;padding-right:25px;vertical-align:=
+top;border-top:0;border-right:0;border-bottom:0;border-left:0"><table class=
+=3D"text_block block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rs=
+pace:0;word-break:break-word"><tr><td class=3D"pad" style=3D"padding-bottom=
+:5px;padding-top:15px"><div style=3D"font-family:Arial,sans-serif"><div cla=
+ss=3D"" style=3D"font-size:14px;font-family:Mada,Arial,sans-serif;mso-line-=
+height-alt:16.8px;color:#2a2a2a;line-height:1.2"><p style=3D"margin:0;font-=
+size:14px;mso-line-height-alt:16.8px"><span style=3D"font-size:18px;"><stro=
+ng>Start TODAY</strong></span></p></div></div></td></tr></table><table clas=
+s=3D"text_block block-2" width=3D"100%" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-r=
+space:0;word-break:break-word"><tr><td class=3D"pad"><div style=3D"font-fam=
+ily:Georgia,serif"><div class=3D"" style=3D"font-size:12px;font-family:Crim=
+sonPro,Georgia,Times,Times New Roman,serif;mso-line-height-alt:18px;color:#=
+2a2a2a;line-height:1.5"><p style=3D"margin:0;font-size:12px;mso-line-height=
+-alt:27px"><span style=3D"font-size:18px;">Start TODAY is the destination t=
+o help you become a healthier, happier and better you. It=E2=80=99s all abo=
+ut overcoming the biggest hurdle =E2=80=94 getting started.<br></span></p><=
+/div></div></td></tr></table><table class=3D"button_block block-3" width=3D=
+"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentatio=
+n" style=3D"mso-table-lspace:0;mso-table-rspace:0"><tr><td class=3D"pad" st=
+yle=3D"padding-bottom:10px;padding-top:10px;text-align:left"><div class=3D"=
+alignment" align=3D"left">
+<!--[if mso]><v:roundrect xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:w=
+=3D"urn:schemas-microsoft-com:office:word" href=3D"https://link.today.com/c=
+lick/65045fe005e9f60001cd12db/aHR0cHM6Ly9pZC5uYmNuZXdzLmNvbS9lbWFpbC1wcmVmZ=
+XJlbmNlcz9icmFuZD10b2RheQ/65045fe0f70c8cedfe0bee97C95c3f4d0" style=3D"heigh=
+t:36px;width:158px;v-text-anchor:middle;" arcsize=3D"0%" stroke=3D"false" f=
+illcolor=3D"#ffb186"><w:anchorlock/><v:textbox inset=3D"0px,0px,0px,0px"><c=
+enter style=3D"color:#2a2a2a; font-family:Arial; font-size:18px"><![endif]-=
+->
+<a href=3D"https://link.today.com/click/65045fe005e9f60001cd12db/aHR0cHM6Ly=
+9pZC5uYmNuZXdzLmNvbS9lbWFpbC1wcmVmZXJlbmNlcz9icmFuZD10b2RheQ/65045fe0f70c8c=
+edfe0bee97D95c3f4d0" target=3D"_blank" style=3D"text-decoration:none;displa=
+y:inline-block;color:#2a2a2a;background-color:#ffb186;border-radius:0px;wid=
+th:auto;border-top:0px solid transparent;font-weight:700;border-right:0px s=
+olid transparent;border-bottom:0px solid transparent;border-left:0px solid =
+transparent;padding-top:0px;padding-bottom:0px;font-family:'Mada', Arial;fo=
+nt-size:18px;text-align:center;mso-border-alt:none;word-break:keep-all;"><s=
+pan style=3D"padding-left:15px;padding-right:15px;font-size:18px;display:in=
+line-block;letter-spacing:normal;"><span dir=3D"ltr" style=3D"word-break: b=
+reak-word; line-height: 36px;">SIGN UP NOW!</span></span></a>
+<!--[if mso]></center></v:textbox></v:roundrect><![endif]--></div></td></tr=
+></table></td></tr></tbody></table></td></tr></tbody></table><table class=
+=3D"row row-13" align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso=
+-table-rspace:0"><tbody><tr><td><table class=3D"row-content" align=3D"cente=
+r" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" s=
+tyle=3D"mso-table-lspace:0;mso-table-rspace:0;border-radius:0;color:#000;wi=
+dth:600px" width=3D"600"><tbody><tr><td class=3D"column column-1" width=3D"=
+41.666666666666664%" style=3D"mso-table-lspace:0;mso-table-rspace:0;font-we=
+ight:400;text-align:left;padding-bottom:15px;padding-left:25px;padding-righ=
+t:10px;vertical-align:top;border-top:0;border-right:0;border-bottom:0;borde=
+r-left:0"><table class=3D"image_block block-1" width=3D"100%" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0"><tr><td class=3D"pad" style=3D"width:100%;pa=
+dding-right:0;padding-left:0"><div class=3D"alignment" align=3D"center" sty=
+le=3D"line-height:10px"><img src=3D"https://media-cldnry.s-nbcnews.com/imag=
+e/upload/t_focal-360x360,f_auto,q_auto:best/newscms/2023_15/1984544/230412-=
+stl-vl-1x1.jpg" style=3D"display:block;height:auto;border:0;width:215px;max=
+-width:100%" width=3D"215"></div></td></tr></table></td><td class=3D"column=
+ column-2" width=3D"58.333333333333336%" style=3D"mso-table-lspace:0;mso-ta=
+ble-rspace:0;font-weight:400;text-align:left;padding-bottom:15px;padding-le=
+ft:10px;padding-right:25px;vertical-align:top;border-top:0;border-right:0;b=
+order-bottom:0;border-left:0"><table class=3D"text_block block-1" width=3D"=
+100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation=
+" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-break:break-word"><tr=
+><td class=3D"pad" style=3D"padding-bottom:5px;padding-top:15px"><div style=
+=3D"font-family:Arial,sans-serif"><div class=3D"" style=3D"font-size:14px;f=
+ont-family:Mada,Arial,sans-serif;mso-line-height-alt:16.8px;color:#2a2a2a;l=
+ine-height:1.2"><p style=3D"margin:0;font-size:14px;mso-line-height-alt:16.=
+8px"><span style=3D"font-size:18px;"><strong>Stuff We Love</strong></span><=
+/p></div></div></td></tr></table><table class=3D"text_block block-2" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presenta=
+tion" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-break:break-word"=
+><tr><td class=3D"pad"><div style=3D"font-family:Georgia,serif"><div class=
+=3D"" style=3D"font-size:12px;font-family:CrimsonPro,Georgia,Times,Times Ne=
+w Roman,serif;mso-line-height-alt:18px;color:#2a2a2a;line-height:1.5"><p st=
+yle=3D"margin:0;font-size:12px;mso-line-height-alt:27px"><span style=3D"fon=
+t-size:18px;">A daily roundup of items that will make your life easier, hea=
+lthier and more stylish.<br></span></p></div></div></td></tr></table><table=
+ class=3D"button_block block-3" width=3D"100%" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-=
+table-rspace:0"><tr><td class=3D"pad" style=3D"padding-bottom:10px;padding-=
+top:10px;text-align:left"><div class=3D"alignment" align=3D"left">
+<!--[if mso]><v:roundrect xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:w=
+=3D"urn:schemas-microsoft-com:office:word" href=3D"https://link.today.com/c=
+lick/65045fe005e9f60001cd12db/aHR0cHM6Ly9pZC5uYmNuZXdzLmNvbS9lbWFpbC1wcmVmZ=
+XJlbmNlcz9icmFuZD10b2RheQ/65045fe0f70c8cedfe0bee97E95c3f4d0" style=3D"heigh=
+t:36px;width:158px;v-text-anchor:middle;" arcsize=3D"0%" stroke=3D"false" f=
+illcolor=3D"#ffb186"><w:anchorlock/><v:textbox inset=3D"0px,0px,0px,0px"><c=
+enter style=3D"color:#2a2a2a; font-family:Arial; font-size:18px"><![endif]-=
+->
+<a href=3D"https://link.today.com/click/65045fe005e9f60001cd12db/aHR0cHM6Ly=
+9pZC5uYmNuZXdzLmNvbS9lbWFpbC1wcmVmZXJlbmNlcz9icmFuZD10b2RheQ/65045fe0f70c8c=
+edfe0bee97F95c3f4d0" target=3D"_blank" style=3D"text-decoration:none;displa=
+y:inline-block;color:#2a2a2a;background-color:#ffb186;border-radius:0px;wid=
+th:auto;border-top:0px solid transparent;font-weight:700;border-right:0px s=
+olid transparent;border-bottom:0px solid transparent;border-left:0px solid =
+transparent;padding-top:0px;padding-bottom:0px;font-family:'Mada', Arial;fo=
+nt-size:18px;text-align:center;mso-border-alt:none;word-break:keep-all;"><s=
+pan style=3D"padding-left:15px;padding-right:15px;font-size:18px;display:in=
+line-block;letter-spacing:normal;"><span dir=3D"ltr" style=3D"word-break: b=
+reak-word; line-height: 36px;">SIGN UP NOW!</span></span></a>
+<!--[if mso]></center></v:textbox></v:roundrect><![endif]--></div></td></tr=
+></table></td></tr></tbody></table></td></tr></tbody></table><table class=
+=3D"row row-14" align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso=
+-table-rspace:0"><tbody><tr><td><table class=3D"row-content" align=3D"cente=
+r" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" s=
+tyle=3D"mso-table-lspace:0;mso-table-rspace:0;border-radius:0;color:#000;wi=
+dth:600px" width=3D"600"><tbody><tr><td class=3D"column column-1" width=3D"=
+41.666666666666664%" style=3D"mso-table-lspace:0;mso-table-rspace:0;font-we=
+ight:400;text-align:left;padding-bottom:15px;padding-left:25px;padding-righ=
+t:10px;vertical-align:top;border-top:0;border-right:0;border-bottom:0;borde=
+r-left:0"><table class=3D"image_block block-1" width=3D"100%" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0"><tr><td class=3D"pad" style=3D"width:100%;pa=
+dding-right:0;padding-left:0"><div class=3D"alignment" align=3D"center" sty=
+le=3D"line-height:10px"><img src=3D"https://media-cldnry.s-nbcnews.com/imag=
+e/upload/t_focal-360x360,f_auto,q_auto:best/newscms/2021_16/1705477/today-n=
+ewsletter-food1.jpg" style=3D"display:block;height:auto;border:0;width:215p=
+x;max-width:100%" width=3D"215"></div></td></tr></table></td><td class=3D"c=
+olumn column-2" width=3D"58.333333333333336%" style=3D"mso-table-lspace:0;m=
+so-table-rspace:0;font-weight:400;text-align:left;padding-bottom:15px;paddi=
+ng-left:10px;padding-right:25px;vertical-align:top;border-top:0;border-righ=
+t:0;border-bottom:0;border-left:0"><table class=3D"text_block block-1" widt=
+h=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"present=
+ation" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-break:break-word=
+"><tr><td class=3D"pad" style=3D"padding-bottom:5px;padding-top:15px"><div =
+style=3D"font-family:Arial,sans-serif"><div class=3D"" style=3D"font-size:1=
+4px;font-family:Mada,Arial,sans-serif;mso-line-height-alt:16.8px;color:#2a2=
+a2a;line-height:1.2"><p style=3D"margin:0;font-size:14px;mso-line-height-al=
+t:16.8px"><span style=3D"font-size:18px;"><strong>TODAY Food</strong></span=
+></p></div></div></td></tr></table><table class=3D"text_block block-2" widt=
+h=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"present=
+ation" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-break:break-word=
+"><tr><td class=3D"pad"><div style=3D"font-family:Georgia,serif"><div class=
+=3D"" style=3D"font-size:12px;font-family:CrimsonPro,Georgia,Times,Times Ne=
+w Roman,serif;mso-line-height-alt:18px;color:#2a2a2a;line-height:1.5"><p st=
+yle=3D"margin:0;font-size:12px;mso-line-height-alt:27px"><span style=3D"fon=
+t-size:18px;">A daily roundup of items that will make your life easier, hea=
+lthier and more stylish.<br></span></p></div></div></td></tr></table><table=
+ class=3D"button_block block-3" width=3D"100%" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-=
+table-rspace:0"><tr><td class=3D"pad" style=3D"padding-bottom:10px;padding-=
+top:10px;text-align:left"><div class=3D"alignment" align=3D"left">
+<!--[if mso]><v:roundrect xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:w=
+=3D"urn:schemas-microsoft-com:office:word" href=3D"https://link.today.com/c=
+lick/65045fe005e9f60001cd12db/aHR0cHM6Ly9pZC5uYmNuZXdzLmNvbS9lbWFpbC1wcmVmZ=
+XJlbmNlcz9icmFuZD10b2RheQ/65045fe0f70c8cedfe0bee97G95c3f4d0" style=3D"heigh=
+t:36px;width:158px;v-text-anchor:middle;" arcsize=3D"0%" stroke=3D"false" f=
+illcolor=3D"#ffb186"><w:anchorlock/><v:textbox inset=3D"0px,0px,0px,0px"><c=
+enter style=3D"color:#2a2a2a; font-family:Arial; font-size:18px"><![endif]-=
+->
+<a href=3D"https://link.today.com/click/65045fe005e9f60001cd12db/aHR0cHM6Ly=
+9pZC5uYmNuZXdzLmNvbS9lbWFpbC1wcmVmZXJlbmNlcz9icmFuZD10b2RheQ/65045fe0f70c8c=
+edfe0bee97H95c3f4d0" target=3D"_blank" style=3D"text-decoration:none;displa=
+y:inline-block;color:#2a2a2a;background-color:#ffb186;border-radius:0px;wid=
+th:auto;border-top:0px solid transparent;font-weight:700;border-right:0px s=
+olid transparent;border-bottom:0px solid transparent;border-left:0px solid =
+transparent;padding-top:0px;padding-bottom:0px;font-family:'Mada', Arial;fo=
+nt-size:18px;text-align:center;mso-border-alt:none;word-break:keep-all;"><s=
+pan style=3D"padding-left:15px;padding-right:15px;font-size:18px;display:in=
+line-block;letter-spacing:normal;"><span dir=3D"ltr" style=3D"word-break: b=
+reak-word; line-height: 36px;">SIGN UP NOW!</span></span></a>
+<!--[if mso]></center></v:textbox></v:roundrect><![endif]--></div></td></tr=
+></table></td></tr></tbody></table></td></tr></tbody></table><table class=
+=3D"row row-15" align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso=
+-table-rspace:0;background-size:auto"><tbody><tr><td><table class=3D"row-co=
+ntent stack" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;ba=
+ckground-color:#fff;background-size:auto;color:#000;width:600px" width=3D"6=
+00"><tbody><tr><td class=3D"column column-1" width=3D"100%" style=3D"mso-ta=
+ble-lspace:0;mso-table-rspace:0;font-weight:400;text-align:left;padding-bot=
+tom:10px;padding-left:25px;padding-right:25px;padding-top:20px;vertical-ali=
+gn:top;border-top:0;border-right:0;border-bottom:0;border-left:0"><table cl=
+ass=3D"text_block block-1 mobile_hide" width=3D"100%" border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace=
+:0;mso-table-rspace:0;word-break:break-word"><tr><td class=3D"pad" style=3D=
+"padding-top:5px"><div style=3D"font-family:sans-serif"><div class=3D"" sty=
+le=3D"font-size:12px;font-family:Prata,Geneva,sans-serif;mso-line-height-al=
+t:18px;color:#000;line-height:1.5"><p style=3D"margin:0;font-size:12px;mso-=
+line-height-alt:36px"><span style=3D"font-size:24px;"><span style=3D"">Comi=
+ng Soon...</span></span></p></div></div></td></tr></table><table class=3D"t=
+ext_block block-2 desktop_hide" width=3D"100%" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-=
+table-rspace:0;mso-hide:all;display:none;max-height:0;overflow:hidden;word-=
+break:break-word"><tr><td class=3D"pad" style=3D"padding-top:5px"><div styl=
+e=3D"font-family:sans-serif"><div class=3D"" style=3D"font-size:12px;font-f=
+amily:Prata,Geneva,sans-serif;mso-line-height-alt:18px;color:#2a2a2a;line-h=
+eight:1.5"><p style=3D"margin:0;font-size:12px;text-align:left;mso-line-hei=
+ght-alt:30px;letter-spacing:normal"><span style=3D"font-size:20px;"><span s=
+tyle=3D"">Coming Soon...</span></span></p></div></div></td></tr></table><ta=
+ble class=3D"html_block block-3" width=3D"100%" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso=
+-table-rspace:0"><tr><td class=3D"pad"><div style=3D"font-family:CrimsonPro=
+,Georgia;text-align:center" align=3D"center"><div class=3D"divider-orange">=
+</div>
+<style>
+.divider-orange {
+background-color: #FFBAAD;
+clip-path: polygon(0 0, 100% 20%, 98% 70%, 0 100%);
+max-width: 160px;
+height: 14px;
+}
+</style></div></td></tr></table></td>
+</tr></tbody></table></td></tr></tbody></table><table class=3D"row row-16" =
+align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0=
+"><tbody><tr><td><table class=3D"row-content" align=3D"center" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tab=
+le-lspace:0;mso-table-rspace:0;background-color:#fff;color:#000;width:600px=
+" width=3D"600"><tbody><tr><td class=3D"column column-1" width=3D"100%" sty=
+le=3D"mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-align:left=
+;padding-bottom:20px;padding-left:25px;padding-right:25px;padding-top:5px;v=
+ertical-align:top;border-top:0;border-right:0;border-bottom:0;border-left:0=
+"><table class=3D"text_block block-1" width=3D"100%" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:=
+0;mso-table-rspace:0;word-break:break-word"><tr><td class=3D"pad"><div styl=
+e=3D"font-family:Georgia,serif"><div class=3D"" style=3D"font-size:12px;fon=
+t-family:CrimsonPro,Georgia,Times,Times New Roman,serif;mso-line-height-alt=
+:18px;color:#2a2a2a;line-height:1.5"><p style=3D"margin:0;font-size:12px;ms=
+o-line-height-alt:27px">
+<span style=3D"font-size:18px;">We are working hard to continue to add new =
+features as they are ready. We=E2=80=99ll be sure to let you know about any=
+ updates. Please reach out to us if you have any questions, comments or ide=
+as. <a href=3D"mailto:todaynewsletters@nbcnews.zendesk.com" target=3D"_blan=
+k" rel=3D"noopener" title=3D"todaynewsletters@nbcnews.zendesk.com" style=3D=
+"text-decoration: underline; color: #ff503c;">We=E2=80=99d love to hear fro=
+m you!</a><br></span></p></div></div></td></tr></table></td></tr>
+</tbody></table></td></tr></tbody></table><table class=3D"row row-17" align=
+=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rspace:0"><tbo=
+dy><tr><td><table class=3D"row-content stack" align=3D"center" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tab=
+le-lspace:0;mso-table-rspace:0;background-repeat:no-repeat;border-radius:0;=
+color:#000;background-color:#fff;background-image:url(https://media.sailthr=
+u.com/composer/images/sailthru-prod-5ci/Rectangle%20610.png);width:600px" w=
+idth=3D"600"><tbody><tr><td class=3D"column column-1" width=3D"100%" style=
+=3D"mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-align:left;p=
+adding-bottom:5px;padding-top:5px;vertical-align:top;border-top:0;border-ri=
+ght:0;border-bottom:0;border-left:0"><table class=3D"image_block block-1" w=
+idth=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pres=
+entation" style=3D"mso-table-lspace:0;mso-table-rspace:0"><tr><td class=3D"=
+pad" style=3D"padding-top:40px;width:100%;padding-right:0;padding-left:0"><=
+div class=3D"alignment" align=3D"center" style=3D"line-height:10px"><img sr=
+c=3D"https://media.sailthru.com/composer/images/sailthru-prod-5ci/Positive%=
+20Full%20Color.png" style=3D"display:block;height:auto;border:0;width:210px=
+;max-width:100%" width=3D"210"></div></td></tr>
+</table><table class=3D"text_block block-2" width=3D"100%" border=3D"0" cel=
+lpadding=3D"10" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-=
+lspace:0;mso-table-rspace:0;word-break:break-word"><tr><td class=3D"pad"><d=
+iv style=3D"font-family:sans-serif"><div class=3D"" style=3D"font-size:14px=
+;font-family:Mada,undefined;mso-line-height-alt:21px;color:#555;line-height=
+:1.5"><p style=3D"margin:0;font-size:14px;text-align:center;mso-line-height=
+-alt:21px">30 Rockefeller Plaza<br>New York, NY 10112</p></div></div></td>
+</tr></table></td></tr></tbody></table></td></tr></tbody></table><table cla=
+ss=3D"row row-18 mobile_hide" align=3D"center" width=3D"100%" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;background-size:auto"><tbody><tr><td><table c=
+lass=3D"row-content" align=3D"center" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-rsp=
+ace:0;background-color:#f2f2f2;background-size:auto;color:#000;width:600px"=
+ width=3D"600"><tbody><tr><td class=3D"column column-1" width=3D"100%" styl=
+e=3D"mso-table-lspace:0;mso-table-rspace:0;font-weight:400;text-align:left;=
+padding-bottom:10px;padding-top:10px;vertical-align:top;border-top:0;border=
+-right:0;border-bottom:0;border-left:0"><table class=3D"text_block block-1"=
+ width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pr=
+esentation" style=3D"mso-table-lspace:0;mso-table-rspace:0;word-break:break=
+-word"><tr><td class=3D"pad" style=3D"padding-left:10px;padding-right:10px"=
+>
+<div style=3D"font-family:Arial,Tahoma,Verdana,sans-serif"><div class=3D"" =
+style=3D"font-size:14px;font-family:Mada,Arial #000,Arial,Tahoma,Verdana,Se=
+goe,sans-serif;mso-line-height-alt:16.8px;color:#555;line-height:1.2"><p st=
+yle=3D"margin:0;font-size:14px;text-align:center;mso-line-height-alt:16.8px=
+;letter-spacing:normal">
+<span style=3D"font-size:13px;"><strong><span style=3D""><a href=3D"https:/=
+/link.today.com/click/65045fe005e9f60001cd12db/aHR0cDovL2xpbmsudG9kYXkuY29t=
+L21hbmFnZS81Y2kvcHJlZmVyZW5jZXM_ZW1haWw9dG9iaW5zaWx2ZXN0cmUwOTNAc29vbmVycy5=
+1cw/65045fe0f70c8cedfe0bee97B73d5b747" target=3D"_blank" style=3D"text-deco=
+ration: underline; color: #2a2a2a;" rel=3D"noopener"><u>Manage Subscription=
+s</u></a> | <a href=3D"https://link.today.com/oc/65045fe0f70c8cedfe0bee9765=
+045fe005e9f60001cd12db/1587413e&amp;listvar=3Dsub_ontheshow" target=3D"_bla=
+nk" style=3D"text-decoration: underline; color: #2a2a2a;" rel=3D"noopener">=
+<u>Unsubscribe</u></a> | <a href=3D"https://link.today.com/click/65045fe005=
+e9f60001cd12db/aHR0cHM6Ly93d3cubmJjdW5pdmVyc2FsLmNvbS9wcml2YWN5/65045fe0f70=
+c8cedfe0bee97Be5a59816" target=3D"_blank" style=3D"text-decoration: underli=
+ne; color: #2a2a2a;" rel=3D"noopener"><u>Privacy</u></a> | <a href=3D"https=
+://link.today.com/click/65045fe005e9f60001cd12db/aHR0cHM6Ly9uYmNuZXdzLnplbm=
+Rlc2suY29tL2hjL2VuLXVzL3JlcXVlc3RzL25ldz90aWNrZXRfZm9ybV9pZD0xMjYwODA5MjkzM=
+Dcw/65045fe0f70c8cedfe0bee97B59f4837f" target=3D"_blank" style=3D"text-deco=
+ration: underline; color: #2a2a2a;" rel=3D"noopener"><u>Contact</u></a></sp=
+an></strong></span>
+</p></div></div></td></tr></table></td></tr></tbody></table></td></tr></tbo=
+dy></table><table class=3D"row row-19 desktop_hide" align=3D"center" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presenta=
+tion" style=3D"mso-table-lspace:0;mso-table-rspace:0;mso-hide:all;display:n=
+one;max-height:0;overflow:hidden;background-size:auto"><tbody><tr><td><tabl=
+e class=3D"row-content" align=3D"center" border=3D"0" cellpadding=3D"0" cel=
+lspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-table-=
+rspace:0;mso-hide:all;display:none;max-height:0;overflow:hidden;background-=
+color:#f2f2f2;background-size:auto;color:#000;width:600px" width=3D"600"><t=
+body><tr><td class=3D"column column-1" width=3D"100%" style=3D"mso-table-ls=
+pace:0;mso-table-rspace:0;font-weight:400;text-align:left;padding-bottom:10=
+px;padding-top:10px;vertical-align:top;border-top:0;border-right:0;border-b=
+ottom:0;border-left:0"><table class=3D"text_block block-1" width=3D"100%" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"mso-table-lspace:0;mso-table-rspace:0;word-break:break-word;mso-hide:al=
+l;display:none;max-height:0;overflow:hidden"><tr><td class=3D"pad" style=3D=
+"padding-left:10px;padding-right:10px"><div style=3D"font-family:Arial,Taho=
+ma,Verdana,sans-serif"><div class=3D"" style=3D"font-size:14px;font-family:=
+Mada,Arial #000,Arial,Tahoma,Verdana,Segoe,sans-serif;mso-line-height-alt:2=
+1px;color:#2a2a2a;line-height:1.5"><p style=3D"margin:0;font-size:14px;text=
+-align:center;mso-line-height-alt:21px">
+<strong><span style=3D"font-size:10px;"><a href=3D"https://link.today.com/c=
+lick/65045fe005e9f60001cd12db/aHR0cDovL2xpbmsudG9kYXkuY29tL21hbmFnZS81Y2kvc=
+HJlZmVyZW5jZXM_ZW1haWw9dG9iaW5zaWx2ZXN0cmUwOTNAc29vbmVycy51cw/65045fe0f70c8=
+cedfe0bee97C73d5b747" target=3D"_blank" style=3D"text-decoration: underline=
+; color: #2a2a2a;" rel=3D"noopener"><u>MANAGE SUBSCRIPTION</u></a> | <a hre=
+f=3D"https://link.today.com/oc/65045fe0f70c8cedfe0bee9765045fe005e9f60001cd=
+12db/1587413e&amp;listvar=3Dsub_ontheshow" target=3D"_blank" style=3D"text-=
+decoration: underline; color: #2a2a2a;" rel=3D"noopener"><u>UNSUBSCRIBE</u>=
+</a> | <a href=3D"https://link.today.com/click/65045fe005e9f60001cd12db/aHR=
+0cHM6Ly93d3cubmJjdW5pdmVyc2FsLmNvbS9wcml2YWN5/65045fe0f70c8cedfe0bee97Ce5a5=
+9816" target=3D"_blank" style=3D"text-decoration: underline; color: #2a2a2a=
+;" rel=3D"noopener"><u>PRIVACY</u></a> | <a href=3D"https://link.today.com/=
+click/65045fe005e9f60001cd12db/aHR0cHM6Ly9uYmNuZXdzLnplbmRlc2suY29tL2hjL2Vu=
+LXVzL3JlcXVlc3RzL25ldz90aWNrZXRfZm9ybV9pZD0xMjYwODA5MjkzMDcw/65045fe0f70c8c=
+edfe0bee97C59f4837f" target=3D"_blank" style=3D"text-decoration: underline;=
+ color: #2a2a2a;" rel=3D"noopener"><u>CONTACT</u></a></span></strong>
+</p></div></div></td></tr></table></td></tr></tbody></table></td></tr></tbo=
+dy></table></td></tr></tbody></table><!-- End --></body></html>=
+
+------=_Part_17248059_1164693934.1694785504606--

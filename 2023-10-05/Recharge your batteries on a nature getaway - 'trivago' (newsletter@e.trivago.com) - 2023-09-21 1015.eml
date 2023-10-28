@@ -1,0 +1,945 @@
+Received: from CH3PR20MB7020.namprd20.prod.outlook.com (2603:10b6:610:1af::17)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Thu, 21 Sep 2023
+ 15:15:15 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=V3XDcwyMIyKDAF9R4KvO17KHsp9IGGVWiMZLyOK6MvjLCeGqGgvB64eV34BI2rLsa2A8RHkeiAskaBgkTKqZgcs+EPHZJKXCOhqTr85xs5NjrXMoLZvIPavhptg45X7L+60mOqsHQds6S5eRW9yHFjq7+JHDUwZD5jrHeAJ6uU1t8e9GpqZ/+MLfjqCYPpyFnXjT8uPSjCL6NNtU3/XRsck0t+idrDwoTUYlCpeYdXGc/FywXQFJ7SzcGyUQrAqr8Xc9sDhIb0KMEUxAD0R/z6DIueQxEjOmQ9A0HBES7tO6Rv1SfpmNKOTf/lGAuv69QTb2tMthZ7uEB4upcx76XQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ePPW+gpn1nHsRKxuOKCkI21KT8WvygLq0gjw0UoAkVw=;
+ b=LU8TP697lZjUevDG1WptOCMQlyNY3G7/WyPRw/hVnWNY3Bmuft6z6orjv2RtNjwdlbYifM9JpfdL2L5vnbWjbhOOG8u9NWVKEAoH4ZzrmiV6IXj2kFWT7GAMeGo9xjzZiNOG2Y+uSzNh4PSjS1StzuF4RJxgV2CKrtGlQKoNZMZiG0Ozlqlhs2XMqKFpzLDHOOvPDoNWmfkSQC+yPV/mL5BT02UxzG8+C1AuM9TYrBNWT16ZsgojkSBE+gP3CaXhmPM1eXlHwKnXAitZ1/8m6uQ23P6ohnmtj40Yad4rcUmAvIquGhwuq7XRzgp0WGbT+GMZw/ppkRN39eeja2bJDA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.219.169) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.e.trivago.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=e.trivago.com; dkim=pass (signature was verified)
+ header.d=e.trivago.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounce-158_html-476354094-5209134-6172748-27147@bounce.e.trivago.com]
+ dkim=[1,1,header.i=@e.trivago.com] dmarc=[1,1,header.from=e.trivago.com])
+Received: from SN7PR04CA0010.namprd04.prod.outlook.com (2603:10b6:806:f2::15)
+ by CH3PR20MB7020.namprd20.prod.outlook.com (2603:10b6:610:1af::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.20; Thu, 21 Sep
+ 2023 15:15:12 +0000
+Received: from SN1PEPF0002BA4E.namprd03.prod.outlook.com
+ (2603:10b6:806:f2:cafe::66) by SN7PR04CA0010.outlook.office365.com
+ (2603:10b6:806:f2::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.31 via Frontend
+ Transport; Thu, 21 Sep 2023 15:15:12 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.219.169)
+ smtp.mailfrom=bounce.e.trivago.com; dkim=pass (signature was verified)
+ header.d=e.trivago.com;dmarc=pass action=none
+ header.from=e.trivago.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of bounce.e.trivago.com
+ does not designate 209.85.219.169 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.219.169;
+ helo=mail-yb1-f169.google.com;
+Received: from mail-yb1-f169.google.com (209.85.219.169) by
+ SN1PEPF0002BA4E.mail.protection.outlook.com (10.167.242.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Thu, 21 Sep 2023 15:15:12 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:48C60B2923E15087DEA9113AEA3E7695C344A7F7D42863117A9C46454EB266C9;UpperCasedChecksum:B5D3AEE8E1E267C216FC125F7F0769D4778366A41784A3F962FBF9F72B61F53F;SizeAsReceived:5979;Count:30
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-d8165e3b209so3135484276.1
+        for <tobinsilvestre@outlook.com>; Thu, 21 Sep 2023 08:15:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695309312; x=1695914112;
+        h=x-forwarded-for:message-id:list-id:reply-to:mime-version
+         :list-unsubscribe-post:list-unsubscribe:date:subject:to:from
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ePPW+gpn1nHsRKxuOKCkI21KT8WvygLq0gjw0UoAkVw=;
+        b=Eb3jtKZ1HMlQNIVl7/0Dt2gC/LwlK/dFSv0GV3BON/YnakjyZH5EfeetbiyneJOnJd
+         /Y5f0ErLKv82PYxfI/Z/Ggl4bFwKMx38MkGJkjgi1DAc5M3L7g5YCJ5vnx9+ZL35caMR
+         ZrCfBy0RwSrSjR2tT+t4b/IgR+d+rrnOpZ0pEkjkId+tONtoxdjYsfyEA+nakNPPM8QC
+         nPveVevghYqrOnAFGJ6s5k0SkoQP222zQoP9ZE0fEsdbWAFA67nNudPJfpeJgsCr6BJx
+         8+I4bPHvI1T+G2mm82SnEzdhPDNO9fSIfuZI2HfX31gxcD+yr45Ie8hGvPqeKyFyIs51
+         zBvA==
+X-Gm-Message-State: AOJu0YwDy0LFtWJY5nNlwcbNPKSBvBgHdR0dgLc6/87U4QwxqSIRYhTQ
+	mgCp6BrecrfrhM/T+sXl5uYjcrvV1K4b+6csvg==
+X-Google-Smtp-Source: AGHT+IFr+Iq3CoqBjDDh//BxcBFBtfM2q5Jwd0X43Bn6pOUJzZqIJe+f0I1k48/hwIExT08oeWy9K3RWYe8EtvLJafpkPg8FLVw=
+X-Received: by 2002:a25:f813:0:b0:d85:f28:1d42 with SMTP id u19-20020a25f813000000b00d850f281d42mr6341412ybd.27.1695309312028;
+        Thu, 21 Sep 2023 08:15:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695309312; cv=none;
+        d=google.com; s=arc-20160816;
+        b=zK5snM57t+apARoRZj/jbNZJ/v9eX7IlOzGFw3IXWfVpGHtl4wQyMfSC76I0vfe7Xq
+         0UZAxNIqih+97O75Va2tnyeonVF1XFX4BxrpbEfZOvHXgK0m48kyZljYvjw5rsXZwvn0
+         3iNTvXFAWN9gct5Wy+vg8bla+Xoo85sQup6RIMCfZzFAm+gboBTviXFZQp4/Z9JhPtJt
+         gih4nF8QhSNyYH3VHWCb6FTy1991W2uWDFBeV/IViXdmAh//cnPMkGAverHF9bP/BIUs
+         Yqzj5RPGBYek6x/xq779TQtfMA1gVBDOj7S6KFxBunDd5Wdr7owUK9DWJqowEw0LFglF
+         ORrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=message-id:list-id:reply-to:mime-version:list-unsubscribe-post
+         :list-unsubscribe:date:subject:to:from:dkim-signature;
+        bh=ePPW+gpn1nHsRKxuOKCkI21KT8WvygLq0gjw0UoAkVw=;
+        fh=ZYKQ/1sALZgk5oyC+w3KdzM4x9rwnKDUn0xbuZITYT4=;
+        b=LZyzaZxCT4gXH5qjVA9GJnv0nxvia0chSQS36ggts6o4N0LyOYuLrrjsq7srGTRngj
+         JV2BmEOWuk65l6m7jzIKzL2RFRJ4w8332+wlD3M7aOQrcnSvOQq2zlIRtSpKVD6Qbnzn
+         B+7dHCNF6smP1hR8vramgoUKXFD7305f2POYj1W4d6WUMIEd2kZro36GIg54XRN6JAQd
+         juJabNnPGKvYbl2+CoL90h8TxGryQb0s+1TFx6XFNV4V9wGAF6uyM/eVHgNj3AcmDZTX
+         30N6ZvCqxvY2wgYMmNPMPtPrAf/ugaRTB1e35doihB8gw7l5mB/ZvEEOvA7cJGQfiS+2
+         IE/w==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@e.trivago.com header.s=200608 header.b=VNR46+iT;
+       spf=pass (google.com: domain of bounce-158_html-476354094-5209134-6172748-27147@bounce.e.trivago.com designates 13.111.6.190 as permitted sender) smtp.mailfrom=bounce-158_HTML-476354094-5209134-6172748-27147@bounce.e.trivago.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=e.trivago.com
+Return-Path:
+ bounce-158_HTML-476354094-5209134-6172748-27147@bounce.e.trivago.com
+Received: from mta.e.trivago.com (mta.e.trivago.com. [13.111.6.190])
+        by gmr-mx.google.com with ESMTPS id c144-20020a25c096000000b00d7e3a95143csi220996ybf.0.2023.09.21.08.15.11
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Sep 2023 08:15:11 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-158_html-476354094-5209134-6172748-27147@bounce.e.trivago.com designates 13.111.6.190 as permitted sender) client-ip=13.111.6.190;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@e.trivago.com header.s=200608 header.b=VNR46+iT;       spf=pass
+ (google.com: domain of
+ bounce-158_html-476354094-5209134-6172748-27147@bounce.e.trivago.com
+ designates 13.111.6.190 as permitted sender)
+ smtp.mailfrom=bounce-158_HTML-476354094-5209134-6172748-27147@bounce.e.trivago.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=e.trivago.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=200608; d=e.trivago.com;
+ h=From:To:Subject:Date:List-Unsubscribe:List-Unsubscribe-Post:MIME-Version:
+ Reply-To:List-ID:X-CSA-Complaints:Message-ID:Content-Type;
+ i=newsletter@e.trivago.com;
+ bh=ePPW+gpn1nHsRKxuOKCkI21KT8WvygLq0gjw0UoAkVw=;
+ b=VNR46+iTCnSr+I0RB8NoIRiqmk5ih4guAbgabJyn7UEcXRRUgNbau0H8R9/AwlwPw9TKO1E25xnn
+   8p9Pu+2MpxOCLbz2slra4L02OcwGEJgVnIBsWhijfjB3Px+R5CqZ74Zbpkv20dVYkOq68Npz8b+3
+   9ZdUt4MGdsgh2179KsI=
+Received: by mta.e.trivago.com id h1hevu2fmd4s for <tobinsilvestre076@sooners.us>; Thu, 21 Sep 2023 15:15:11 +0000 (envelope-from <bounce-158_HTML-476354094-5209134-6172748-27147@bounce.e.trivago.com>)
+From: "trivago" <newsletter@e.trivago.com>
+To: <tobinsilvestre076@sooners.us>
+Subject: Recharge your batteries on a nature getaway
+Date: Thu, 21 Sep 2023 09:15:11 -0600
+List-Unsubscribe: <http://click.e.trivago.com/subscription_center.aspx?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWQiOiI2MTcyNzQ4IiwicyI6IjQ3NjM1NDA5NCIsImxpZCI6IjE1OCIsImoiOiI1MjA5MTM0IiwiamIiOiIyNzE0NyIsImQiOiI2MDIyOSJ9.Kl2oqrJQywwpgZAFbpWgZGqeCI0idXd1OCai4gNIAVA>, <mailto:leave-fd4d15757d0b5c392848-fe25107773670179751d74-fe971172756d057e71-fe8c1271726603797d-fefa1677746003@leave.e.trivago.com>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+x-CSA-Compliance-Source: SFMC
+Reply-To: "trivago" <reply-fe971172756d057e71-158_HTML-476354094-6172748-27147@e.trivago.com>
+List-ID: <6172748.xt.local>
+X-CSA-Complaints: csa-complaints@eco.de
+X-SFMC-Stack: 6
+x-job: 6172748_5209134
+Message-ID: <37de88ba-d659-47dd-88aa-19b8e531b107@ind1s06mta1781.xt.local>
+Content-Type: multipart/alternative;
+	boundary="dpqBMUPtIf3H=_?:"
+X-Forwarded-For: tobinsilvestre076@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 30
+X-MS-Exchange-Organization-ExpirationStartTime: 21 Sep 2023 15:15:12.2955
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ e86e3d6d-168a-4ce9-97e8-08dbbab58d25
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ SN1PEPF0002BA4E:EE_|CH3PR20MB7020:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ SN1PEPF0002BA4E.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/21/2023 2:49:32 PM
+X-MS-Office365-Filtering-Correlation-Id: e86e3d6d-168a-4ce9-97e8-08dbbab58d25
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.219.169
+X-SID-PRA: NEWSLETTER@E.TRIVAGO.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:2;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2023 15:15:12.2642
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e86e3d6d-168a-4ce9-97e8-08dbbab58d25
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ SN1PEPF0002BA4E.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR20MB7020
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.2925836
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPm8XPty+wcISCRm3hFb0qofHsXtvzTh7ugBX4xebmOw9Xqxar0574mXI258nvOOfZO1PDayhh/i6BYC4j6XCGY/t1ApZ20WS9cAKPrxnWSBV3bK27jNcFMWoLg7CvDqd2Ya8sxAeQvkUWTVkdw7HhNaLPm6oGkl1GZ1lKjJ+fKYchBSt2oc9Pm9AvyPiqsr2qGiCbBF+y9Zcw==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eWlrK21WMllyRnN5OWdUK0hHeHdJMTJ3RFJ4WWhRK3FsYWc4VXYvdWNJbHFs?=
+ =?utf-8?B?dXFpd2NwV1h5b1NNMEtITDlxWEdPL2NWT0VHcnpJZXlheEFmZUxqWTR6RE1N?=
+ =?utf-8?B?dDVQWVpldkYxU0hOME5lamxEZUR1MWVPMElETkJEa1JmbHNJUWxLTHdlN2kw?=
+ =?utf-8?B?eFFKR01zUjM2RFVrYXNMS2FlTHg3elR1UHRRYVpyZ1pGTTZrNFBCdlUxZkVT?=
+ =?utf-8?B?ME1uRm9HZXl5QzNnSzJaMnl5d3Q2TlRhMnBlTWFocSt6N1ErSGdDVFgyeGY3?=
+ =?utf-8?B?bDBiY0kyS1hBL0IyV1FyNk1ENFViMnk5UVNXUEY1WEY4Wis3T3drRUNNcHhV?=
+ =?utf-8?B?aDN5eHpkY3FJYnlLUDJRalloK2NsZTZNT0hLMmF3WTJ2OVc0cUZYd1NpOHBR?=
+ =?utf-8?B?bXJkT1Zsa1RMRkQwRUtUUjE1ZTZSZjV3ZWFRRm1kd0Qrb3A1b1VCaW5YeUc4?=
+ =?utf-8?B?bFdRSWordmFFSmxEY3pQYlVJYmJrZnI0MU1HYkg3S0ZGMVZ1TmlTaldwTGF3?=
+ =?utf-8?B?ejJrb2JyUjI4d2UxMDhsUjBCempiY2Z5WFdqTlFRVU5DbkJPc1hpNHdIWmU1?=
+ =?utf-8?B?eitaU25BcDc3c0haREJBaHBGb1lNWjRTR2N0bUNGWWhISStpVmRSWFlZL29D?=
+ =?utf-8?B?aytOeXdWbUVuM1dRcEVYRlcrZnhMajZtNmMxbjZoSHNoTTFnanFSOGtEUi9C?=
+ =?utf-8?B?eGJkYjRadzJRdWRIL2NCc3RXUEsySklVa0NUYXdWeTN1SDhwYkhrZElwYndN?=
+ =?utf-8?B?dmFzWGl6SXNxYVE4VzF1ZkpFczRZbXBoS1JqV0FEUDZZaUg4aE5YRWQzSnRS?=
+ =?utf-8?B?QzRZbWxOMExHU2htQzdRZXp2VURzVWJlVWcyS25udkVPcGRTR0dmMWhsdWhz?=
+ =?utf-8?B?aFFlT0pSVHIySHFQOEQxbUphTWVLTDRRaWhzVS8yenIraEhCV2ZzTFA5TUZn?=
+ =?utf-8?B?cGNwaXdTQThsRGlERkxacmpNNGk4VHAwWmQ1RFd1eEl5V3NjbGFnSDNRcFo4?=
+ =?utf-8?B?Z3d1b3RaY3lPM1BXei9IVnVmQXR4NFhBaGtWWVg0K3JZdUhDd3FLWGVHbDd1?=
+ =?utf-8?B?aFVmWEFmZElOZ1c2MjBVOG5sUm93RlhyZU5jVjhjTVB0bW5Rbi80OFUyWTdS?=
+ =?utf-8?B?cjJtTVRYRkxrL3VYVmMvQTB0a0NFVlFEb3BCUHNQSGZIOFlTK3hueGpwTENS?=
+ =?utf-8?B?Y1owcFNWL29reXEreDZGemdSbFFFN3AxTmd2VEllMSttSWNsU2FKWm1zanFZ?=
+ =?utf-8?B?RVF6QXZyNTY5UFJjM01mT213bUFYRXZrZkUvRWEyT0lFa2ZtNEIxTktKU1Rl?=
+ =?utf-8?B?UDJRcngvdHRoQ2tNYUJRcXg1QTNOd0FlSnk3RG82RVVPOUhCTG54L1IzN0hy?=
+ =?utf-8?B?aVlTT3hPYlBxTUh3dnYrbkFsSm5SMWdUcWIyREUyb3A2S3kyT3hNMmFmYUtB?=
+ =?utf-8?B?R0NDU2Z6alNUU2tjNGpkUitUdSs2anBJZWFjLzdxVVYxVnlxV2N0aEQ0dkJU?=
+ =?utf-8?B?YnhQczh1MlBkbkNQekx3OUE2Q01xbnYwNXhqRUpNMUJiczVqMi94bFh4aG56?=
+ =?utf-8?B?d3NkaDZKb3EraW5sUjF5YkRhZGQ5WCsvcmtoUzQrUFE5WmNieXJsTGFYeklD?=
+ =?utf-8?B?UFpXOThRT3plK2ErZG00YXlLc3BCZWRxa1pXeDBqbmNlc1p2ODV6eUJjUG9J?=
+ =?utf-8?B?dVpuaG1PKzh0bGUyNHVqL21LdGE4SnIvbTRBb1pOYXVzUGNzZThtTTdhQWM0?=
+ =?utf-8?B?Q2xvanhnOFJWUTBJbjQxNkFwZE5Cc3Jrb2FRRHBrL0tTYUU2UzlwTWZOZGVX?=
+ =?utf-8?B?VFpmODVydWZLWVl3YlFadkVXOTFiNGE5N2VMdGhEem5vNk5DMnVzWHVoVG5E?=
+ =?utf-8?B?NHIvd1VsUmhsNnNzc0lMVC9mY0h2YzR6bUo2N0VVZ3JpYzk5b3gxMGxYOFZT?=
+ =?utf-8?B?bTBCa0ZiYmptYkNoREhwV2V3cVJMWmlmeTU2cGJ3ajlPT1djZmZjRTErM2xG?=
+ =?utf-8?B?dDBFOGpQSlpxcE1paGltaGZKN1FEK0NkZjVBOW1GOUhIcGdTYWNjMXpURjNa?=
+ =?utf-8?B?Rzd1L3FValFUSkVrTVpJR0NUdFF2VytXcHo4REtkU2NLdGlFMGlEN2NVRW9i?=
+ =?utf-8?B?TVlmeE4vcncySzBIWFg4ckhWN0JqNElsSk9wamZhVWIvZHZTczR2VG1QaVla?=
+ =?utf-8?Q?Tcvll5ctUbfYYLC+XXwdVpg=3D?=
+MIME-Version: 1.0
+
+--dpqBMUPtIf3H=_?:
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+
+trivago.com &#45; Compare hotel prices worldwide
+http://view.e.trivago.com/?qs=bbfcec2b73bf7d3eefd7be7a4f904ff0f7d68fdb7926ca44e6d100d82453d9e394176b08a67bd3ae74526d54bdd2f15d7f23f90766733c8e77e5a09290e1e2bbf6d90d1dbb9b5974e5db6bf38cec585f92fecf69383acae5 
+View this email online 
+
+http://click.e.trivago.com/?qs=1f54d0affbd65bb4d8829ffc8c851efa71f1fbbc6ae73cb9f0dc25a2419e666f1d8615c4cf33e1def6de4b2f68025704edd4e5ed4fb561ba2833a12197e9f812 
+
+Stay close to nature for a rejuvenating escape 
+
+http://click.e.trivago.com/?qs=1f54d0affbd65bb427970b75fcc2b52785e2d68feb91d66aff77720d4a1e5c7ce9b35e586c4eb214419988b21df611df9c463cab11f9e9dbb75c42b5938a8d6d 
+
+Heed the call of the wild at these outdoorsy destinations: 
+ Close to national parks, untouched wildernesses, and scenic spots, these restorative next-to-nature stays are here to help you explore and unwind.
+
+http://click.e.trivago.com/?qs=659508d750c66d4360e65d11535ac2c15c2735cac63b62e4a81e6d754fbc727569e476d22d03a451f926691660ed7ac3de604fe0bf38db522596fe0061aac965 
+
+http://click.e.trivago.com/?qs=659508d750c66d4360e65d11535ac2c15c2735cac63b62e4a81e6d754fbc727569e476d22d03a451f926691660ed7ac3de604fe0bf38db522596fe0061aac965 
+Garden of the Gods (Colorado) 
+ 
+http://click.e.trivago.com/?qs=659508d750c66d4360e65d11535ac2c15c2735cac63b62e4a81e6d754fbc727569e476d22d03a451f926691660ed7ac3de604fe0bf38db522596fe0061aac965 
+View Price     
+
+http://click.e.trivago.com/?qs=659508d750c66d43d8c1426c501cdcaa62495bceb2cce136f3ba9c87ecaa31632faed7ca7db9ea350f340b5098f68e1f9c51bd52be964f9fee3f1a3e701859e8 
+
+http://click.e.trivago.com/?qs=659508d750c66d43d8c1426c501cdcaa62495bceb2cce136f3ba9c87ecaa31632faed7ca7db9ea350f340b5098f68e1f9c51bd52be964f9fee3f1a3e701859e8 
+Zion National Park (Utah) 
+ 
+http://click.e.trivago.com/?qs=659508d750c66d43d8c1426c501cdcaa62495bceb2cce136f3ba9c87ecaa31632faed7ca7db9ea350f340b5098f68e1f9c51bd52be964f9fee3f1a3e701859e8 
+View Price     
+
+http://click.e.trivago.com/?qs=659508d750c66d43d67196b99a39fe93069cd3697530dfd8f0ecb67684b81b1c38172aba43b08da327e64a82b561119bbc1e8f24a851f1e62a9e371780f59dff 
+
+http://click.e.trivago.com/?qs=659508d750c66d43d67196b99a39fe93069cd3697530dfd8f0ecb67684b81b1c38172aba43b08da327e64a82b561119bbc1e8f24a851f1e62a9e371780f59dff 
+Antelope Canyon (Arizona) 
+ 
+http://click.e.trivago.com/?qs=659508d750c66d43d67196b99a39fe93069cd3697530dfd8f0ecb67684b81b1c38172aba43b08da327e64a82b561119bbc1e8f24a851f1e62a9e371780f59dff 
+View Price     
+
+http://click.e.trivago.com/?qs=659508d750c66d43ab8a49c1f8102b30a9d0260e4b80f5af1cc2d4f04bcb03591b02741857cbf54ee6b4b984501565004e7bbe1cbfb1b81632599638c16f683a 
+
+http://click.e.trivago.com/?qs=659508d750c66d43ab8a49c1f8102b30a9d0260e4b80f5af1cc2d4f04bcb03591b02741857cbf54ee6b4b984501565004e7bbe1cbfb1b81632599638c16f683a 
+Lake Tahoe (Nevada) 
+ 
+http://click.e.trivago.com/?qs=659508d750c66d43ab8a49c1f8102b30a9d0260e4b80f5af1cc2d4f04bcb03591b02741857cbf54ee6b4b984501565004e7bbe1cbfb1b81632599638c16f683a 
+View Price     
+
+
+
+http://click.e.trivago.com/?qs=659508d750c66d43c2f99fa6a489baa5ea0dd74ed00494bd8716c97b73242128baec26b6fae5ef711357a3bef7be8c5208c5a0677f2eb9d7a2684863713ac7f3 
+ 
+
+http://click.e.trivago.com/?qs=659508d750c66d43c2f99fa6a489baa5ea0dd74ed00494bd8716c97b73242128baec26b6fae5ef711357a3bef7be8c5208c5a0677f2eb9d7a2684863713ac7f3 
+  
+
+http://click.e.trivago.com/?qs=659508d750c66d43c2f99fa6a489baa5ea0dd74ed00494bd8716c97b73242128baec26b6fae5ef711357a3bef7be8c5208c5a0677f2eb9d7a2684863713ac7f3 
+ 
+
+
+
+http://click.e.trivago.com/?qs=659508d750c66d43afaf2fd78107adb7cb6720d510c09324f5e221e7a5c7de34de8cc931af6101a1e6b5781312793477fed433cc992541093ee6a1cd25b16ec2 
+
+http://click.e.trivago.com/?qs=659508d750c66d43afaf2fd78107adb7cb6720d510c09324f5e221e7a5c7de34de8cc931af6101a1e6b5781312793477fed433cc992541093ee6a1cd25b16ec2 
+  
+
+http://click.e.trivago.com/?qs=659508d750c66d43afaf2fd78107adb7cb6720d510c09324f5e221e7a5c7de34de8cc931af6101a1e6b5781312793477fed433cc992541093ee6a1cd25b16ec2 
+ 
+
+Getaways at your fingertips on the trivago app
+Easily search, compare deals, and find great places to stay on the trivago app
+Download now 
+http://click.e.trivago.com/?qs=1f54d0affbd65bb482bbfc00b4bed692fe3bc2235e0adff954a028170fe3640855a396ac3f6e1aec2f2d0e25bc61c62c327ed2cc32f4e9622bb3f61282e886ac 
+ 
+http://click.e.trivago.com/?qs=1f54d0affbd65bb482bbfc00b4bed692fe3bc2235e0adff954a028170fe3640855a396ac3f6e1aec2f2d0e25bc61c62c327ed2cc32f4e9622bb3f61282e886ac 
+
+Plan your next outdoor getaway
+
+http://click.e.trivago.com/?qs=659508d750c66d4301052fd76394d954385d5e13fef2c2b16898857c27c8752a121516cf7df91a5b338b0bad626899e0a4069ee05cdce8873f8ff3d6819faa7d 
+
+http://click.e.trivago.com/?qs=659508d750c66d4301052fd76394d954385d5e13fef2c2b16898857c27c8752a121516cf7df91a5b338b0bad626899e0a4069ee05cdce8873f8ff3d6819faa7d 
+Where do you want to go? 
+
+http://click.e.trivago.com/?qs=659508d750c66d4301052fd76394d954385d5e13fef2c2b16898857c27c8752a121516cf7df91a5b338b0bad626899e0a4069ee05cdce8873f8ff3d6819faa7d 
+Search 
+
+http://click.e.trivago.com/?qs=659508d750c66d4301052fd76394d954385d5e13fef2c2b16898857c27c8752a121516cf7df91a5b338b0bad626899e0a4069ee05cdce8873f8ff3d6819faa7d 
+
+ 
+ 
+
+http://click.e.trivago.com/?qs=1f54d0affbd65bb482bbfc00b4bed692fe3bc2235e0adff954a028170fe3640855a396ac3f6e1aec2f2d0e25bc61c62c327ed2cc32f4e9622bb3f61282e886ac 
+ 
+http://click.e.trivago.com/?qs=1f54d0affbd65bb482bbfc00b4bed692fe3bc2235e0adff954a028170fe3640855a396ac3f6e1aec2f2d0e25bc61c62c327ed2cc32f4e9622bb3f61282e886ac 
+
+http://click.e.trivago.com/?qs=1f54d0affbd65bb4602e9cd4d83d806c51ec62d02498bbeddc6d4228572b8a8f9d55fd47c3b0fe11ecc97cf1ea336b364e7705b7396d1aca 
+ 
+http://click.e.trivago.com/?qs=1f54d0affbd65bb4f054801362264524e533058d02aa139800ce786d4cf33325e31910221f1fdf3d1ae2ef7f9c958abb1e6f8096a639f732 
+ 
+http://click.e.trivago.com/?qs=1f54d0affbd65bb43dc23c3db0e499717cf6b9aaa7a78ab7431dfe144f4636ab0b7fd01d70c991fa7c0edd1f56929b46416f289ec65ffa58 
+ 
+http://click.e.trivago.com/?qs=1f54d0affbd65bb44b9b2ecc80ba5ac7becd75ef8e6fd34c37be7ece60d420cdc49b352ffd86315ce536b7be761677561acdb8d0a5bcd30e 
+  
+http://click.e.trivago.com/?qs=659508d750c66d43daf669a327221820bf17162d2535c084ea4b761d250140b3bb611fadd143f5feb6c41dd284bfb6d518d63916b465cc7d 
+
+ Prices may vary. Pricing and fares contained in this email have been collected during the three days prior to the calendar date of this email. Actual pricing and fares are provided by advertisers, whose prices change frequently and without notice. 
+
+ Your privacy is very important to us. For further information, consult our  
+http://click.e.trivago.com/?qs=659508d750c66d435fddfd275ab5cfdf24f317eeaa150a66fd8f7c1b8d1b21d758810ceb730f8fdc691d2fb1a5d833be2ae33711cc4b1c6bcdf5ff4ad0150472 
+Privacy Policy. 
+
+
+ We don't love an early checkout, but we understand sometimes it's necessary. Click 
+http://click.e.trivago.com/unsub_center.aspx?qs=77247f398c016f668430e928ddb69fc87d1c5a82ba465c967b172f92390bcd4f656ee129eef2a28b3d1a4a117f99db0e42fe61816e8b4ce9a2755af20b09d105f4d35c01efce4a89 
+ here   to unsubscribe. 
+ 
+
+ trivago N.V., Kesselstrasse 5-7, Dusseldorf, Germany  
+
+ Chamber of Commerce: 67222927 
+
+http://click.e.trivago.com/?qs=659508d750c66d432517061d6896c51bfb7a4bc8496cffd1f90b23fb225def4c0e006417580ab22a7d8fcacdf71badc280df78b935accd99de6b10efe365972b 
+
+
+
+--dpqBMUPtIf3H=_?:
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><!--[if gte mso 9]><xml> <o:OfficeDocumentSettings> <o:AllowPNG/> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml><![endif]-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>trivago.com - Compare hotel prices worldwide</title>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 ">
+<meta name="format-detection" content="telephone=no">
+<!--[if !mso]><!-->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+</style>
+<!--<![endif]-->
+<style type="text/css">
+body {
+ margin: 0;
+ padding: 0;
+ -webkit-text-size-adjust: 100% !important;
+ -ms-text-size-adjust: 100% !important;
+ -webkit-font-smoothing: antialiased !important;
+}
+img {
+ border: 0 !important;
+ outline: none !important;
+}
+p {
+ Margin: 0px !important;
+ Padding: 0px !important;
+}
+td,
+a,
+span {
+ border-collapse: collapse;
+ mso-line-height-rule: exactly;
+}
+.ExternalClass * {
+ line-height: 100%;
+}
+.em_defaultlink a {
+ color: inherit;
+ text-decoration: none;
+}
+.em_defaultlink_u a {
+ color: inherit;
+ text-decoration: underline;
+}
+.em_g_img + div {
+ display: none;
+}
+a[x-apple-data-detectors],
+u + .em_body a,
+#MessageViewBody a {
+ color: inherit;
+ font-size: inherit;
+ font-family: inherit;
+ font-weight: inherit;
+ line-height: inherit;
+}
+ @media only screen and (max-width:639px) {
+.em_main_table {
+ width: 100% !important;
+}
+.em_wrapper {
+ width: 100% !important;
+}
+.em_hide {
+ display: none !important;
+}
+.em_full_img img {
+ width: 100% !important;
+ height: auto !important;
+}
+.em_full_img1 img {
+ width: 100% !important;
+ height: auto !important;
+ max-width: none !important;
+}
+.em_ptop {
+ padding-top: 16px !important;
+}
+u + .em_body .em_full_wrap {
+ width: 100% !important;
+ width: 100vw !important;
+}
+.em_font24 {
+ font-size: 24px !important;
+ line-height: 30px !important;
+}
+.em_pbottom16 {
+ padding-bottom: 16px !important;
+}
+.em_pbottom47 {
+ padding-bottom: 47px !important;
+}
+.em_bg {
+ background: url(images/mob_bg1.jpg) !important;
+ background-size: 100% auto !important;
+ height: auto !important;
+ background-repeat: no-repeat !important;
+}
+.em_bg1 {
+ background-image: none !important;
+}
+.em_bgcolor {
+ background-color: #f8d9d7 !important;
+ border-top-left-radius: 12px !important;
+ border-top-right-radius: 12px !important;
+}
+.em_w16 {
+ width: 16px !important;
+}
+.em_pbottom10 {
+ padding-bottom: 10px !important;
+}
+.em_pbottom18 {
+ padding-bottom: 18px !important;
+}
+.em_pbottom25 {
+ padding-bottom: 25px !important;
+}
+.em_hide_desktop {
+ display: table !important;
+ width: 100% !important;
+ overflow: visible !important;
+ height: auto !important;
+ max-height: auto !important;
+}
+.em_pad1 {
+ padding: 0px 0px 40px !important;
+}
+.em_pad2 {
+ padding: 0px 24px 5px 24px !important;
+}
+.em_pad3 {
+ padding: 0px 24px 5px !important;
+}
+.em_pad4 {
+ padding: 0px 24px 44px !important;
+}
+.em_pad5 {
+ padding: 0px 24px 38px !important;
+}
+.em_clear {
+ display: block !important;
+ width: 100% !important;
+ float: left !important;
+ clear: both !important;
+}
+}
+ @media screen and (max-width: 480px) {
+.em_br {
+ display: block !important;
+}
+}
+</style>
+<!--[if mso]> <style type="text/css"> body, table, td {font-family: Arial,  sans-serif !important;} </style> <![endif]-->
+</head>
+<body class="em_body" style="margin:0px auto; padding:0px;" bgcolor="#ffffff"><style type="text/css">
+div.preheader 
+{ display: none !important; } 
+</style>
+<div class="preheader" style="font-size: 1px; display: none !important;">Deals for disconnecting and detoxing</div>
+<!-- == Header Logo Section == -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="em_full_wrap" bgcolor="#ffffff">
+  <tr>
+    <td align="center" valign="top"><table align="center" width="640" border="0" cellspacing="0" cellpadding="0" class="em_main_table" style="width:640px; table-layout:fixed;">
+        <tr>
+          <td align="left" valign="top" style="padding:30px 24px 42px;"><table width="100%" align="left" border="0" cellspacing="0" cellpadding="0">
+              <!---->
+              <tr>
+                <td class="em_defaultlink" align="center" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:12px; line-height:24px; color:#666666; padding-bottom:22px;"><a href="http://view.e.trivago.com/?qs=bbfcec2b73bf7d3eefd7be7a4f904ff0f7d68fdb7926ca44e6d100d82453d9e394176b08a67bd3ae74526d54bdd2f15d7f23f90766733c8e77e5a09290e1e2bbf6d90d1dbb9b5974e5db6bf38cec585f92fecf69383acae5" target="_blank" style="text-decoration:underline; color:#666666;">View this email online</a></td>
+              </tr>
+              <!---->
+              <tr>
+                <td align="left" valign="top"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb4d8829ffc8c851efa71f1fbbc6ae73cb9f0dc25a2419e666f1d8615c4cf33e1def6de4b2f68025704edd4e5ed4fb561ba2833a12197e9f812" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1600699462/Assets/newsletter/assets-2020-designrefresh-template/trivago_logo.png" width="102" alt="trivago" border="0" style="display:block; max-width:102px; font-family: Arial, sans-serif; font-size:24px; line-height:26px; color:#1391D2; font-weight:bold;"></a></td>
+              </tr>
+            </table></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+<!-- == //Header Logo Section == --> 
+<!-- == Body Section == -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="em_full_wrap" bgcolor="#ffffff">
+  <tr>
+    <td align="center" valign="top"><table align="center" width="640" border="0" cellspacing="0" cellpadding="0" class="em_main_table" style="width:640px; table-layout:fixed;">
+        <!-- Covid Banner Section --> 
+        <!---->
+        <!--         <tr>           <td align="center" valign="top" style="padding:0px 24px 35px;" class="em_pad4"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">               <tr>                 <td valign="top" align="center" bgcolor="#E6F2F7" style="border-radius:12px;"><table width="100%" border="0" cellspacing="0" cellpadding="0">                     <tr>                       <td align="center" valign="top" style="font-family: 'Nunito Sans', Arial, sans-serif; font-size:18px; line-height:24px; color:#37454D; padding: 16px 32px;">Click  <a href="https://support.trivago.com/hc/en-us/articles/360006780478?cip=1070657040101&cip_tc=US-en_weekly_NatureGetaway092023-segmentAct-21092023_v02_covid&cipc=dea" alias="Hyperlink" conversion="true" target="_blank" style="text-decoration:none; color:#37454D;"><Strong>here </Strong></a> to see our Covid-19 travel advice</td>                     </tr>                   </table>
+</td>               </tr>             </table></td>         </tr>-->
+        <!--%--> 
+        <!-- //Covid Banner Section --> 
+        <!-- Banner Content Section -->
+        <tr>
+          <td align="center" valign="top" class="em_pad4" style="padding:0px 24px 35px;"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td class="em_defaultlink em_font24" align="left" valign="top" style="font-family: 'Nunito Sans', Arial, sans-serif; font-size:32px; line-height:36px; color:#37454D; font-weight:bold; padding-bottom:16px;"><span style="color: #005F00">Stay close to nature</span> for a rejuvenating escape <span style="color: #005F00;"></span></td>
+              </tr>
+             
+              <tr>
+                <td align="center" valign="top" class="em_full_img1"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb427970b75fcc2b52785e2d68feb91d66aff77720d4a1e5c7ce9b35e586c4eb214419988b21df611df9c463cab11f9e9dbb75c42b5938a8d6d"><img src="https://imgma.trivago.com/image/upload/v1556275807/Assets/0000/0002/eyeem-27037945-88154631.jpg" width="592" alt="" border="0" style="display:block; max-width:592px; font-family: Arial, sans-serif; font-size:20px; line-height:22px; color:#293339; font-weight:bold; border-radius:12px;" class="em_g_img"></a>
+              </tr>
+            </table></td>
+        </tr>
+        <!-- //Banner Content Section --> 
+        <!-- 10 Local Destinations Section -->
+        <tr>
+          <td align="center" valign="top" style="padding:0px 24px 53px;" class="em_pad5"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+              <!---->
+              <tr>
+                <td align="left" valign="top" style="padding-bottom:6px;"><table align="left" width="28" border="0" cellspacing="0" cellpadding="0" style="width:28px;">
+                    <tr>
+                      <td bgcolor="#005F00" height="4" style="height:4px; font-size:0px; line-height:0px; background-color:#005F00;"><img src="https://imgma.trivago.com/image/upload/v1600699461/Assets/newsletter/assets-2020-designrefresh-template/spacer.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <tr>
+                <td class="em_defaultlink" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:20px; line-height:25px; color:#37454d; font-weight:bold; padding-bottom:16px;">Heed the call of the wild at these <span style="color: #005F00">outdoorsy destinations:</span> <span style="color: #005F00;"></span></td>
+              </tr>
+             <tr>
+                <td class="em_defaultlink" align="left" valign="top" style="font-family: 'Nunito Sans', Arial, sans-serif; font-size:16px; line-height:24px; color:#293339; padding-bottom:16px;"> Close to national parks, untouched wildernesses, and scenic spots, these restorative next-to-nature stays are here to help you explore and unwind.</td>
+              </tr>
+              <!-- 2 Column Sections -->
+              <tr>
+                <td align="center" valign="top" style="padding-bottom:16px;"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td valign="top" align="center" class="em_clear"><table align="left" width="288" border="0" cellspacing="0" cellpadding="0" style="width:288px;" class="em_wrapper">
+                          <tr>
+                            <td align="center" valign="top" class="em_pbottom16"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" style="box-shadow:0px 4px 16px 0px #d6d6d6; border-radius:12px 12px 12px 12px;">
+                                <tr>
+                                  <td align="center" valign="top" class="em_full_img1"><a href="http://click.e.trivago.com/?qs=659508d750c66d4360e65d11535ac2c15c2735cac63b62e4a81e6d754fbc727569e476d22d03a451f926691660ed7ac3de604fe0bf38db522596fe0061aac965" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/c_scale,h_550,w_900/v1631257251/Assets/0000/0006/AdobeStock_98045544.jpg" width="288" alt="" border="0" style="display:block; max-width:288px; font-family: Arial, sans-serif; font-size:20px; line-height:22px; color:#293339; font-weight:bold; border-top-left-radius:12px; border-top-right-radius:12px;" class="em_g_img"></a></td>
+                                </tr>
+                                <tr>
+                                  <td align="center" valign="top" style="padding:12px 16px 15px 16px; border-bottom:1px solid #e6e6e6; border-left:1px solid #e6e6e6; border-right:1px solid #e6e6e6; display:block; border-radius:0px 0px 12px 12px; background-color:#ffffff;" bgcolor="#ffffff"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                      <tr>
+                                        <td class="em_defaultlink" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:20px; line-height:25px; color:#37454d; font-weight:bold; padding-bottom:16px;"><a href="http://click.e.trivago.com/?qs=659508d750c66d4360e65d11535ac2c15c2735cac63b62e4a81e6d754fbc727569e476d22d03a451f926691660ed7ac3de604fe0bf38db522596fe0061aac965" target="_blank" style="text-decoration:none; color:#37454d;">Garden of the Gods <br><small>(Colorado)</small></a></td>
+                                      </tr>
+                                      <tr>
+                                        <td valign="top" align="center"><table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+
+                                            <tbody>
+                                              <tr>
+                                                <td valign="top" align="center">&nbsp;</td>
+                                                <td valign="top" align="center"><table border="0" cellspacing="0" cellpadding="0" align="right" style="border-radius: 8px;" bgcolor="#438501">
+                                                    <tbody>
+                                                      <tr>
+                                                        <td valign="top" align="center" style="padding: 0px 10px;"><table border="0" cellspacing="0" cellpadding="0" align="center">
+                                                            <tbody>
+                                                              <tr>
+                                                                <td class="em_defaultlink" align="left" valign="middle" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:14px; color:#ffffff; font-weight:bold; height: 40px;"><a href="http://click.e.trivago.com/?qs=659508d750c66d4360e65d11535ac2c15c2735cac63b62e4a81e6d754fbc727569e476d22d03a451f926691660ed7ac3de604fe0bf38db522596fe0061aac965" target="_blank" style="text-decoration: none; color: #ffffff; display: inline-block; line-height: 40px;">View Price&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://imgma.trivago.com/image/upload/v1601969892/Assets/newsletter/assets-2020-designrefresh-template/CTA_Arrow.png" width="7" height="12" alt="" border="0" style="display: inline-block; max-width: 7px; vertical-align: 0px;"></a></td>
+                                                              </tr>
+                                                            </tbody>
+                                                          </table></td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table></td>
+                                              </tr>
+                                            </tbody>
+                                          </table></td>
+                                      </tr>
+                                    </table></td>
+                                </tr>
+                              </table></td>
+                          </tr>
+                        </table></td>
+                        <td valign="top" align="center" class="em_clear"><table align="right" width="288" border="0" cellspacing="0" cellpadding="0" style="width:288px;" class="em_wrapper">
+                          <tr>
+                            <td align="center" valign="top" class="em_pbottom16"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" style="box-shadow:0px 4px 16px 0px #d6d6d6; border-radius:12px 12px 12px 12px;">
+                                <tr>
+                                  <td align="center" valign="top" class="em_full_img1"><a href="http://click.e.trivago.com/?qs=659508d750c66d43d8c1426c501cdcaa62495bceb2cce136f3ba9c87ecaa31632faed7ca7db9ea350f340b5098f68e1f9c51bd52be964f9fee3f1a3e701859e8" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/c_scale,h_550,w_900/v1622631253/Assets/0000/0006/AdobeStock_162430932.jpg" width="288" alt="" border="0" style="display:block; max-width:288px; font-family: Arial, sans-serif; font-size:20px; line-height:22px; color:#293339; font-weight:bold; border-top-left-radius:12px; border-top-right-radius:12px;" class="em_g_img"></a></td>
+                                </tr>
+                                <tr>
+                                  <td align="center" valign="top" style="padding:12px 16px 15px 16px; border-bottom:1px solid #e6e6e6; border-left:1px solid #e6e6e6; border-right:1px solid #e6e6e6; display:block; border-radius:0px 0px 12px 12px; background-color:#ffffff;" bgcolor="#ffffff"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                      <tr>
+                                        <td class="em_defaultlink" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:20px; line-height:25px; color:#37454d; font-weight:bold; padding-bottom:16px;"><a href="http://click.e.trivago.com/?qs=659508d750c66d43d8c1426c501cdcaa62495bceb2cce136f3ba9c87ecaa31632faed7ca7db9ea350f340b5098f68e1f9c51bd52be964f9fee3f1a3e701859e8" target="_blank" style="text-decoration:none; color:#37454d;">Zion National Park <br><small>(Utah)</small></a></td>
+                                      </tr>
+                                      <tr>
+                                        <td valign="top" align="center"><table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+                                            <tbody>
+                                              <tr>
+                                                <td valign="top" align="center">&nbsp;</td>
+                                                <td valign="top" align="center"><table border="0" cellspacing="0" cellpadding="0" align="right" style="border-radius: 8px;" bgcolor="#438501">
+                                                    <tbody>
+                                                      <tr>
+                                                        <td valign="top" align="center" style="padding: 0px 10px;"><table border="0" cellspacing="0" cellpadding="0" align="center">
+                                                            <tbody>
+                                                              <tr>
+                                                                <td class="em_defaultlink" align="left" valign="middle" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:14px; color:#ffffff; font-weight:bold; height: 40px;"><a href="http://click.e.trivago.com/?qs=659508d750c66d43d8c1426c501cdcaa62495bceb2cce136f3ba9c87ecaa31632faed7ca7db9ea350f340b5098f68e1f9c51bd52be964f9fee3f1a3e701859e8" target="_blank" style="text-decoration: none; color: #ffffff; display: inline-block; line-height: 40px;">View Price&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://imgma.trivago.com/image/upload/v1601969892/Assets/newsletter/assets-2020-designrefresh-template/CTA_Arrow.png" width="7" height="12" alt="" border="0" style="display: inline-block; max-width: 7px; vertical-align: 0px;"></a></td>
+                                                              </tr>
+                                                            </tbody>
+                                                          </table></td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table></td>
+                                              </tr>
+                                            </tbody>
+                                          </table></td>
+                                      </tr>
+                                    </table></td>
+                                </tr>
+                              </table></td>
+                          </tr>
+                        </table></td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <tr>
+                <td align="center" valign="top" style="padding-bottom:32px;"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td valign="top" align="center" class="em_clear"><table align="left" width="288" border="0" cellspacing="0" cellpadding="0" style="width:288px;" class="em_wrapper">
+                          <tr>
+                            <td align="center" valign="top" class="em_pbottom16"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" style="box-shadow:0px 4px 16px 0px #d6d6d6; border-radius:12px 12px 12px 12px;">
+                                <tr>
+                                  <td align="center" valign="top" class="em_full_img1"><a href="http://click.e.trivago.com/?qs=659508d750c66d43d67196b99a39fe93069cd3697530dfd8f0ecb67684b81b1c38172aba43b08da327e64a82b561119bbc1e8f24a851f1e62a9e371780f59dff" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/c_scale,h_550,w_900/v1583753036/Assets/0000/0006/AdobeStock_207644873.jpg" width="288" alt="" border="0" style="display:block; max-width:288px; font-family: Arial, sans-serif; font-size:20px; line-height:22px; color:#293339; font-weight:bold; border-top-left-radius:12px; border-top-right-radius:12px;" class="em_g_img"></a></td>
+                                </tr>
+                                <tr>
+                                  <td align="center" valign="top" style="padding:12px 16px 15px 16px; border-bottom:1px solid #e6e6e6; border-left:1px solid #e6e6e6; border-right:1px solid #e6e6e6; display:block; border-radius:0px 0px 12px 12px; background-color:#ffffff;" bgcolor="#ffffff"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                      <tr>
+                                        <td class="em_defaultlink" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:20px; line-height:25px; color:#37454d; font-weight:bold; padding-bottom:16px;"><a href="http://click.e.trivago.com/?qs=659508d750c66d43d67196b99a39fe93069cd3697530dfd8f0ecb67684b81b1c38172aba43b08da327e64a82b561119bbc1e8f24a851f1e62a9e371780f59dff" target="_blank" style="text-decoration:none; color:#37454d;">Antelope Canyon <br><small>(Arizona)</small></a></td>
+                                      </tr>
+                                      <tr>
+                                        <td valign="top" align="center"><table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+                                            <tbody>
+                                              <tr>
+                                                <td valign="top" align="center">&nbsp;</td>
+                                                <td valign="top" align="center"><table border="0" cellspacing="0" cellpadding="0" align="right" style="border-radius: 8px;" bgcolor="#438501">
+                                                    <tbody>
+                                                      <tr>
+                                                        <td valign="top" align="center" style="padding: 0px 10px;"><table border="0" cellspacing="0" cellpadding="0" align="center">
+                                                            <tbody>
+                                                              <tr>
+                                                                <td class="em_defaultlink" align="left" valign="middle" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:14px; color:#ffffff; font-weight:bold; height: 40px;"><a href="http://click.e.trivago.com/?qs=659508d750c66d43d67196b99a39fe93069cd3697530dfd8f0ecb67684b81b1c38172aba43b08da327e64a82b561119bbc1e8f24a851f1e62a9e371780f59dff" target="_blank" style="text-decoration: none; color: #ffffff; display: inline-block; line-height: 40px;">View Price&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://imgma.trivago.com/image/upload/v1601969892/Assets/newsletter/assets-2020-designrefresh-template/CTA_Arrow.png" width="7" height="12" alt="" border="0" style="display: inline-block; max-width: 7px; vertical-align: 0px;"></a></td>
+                                                              </tr>
+                                                            </tbody>
+                                                          </table></td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table></td>
+                                              </tr>
+                                            </tbody>
+                                          </table></td>
+                                      </tr>
+                                    </table></td>
+                                </tr>
+                              </table></td>
+                          </tr>
+                        </table></td>
+                        <td valign="top" align="center" class="em_clear"><table align="right" width="288" border="0" cellspacing="0" cellpadding="0" style="width:288px;" class="em_wrapper">
+                          <tr>
+                            <td align="center" valign="top" class="em_pbottom16"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" style="box-shadow:0px 4px 16px 0px #d6d6d6; border-radius:12px 12px 12px 12px;">
+                                <tr>
+                                  <td align="center" valign="top" class="em_full_img1"><a href="http://click.e.trivago.com/?qs=659508d750c66d43ab8a49c1f8102b30a9d0260e4b80f5af1cc2d4f04bcb03591b02741857cbf54ee6b4b984501565004e7bbe1cbfb1b81632599638c16f683a" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/c_scale,h_550,w_900/v1553096968/Assets/2000/2001/34316_v1.jpg" width="288" alt="" border="0" style="display:block; max-width:288px; font-family: Arial, sans-serif; font-size:20px; line-height:22px; color:#293339; font-weight:bold; border-top-left-radius:12px; border-top-right-radius:12px;" class="em_g_img"></a></td>
+                                </tr>
+                                <tr>
+                                  <td align="center" valign="top" style="padding:12px 16px 15px 16px; border-bottom:1px solid #e6e6e6; border-left:1px solid #e6e6e6; border-right:1px solid #e6e6e6; display:block; border-radius:0px 0px 12px 12px; background-color:#ffffff;" bgcolor="#ffffff"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                      <tr>
+                                        <td class="em_defaultlink" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:20px; line-height:25px; color:#37454d; font-weight:bold; padding-bottom:16px;"><a href="http://click.e.trivago.com/?qs=659508d750c66d43ab8a49c1f8102b30a9d0260e4b80f5af1cc2d4f04bcb03591b02741857cbf54ee6b4b984501565004e7bbe1cbfb1b81632599638c16f683a" target="_blank" style="text-decoration:none; color:#37454d;">Lake Tahoe <br><small>(Nevada)</small></a></td>
+                                      </tr>
+                                      <tr>
+                                        <td valign="top" align="center"><table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+                                            <tbody>
+                                              <tr>
+                                                <td valign="top" align="center">&nbsp;</td>
+                                                <td valign="top" align="center"><table border="0" cellspacing="0" cellpadding="0" align="right" style="border-radius: 8px;" bgcolor="#438501">
+                                                    <tbody>
+                                                      <tr>
+                                                        <td valign="top" align="center" style="padding: 0px 10px;"><table border="0" cellspacing="0" cellpadding="0" align="center">
+                                                            <tbody>
+                                                              <tr>
+                                                                <td class="em_defaultlink" align="left" valign="middle" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:14px; color:#ffffff; font-weight:bold; height: 40px;"><a href="http://click.e.trivago.com/?qs=659508d750c66d43ab8a49c1f8102b30a9d0260e4b80f5af1cc2d4f04bcb03591b02741857cbf54ee6b4b984501565004e7bbe1cbfb1b81632599638c16f683a" target="_blank" style="text-decoration: none; color: #ffffff; display: inline-block; line-height: 40px;">View Price&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://imgma.trivago.com/image/upload/v1601969892/Assets/newsletter/assets-2020-designrefresh-template/CTA_Arrow.png" width="7" height="12" alt="" border="0" style="display: inline-block; max-width: 7px; vertical-align: 0px;"></a></td>
+                                                              </tr>
+                                                            </tbody>
+                                                          </table></td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table></td>
+                                              </tr>
+                                            </tbody>
+                                          </table></td>
+                                      </tr>
+                                    </table></td>
+                                </tr>
+                              </table></td>
+                          </tr>
+                        </table></td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <!----> 
+              <!-- 2 Column Sections -->
+              <tr>
+                <td valign="top" align="center"><table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+                    <tbody>
+                      <!----> 
+                      <!---->
+                    </tbody>
+                  </table></td>
+              </tr>
+              <!-- //2 Column Sections -->
+            </table></td>
+        </tr>
+        <!-- //10 Local Destinations Section --> 
+        <!-- App Section --> 
+        <!---->
+        <tr>
+          <td align="center" valign="top" style="padding:0px 23px 56px;" class="em_pad4"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="left" valign="top" style="padding-bottom:5px;"><table align="left" width="28" border="0" cellspacing="0" cellpadding="0" style="width:28px;">
+                    <tr>
+                      <td bgcolor="#005F00" height="5" style="height:5px; font-size:0px; line-height:0px; background-color:#005F00;"><img src="https://imgma.trivago.com/image/upload/v1600699461/Assets/newsletter/assets-2020-designrefresh-template/spacer.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <tr>
+                <td class="em_defaultlink" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:20px; line-height:25px; color:#37454D; font-weight:bold; padding-bottom:16px;">Getaways at your fingertips on the trivago app</td>
+              </tr>
+              <tr>
+                <td class="em_defaultlink" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:16px; line-height:24px; color:#37454D; padding-bottom:16px;">Easily search, compare deals, and find great places to stay on the trivago app</td>
+              </tr>
+              <tr>
+                <td align="center" valign="top"><table border="0" cellspacing="0" cellpadding="0" align="left">
+                    <tr>
+                      <td class="em_defaultlink em_clear" align="left" valign="middle " style="font-family:'Nunito Sans', Arial, sans-serif; font-size:16px; line-height:24px; color:#005F00;">Download now</td>
+                      <td width="30" style="width:30px; height:16px; font-size:0px; line-height:0px;" class="em_clear">&nbsp;</td>
+                      <td align="center" valign="top" class="em_clear"><table border="0" cellspacing="0" cellpadding="0" align="left">
+                          <tr>
+                            <td align="center" valign="top"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb482bbfc00b4bed692fe3bc2235e0adff954a028170fe3640855a396ac3f6e1aec2f2d0e25bc61c62c327ed2cc32f4e9622bb3f61282e886ac" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1571307236/Assets/newsletter/app_badges/android/en.png" width="134" alt="GET IT ON Google Play" border="0" style="display:block; max-width:134px; font-family: Arial, sans-serif; font-size:16px; line-height:18px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                            <td width="18" style="width:18px;">&nbsp;</td>
+                            <td align="center" valign="top"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb482bbfc00b4bed692fe3bc2235e0adff954a028170fe3640855a396ac3f6e1aec2f2d0e25bc61c62c327ed2cc32f4e9622bb3f61282e886ac" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1571307233/Assets/newsletter/app_badges/ios/en.png" width="134" alt="Download on the App Store" border="0" style="display:block; max-width:134px; font-family: Arial, sans-serif; font-size:16px; line-height:18px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                          </tr>
+                        </table></td>
+                    </tr>
+                  </table></td>
+              </tr>
+            </table></td>
+        </tr>
+        <!----> 
+        <!-- //App Section --> 
+        <!-- Search Section --> 
+        <!---->
+        <tr>
+          <td align="center" valign="top" style="padding:0px 23px 56px;" class="em_pad4"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="left" valign="top" style="padding-bottom:5px;"><table align="left" width="28" border="0" cellspacing="0" cellpadding="0" style="width:28px;">
+                    <tr>
+                      <td bgcolor="#005F00" height="5" style="height:5px; font-size:0px; line-height:0px; background-color:#005F00;"><img src="https://imgma.trivago.com/image/upload/v1600699461/Assets/newsletter/assets-2020-designrefresh-template/spacer.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <tr>
+                <td class="em_defaultlink" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:20px; line-height:25px; color:#37454D; font-weight:bold; padding-bottom:16px;">Plan your next outdoor getaway</td>
+              </tr>
+              <tr>
+                <td align="center" valign="top" class="em_aside"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #f3f3f3; box-shadow:0px 4px 16px 0px #d6d6d6; border-radius:12px;">
+                    <tr>
+                      <td align="center" valign="top"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td align="center" valign="top"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" style="border:1px solid #e5e5e5; box-shadow:0px 4px 20px 0px #d6d6d6; border-radius:12px;" bgcolor="#ffffff">
+                                <tr>
+                                  <td align="left" valign="middle"><table align="left" border="0" cellspacing="0" cellpadding="0">
+                                      
+                                        <td width="16" style="width:16px; font-size:0px; line-height:0px;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/0707e926-95db-4844-9a5e-1c26abb49f50.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                                        <td align="center" valign="top"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                              <td height="16" style="height:16px; font-size:0px; line-height:0px;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/0707e926-95db-4844-9a5e-1c26abb49f50.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                                            </tr>
+                                            <tr>
+                                              <td align="center" valign="top"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                  <tr>
+                                                    <td class="em_hide" align="left" valign="top" style="font-size:0px; line-height:0px;"><a href="http://click.e.trivago.com/?qs=659508d750c66d4301052fd76394d954385d5e13fef2c2b16898857c27c8752a121516cf7df91a5b338b0bad626899e0a4069ee05cdce8873f8ff3d6819faa7d" target="_blank" style="text-decoration:none; color:#FFFFFF;"><img src="https://imgma.trivago.com/image/upload/v1618497435/Assets/0000/Newsletter/weekend/icn_magnifier_line.jpg" width="20" alt="" border="0" style="display:block; max-width:20px; font-family: Arial, sans-serif; font-size:10px; line-height:12px; color:#37454D; font-weight:bold;" class="em_g_img"></a></td>
+                                                    <td class="em_hide" width="10" style="width:10px; font-size:0px; line-height:0px;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/0707e926-95db-4844-9a5e-1c26abb49f50.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                                                    <td class="em_defaultlink" align="left" valign="top" style="font-family: 'Proxima Nova', Arial, sans-serif; font-size:16px; line-height:22px; color:#9BA2A6;"><a href="http://click.e.trivago.com/?qs=659508d750c66d4301052fd76394d954385d5e13fef2c2b16898857c27c8752a121516cf7df91a5b338b0bad626899e0a4069ee05cdce8873f8ff3d6819faa7d" target="_blank" style="text-decoration:none; color:#9BA2A6;">Where do you want to go?</a></td>
+                                                  </tr>
+                                                </table></td>
+                                            </tr>
+                                            <tr>
+                                              <td height="16" style="height:16px; font-size:0px; line-height:0px;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/0707e926-95db-4844-9a5e-1c26abb49f50.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                                            </tr>
+                                          </table></td>
+                                        <td width="16" style="width:16px; font-size:0px; line-height:0px;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/0707e926-95db-4844-9a5e-1c26abb49f50.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                                    </table></td>
+                                  <td align="right" valign="middle"><table align="right" border="0" cellspacing="0" cellpadding="0" bgcolor="#005F00" style=" border-top-right-radius:12px; border-bottom-right-radius:12px;" class="em_W52">
+                                      
+                                        <td width="16" style="width:16px; font-size:0px; line-height:0px;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/0707e926-95db-4844-9a5e-1c26abb49f50.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                                        <td align="center" valign="top"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                              <td height="16" style="height:16px; font-size:0px; line-height:0px;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/0707e926-95db-4844-9a5e-1c26abb49f50.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                                            </tr>
+                                            <tr>
+                                              <td class="em_defaultlink em_hide" align="center" valign="top" style="font-family: 'Nunito Sans', Arial, sans-serif; font-size:16px; line-height:22px; color:#FFFFFF; font-weight:bold;"><a href="http://click.e.trivago.com/?qs=659508d750c66d4301052fd76394d954385d5e13fef2c2b16898857c27c8752a121516cf7df91a5b338b0bad626899e0a4069ee05cdce8873f8ff3d6819faa7d" target="_blank" style="text-decoration:none; color:#FFFFFF;">Search</a></td>
+                                            </tr>
+                                            <!--[if !mso 9]><!-->
+                                            <tr>
+                                              <td align="center" valign="top"><div class="em_hide_desktop" style="display:none;width:0;overflow:hidden;max-height:0px;">
+                                                  <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                      <td align="center" valign="middle"><a href="http://click.e.trivago.com/?qs=659508d750c66d4301052fd76394d954385d5e13fef2c2b16898857c27c8752a121516cf7df91a5b338b0bad626899e0a4069ee05cdce8873f8ff3d6819faa7d" target="_blank" style="text-decoration:none; color:#FFFFFF;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/d1eaddba-fa15-46f1-bc54-170d4ae96d6a.png" width="20" alt="" border="0" style="display:block; max-width:20px; font-family: Arial, sans-serif; font-size:10px; line-height:12px; color:#37454D; font-weight:bold;" class="em_g_img"></a></td>
+                                                    </tr>
+                                                  </table>
+                                                </div></td>
+                                            </tr>
+                                            <!--<![endif]-->
+                                            <tr>
+                                              <td height="16" style="height:16px; font-size:0px; line-height:0px;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/0707e926-95db-4844-9a5e-1c26abb49f50.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                                            </tr>
+                                          </table></td>
+                                        <td width="16" style="width:16px; font-size:0px; line-height:0px;"><img src="http://image.e.trivago.com/lib/fe8c1271726603797d/m/0/0707e926-95db-4844-9a5e-1c26abb49f50.gif" width="1" height="1" alt="" border="0" style="display:block;"></td>
+                                    </table></td>
+                                </tr>
+                              </table></td>
+                          </tr>
+                        </table></td>
+                    </tr>
+                  </table></td>
+              </tr>
+            </table></td>
+        </tr>
+        <!----> 
+        <!-- //Search Section -->
+        
+      </table></td>
+  </tr>
+</table>
+<!-- == //Body Section == --> 
+  
+<!-- == Footer Section == -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="em_full_wrap" bgcolor="#ffffff">
+  <tr>
+    <td align="center" valign="top"><table align="center" width="640" border="0" cellspacing="0" cellpadding="0" class="em_main_table" style="width:640px; table-layout:fixed;">
+        <tr>
+          <td align="center" valign="top" bgcolor="#2a333a" style="background-color:#2a333a; padding:32px 24px 40px;"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" valign="top" style="padding-bottom:21px;" class="em_pbottom25"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td valign="top"><table align="left" border="0" cellspacing="0" cellpadding="0" class="em_wrapper">
+                          <tr>
+                            <td align="left" valign="top" class="em_pbottom18"><table align="left" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                  <td align="center" valign="top"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb482bbfc00b4bed692fe3bc2235e0adff954a028170fe3640855a396ac3f6e1aec2f2d0e25bc61c62c327ed2cc32f4e9622bb3f61282e886ac" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1571307236/Assets/newsletter/app_badges/android/en.png" width="134" alt="GET IT ON Google Play" border="0" style="display:block; max-width:134px; font-family: Arial, sans-serif; font-size:16px; line-height:18px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                                  <td width="18" style="width:18px;">&nbsp;</td>
+                                  <td align="center" valign="top"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb482bbfc00b4bed692fe3bc2235e0adff954a028170fe3640855a396ac3f6e1aec2f2d0e25bc61c62c327ed2cc32f4e9622bb3f61282e886ac" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1571307233/Assets/newsletter/app_badges/ios/en.png" width="134" alt="Download on the App Store" border="0" style="display:block; max-width:134px; font-family: Arial, sans-serif; font-size:16px; line-height:18px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                                </tr>
+                              </table></td>
+                          </tr>
+                        </table>
+                        <table align="right" width="" border="0" cellspacing="0" cellpadding="0" style="width:px;" class="em_wrapper">
+                          <tr>
+                            <td align="left" valign="top"><table align="left" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                  <td align="center" valign="top"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb4602e9cd4d83d806c51ec62d02498bbeddc6d4228572b8a8f9d55fd47c3b0fe11ecc97cf1ea336b364e7705b7396d1aca" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1600699462/Assets/newsletter/assets-2020-designrefresh-template/social_icon_fb.png" width="32" alt="fb" border="0" style="display:block; max-width:32px; font-family: Arial, sans-serif; font-size:12px; line-height:14px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                                  <td width="8" style="width:8px;">&nbsp;</td>
+                                  <td align="center" valign="top"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb4f054801362264524e533058d02aa139800ce786d4cf33325e31910221f1fdf3d1ae2ef7f9c958abb1e6f8096a639f732" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1600699461/Assets/newsletter/assets-2020-designrefresh-template/social_icon_tw.png" width="32" alt="tw" border="0" style="display:block; max-width:32px; font-family: Arial, sans-serif; font-size:12px; line-height:14px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                                  <td width="8" style="width:8px;">&nbsp;</td>
+                                  <td align="center" valign="top"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb43dc23c3db0e499717cf6b9aaa7a78ab7431dfe144f4636ab0b7fd01d70c991fa7c0edd1f56929b46416f289ec65ffa58" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1600699462/Assets/newsletter/assets-2020-designrefresh-template/social_icon_insta.png" width="32" alt="insta" border="0" style="display:block; max-width:32px; font-family: Arial, sans-serif; font-size:12px; line-height:14px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                                  <td width="8" style="width:8px;">&nbsp;</td>
+                                  <td align="center" valign="top"><a href="http://click.e.trivago.com/?qs=1f54d0affbd65bb44b9b2ecc80ba5ac7becd75ef8e6fd34c37be7ece60d420cdc49b352ffd86315ce536b7be761677561acdb8d0a5bcd30e" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1600699461/Assets/newsletter/assets-2020-designrefresh-template/social_icon_yt.png" width="32" alt="yt" border="0" style="display:block; max-width:32px; font-family: Arial, sans-serif; font-size:12px; line-height:14px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                                  <td width="8" style="width:8px;">&nbsp;</td>
+                                  <td align="center" valign="top"><a href="#" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1600699462/Assets/newsletter/assets-2020-designrefresh-template/social_icon_pinterest.png" width="32" alt="pint" border="0" style="display:block; max-width:32px; font-family: Arial, sans-serif; font-size:12px; line-height:14px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                                  <td width="8" style="width:8px;">&nbsp;</td>
+                                  <td align="center" valign="top"><a href="http://click.e.trivago.com/?qs=659508d750c66d43daf669a327221820bf17162d2535c084ea4b761d250140b3bb611fadd143f5feb6c41dd284bfb6d518d63916b465cc7d" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1600699462/Assets/newsletter/assets-2020-designrefresh-template/social_icon_in.png" width="32" alt="in" border="0" style="display:block; max-width:32px; font-family: Arial, sans-serif; font-size:12px; line-height:14px; color:#FFFFFF; font-weight:bold;" class="em_g_img"></a></td>
+                                </tr>
+                              </table></td>
+                          </tr>
+                        </table></td>
+                    </tr>
+                  </table></td>
+              </tr>
+                <tr>
+                  <td class="em_defaultlink_u" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:14px; line-height:21px; color:#FFFFFF;"> Prices may vary. Pricing and fares contained in this email have been collected during the three days prior to the calendar date of this email. Actual pricing and fares are provided by advertisers, whose prices change frequently and without notice.  <br> <br> </td>
+            </tr>
+           
+              <tr>
+                <td class="em_defaultlink_u" align="left" valign="top" style="font-family:'Nunito Sans', Arial, sans-serif; font-size:14px; line-height:21px; color:#FFFFFF;"> Your privacy is very important to us. For further information, consult our  <a href="http://click.e.trivago.com/?qs=659508d750c66d43e88d799915c78589f0862f10b55702329ec317a29c1fdda81286cdcd5f23396179c65eaf24511d88ce5d68a8924f6f5ab68bba5fee91b211" target="_blank" style="color: #ffffff;">Privacy Policy.</a> <br>
+                  <br>
+                  We don't love an early checkout, but we understand sometimes it's necessary. Click <a href="http://click.e.trivago.com/unsub_center.aspx?qs=77247f398c016f668430e928ddb69fc87d1c5a82ba465c967b172f92390bcd4f656ee129eef2a28b3d1a4a117f99db0e42fe61816e8b4ce911c3de50efe77c1ad8ee19c8fd8bf8ba" target="_blank" style="color: #ffffff !important;" data-litmus-ignore=""> here</a>  to unsubscribe. 
+                  <br><br>
+                  trivago N.V., Kesselstrasse 5-7, Dusseldorf, Germany  <br>
+                    Chamber of Commerce: 67222927 <br>
+                  <br></td>
+          
+            </table></td>
+        </tr>
+        <tr>
+          <td align="center" valign="top" bgcolor="#37464d" style="background-color:#37464d; padding:32px 24px 31px;"><table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" valign="top"><table align="center" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td align="left" valign="top"><a href="http://click.e.trivago.com/?qs=659508d750c66d432517061d6896c51bfb7a4bc8496cffd1f90b23fb225def4c0e006417580ab22a7d8fcacdf71badc280df78b935accd99de6b10efe365972b" target="_blank" style="text-decoration:none;"><img src="https://imgma.trivago.com/image/upload/v1600699462/Assets/newsletter/assets-2020-designrefresh-template/trivago_footer_logo.png" width="102" alt="trivago" border="0" style="display:block; max-width:102px; font-family: Arial, sans-serif; font-size:24px; line-height:26px; color:#FFFFFF; font-weight:bold;"></a></td>
+                    </tr>
+                  </table></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr>
+          <td class="em_hide" style="line-height:1px;min-width:640px;background-color:#37464d;"><img alt="" src="images/spacer.gif" height="1" width="640" style="max-height:1px; min-height:1px; display:block; width:640px; min-width:640px;" border="0"></td>
+        </tr>
+      </table></td>
+  </tr>
+  
+</table>
+<!-- == //Footer Section == -->
+</body>
+</html>
+<img src="http://click.e.trivago.com/open.aspx?ffcb10-fe971172756d057e71-fdf615757763077e7513757d-fe8c1271726603797d-ff6115757d-fe25107773670179751d74-fefa1677746003&amp;sc=1&amp;d=60229&amp;bmt=0" width="1" height="1" alt="">
+
+--dpqBMUPtIf3H=_?:--

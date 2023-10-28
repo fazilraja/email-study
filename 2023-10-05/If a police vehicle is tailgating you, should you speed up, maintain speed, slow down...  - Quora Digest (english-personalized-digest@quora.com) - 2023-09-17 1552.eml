@@ -1,0 +1,1599 @@
+Received: from MN2PR20MB3512.namprd20.prod.outlook.com (2603:10b6:208:26a::24)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Sun, 17 Sep 2023
+ 20:52:35 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=eQGYp1Kl6e/T68nc4z7l0W7jgSloA7l3N1Pax+vYVQt5Q/3ot7+cXhPDt3mCof1B7RtetNCHt5hArDcSTGyOQU8LIbnhWUBR4BkPwjvg0rV/w2KErfsvvxhG9CWTySFY+0NKq8Odl95b8n/kAi+m6s4mY9m/HKlUwvNU9ptnBbtUE5P0cNaKhszkZP1rJYTTwCM2PNLAboeK89VpGEUDcIF5I5OfEdTPpdJKKWW+cvYRAgxiysDZhaC5AaNeR1UEQyOn+h4yL67d4ZGHEmTL607GhUUrM1Phcgh4knMZRzlnxpV5sxjvesVJdnzPA0aFFJ5C2RaG9M4HV+PZpWoYhQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GWsv3qBkbrfCjfGiAxS6D6NUcSQWqrrMZuPO7GwL+TM=;
+ b=VEjq0q9LCriRg6XfEPS+WKKwHsuK4m+U66gy/ZhC8kW7XV6DzbN8S4vctdIZNyoBvr+ZecsZs9I0VvVJTdqYsIDO65GdqTtkaHLGRnm+q91ZQOEJbKhjxFgd+EYS1gIZKZihPIlAhmEQyJbMp4LP4tK694/bfZAh3gUq/5Anhv28u8h0MaJuEi8Ydz9o1NmP45u7v1TE2+K6NFSoIs4gF0hyBr+qeGNsWUVBiMNvBnAWuGGrW43dX6bU/sNHDGCZ0M+vY3vPXAgwejretDmp5uhKga9yJoaYVbeJZrw3/LlTDP0TBrnho9FqCJPg/oRsYJZCx2JsMin9na0iK+Iciw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 209.85.167.172) smtp.rcpttodomain=outlook.com smtp.mailfrom=quora.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=quora.com;
+ dkim=pass (signature was verified) header.d=quora.com; arc=pass (0 oda=1
+ ltdi=1 spf=[1,1,smtp.mailfrom=noreply@quora.com]
+ dkim=[1,1,header.i=@quora.com] dmarc=[1,1,header.from=quora.com])
+Received: from AM4PR05CA0012.eurprd05.prod.outlook.com (2603:10a6:205::25) by
+ MN2PR20MB3512.namprd20.prod.outlook.com (2603:10b6:208:26a::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26; Sun, 17 Sep
+ 2023 20:52:31 +0000
+Received: from AMS1EPF00000046.eurprd04.prod.outlook.com
+ (2603:10a6:205:0:cafe::33) by AM4PR05CA0012.outlook.office365.com
+ (2603:10a6:205::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.25 via Frontend
+ Transport; Sun, 17 Sep 2023 20:52:30 +0000
+Authentication-Results: spf=pass (sender IP is 209.85.167.172)
+ smtp.mailfrom=quora.com; dkim=pass (signature was verified)
+ header.d=quora.com;dmarc=pass action=none header.from=quora.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of quora.com designates
+ 209.85.167.172 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.167.172; helo=mail-oi1-f172.google.com; pr=C
+Received: from mail-oi1-f172.google.com (209.85.167.172) by
+ AMS1EPF00000046.mail.protection.outlook.com (10.167.16.43) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.19 via Frontend Transport; Sun, 17 Sep 2023 20:52:30 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:EC1E5DBC14C5B8EAC4D2D4A480E191825C8CD126B2804DAA4BFE645E2F8E7C0F;UpperCasedChecksum:6CDB21B7C152F836EF687BDCA0E214EE64137F630ED0F1DBDFD53B903EC40193;SizeAsReceived:8018;Count:26
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3a88ef953adso2749298b6e.0
+        for <tobinsilvestre@outlook.com>; Sun, 17 Sep 2023 13:52:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694983950; x=1695588750;
+        h=x-forwarded-for:message-id:date:list-unsubscribe:subject:to:from
+         :mime-version:dkim-signature:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GWsv3qBkbrfCjfGiAxS6D6NUcSQWqrrMZuPO7GwL+TM=;
+        b=gwLqYdqrQjxlWr3ganlqTvlqnTWhmSe8nd4aDOuzGDwG3Vfr394dOQPB3DAbub27Sx
+         3VnT+2rHB/uu92IreLLlUUlHmGotTWSnqcpNMmwYEpaaVSASA5J0fJjoN5MIGKgVHSqE
+         l0zHs82OlqBChS9S+EApgjecjbJtG/IP5lpFcD4NhP7ulp/lUEmC7qSHn0lpgwBU9egI
+         EWatcg2cXuUMrNtW4JeyHSvEdvChy2Szx9sDR7c9PZv9+A+3S+J2I3P32kdY43yBYCpx
+         bQGexcYDDohZeiBBDHwbm4EUcxr212+meYbQhuiLSFyGWuXTPbdlF80n/a/1qnT2mS43
+         RjZA==
+X-Gm-Message-State: AOJu0YwzBCm4ERldWB7bF0jeNKelSGIjnIPEAkxxhf37+QPKvvHWiP3f
+	/NEVAHvtzjsgRS4/Q2M4sIHzMPa+vDac8l4Pgw==
+X-Google-Smtp-Source: AGHT+IFxFTfQFf56NhHl1HtAEYjfF9k5tl+79Ah+UejIrw0TYgohahER40xwhNPI4ugL24ZA0SMPc3caSNyeafzzQD4arWkH38g=
+X-Received: by 2002:a05:6870:468a:b0:1b0:80d0:b895 with SMTP id a10-20020a056870468a00b001b080d0b895mr8798783oap.12.1694983950420;
+        Sun, 17 Sep 2023 13:52:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694983950; cv=none;
+        d=google.com; s=arc-20160816;
+        b=zrYvQEzY0Df1ZvBBvzM4XZGn7p3IaYwucs7VeENyu3ieClbw9fYDB6cAnebfNUcGgl
+         9vi8TXQRk+Y86Gxe05PjTXNSzrFNVGICc0TfcQVr3G2eX8EyHD12HGR5i+6JZf1YI1nh
+         GMzRmaX9Kl+23uKl2jVN7ia9crjU8Hp1+zS3ghElS/KpoIZblidXwUtjqxk+O8/dDqfC
+         v5hoeRuOVxcptYQ6RcQtdMiXc1I8rtAzYRXqWi4QaN50cZAStLCfpyeFfPomJrsr6ndy
+         h7o9pEsQQjvmMhAvablGsHIoag8co/YO5lHjPiBhjtcnvUJQlazNQETzG+QZIyrArTUT
+         DqRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=message-id:date:list-unsubscribe:subject:to:from:mime-version
+         :dkim-signature;
+        bh=GWsv3qBkbrfCjfGiAxS6D6NUcSQWqrrMZuPO7GwL+TM=;
+        fh=mIvoDv652Eqh/+zXwK++2Ne7i5SMLcxnDhsYAx20Clg=;
+        b=rSjCoJjkoMgATqoX6AsFxtfH8Z8+y0of5M/8RdU57R7kKUYHNGedFAunDAymI7wwHN
+         SAHDTET8H6D9fILNgvRpfGqsUqOEX27WlJSb3ouZF/r5PUtnZ/T8z5Uvq4+7oDte9aGO
+         fUz0/th/rLqSPbvuLQ0lEYHMd115FmOTkSws5jZIGJJ+AvDX1ESPRunqLnyUXV9li07T
+         ZFFfIAvC79MUz0AjX4GyZYHY0vFJc19+4l5Cp6kQq7jSEJQOPQtOrcheC76W7Bp9emRU
+         V8UZNAHsr+3CbDRwHfCGwxikBant1C8IYABcvl4XG6LhnYUw7E32edQrGG1BwCYy8mAC
+         u56A==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@quora.com header.s=pigeon header.b=FNay9WsH;
+       spf=pass (google.com: domain of noreply@quora.com designates 52.7.163.207 as permitted sender) smtp.mailfrom=noreply@quora.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=quora.com
+Return-Path: noreply@quora.com
+Received: from o12.pigeon.quora.com (o12.pigeon.quora.com. [52.7.163.207])
+        by gmr-mx.google.com with ESMTPS id lh20-20020a0568700b1400b001d7082eb8a0si191245oab.0.2023.09.17.13.52.30
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Sep 2023 13:52:30 -0700 (PDT)
+Received-SPF: pass (google.com: domain of noreply@quora.com designates 52.7.163.207 as permitted sender) client-ip=52.7.163.207;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@quora.com header.s=pigeon header.b=FNay9WsH;       spf=pass
+ (google.com: domain of noreply@quora.com designates 52.7.163.207 as permitted
+ sender) smtp.mailfrom=noreply@quora.com;       dmarc=pass (p=REJECT sp=REJECT
+ dis=NONE) header.from=quora.com
+Received:
+ by pigeon-at-10057 (OpenSMTPD) with ESMTP id 2d55eccc
+	for <tobinsilvestre002@sooners.us>;
+	Sun, 17 Sep 2023 20:52:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; d=quora.com; h=
+	content-type:mime-version:from:to:subject:list-unsubscribe:date
+	:message-id; s=pigeon; bh=3jYmq9hWT0h4kFH0DU9yaTw9WJg=; b=FNay9W
+	sHMQKrFscpSDVJuG9qXjoxz18ZyN3+Rkr7syYB7Okj3spOADmd0CtxRs10A8kIAp
+	UZAHyuxNGOGgu+nN/CIMOxJhBDLoRsYyhrw3hXVYBgRW7H6FRcnAgSWyI0qw6Lhl
+	DkAfpcU98DqKeRxuJBu11u829y9AMbgjSGKdtGMVRJB8qsXDod0Oub/tJth6C6eY
+	85ffA2aTKrNvR1xHh739vfZGSkfNAiY0HqLKJGAfXNLuycqRYUbAwg/e1fxRrNIQ
+	BJz6GVw92QpiCKQQ0/r/0LbtUg9QZ3ZrpCEwnfIeKyZbD47JbA4AUgdpSBA3S/Kr
+	DcypeR7f2kbp76cw==
+Content-Type: multipart/alternative;
+ boundary="===============3968597362852605608=="
+From: Quora Digest <english-personalized-digest@quora.com>
+To: tobinsilvestre002@sooners.us
+Subject: =?utf-8?q?If_a_police_vehicle_is_tailgating_you=2C_should_you_speed_up=2C_ma?=
+ =?utf-8?q?intain_speed=2C_slow_down=2E=2E=2E=3F?=
+List-Unsubscribe: <https://www.quora.com/email_optout/qemail_unsubscribe?email_track_id=aa81fcdf7f4548bebdeea638bd96bb86&ish=1&t=1694983948999367&token=cbb2d9499e06ab426a3f6f161019c60d1303383c5cc5591eaea6d5e57e59ff95d00363744070fc18806c592f6ca4831e9130b8c226830f083290ead321e42ade&type=2&uid=2289419746>
+X-CID: WppdhOTffYl-5KWuZ_eCALURHsb8Xw1vxo8rBcsRMV9a-qNf2D5_DVmsPoCLyKUZJoS9D5H1VRmXqfcP8KsxOPnzXM-SFmneT-QmVayzP0BDns8EKQl194d_fTesOoQxo86nUAXw7HvULt2_Y83fSSwAAQIA
+Date: Sun, 17 Sep 2023 20:52:29 +0000
+Message-ID: <WppdhOTffYl-5KWuZ_eCALURHsb8Xw1vxo8rBcsRMV9a-qNf2D5_DVmsPoCLyKUZJoS9D5H1VRmXqfcP8KsxOPnzXM-SFmneT-QmVayzP0BDns8EKQl194d_fTesOoQxo86nUAXw7HvULt2_Y83fSSwAAQIA@t2.msgid.quoramail.com>
+X-SMTPAPI: =?utf-8?q?=7B=22unique=5Fargs=22=3A_=7B=22Message-ID=22=3A_=22=3CWppdhOTffYl?=
+ =?utf-8?q?-5KWuZ=5FeCALURHsb8Xw1vxo8rBcsRMV9a-qNf2D5=5FDVmsPoCLyKUZJoS9D5H1?=
+ =?utf-8?q?VRmXqfcP8KsxOPnzXM-SFmneT-QmVayzP0BDns8EKQl194d=5FfTesOoQxo86nUAX?=
+ =?utf-8?q?w7HvULt2=5FY83fSSwAAQIA=40t2=2Emsgid=2Equoramail=2Ecom=3E=22=2C_?=
+ =?utf-8?q?=22account=22=3A_=22digest=22=2C_=22email=5Ftype=22=3A_2=2C_=22ip?=
+ =?utf-8?q?=5Fpool=22=3A_=22main=22=2C_=22X-QMSG=22=3A_=22wABCHcfgR-3CdgETQL?=
+ =?utf-8?q?voaatXkXu52PDs5BZtkjJ2kfzh1zikUduo07EoCbPsheaiRj2SAK2ZnRgpUqBTQdE?=
+ =?utf-8?q?QVup7hE-D3eRH9dNyNyhtGnBj36JjRuBnX95XF-GzvicP12=5FNwYCWTOIevDnn5w?=
+ =?utf-8?q?38NKGqSgj5nqqyUVA1tc8ChQ=5F2XLB-x6q4-bByQF5S3T6Z73tlvgvkmMG1EeCne?=
+ =?utf-8?q?eQ1nXjNilYfoKLfuo2RkLHgc6KCkOlvhGWoR7aJtS-M4QhkIWPvr67Ti366x2HUfY?=
+ =?utf-8?q?Fwjc4MImrMUbRpF=5F2L48jOnUL09QgaJLT8zmHpQgO2mD1qVsUIMmxtX9WEi1yYG?=
+ =?utf-8?q?B1tLPi6My0naGi-8opBTimGnxncB9dj6XUDORCzZYBZqNpETVB0vRUxRUSlfIAEAv?=
+ =?utf-8?q?HCR4=5FLzSCKjWEBqadFuiQAJcLWlU1jXHpzmr54I6op4yA1WZi=5FUWi-yH7KEdV?=
+ =?utf-8?q?gVv3PBB3ZYeYNgzC1K5qmYUvxv5McdtXp4xpIN-Vv-FKNPEh2WRgCN8LIiv=5F8Am?=
+ =?utf-8?q?QfonThD7UdpHDy5I2uJTYWvsa32ub6JV0=5FfXuuFlHJWf5rAfMn5JAU76Fxo29o7?=
+ =?utf-8?q?gg0xTE5FCmZmUcbMUhQhPro3PHAyhDlLcOxkX3H6qIU8IIAAQIA=22=7D=2C_=22c?=
+ =?utf-8?q?ategory=22=3A_=5B=22account=5Fdigest=22=2C_=22email=5Ftype=5F2=22?=
+ =?utf-8?q?=2C_=22ip=5Fpool=5Fmain=22=5D=2C_=22filters=22=3A_=7B=22bypass=5F?=
+ =?utf-8?q?list=5Fmanagement=22=3A_=7B=22settings=22=3A_=7B=22enable=22=3A_1?=
+ =?utf-8?q?=7D=7D=7D=2C_=22ip=5Fpool=22=3A_=22main=22=7D?=
+X-QMSG: =?utf-8?q?wABCHcfgR-3CdgETQLvoaatXkXu52PDs5BZtkjJ2kfzh1zikUduo07EoCbPsheaiRj?=
+ =?utf-8?q?2SAK2ZnRgpUqBTQdEQVup7hE-D3eRH9dNyNyhtGnBj36JjRuBnX95XF-GzvicP12?=
+ =?utf-8?q?=5FNwYCWTOIevDnn5w38NKGqSgj5nqqyUVA1tc8ChQ=5F2XLB-x6q4-bByQF5S3T6?=
+ =?utf-8?q?Z73tlvgvkmMG1EeCneeQ1nXjNilYfoKLfuo2RkLHgc6KCkOlvhGWoR7aJtS-M4Qhk?=
+ =?utf-8?q?IWPvr67Ti366x2HUfYFwjc4MImrMUbRpF=5F2L48jOnUL09QgaJLT8zmHpQgO2mD1?=
+ =?utf-8?q?qVsUIMmxtX9WEi1yYGB1tLPi6My0naGi-8opBTimGnxncB9dj6XUDORCzZYBZqNpE?=
+ =?utf-8?q?TVB0vRUxRUSlfIAEAvHCR4=5FLzSCKjWEBqadFuiQAJcLWlU1jXHpzmr54I6op4yA?=
+ =?utf-8?q?1WZi=5FUWi-yH7KEdVgVv3PBB3ZYeYNgzC1K5qmYUvxv5McdtXp4xpIN-Vv-FKNPE?=
+ =?utf-8?q?h2WRgCN8LIiv=5F8AmQfonThD7UdpHDy5I2uJTYWvsa32ub6JV0=5FfXuuFlHJWf5?=
+ =?utf-8?q?rAfMn5JAU76Fxo29o7gg0xTE5FCmZmUcbMUhQhPro3PHAyhDlLcOxkX3H6qIU8IIA?=
+ =?utf-8?q?AQIA?=
+X-Forwarded-For: tobinsilvestre002@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 26
+X-MS-Exchange-Organization-ExpirationStartTime: 17 Sep 2023 20:52:30.8965
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 91c255ca-c613-4897-0911-08dbb7c002a4
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ AMS1EPF00000046:EE_|MN2PR20MB3512:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ AMS1EPF00000046.eurprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/17/2023 7:07:45 PM
+X-MS-Office365-Filtering-Correlation-Id: 91c255ca-c613-4897-0911-08dbb7c002a4
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.167.172
+X-SID-PRA: ENGLISH-PERSONALIZED-DIGEST@QUORA.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:2;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2023 20:52:30.7715
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91c255ca-c613-4897-0911-08dbb7c002a4
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ AMS1EPF00000046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR20MB3512
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:04.3991200
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90012020)(91020020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPkgsOdgs9NqPvMadnGy4RXCsunQOjXYLqm5cZPgmeAKWgcl0P0bzQdA5Lg2+0Na0m+dlcbPi0CIxxQFAVXg97OGvepeGljlmaBt4NczCHjndyD7JU+pHhUES3g9qAl5CsfzCHk3PLY8w1+TpQR5jKwiYwmdjxljbNdCkZ10ifV+HkUvap/gDU83IxbnG3LHvuKX8aVYbgntGA==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?S2poZkxxYnkrMUZDOWxCR0c0RnZNRmpyTWE2aUs0TVJ2dS81QXV0QmtkdzBR?=
+ =?utf-8?B?UklVRjlQWUhTMWthRGMySjZERkpIM2krYUhub0VBbHQybEtPRURlNVNvZkxW?=
+ =?utf-8?B?NlFaS3o1Mm5GUUxjZEVVaEVvN2U3N3czQjgyb1dSeUNjRXpmWWRIalZUZ3VI?=
+ =?utf-8?B?UmtTcjFGVzJwaFN4dzZISklWTFc5aWRyNnl2azJKRTJyeHNWVmgwSXdGSThi?=
+ =?utf-8?B?Z25ZSWJ3MEZ5Y1VNMGNKN0tZRitVYmRCSkY3b0QwS1BLNEFUOW44UmRNTnNM?=
+ =?utf-8?B?YUhNVm5BVTdaL2l0L2JjWUh4S1lyc3NPVGk3RmlNcDJsNHdJVDJwREZRM2lk?=
+ =?utf-8?B?YkNocVBaYVFuL1JnQjlTSjFVQVlYaDYzeTJBeklWUjk1NGt2WDRLRjU5N3or?=
+ =?utf-8?B?UHBVR0JZZ2tiNGdBZGcyemJacThYZWdVTXVScmoyZGN6WVBETVZhYnZvYW5u?=
+ =?utf-8?B?NHpROHdDR1JZSmZmdURlUnlqdlBlTkhmdUYwL1d6czFHUXRnWHZSS1VqV0Jz?=
+ =?utf-8?B?b0RUR0dKejZ5RmFIS212NmhDQ2trMW5BWll6SDRuNnFsRmJqeGxqQUkrNm9X?=
+ =?utf-8?B?cW1PYWVzMFhzMEp1SjlDcG05SG1Ba3VEaGM3Q3JpNzZXS2NDcDV0TDBoUzgv?=
+ =?utf-8?B?N0NDdFNoVGQxMzRaWjg4TTNyZy80SGp5QmdrOUZGUEVBbHltZTlNRmxsSnhw?=
+ =?utf-8?B?KzlYV0V0SUhoMElYWXdqdDFKMmpiNlJqRUJULzdOTnZHR3J3WGlNMys2a1BI?=
+ =?utf-8?B?elEycUNVRTNrbzZybWI0ZG1DMHhsV1EwbWNWbE4yWHBIb3NwS0N2NlAwWndO?=
+ =?utf-8?B?RXFrcitCc3hmaGxKL2h5allKRVQyV3VHdGJpTWdaaEdSVUZNTkErUi8yTHVq?=
+ =?utf-8?B?RUJMZ29oSVptNk5RQmsxbW5OVUhHcDExdzdrWVROYnpkZzM4YUtjZHRuZXFJ?=
+ =?utf-8?B?NW9MSDhnR0xPc25lVlFJVlg0UXVRZzByTmE3NmswcjRyNVZJZWtGcWxCdTJa?=
+ =?utf-8?B?eVBxenJSZmF0alEvY3gzUXFWRk4xYVRZdE1WWXBpa0NvaWhLOFdsMGdDNnZJ?=
+ =?utf-8?B?NE1vSUJJVEF5VkQ0RkFOUkk3TnBWam54ZVRyczBaVDFTZ3ZMZjkrNkFqMmUv?=
+ =?utf-8?B?Vm1Ya0R4UlF4d29CcXJPczhPMGpuRU5jRitIemRFdkdNei9pWlJ1VDRCdVpa?=
+ =?utf-8?B?c2ZiZUtDdFFsQjZTRlArbHdWZ29LTWZodnA5OGhrWXU3eFlSa2xwQ2RFSzZE?=
+ =?utf-8?B?b21TS3VUblcxeGFROTBXQzA3eFZBL2ZjOXRDUXlPUTE1a2lQYXVVTnQxQkFD?=
+ =?utf-8?B?eXNUZnVmV3hZOHFuNU5odTM3RlpXTDBNVWJkT3l4S3J1YXpEUlpjV0dSRDR3?=
+ =?utf-8?B?M1Y2aEV4dGRHaCtCVmNGNjJVZ3ZUb3ZvRkVrNXhyK3ZGMVZ1WkhqVU1Vb21j?=
+ =?utf-8?B?aVRjWDBLMWI2UTNFT0hCdG5iOHB3TXplTDBhaEN0QWI1eUNvaHFyOE5vSkZV?=
+ =?utf-8?B?bjloMmZVeENIVWltcXlTY0tkeEFiV0dTVTJXaGNmRHRsd00wN0Y5SFVUV0Fw?=
+ =?utf-8?B?c0xkT2V2YkxMQnhTK2E1UnZ6djJ5Wlg1aDZ1UWlaLzFSQVJrUmxXY1dlc08r?=
+ =?utf-8?B?ZGRyMXkvaU5aMUxyQ3kxMEwydGFyN0JFazdraUszQi9Tak5WbjVqZzNVVnhq?=
+ =?utf-8?B?MDd5VlgrZzU2Yy8zYkFIeHhZamNFbGk2UC8rUzNNOFZBWmhoYTZYTXpyQnYz?=
+ =?utf-8?B?T3ZwbnJqMXdZTG5CcHE3OUhybmFFc0p6VmQvOXNrNncvaXJSOUpESmtlUisv?=
+ =?utf-8?B?VExZb3crd2x0bDdWdUVWS1RVTzFjc1FNQm5TSE96SVVUaEc4cFVvWTg2dUY0?=
+ =?utf-8?B?OFpOUnJ5TTljelRsSVNRMzU2emZjUUV5YVhqcmhha3BlSjA5Z2lRaXFiY2s1?=
+ =?utf-8?B?NGh0UG4ya0VOVkZPWDVoenRIUmYvZVJmMEV6eFFpanE4TmZvNmp6ejFHVVNa?=
+ =?utf-8?B?TnMzQ2o0U25pMytFWGYwRmU3NTFTdDhrQ1NQazYwVnBXelNXMER4OHA1Qmsy?=
+ =?utf-8?B?WXdGRUE0MWpwK1dSajlyekd4YThDSWxwMXZDWVF6TjNIQTRkMHZoaGJMdGpk?=
+ =?utf-8?B?SWlzeHVuKzNjNW1wSCsrL2VWOW5LMEFYMFZBK0NLd1RvMDhTUWcxU0lWb0Rj?=
+ =?utf-8?Q?aHlwpBcIcz8zNqTt6DBT5eU=3D?=
+MIME-Version: 1.0
+
+--===============3968597362852605608==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Top stories for Tobin002
+
+-----
+
+Question: If a police vehicle is tailgating you, should you speed up, maint=
+ain speed, slow down, or pull over and stop?
+
+
+Answer from Alanna
+
+
+I had a cop tailgating me heading out of the mountains. He was way to close=
+ for comfort. I pulled over on a turnout & he slammed on his break about 50=
+ feet down the road. =20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxfDF8MTQ3Nzc0MzY4OTI0NjUyMyJ9&al_pri=3D8&ao=
+id=3Dz9wHrDei2p4&aoty=3D1&aty=3D4&cp=3D1&et=3D2&id=3Daa81fcdf7f4548bebdeea6=
+38bd96bb86&uid=3Doe44DxaONN7
+-----
+Question: Is vaping bad for your health?
+
+
+Answer from Fernando Baptista
+
+
+Let=E2=80=99s suppose you are a smoker. You smoke one pack a day. Then you =
+start smoking just one cigarette a day.
+
+You might think that you would be ruining your health smoking a=20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3wyfDF8NTAzMTAxNzkifQ%3D%3D&al_pri=3D8&aoid=
+=3D33l7ZlpIS6F&aoty=3D1&aty=3D4&cp=3D2&et=3D2&id=3Daa81fcdf7f4548bebdeea638=
+bd96bb86&uid=3Doe44DxaONN7
+-----
+Question: My husband got our 17-year-old daughter pregnant behind my back. =
+What do I do? I'm freaking out.
+
+
+Answer from Michelle Huntington Wells
+
+
+You call the police and have his happy ass arrested! Then you file for divo=
+rce and take him for every penny you can. Support your daughter in whatever=
+ she chooses to do ab=20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3wzfDF8MTQ3Nzc0MzY3OTA4MjEzOSJ9&al_pri=3D8&ao=
+id=3DIKAyo6b90Hx&aoty=3D1&aty=3D4&cp=3D3&et=3D2&id=3Daa81fcdf7f4548bebdeea6=
+38bd96bb86&uid=3Doe44DxaONN7
+-----
+Question: How can I tell if someone has linked my phone to theirs?
+
+
+Answer from FitGains
+
+
+Hello there!
+
+It's great that you're concerned about your phone's security. It's possible=
+ for someone to link your phone to theirs without your knowledge, and there=
+ are se=20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3w0fDF8MTQ3Nzc0MzY1MzYwNTg2MyJ9&al_pri=3D8&ao=
+id=3DolgNwm19KnU&aoty=3D1&aty=3D4&cp=3D4&et=3D2&id=3Daa81fcdf7f4548bebdeea6=
+38bd96bb86&uid=3Doe44DxaONN7
+-----
+Question: The FBI raids your house, takes your computers, then comes back 2=
+4 hours later with all your computer equipment and even sets it all back up=
+ for you and tells you they hit the wrong house. Do you keep your equipment=
+ or throw it away?
+
+
+Answer from Nathan Hayes
+
+
+Get rid of it all. Don=E2=80=99t set it up, don=E2=80=99t turn it on=E2=80=
+=A6don=E2=80=99t even touch it if you can help it. In fact, I would reject =
+the delivery. Whether you do anything illegal or not, =20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3w1fDF8MjQwNjEzMDg3In0%3D&al_pri=3D8&aoid=3Do=
+bQjXs8Wd3q&aoty=3D1&aty=3D4&cp=3D5&et=3D2&id=3Daa81fcdf7f4548bebdeea638bd96=
+bb86&uid=3Doe44DxaONN7
+-----
+Question: I cheated on my husband with his best friend. Am I a terrible hum=
+an being and how do I cope with this?
+
+
+Answer from Chuck Sears
+
+
+Yes, you are. You have no honor or integrity, and you have clearly shown th=
+at you have no respect for your husband. The best thing you can do for him =
+is divorce him and ge=20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3w2fDF8MTQ3Nzc0MzY0MzY1NzA3NSJ9&al_pri=3D8&ao=
+id=3DM7IhSlabcfq&aoty=3D1&aty=3D4&cp=3D6&et=3D2&id=3Daa81fcdf7f4548bebdeea6=
+38bd96bb86&uid=3Doe44DxaONN7
+-----
+Question: I got fired. My ex-boss is now asking for the whereabouts of impo=
+rtant files. How should I respond?
+
+
+Answer from Steve Poling
+
+
+Smile. Thank him/her for reaching out. Ask about his family and be nice.
+
+When he turns the conversation back to the important files, give him your c=
+onsulting rate & an es=20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3w3fDF8MTQ3Nzc0MzY5MTA1Njc2OSJ9&al_pri=3D8&ao=
+id=3Db4akz9AjO9Y&aoty=3D1&aty=3D4&cp=3D7&et=3D2&id=3Daa81fcdf7f4548bebdeea6=
+38bd96bb86&uid=3Doe44DxaONN7
+-----
+Question: If I die alone at home, how many hours or days will pass until my=
+ pet dog, cat or bird eats me?
+
+
+Answer from Steven Brewer
+
+
+My father in-law passed a few years ago. He lived alone with two large dogs=
+. He passed away on his bed which was more like a low cot so the dogs had e=
+asy access to him.
+Th=20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3w4fDF8MzU2MTQwNDMifQ%3D%3D&al_pri=3D8&aoid=
+=3D9PShYO4JpKa&aoty=3D1&aty=3D4&cp=3D8&et=3D2&id=3Daa81fcdf7f4548bebdeea638=
+bd96bb86&uid=3Doe44DxaONN7
+-----
+Question: What will happen if I eat 500-800 calories a day as a young woman?
+
+
+Answer from Weight Lose Expert
+
+
+I share with you my friend experience she is young woman. She eaten 500=E2=
+=80=93800 calories and what happened with her when she eaten 800 to 500 cal=
+ories a day. I discuss about t=20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3w5fDF8MTQ3Nzc0MzY3NDExNjI4NCJ9&al_pri=3D8&ao=
+id=3D81lUwy3EREK&aoty=3D1&aty=3D4&cp=3D9&et=3D2&id=3Daa81fcdf7f4548bebdeea6=
+38bd96bb86&uid=3Doe44DxaONN7
+-----
+Question: 7 TYPES of NEGATIVITY TO YOU should KILL
+
+
+Asked in Human mind readers, Answer from Elia Juniana
+
+
+1. PERFECTIONISM
+
+Trying to achieve something that's literally unattainable will only result =
+in you feeling "less than".
+
+2. JUDGEMENT OVER YOURSELF AND OTHERS
+
+When you a=20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxMHwxfDE0Nzc3NDM2NjY0NTIwNzgifQ%3D%3D&al_pr=
+i=3D8&aoid=3DMsxxoXfaGW8&aoty=3D1&aty=3D4&cp=3D10&et=3D2&id=3Daa81fcdf7f454=
+8bebdeea638bd96bb86&uid=3Doe44DxaONN7
+-----
+Question: Why is Myanmar called Myanmar and not Burma?
+
+
+Answer from Ismail Bashmori
+
+
+Years ago I read that Burma had always been called Burma until the current =
+military dictatorship gave the country a name of its own invention, Myanmar=
+. Lazily I believed t=20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxMXwxfDM5MzM4NjI4OCJ9&al_pri=3D8&aoid=3DFdW=
+n6fHIU36&aoty=3D1&aty=3D4&cp=3D11&et=3D2&id=3Daa81fcdf7f4548bebdeea638bd96b=
+b86&uid=3Doe44DxaONN7
+-----
+Question: What if no Doordasher wants to accept your order?
+
+
+Answer from Rafael Santana
+
+
+This is a huge problem that actually happens a loottt. Customers are under =
+the impression that dashers are employees that work for doordash and a tip =
+is nothing more than =20
+Read More: https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXN=
+oIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxMnwxfDI2ODE5MzA0NiJ9&al_pri=3D8&aoid=3DXhE=
+F6p8TKXW&aoty=3D1&aty=3D4&cp=3D12&et=3D2&id=3Daa81fcdf7f4548bebdeea638bd96b=
+b86&uid=3Doe44DxaONN7
+-----
+
+-----
+
+To control which emails we send you, visit: https://www.quora.com/qemail/tc=
+?aoid&aoty=3D14&aty=3D4&cp=3D0&et=3D2&id=3Daa81fcdf7f4548bebdeea638bd96bb86=
+&uid=3Doe44DxaONN7
+
+To unsubscribe from this type of email, visit: https://www.quora.com/email_=
+optout/qemail_unsubscribe?email_track_id=3Daa81fcdf7f4548bebdeea638bd96bb86=
+&t=3D1694983949003196&token=3Dfa8e4a7d815320925de2d6eae3928caef13db1bf18435=
+813539d4161264eaa6fe386a52f0ffa399dc623f415115f0a03d8111dc794c7b6e5be7a1226=
+4bb29574&type=3D2&uid=3D2289419746
+--===============3968597362852605608==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html lang=3D"en" xmlns=3D"http://www.w3.org/1999/xhtml" xml=
+ns:o=3D"urn:schemas-microsoft-com:office:office" xmlns:v=3D"urn:schemas-mic=
+rosoft-com:vml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>If a police vehicle is tailgating you, should you speed up, maintain s=
+peed, slow down...?</title><!--[if !mso]><!--><meta content=3D"IE=3Dedge" h=
+ttp-equiv=3D"X-UA-Compatible"><!--<![endif]--><meta content=3D"width=3Ddevi=
+ce-width,initial-scale=3D1" name=3D"viewport"><style>#outlook a { padding:0=
+; }
+          body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-=
+size-adjust:100%; }
+          table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-tab=
+le-rspace:0pt; }
+          img { border:0;height:auto;line-height:100%; outline:none;text-de=
+coration:none;-ms-interpolation-mode:bicubic; }
+          p { display:block;margin:13px 0; }</style><!--[if mso]>
+        <noscript>
+        <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG/>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+        </xml>
+        </noscript>
+        <![endif]--><!--[if lte mso 11]>
+        <style type=3D"text/css">
+          .mj-outlook-group-fix { width:100% !important; }
+        </style>
+        <![endif]--><style>@media only screen and (min-width:480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-100 { width:100% !important; max-width: 100%; }</style><sty=
+le>@media only screen and (max-width:480px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style><style>@media screen and (max-width: 480px) {
+                .surveyResponseSelector {
+                    width: 100%;
+                    padding-top: 8px
+                }
+                .surveyResponseImage {
+                    height: 36px
+                }
+                .surveyResponseImageCellPadding {
+                    padding: 0 8px
+                }
+            }
+            @media screen and (min-width: 481px) {
+                .surveyResponseText {
+                    max-width: 278px
+                }
+                .surveyResponseImage {
+                    height: 28px
+                }
+                .surveyResponseImageCellPadding {
+                    padding: 0 4px
+                }
+            }</style></head><body style=3D"word-spacing:normal;"><div style=
+=3D"display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px=
+;max-width:0px;opacity:0;overflow:hidden;">I had a cop tailgating me headin=
+g out of the mountains. He was way to close for comfort. I pulled over on a=
+ turnout &amp; he slammed on his break about 50 feet down the road. He then=
+ sped off. I wai=E2=80=A6</div><div style=3D"max-width: 525px; margin: 0 au=
+to; text-align: center; padding: 0 4px 16px;" class=3D"emailBody"><table st=
+yle=3D"width:100%;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" align=3D"center"><tbody><tr><td><!--[if mso | IE]><table =
+align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"=
+" role=3D"presentation" style=3D"width:525px;" width=3D"525" ><tr><td style=
+=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-=
+-><div style=3D"margin:0px auto;max-width:525px;"><table style=3D"width:100=
+%;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" =
+align=3D"center"><tbody><tr><td style=3D"direction:ltr;font-size:0px;paddin=
+g:0px;padding-bottom:24px;padding-top:16px;text-align:center;"><!--[if mso =
+| IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0"><tr><td class=3D"centered-group-outlook" style=3D"width:525px;" ><=
+![endif]--><div style=3D"font-size: 0; line-height: 0; display: inline-bloc=
+k; width: 100%; direction: ltr; text-align: center;" class=3D"mj-column-per=
+-100 mj-outlook-group-fix centered-group"><!--[if mso | IE]><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" ><tr><td s=
+tyle=3D"vertical-align:top;width:525px;" ><![endif]--><div style=3D"font-si=
+ze:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:to=
+p;width:100%;" class=3D"mj-column-per-100 mj-outlook-group-fix"><table styl=
+e=3D"vertical-align:top;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"font-size:0px;=
+padding:0px;word-break:break-word;" align=3D"center" class=3D"of-contain"><=
+table style=3D"border-collapse:collapse;border-spacing:0px;" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"><tbody><tr><td sty=
+le=3D"width:1px;"><img alt=3D"" height=3D"1" src=3D"https://www.quora.com/q=
+email/mark_read?ct=3D1694983948977309&amp;et=3D2&amp;id=3Daa81fcdf7f4548beb=
+deea638bd96bb86&amp;request_id=3D286759828330565593&amp;src=3D1&amp;st=3D16=
+94983948977309&amp;stories=3D1_z9wHrDei2p4%7C1_33l7ZlpIS6F%7C1_IKAyo6b90Hx%=
+7C1_olgNwm19KnU%7C1_obQjXs8Wd3q%7C1_M7IhSlabcfq%7C1_b4akz9AjO9Y%7C1_9PShYO4=
+JpKa%7C1_81lUwy3EREK%7C1_MsxxoXfaGW8%7C1_FdWn6fHIU36%7C1_XhEF6p8TKXW&amp;ui=
+d=3Doe44DxaONN7&amp;v=3D0" style=3D"object-fit: contain; border: 0; display=
+: block; outline: none; text-decoration: none; height: 1px; width: 100%; fo=
+nt-size: 13px;" width=3D"1"></td></tr></tbody></table></td></tr><tr><td sty=
+le=3D"font-size:0px;padding:0px;word-break:break-word;"><div style=3D"heigh=
+t:5px;line-height:5px;">=E2=80=8A</div></td></tr><tr><td style=3D"font-size=
+:0px;padding:0px;word-break:break-word;" align=3D"left"><table style=3D"col=
+or:#000000;font-family:system-ui, Segoe UI, sans-serif;font-size:13px;line-=
+height:22px;table-layout:auto;width:100%;border:none;" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" width=3D"100%"><tr><td style=3D"float:left" wi=
+dth=3D"75%"><div style=3D"padding:0" dir=3D"ltr"><p style=3D"font-family: s=
+ystem-ui, Segoe UI, sans-serif; font-weight: normal; font-size: 12px; line-=
+height: 1.5; color: #171717; text-transform: uppercase; letter-spacing: -0.=
+5px; text-align: left; margin: 0;">Top stories for Tobin002</p></div></td><=
+td style=3D"float:right"><a href=3D"https://www.quora.com/qemail/tc?aoid&am=
+p;aoty=3D7&amp;aty=3D4&amp;cp=3D0&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea=
+638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration:underline"><img=
+ alt=3D"Quora" height=3D"15.202702702702702" src=3D"http://qsf.fs.quoracdn.=
+net/-4-images.logo.WordmarkLogo_592x200_4x.png-26-b469cd653dba282b.png" sty=
+le=3D"text-decoration:none;display:block;border:0;outline:none;width:45px;h=
+eight:15.202702702702702px;float:none;padding:0;margin:none" align=3D"none"=
+ width=3D"45"></a></td></tr></table></td></tr><tr><td style=3D"font-size:0p=
+x;padding:0px;padding-top:4px;padding-bottom:0px;word-break:break-word;" al=
+ign=3D"center"><p style=3D"border-top: solid 1px #dee0e1; font-size: 1px; w=
+idth: 100%; margin: 0;"></p><!--[if mso | IE]><table align=3D"center" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 1px #=
+dee0e1;font-size:1px;margin:0px auto;width:525px;" role=3D"presentation" wi=
+dth=3D"525px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxfDF8MTQ3Nzc0MzY4OTI0=
+NjUyMyJ9&amp;al_pri=3D1&amp;aoid=3DX90oAS69gUB&amp;aoty=3D2&amp;aty=3D4&amp=
+;cp=3D1&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3Dz9=
+wHrDei2p4&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inh=
+erit;"><span style=3D"color:#333333"><span>If a police vehicle is tailgatin=
+g you, should you speed up, maintain speed, slow down, or pull over and sto=
+p?</span></span></a></div></td></tr><tr><td style=3D"font-size:0px;padding:=
+0px;word-break:break-word;" align=3D"left"><table style=3D"color:#000000;fo=
+nt-family:system-ui, Segoe UI, sans-serif;font-size:13px;line-height:22px;t=
+able-layout:auto;width:100%;border:none;" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" width=3D"100%"><tr><td valign=3D"middle"><div style=3D"padd=
+ing:0;padding-bottom:4px" dir=3D"ltr" class=3D"text-pass-color-to-links"><p=
+ style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 13px; li=
+ne-height: 1.2; color: #333333; text-align: left; margin: 0;"><b><span styl=
+e=3D"font-weight:700">Alanna</span></b>, studied Medicine and Healthcare &a=
+mp; Cannabis at Boulder, CO (2023)<span style=3D"color:#636466"> =E2=80=A2 =
+</span><a href=3D"https://www.quora.com/qemail/tc?aoid=3Dz9wHrDei2p4&amp;ao=
+ty=3D1&amp;aty=3D4&amp;cp=3D1&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638b=
+d96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inher=
+it;"><span style=3D"color:#636466">Answered August 21</span></a></p></div><=
+/td></tr></table></td></tr><tr><td style=3D"font-size:0px;padding:0px;word-=
+break:break-word;" align=3D"left"><div style=3D"font-family:system-ui, Sego=
+e UI, sans-serif;font-size:16px;line-height:1.6;text-align:left;color:#3333=
+33;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsIC=
+JoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxfDF8MTQ3Nzc0MzY4OTI0NjUyMyJ9&amp;al_p=
+ri=3D0&amp;aoid=3Dz9wHrDei2p4&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D1&amp;et=3D=
+2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D=
+"text-decoration:none;color:#333333"><span style=3D"color:#333333"><div sty=
+le=3D"padding:0;padding-bottom:16px;display:inline" dir=3D"ltr" class=3D"te=
+xt-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI, sans-=
+serif; font-size: 16px; line-height: 1.6; color: #333333; text-align: left;=
+ display: inline; margin: 0;"><span>I had a cop tailgating me heading out o=
+f the mountains. He was way to close for comfort. I pulled over on a turnou=
+t &amp; he slammed on his break about 50 feet down the road. H...</span></p=
+></div><span> </span><div style=3D"padding:0;display:inline" dir=3D"ltr"><p=
+ style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 16px; li=
+ne-height: 1.6; color: #168de9; text-align: left; display: inline; margin: =
+0;">Read more =C2=BB</p></div><br><div style=3D"float:left;padding-top:8px"=
+><table><tr><td><img alt=3D"Upvote" height=3D"20" src=3D"https://qsf.fs.quo=
+racdn.net/-4-ans_frontend_assets.icons.upvote_20_retina.png-26-3d9494ab59c3=
+7e56.png" style=3D"text-decoration:none;display:block;border:0;outline:none=
+;height:20px;float:none;padding:0;margin:auto" align=3D"none"></td><td styl=
+e=3D"padding-right:16px"><div style=3D"padding:0" dir=3D"ltr" class=3D"text=
+-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI, sans-se=
+rif; font-size: 13px; line-height: 1.2; color: #636466; text-align: left; m=
+argin: 0;">964</p></div></td><td><img alt=3D"Comment" height=3D"20" src=3D"=
+https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.comment_20_retina.=
+png-26-4dbd4e9124f23bec.png" style=3D"text-decoration:none;display:block;bo=
+rder:0;outline:none;height:20px;float:none;padding:0;margin:auto" align=3D"=
+none"></td><td style=3D"padding-right:16px"><div style=3D"padding:0" dir=3D=
+"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui=
+, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; color: #636466; =
+text-align: left; margin: 0;">594</p></div></td></tr></table></div></span><=
+/a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;word-break:br=
+eak-word;"><div style=3D"height:16px;line-height:16px;">=E2=80=8A</div></td=
+></tr><tr><td style=3D"font-size:0px;padding:0px;word-break:break-word;" al=
+ign=3D"left"><table style=3D"color:#000000;font-family:system-ui, Segoe UI,=
+ sans-serif;font-size:13px;line-height:22px;table-layout:auto;width:100%;bo=
+rder:none;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"=
+><tr><td><table style=3D"border-radius:10px;border-collapse:separate;backgr=
+ound-color:#ebf0ff;display:block;float:right;text-align:right;margin-right:=
+8px;padding-left:4px;padding-right:4px;margin-bottom:-12px"><tr><td style=
+=3D"display:inline-block"><img alt=3D"lock" height=3D"16" src=3D"https://qs=
+f.cf2.quoracdn.net/-4-ans_frontend_assets.icons.lock_20.png-26-bf4fae678b82=
+50f5.png" style=3D"text-decoration:none;display:block;border:0;outline:none=
+;height:16px;float:none;padding:0;margin:auto" align=3D"none"></td><td styl=
+e=3D"display:inline-block"><div style=3D"padding:0" dir=3D"ltr"><p style=3D=
+"font-family: system-ui, Segoe UI, sans-serif; font-size: 12px; line-height=
+: 1.6; color: #2e69ff; text-align: left; margin: 0;">Your response is priva=
+te</p></div></td></tr></table><table style=3D"border-radius:10px;border:1px=
+ solid #2e69ff;border-collapse:separate;background-color:#ebf0ff;width:100%=
+;padding:8px"><tr><td style=3D"padding-right:24px;display:inline-block;floa=
+t:left;text-align:left" class=3D"surveyResponseText"><img alt=3D"" height=
+=3D"1" src=3D"https://www.quora.com/qemail/log_survey_impression?aoid=3Dz9w=
+HrDei2p4&amp;aoty=3D1&amp;cp=3D1&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea6=
+38bd96bb86&amp;sv=3D4&amp;uid=3Doe44DxaONN7" style=3D"text-decoration:none;=
+display:block;border:0;outline:none;width:1px;height:1px;float:none;padding=
+:0;margin:auto" align=3D"none" width=3D"1"><div style=3D"padding:0" dir=3D"=
+ltr"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-weight:=
+ 500; font-size: 15px; line-height: 1.6; color: #2e69ff; text-align: left; =
+margin: 0;">Was this worth your time?</p></div><div style=3D"padding:0" dir=
+=3D"ltr"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-siz=
+e: 13px; line-height: 1.6; color: #2e69ff; text-align: left; margin: 0;">Th=
+is helps us show content you find valuable.</p></div></td><td style=3D"disp=
+lay:inline-block" class=3D"surveyResponseSelector"><table style=3D"display:=
+block;width:auto"><tbody style=3D"display:table;margin:auto"><tr><td style=
+=3D"display:inline-block;float:left;text-align:left;padding-left:4px"> </td=
+><td style=3D"display:inline-block;float:left;text-align:left" class=3D"sur=
+veyResponseImageCellPadding"><a href=3D"https://www.quora.com/qemail/tc?aoi=
+d=3Dz9wHrDei2p4&amp;aoty=3D1&amp;aty=3D31&amp;cp=3D1&amp;et=3D2&amp;id=3Daa=
+81fcdf7f4548bebdeea638bd96bb86&amp;sr=3D1&amp;sv=3D4&amp;uid=3Doe44DxaONN7"=
+ style=3D"text-decoration:underline"><img alt=3D"" height=3D"auto" src=3D"h=
+ttps://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.star_40.png-26-0ec0=
+af77c75848b1.png" style=3D"text-decoration:none;display:block;border:0;outl=
+ine:none;float:none;padding:0;margin:auto" align=3D"none" class=3D"surveyRe=
+sponseImage"></a></td><td style=3D"display:inline-block;float:left;text-ali=
+gn:left" class=3D"surveyResponseImageCellPadding"><a href=3D"https://www.qu=
+ora.com/qemail/tc?aoid=3Dz9wHrDei2p4&amp;aoty=3D1&amp;aty=3D31&amp;cp=3D1&a=
+mp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;sr=3D2&amp;sv=3D4&a=
+mp;uid=3Doe44DxaONN7" style=3D"text-decoration:underline"><img alt=3D"" hei=
+ght=3D"auto" src=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icon=
+s.star_40.png-26-0ec0af77c75848b1.png" style=3D"text-decoration:none;displa=
+y:block;border:0;outline:none;float:none;padding:0;margin:auto" align=3D"no=
+ne" class=3D"surveyResponseImage"></a></td><td style=3D"display:inline-bloc=
+k;float:left;text-align:left" class=3D"surveyResponseImageCellPadding"><a h=
+ref=3D"https://www.quora.com/qemail/tc?aoid=3Dz9wHrDei2p4&amp;aoty=3D1&amp;=
+aty=3D31&amp;cp=3D1&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&am=
+p;sr=3D3&amp;sv=3D4&amp;uid=3Doe44DxaONN7" style=3D"text-decoration:underli=
+ne"><img alt=3D"" height=3D"auto" src=3D"https://qsf.fs.quoracdn.net/-4-ans=
+_frontend_assets.icons.star_40.png-26-0ec0af77c75848b1.png" style=3D"text-d=
+ecoration:none;display:block;border:0;outline:none;float:none;padding:0;mar=
+gin:auto" align=3D"none" class=3D"surveyResponseImage"></a></td><td style=
+=3D"display:inline-block;float:left;text-align:left" class=3D"surveyRespons=
+eImageCellPadding"><a href=3D"https://www.quora.com/qemail/tc?aoid=3Dz9wHrD=
+ei2p4&amp;aoty=3D1&amp;aty=3D31&amp;cp=3D1&amp;et=3D2&amp;id=3Daa81fcdf7f45=
+48bebdeea638bd96bb86&amp;sr=3D4&amp;sv=3D4&amp;uid=3Doe44DxaONN7" style=3D"=
+text-decoration:underline"><img alt=3D"" height=3D"auto" src=3D"https://qsf=
+.fs.quoracdn.net/-4-ans_frontend_assets.icons.star_40.png-26-0ec0af77c75848=
+b1.png" style=3D"text-decoration:none;display:block;border:0;outline:none;f=
+loat:none;padding:0;margin:auto" align=3D"none" class=3D"surveyResponseImag=
+e"></a></td><td style=3D"display:inline-block;float:left;text-align:left" c=
+lass=3D"surveyResponseImageCellPadding"><a href=3D"https://www.quora.com/qe=
+mail/tc?aoid=3Dz9wHrDei2p4&amp;aoty=3D1&amp;aty=3D31&amp;cp=3D1&amp;et=3D2&=
+amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;sr=3D5&amp;sv=3D4&amp;uid=3Do=
+e44DxaONN7" style=3D"text-decoration:underline"><img alt=3D"" height=3D"aut=
+o" src=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.star_40.=
+png-26-0ec0af77c75848b1.png" style=3D"text-decoration:none;display:block;bo=
+rder:0;outline:none;float:none;padding:0;margin:auto" align=3D"none" class=
+=3D"surveyResponseImage"></a></td><td style=3D"display:inline-block;float:l=
+eft;text-align:left;padding-right:4px"> </td></tr><tr><td style=3D"display:=
+inline-block;float:left;text-align:left"><div style=3D"padding:0" dir=3D"lt=
+r"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 12p=
+x; line-height: 1.6; color: #2e69ff; text-align: left; margin: 0;">Absolute=
+ly not</p></div></td><td style=3D"display:inline-block;float:right;text-ali=
+gn:right"><div style=3D"padding:0" dir=3D"ltr"><p style=3D"font-family: sys=
+tem-ui, Segoe UI, sans-serif; font-size: 12px; line-height: 1.6; color: #2e=
+69ff; text-align: left; margin: 0;">Definitely yes</p></div></td></tr></tbo=
+dy></table></td></tr></table></td></tr></table></td></tr><tr><td style=3D"f=
+ont-size:0px;padding:0px;padding-top:16px;padding-right:25%;padding-bottom:=
+0px;padding-left:25%;word-break:break-word;" align=3D"center"><p style=3D"b=
+order-top: solid 0.5px #dee0e1; font-size: 1px; width: 100%; margin: 0;"></=
+p><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" style=3D"border-top:solid 0.5px #dee0e1;font-size:1px;mar=
+gin:0px auto;width:475px;" role=3D"presentation" width=3D"475px" ><tr><td s=
+tyle=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wyfDF8NTAzMTAxNzkifQ%3=
+D%3D&amp;al_pri=3D1&amp;aoid=3DbrlzVHyNAhD&amp;aoty=3D2&amp;aty=3D4&amp;cp=
+=3D2&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3D33l7Z=
+lpIS6F&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inheri=
+t;"><span style=3D"color:#333333"><span>Is vaping bad for your health?</spa=
+n></span></a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;wor=
+d-break:break-word;" align=3D"left"><table style=3D"color:#000000;font-fami=
+ly:system-ui, Segoe UI, sans-serif;font-size:13px;line-height:22px;table-la=
+yout:auto;width:100%;border:none;" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" width=3D"100%"><tr><td valign=3D"middle"><div style=3D"padding:0;p=
+adding-bottom:4px" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=
+=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 13px; line-hei=
+ght: 1.2; color: #333333; text-align: left; margin: 0;"><b><span style=3D"f=
+ont-weight:700">Fernando Baptista</span></b>, Vaper for 4 years so far. Fee=
+ling 10 years younger<span style=3D"color:#636466"> =E2=80=A2 </span><a hre=
+f=3D"https://www.quora.com/qemail/tc?aoid=3D33l7ZlpIS6F&amp;aoty=3D1&amp;at=
+y=3D4&amp;cp=3D2&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;u=
+id=3Doe44DxaONN7" style=3D"text-decoration: none; color: inherit;"><span st=
+yle=3D"color:#636466">Updated July 25</span></a></p></div></td></tr></table=
+></td></tr><tr><td style=3D"font-size:0px;padding:0px;word-break:break-word=
+;" align=3D"left"><div style=3D"font-family:system-ui, Segoe UI, sans-serif=
+;font-size:16px;line-height:1.6;text-align:left;color:#333333;"><a href=3D"=
+https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXNoIjogIjI4Nj=
+c1OTgyODMzMDU2NTU5M3wyfDF8NTAzMTAxNzkifQ%3D%3D&amp;al_pri=3D0&amp;aoid=3D33=
+l7ZlpIS6F&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D2&amp;et=3D2&amp;id=3Daa81fcdf7=
+f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration:non=
+e;color:#333333"><span style=3D"color:#333333"><div style=3D"padding:0;padd=
+ing-bottom:16px;display:inline" dir=3D"ltr" class=3D"text-pass-color-to-lin=
+ks"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 16=
+px; line-height: 1.6; color: #333333; text-align: left; display: inline; ma=
+rgin: 0;"><span>Let=E2=80=99s suppose you are a smoker. You smoke one pack =
+a day. Then you start smoking just one cigarette a day.</span></p></div><sp=
+an> </span><div style=3D"padding:0;padding-bottom:16px;display:inline" dir=
+=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: system=
+-ui, Segoe UI, sans-serif; font-size: 16px; line-height: 1.6; color: #33333=
+3; text-align: left; display: inline; margin: 0;"><span>You might think tha=
+t you would be ruining your health smoking a pa...</span></p></div><span> <=
+/span><div style=3D"padding:0;display:inline" dir=3D"ltr"><p style=3D"font-=
+family: system-ui, Segoe UI, sans-serif; font-size: 16px; line-height: 1.6;=
+ color: #168de9; text-align: left; display: inline; margin: 0;">Read more =
+=C2=BB</p></div><br><div style=3D"float:left;padding-top:8px"><table><tr><t=
+d><img alt=3D"Upvote" height=3D"20" src=3D"https://qsf.fs.quoracdn.net/-4-a=
+ns_frontend_assets.icons.upvote_20_retina.png-26-3d9494ab59c37e56.png" styl=
+e=3D"text-decoration:none;display:block;border:0;outline:none;height:20px;f=
+loat:none;padding:0;margin:auto" align=3D"none"></td><td style=3D"padding-r=
+ight:16px"><div style=3D"padding:0" dir=3D"ltr" class=3D"text-pass-color-to=
+-links"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size=
+: 13px; line-height: 1.2; color: #636466; text-align: left; margin: 0;">1.3=
+K</p></div></td><td><img alt=3D"Comment" height=3D"20" src=3D"https://qsf.f=
+s.quoracdn.net/-4-ans_frontend_assets.icons.comment_20_retina.png-26-4dbd4e=
+9124f23bec.png" style=3D"text-decoration:none;display:block;border:0;outlin=
+e:none;height:20px;float:none;padding:0;margin:auto" align=3D"none"></td><t=
+d style=3D"padding-right:16px"><div style=3D"padding:0" dir=3D"ltr" class=
+=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI,=
+ sans-serif; font-size: 13px; line-height: 1.2; color: #636466; text-align:=
+ left; margin: 0;">258</p></div></td></tr></table></div></span></a></div></=
+td></tr><tr><td style=3D"font-size:0px;padding:0px;padding-top:16px;padding=
+-right:25%;padding-bottom:0px;padding-left:25%;word-break:break-word;" alig=
+n=3D"center"><p style=3D"border-top: solid 0.5px #dee0e1; font-size: 1px; w=
+idth: 100%; margin: 0;"></p><!--[if mso | IE]><table align=3D"center" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 0.5px=
+ #dee0e1;font-size:1px;margin:0px auto;width:475px;" role=3D"presentation" =
+width=3D"475px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;" align=3D"left"><table style=3D"color:#00000=
+0;font-family:system-ui, Segoe UI, sans-serif;font-size:13px;line-height:22=
+px;table-layout:auto;width:100%;border:none;" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" width=3D"100%"><tr><td><a href=3D"https://www.quora.com=
+/_/cli?ct=3D1694983948977309&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;=
+is_mobile=3DFalse&amp;new_digest_email_exp_version=3Dv0&amp;uid=3Doe44DxaON=
+N7" style=3D"text-decoration:underline"><img alt=3D"" height=3D"auto" src=
+=3D"https://www.quora.com/_/imp?ct=3D1694983948977309&amp;id=3Daa81fcdf7f45=
+48bebdeea638bd96bb86&amp;is_mobile=3DFalse&amp;new_digest_email_exp_version=
+=3Dv0&amp;uid=3Doe44DxaONN7" style=3D"text-decoration:none;display:block;bo=
+rder:0;outline:none;max-width:320px;float:none;padding:0;margin:none" align=
+=3D"none"></a></td></tr></table></td></tr><tr><td style=3D"font-size:0px;pa=
+dding:0px;padding-top:8px;padding-right:25%;padding-bottom:16px;padding-lef=
+t:25%;word-break:break-word;" align=3D"center"><p style=3D"border-top: soli=
+d 0.5px #dee0e1; font-size: 1px; width: 100%; margin: 0;"></p><!--[if mso |=
+ IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0" style=3D"border-top:solid 0.5px #dee0e1;font-size:1px;margin:0px auto;wi=
+dth:475px;" role=3D"presentation" width=3D"475px" ><tr><td style=3D"height:=
+0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wzfDF8MTQ3Nzc0MzY3OTA4=
+MjEzOSJ9&amp;al_pri=3D1&amp;aoid=3DI4dqw3nnZuS&amp;aoty=3D2&amp;aty=3D4&amp=
+;cp=3D3&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3DIK=
+Ayo6b90Hx&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inh=
+erit;"><span style=3D"color:#333333"><span>My husband got our 17-year-old d=
+aughter pregnant behind my back. What do I do? I'm freaking out.</span></sp=
+an></a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;word-brea=
+k:break-word;" align=3D"left"><table style=3D"color:#000000;font-family:sys=
+tem-ui, Segoe UI, sans-serif;font-size:13px;line-height:22px;table-layout:a=
+uto;width:100%;border:none;" border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0" width=3D"100%"><tr><td valign=3D"middle"><div style=3D"padding:0;padding=
+-bottom:4px" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"fon=
+t-family: system-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.=
+2; color: #333333; text-align: left; margin: 0;"><b><span style=3D"font-wei=
+ght:700">Michelle Huntington Wells</span></b>, former Physics Tech at The U=
+niversity of Texas MD Anderson Cancer Center<span style=3D"color:#636466"> =
+=E2=80=A2 </span><a href=3D"https://www.quora.com/qemail/tc?aoid=3DIKAyo6b9=
+0Hx&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D3&amp;et=3D2&amp;id=3Daa81fcdf7f4548b=
+ebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; co=
+lor: inherit;"><span style=3D"color:#636466">Answered July 9</span></a></p>=
+</div></td></tr></table></td></tr><tr><td style=3D"font-size:0px;padding:0p=
+x;word-break:break-word;" align=3D"left"><div style=3D"font-family:system-u=
+i, Segoe UI, sans-serif;font-size:16px;line-height:1.6;text-align:left;colo=
+r:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjo=
+gMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wzfDF8MTQ3Nzc0MzY3OTA4MjEzOSJ9&a=
+mp;al_pri=3D0&amp;aoid=3DIKAyo6b90Hx&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D3&am=
+p;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" s=
+tyle=3D"text-decoration:none;color:#333333"><span style=3D"color:#333333"><=
+div style=3D"padding:0;padding-bottom:16px;display:inline" dir=3D"ltr" clas=
+s=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI=
+, sans-serif; font-size: 16px; line-height: 1.6; color: #333333; text-align=
+: left; display: inline; margin: 0;"><span>You call the police and have his=
+ happy ass arrested! Then you file for divorce and take him for every penny=
+ you can. Support your daughter in whatever she chooses to do abo...</span>=
+</p></div><span> </span><div style=3D"padding:0;display:inline" dir=3D"ltr"=
+><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 16px;=
+ line-height: 1.6; color: #168de9; text-align: left; display: inline; margi=
+n: 0;">Read more =C2=BB</p></div><br><div style=3D"float:left;padding-top:8=
+px"><table><tr><td><img alt=3D"Upvote" height=3D"20" src=3D"https://qsf.fs.=
+quoracdn.net/-4-ans_frontend_assets.icons.upvote_20_retina.png-26-3d9494ab5=
+9c37e56.png" style=3D"text-decoration:none;display:block;border:0;outline:n=
+one;height:20px;float:none;padding:0;margin:auto" align=3D"none"></td><td s=
+tyle=3D"padding-right:16px"><div style=3D"padding:0" dir=3D"ltr" class=3D"t=
+ext-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI, sans=
+-serif; font-size: 13px; line-height: 1.2; color: #636466; text-align: left=
+; margin: 0;">15.3K</p></div></td><td><img alt=3D"Comment" height=3D"20" sr=
+c=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.comment_20_re=
+tina.png-26-4dbd4e9124f23bec.png" style=3D"text-decoration:none;display:blo=
+ck;border:0;outline:none;height:20px;float:none;padding:0;margin:auto" alig=
+n=3D"none"></td><td style=3D"padding-right:16px"><div style=3D"padding:0" d=
+ir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: syst=
+em-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; color: #636=
+466; text-align: left; margin: 0;">3.5K</p></div></td></tr></table></div></=
+span></a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;padding=
+-top:16px;padding-right:25%;padding-bottom:0px;padding-left:25%;word-break:=
+break-word;" align=3D"center"><p style=3D"border-top: solid 0.5px #dee0e1; =
+font-size: 1px; width: 100%; margin: 0;"></p><!--[if mso | IE]><table align=
+=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"borde=
+r-top:solid 0.5px #dee0e1;font-size:1px;margin:0px auto;width:475px;" role=
+=3D"presentation" width=3D"475px" ><tr><td style=3D"height:0;line-height:0;=
+"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w0fDF8MTQ3Nzc0MzY1MzYw=
+NTg2MyJ9&amp;al_pri=3D1&amp;aoid=3DYfOYQudfRE4&amp;aoty=3D2&amp;aty=3D4&amp=
+;cp=3D4&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3Dol=
+gNwm19KnU&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inh=
+erit;"><span style=3D"color:#333333"><span>How can I tell if someone has li=
+nked my phone to theirs?</span></span></a></div></td></tr><tr><td style=3D"=
+font-size:0px;padding:0px;word-break:break-word;" align=3D"left"><table sty=
+le=3D"color:#000000;font-family:system-ui, Segoe UI, sans-serif;font-size:1=
+3px;line-height:22px;table-layout:auto;width:100%;border:none;" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr><td valign=3D"midd=
+le"><div style=3D"padding:0;padding-bottom:4px" dir=3D"ltr" class=3D"text-p=
+ass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI, sans-seri=
+f; font-size: 13px; line-height: 1.2; color: #333333; text-align: left; mar=
+gin: 0;"><b><span style=3D"font-weight:700">FitGains</span></b>, Helping Pe=
+ople Transform Their Bodies and Their Lives<span style=3D"color:#636466"> =
+=E2=80=A2 </span><a href=3D"https://www.quora.com/qemail/tc?aoid=3DolgNwm19=
+KnU&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D4&amp;et=3D2&amp;id=3Daa81fcdf7f4548b=
+ebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; co=
+lor: inherit;"><span style=3D"color:#636466">Answered March 28</span></a></=
+p></div></td></tr></table></td></tr><tr><td style=3D"font-size:0px;padding:=
+0px;word-break:break-word;" align=3D"left"><div style=3D"font-family:system=
+-ui, Segoe UI, sans-serif;font-size:16px;line-height:1.6;text-align:left;co=
+lor:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlI=
+jogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w0fDF8MTQ3Nzc0MzY1MzYwNTg2MyJ9=
+&amp;al_pri=3D0&amp;aoid=3DolgNwm19KnU&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D4&=
+amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7"=
+ style=3D"text-decoration:none;color:#333333"><span style=3D"color:#333333"=
+><div style=3D"padding:0;padding-bottom:16px;display:inline" dir=3D"ltr" cl=
+ass=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe =
+UI, sans-serif; font-size: 16px; line-height: 1.6; color: #333333; text-ali=
+gn: left; display: inline; margin: 0;"><span>Hello there!</span></p></div><=
+span> </span><div style=3D"padding:0;padding-bottom:16px;display:inline" di=
+r=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: syste=
+m-ui, Segoe UI, sans-serif; font-size: 16px; line-height: 1.6; color: #3333=
+33; text-align: left; display: inline; margin: 0;"><span>It's great that yo=
+u're concerned about your phone's security. It's possible for someone to li=
+nk your phone to theirs without your knowledge, and there are sever...</spa=
+n></p></div><span> </span><div style=3D"padding:0;display:inline" dir=3D"lt=
+r"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 16p=
+x; line-height: 1.6; color: #168de9; text-align: left; display: inline; mar=
+gin: 0;">Read more =C2=BB</p></div><br><div style=3D"float:left;padding-top=
+:8px"><table><tr><td><img alt=3D"Upvote" height=3D"20" src=3D"https://qsf.f=
+s.quoracdn.net/-4-ans_frontend_assets.icons.upvote_20_retina.png-26-3d9494a=
+b59c37e56.png" style=3D"text-decoration:none;display:block;border:0;outline=
+:none;height:20px;float:none;padding:0;margin:auto" align=3D"none"></td><td=
+ style=3D"padding-right:16px"><div style=3D"padding:0" dir=3D"ltr" class=3D=
+"text-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI, sa=
+ns-serif; font-size: 13px; line-height: 1.2; color: #636466; text-align: le=
+ft; margin: 0;">1.7K</p></div></td><td><img alt=3D"Comment" height=3D"20" s=
+rc=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.comment_20_r=
+etina.png-26-4dbd4e9124f23bec.png" style=3D"text-decoration:none;display:bl=
+ock;border:0;outline:none;height:20px;float:none;padding:0;margin:auto" ali=
+gn=3D"none"></td><td style=3D"padding-right:16px"><div style=3D"padding:0" =
+dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: sys=
+tem-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; color: #63=
+6466; text-align: left; margin: 0;">112</p></div></td></tr></table></div></=
+span></a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;padding=
+-top:16px;padding-right:25%;padding-bottom:0px;padding-left:25%;word-break:=
+break-word;" align=3D"center"><p style=3D"border-top: solid 0.5px #dee0e1; =
+font-size: 1px; width: 100%; margin: 0;"></p><!--[if mso | IE]><table align=
+=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"borde=
+r-top:solid 0.5px #dee0e1;font-size:1px;margin:0px auto;width:475px;" role=
+=3D"presentation" width=3D"475px" ><tr><td style=3D"height:0;line-height:0;=
+"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w1fDF8MjQwNjEzMDg3In0%=
+3D&amp;al_pri=3D1&amp;aoid=3DbN4gcWAjWMy&amp;aoty=3D2&amp;aty=3D4&amp;cp=3D=
+5&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3DobQjXs8W=
+d3q&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inherit;"=
+><span style=3D"color:#333333"><span>The FBI raids your house, takes your c=
+omputers, then comes back 24 hours later with all your computer equipment a=
+nd even sets it all back up for you and tells you they hit the wrong house.=
+ Do you keep your equipment or throw it away?</span></span></a></div></td><=
+/tr><tr><td style=3D"font-size:0px;padding:0px;word-break:break-word;" alig=
+n=3D"left"><table style=3D"color:#000000;font-family:system-ui, Segoe UI, s=
+ans-serif;font-size:13px;line-height:22px;table-layout:auto;width:100%;bord=
+er:none;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><=
+tr><td valign=3D"middle"><div style=3D"padding:0;padding-bottom:4px" dir=3D=
+"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui=
+, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; color: #333333; =
+text-align: left; margin: 0;"><b><span style=3D"font-weight:700">Nathan Hay=
+es</span></b>, former Project Manager Consultant With 15+ Yrs Experience<sp=
+an style=3D"color:#636466"> =E2=80=A2 </span><a href=3D"https://www.quora.c=
+om/qemail/tc?aoid=3DobQjXs8Wd3q&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D5&amp;et=
+=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=
+=3D"text-decoration: none; color: inherit;"><span style=3D"color:#636466">A=
+nswered September 24, 2020</span></a></p></div></td></tr></table></td></tr>=
+<tr><td style=3D"font-size:0px;padding:0px;word-break:break-word;" align=3D=
+"left"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font-size:=
+16px;line-height:1.6;text-align:left;color:#333333;"><a href=3D"https://www=
+.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzM=
+DU2NTU5M3w1fDF8MjQwNjEzMDg3In0%3D&amp;al_pri=3D0&amp;aoid=3DobQjXs8Wd3q&amp=
+;aoty=3D1&amp;aty=3D4&amp;cp=3D5&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea6=
+38bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration:none;color:#3333=
+33"><span style=3D"color:#333333"><div style=3D"padding:0;padding-bottom:16=
+px;display:inline" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=
+=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 16px; line-hei=
+ght: 1.6; color: #333333; text-align: left; display: inline; margin: 0;"><s=
+pan>Get rid of it all. Don=E2=80=99t set it up, don=E2=80=99t turn it on=E2=
+=80=A6don=E2=80=99t even touch it if you can help it. In fact, I would reje=
+ct the delivery. Whether you do anything illegal or not, y...</span></p></d=
+iv><span> </span><div style=3D"padding:0;display:inline" dir=3D"ltr"><p sty=
+le=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 16px; line-h=
+eight: 1.6; color: #168de9; text-align: left; display: inline; margin: 0;">=
+Read more =C2=BB</p></div><br><div style=3D"float:left;padding-top:8px"><ta=
+ble><tr><td><img alt=3D"Upvote" height=3D"20" src=3D"https://qsf.fs.quoracd=
+n.net/-4-ans_frontend_assets.icons.upvote_20_retina.png-26-3d9494ab59c37e56=
+.png" style=3D"text-decoration:none;display:block;border:0;outline:none;hei=
+ght:20px;float:none;padding:0;margin:auto" align=3D"none"></td><td style=3D=
+"padding-right:16px"><div style=3D"padding:0" dir=3D"ltr" class=3D"text-pas=
+s-color-to-links"><p style=3D"font-family: system-ui, Segoe UI, sans-serif;=
+ font-size: 13px; line-height: 1.2; color: #636466; text-align: left; margi=
+n: 0;">15.3K</p></div></td><td><img alt=3D"Comment" height=3D"20" src=3D"ht=
+tps://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.comment_20_retina.pn=
+g-26-4dbd4e9124f23bec.png" style=3D"text-decoration:none;display:block;bord=
+er:0;outline:none;height:20px;float:none;padding:0;margin:auto" align=3D"no=
+ne"></td><td style=3D"padding-right:16px"><div style=3D"padding:0" dir=3D"l=
+tr" class=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui, =
+Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; color: #636466; te=
+xt-align: left; margin: 0;">1.8K</p></div></td></tr></table></div></span></=
+a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;padding-top:16=
+px;padding-right:25%;padding-bottom:0px;padding-left:25%;word-break:break-w=
+ord;" align=3D"center"><p style=3D"border-top: solid 0.5px #dee0e1; font-si=
+ze: 1px; width: 100%; margin: 0;"></p><!--[if mso | IE]><table align=3D"cen=
+ter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top:s=
+olid 0.5px #dee0e1;font-size:1px;margin:0px auto;width:475px;" role=3D"pres=
+entation" width=3D"475px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp=
+;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w2fDF8MTQ3Nzc0MzY0MzY1=
+NzA3NSJ9&amp;al_pri=3D1&amp;aoid=3DF6efXkYXBhh&amp;aoty=3D2&amp;aty=3D4&amp=
+;cp=3D6&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3DM7=
+IhSlabcfq&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inh=
+erit;"><span style=3D"color:#333333"><span>I cheated on my husband with his=
+ best friend. Am I a terrible human being and how do I cope with this?</spa=
+n></span></a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;wor=
+d-break:break-word;" align=3D"left"><table style=3D"color:#000000;font-fami=
+ly:system-ui, Segoe UI, sans-serif;font-size:13px;line-height:22px;table-la=
+yout:auto;width:100%;border:none;" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" width=3D"100%"><tr><td valign=3D"middle"><div style=3D"padding:0;p=
+adding-bottom:4px" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=
+=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 13px; line-hei=
+ght: 1.2; color: #333333; text-align: left; margin: 0;"><b><span style=3D"f=
+ont-weight:700">Chuck Sears</span></b>, lives in Houston, TX<span style=3D"=
+color:#636466"> =E2=80=A2 </span><a href=3D"https://www.quora.com/qemail/tc=
+?aoid=3DM7IhSlabcfq&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D6&amp;et=3D2&amp;id=
+=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-de=
+coration: none; color: inherit;"><span style=3D"color:#636466">Answered Feb=
+ruary 22</span></a></p></div></td></tr></table></td></tr><tr><td style=3D"f=
+ont-size:0px;padding:0px;word-break:break-word;" align=3D"left"><div style=
+=3D"font-family:system-ui, Segoe UI, sans-serif;font-size:16px;line-height:=
+1.6;text-align:left;color:#333333;"><a href=3D"https://www.quora.com/qemail=
+/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w2fDF8MT=
+Q3Nzc0MzY0MzY1NzA3NSJ9&amp;al_pri=3D0&amp;aoid=3DM7IhSlabcfq&amp;aoty=3D1&a=
+mp;aty=3D4&amp;cp=3D6&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&=
+amp;uid=3Doe44DxaONN7" style=3D"text-decoration:none;color:#333333"><span s=
+tyle=3D"color:#333333"><div style=3D"padding:0;padding-bottom:16px;display:=
+inline" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-fam=
+ily: system-ui, Segoe UI, sans-serif; font-size: 16px; line-height: 1.6; co=
+lor: #333333; text-align: left; display: inline; margin: 0;"><span>Yes, you=
+ are. You have no honor or integrity, and you have clearly shown that you h=
+ave no respect for your husband. The best thing you can do for him is divor=
+ce him and get...</span></p></div><span> </span><div style=3D"padding:0;dis=
+play:inline" dir=3D"ltr"><p style=3D"font-family: system-ui, Segoe UI, sans=
+-serif; font-size: 16px; line-height: 1.6; color: #168de9; text-align: left=
+; display: inline; margin: 0;">Read more =C2=BB</p></div><br><div style=3D"=
+float:left;padding-top:8px"><table><tr><td><img alt=3D"Upvote" height=3D"20=
+" src=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.upvote_20=
+_retina.png-26-3d9494ab59c37e56.png" style=3D"text-decoration:none;display:=
+block;border:0;outline:none;height:20px;float:none;padding:0;margin:auto" a=
+lign=3D"none"></td><td style=3D"padding-right:16px"><div style=3D"padding:0=
+" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: s=
+ystem-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; color: #=
+636466; text-align: left; margin: 0;">23K</p></div></td><td><img alt=3D"Com=
+ment" height=3D"20" src=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_asse=
+ts.icons.comment_20_retina.png-26-4dbd4e9124f23bec.png" style=3D"text-decor=
+ation:none;display:block;border:0;outline:none;height:20px;float:none;paddi=
+ng:0;margin:auto" align=3D"none"></td><td style=3D"padding-right:16px"><div=
+ style=3D"padding:0" dir=3D"ltr" class=3D"text-pass-color-to-links"><p styl=
+e=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 13px; line-he=
+ight: 1.2; color: #636466; text-align: left; margin: 0;">2.8K</p></div></td=
+></tr></table></div></span></a></div></td></tr><tr><td style=3D"font-size:0=
+px;padding:0px;padding-top:16px;padding-right:25%;padding-bottom:0px;paddin=
+g-left:25%;word-break:break-word;" align=3D"center"><p style=3D"border-top:=
+ solid 0.5px #dee0e1; font-size: 1px; width: 100%; margin: 0;"></p><!--[if =
+mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" style=3D"border-top:solid 0.5px #dee0e1;font-size:1px;margin:0px au=
+to;width:475px;" role=3D"presentation" width=3D"475px" ><tr><td style=3D"he=
+ight:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w3fDF8MTQ3Nzc0MzY5MTA1=
+Njc2OSJ9&amp;al_pri=3D1&amp;aoid=3DmQLjoVfEtA1&amp;aoty=3D2&amp;aty=3D4&amp=
+;cp=3D7&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3Db4=
+akz9AjO9Y&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inh=
+erit;"><span style=3D"color:#333333"><span>I got fired. My ex-boss is now a=
+sking for the whereabouts of important files. How should I respond?</span><=
+/span></a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;word-b=
+reak:break-word;" align=3D"left"><table style=3D"color:#000000;font-family:=
+system-ui, Segoe UI, sans-serif;font-size:13px;line-height:22px;table-layou=
+t:auto;width:100%;border:none;" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%"><tr><td valign=3D"middle"><div style=3D"padding:0;pad=
+ding-bottom:4px" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D=
+"font-family: system-ui, Segoe UI, sans-serif; font-size: 13px; line-height=
+: 1.2; color: #333333; text-align: left; margin: 0;"><b><span style=3D"font=
+-weight:700">Steve Poling</span></b>, I've been a landlord since 1984.<span=
+ style=3D"color:#636466"> =E2=80=A2 </span><a href=3D"https://www.quora.com=
+/qemail/tc?aoid=3Db4akz9AjO9Y&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D7&amp;et=3D=
+2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D=
+"text-decoration: none; color: inherit;"><span style=3D"color:#636466">Answ=
+ered August 29</span></a></p></div></td></tr></table></td></tr><tr><td styl=
+e=3D"font-size:0px;padding:0px;word-break:break-word;" align=3D"left"><div =
+style=3D"font-family:system-ui, Segoe UI, sans-serif;font-size:16px;line-he=
+ight:1.6;text-align:left;color:#333333;"><a href=3D"https://www.quora.com/q=
+email/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w3f=
+DF8MTQ3Nzc0MzY5MTA1Njc2OSJ9&amp;al_pri=3D0&amp;aoid=3Db4akz9AjO9Y&amp;aoty=
+=3D1&amp;aty=3D4&amp;cp=3D7&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd9=
+6bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration:none;color:#333333"><=
+span style=3D"color:#333333"><div style=3D"padding:0;padding-bottom:16px;di=
+splay:inline" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"fo=
+nt-family: system-ui, Segoe UI, sans-serif; font-size: 16px; line-height: 1=
+.6; color: #333333; text-align: left; display: inline; margin: 0;"><span>Sm=
+ile. Thank him/her for reaching out. Ask about his family and be nice.</spa=
+n></p></div><span> </span><div style=3D"padding:0;padding-bottom:16px;displ=
+ay:inline" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-=
+family: system-ui, Segoe UI, sans-serif; font-size: 16px; line-height: 1.6;=
+ color: #333333; text-align: left; display: inline; margin: 0;"><span>When =
+he turns the conversation back to the important files, give him your consul=
+ting rate &amp; an estim...</span></p></div><span> </span><div style=3D"pad=
+ding:0;display:inline" dir=3D"ltr"><p style=3D"font-family: system-ui, Sego=
+e UI, sans-serif; font-size: 16px; line-height: 1.6; color: #168de9; text-a=
+lign: left; display: inline; margin: 0;">Read more =C2=BB</p></div><br><div=
+ style=3D"float:left;padding-top:8px"><table><tr><td><img alt=3D"Upvote" he=
+ight=3D"20" src=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons=
+.upvote_20_retina.png-26-3d9494ab59c37e56.png" style=3D"text-decoration:non=
+e;display:block;border:0;outline:none;height:20px;float:none;padding:0;marg=
+in:auto" align=3D"none"></td><td style=3D"padding-right:16px"><div style=3D=
+"padding:0" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font=
+-family: system-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2=
+; color: #636466; text-align: left; margin: 0;">2.2K</p></div></td><td><img=
+ alt=3D"Comment" height=3D"20" src=3D"https://qsf.fs.quoracdn.net/-4-ans_fr=
+ontend_assets.icons.comment_20_retina.png-26-4dbd4e9124f23bec.png" style=3D=
+"text-decoration:none;display:block;border:0;outline:none;height:20px;float=
+:none;padding:0;margin:auto" align=3D"none"></td><td style=3D"padding-right=
+:16px"><div style=3D"padding:0" dir=3D"ltr" class=3D"text-pass-color-to-lin=
+ks"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 13=
+px; line-height: 1.2; color: #636466; text-align: left; margin: 0;">72</p><=
+/div></td></tr></table></div></span></a></div></td></tr><tr><td style=3D"fo=
+nt-size:0px;padding:0px;padding-top:16px;padding-right:25%;padding-bottom:0=
+px;padding-left:25%;word-break:break-word;" align=3D"center"><p style=3D"bo=
+rder-top: solid 0.5px #dee0e1; font-size: 1px; width: 100%; margin: 0;"></p=
+><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" style=3D"border-top:solid 0.5px #dee0e1;font-size:1px;marg=
+in:0px auto;width:475px;" role=3D"presentation" width=3D"475px" ><tr><td st=
+yle=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w4fDF8MzU2MTQwNDMifQ%3=
+D%3D&amp;al_pri=3D1&amp;aoid=3D8Yu3oS1Qdp7&amp;aoty=3D2&amp;aty=3D4&amp;cp=
+=3D8&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3D9PShY=
+O4JpKa&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inheri=
+t;"><span style=3D"color:#333333"><span>If I die alone at home, how many ho=
+urs or days will pass until my pet dog, cat or bird eats me?</span></span><=
+/a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;word-break:br=
+eak-word;" align=3D"left"><table style=3D"color:#000000;font-family:system-=
+ui, Segoe UI, sans-serif;font-size:13px;line-height:22px;table-layout:auto;=
+width:100%;border:none;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" w=
+idth=3D"100%"><tr><td valign=3D"middle"><div style=3D"padding:0;padding-bot=
+tom:4px" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-fa=
+mily: system-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; c=
+olor: #333333; text-align: left; margin: 0;"><b><span style=3D"font-weight:=
+700">Steven Brewer</span></b>, former Learning &amp; Development Profession=
+al <span style=3D"color:#636466"> =E2=80=A2 </span><a href=3D"https://www.q=
+uora.com/qemail/tc?aoid=3D9PShYO4JpKa&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D8&a=
+mp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" =
+style=3D"text-decoration: none; color: inherit;"><span style=3D"color:#6364=
+66">Updated March 24, 2017</span></a></p></div></td></tr></table></td></tr>=
+<tr><td style=3D"font-size:0px;padding:0px;word-break:break-word;" align=3D=
+"left"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font-size:=
+16px;line-height:1.6;text-align:left;color:#333333;"><a href=3D"https://www=
+.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzM=
+DU2NTU5M3w4fDF8MzU2MTQwNDMifQ%3D%3D&amp;al_pri=3D0&amp;aoid=3D9PShYO4JpKa&a=
+mp;aoty=3D1&amp;aty=3D4&amp;cp=3D8&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdee=
+a638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration:none;color:#33=
+3333"><span style=3D"color:#333333"><div style=3D"padding:0;padding-bottom:=
+16px;display:inline" dir=3D"ltr" class=3D"text-pass-color-to-links"><p styl=
+e=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 16px; line-he=
+ight: 1.6; color: #333333; text-align: left; display: inline; margin: 0;"><=
+span>My father in-law passed a few years ago. He lived alone with two large=
+ dogs. He passed away on his bed which was more like a low cot so the dogs =
+had easy access to him.</span><br><span>The...</span></p></div><span> </spa=
+n><div style=3D"padding:0;display:inline" dir=3D"ltr"><p style=3D"font-fami=
+ly: system-ui, Segoe UI, sans-serif; font-size: 16px; line-height: 1.6; col=
+or: #168de9; text-align: left; display: inline; margin: 0;">Read more =C2=
+=BB</p></div><br><div style=3D"float:left;padding-top:8px"><table><tr><td><=
+img alt=3D"Upvote" height=3D"20" src=3D"https://qsf.fs.quoracdn.net/-4-ans_=
+frontend_assets.icons.upvote_20_retina.png-26-3d9494ab59c37e56.png" style=
+=3D"text-decoration:none;display:block;border:0;outline:none;height:20px;fl=
+oat:none;padding:0;margin:auto" align=3D"none"></td><td style=3D"padding-ri=
+ght:16px"><div style=3D"padding:0" dir=3D"ltr" class=3D"text-pass-color-to-=
+links"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size:=
+ 13px; line-height: 1.2; color: #636466; text-align: left; margin: 0;">75K<=
+/p></div></td><td><img alt=3D"Comment" height=3D"20" src=3D"https://qsf.fs.=
+quoracdn.net/-4-ans_frontend_assets.icons.comment_20_retina.png-26-4dbd4e91=
+24f23bec.png" style=3D"text-decoration:none;display:block;border:0;outline:=
+none;height:20px;float:none;padding:0;margin:auto" align=3D"none"></td><td =
+style=3D"padding-right:16px"><div style=3D"padding:0" dir=3D"ltr" class=3D"=
+text-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI, san=
+s-serif; font-size: 13px; line-height: 1.2; color: #636466; text-align: lef=
+t; margin: 0;">2K</p></div></td></tr></table></div></span></a></div></td></=
+tr><tr><td style=3D"font-size:0px;padding:0px;padding-top:16px;padding-righ=
+t:25%;padding-bottom:0px;padding-left:25%;word-break:break-word;" align=3D"=
+center"><p style=3D"border-top: solid 0.5px #dee0e1; font-size: 1px; width:=
+ 100%; margin: 0;"></p><!--[if mso | IE]><table align=3D"center" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 0.5px #dee=
+0e1;font-size:1px;margin:0px auto;width:475px;" role=3D"presentation" width=
+=3D"475px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w5fDF8MTQ3Nzc0MzY3NDEx=
+NjI4NCJ9&amp;al_pri=3D1&amp;aoid=3DqFYpGX5332A&amp;aoty=3D2&amp;aty=3D4&amp=
+;cp=3D9&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3D81=
+lUwy3EREK&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inh=
+erit;"><span style=3D"color:#333333"><span>What will happen if I eat 500-80=
+0 calories a day as a young woman?</span></span></a></div></td></tr><tr><td=
+ style=3D"font-size:0px;padding:0px;word-break:break-word;" align=3D"left">=
+<table style=3D"color:#000000;font-family:system-ui, Segoe UI, sans-serif;f=
+ont-size:13px;line-height:22px;table-layout:auto;width:100%;border:none;" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%"><tr><td vali=
+gn=3D"middle"><div style=3D"padding:0;padding-bottom:4px" dir=3D"ltr" class=
+=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI,=
+ sans-serif; font-size: 13px; line-height: 1.2; color: #333333; text-align:=
+ left; margin: 0;"><b><span style=3D"font-weight:700">Weight Lose Expert</s=
+pan></b>, works at Jinnah Hospital, Lahore (2022-present)<span style=3D"col=
+or:#636466"> =E2=80=A2 </span><a href=3D"https://www.quora.com/qemail/tc?ao=
+id=3D81lUwy3EREK&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D9&amp;et=3D2&amp;id=3Daa=
+81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decorat=
+ion: none; color: inherit;"><span style=3D"color:#636466">Answered June 18<=
+/span></a></p></div></td></tr></table></td></tr><tr><td style=3D"font-size:=
+0px;padding:0px;word-break:break-word;" align=3D"left"><div style=3D"font-f=
+amily:system-ui, Segoe UI, sans-serif;font-size:16px;line-height:1.6;text-a=
+lign:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=
+=3DeyJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3w5fDF8MTQ3Nzc0MzY3=
+NDExNjI4NCJ9&amp;al_pri=3D0&amp;aoid=3D81lUwy3EREK&amp;aoty=3D1&amp;aty=3D4=
+&amp;cp=3D9&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3D=
+oe44DxaONN7" style=3D"text-decoration:none;color:#333333"><span style=3D"co=
+lor:#333333"><img alt=3D"" height=3D"auto" src=3D"https://qph.fs.quoracdn.n=
+et/main-qimg-91e6e77b36cbd2e8b7bef61bc7ae13ff" style=3D"text-decoration:non=
+e;display:block;border:0;outline:none;max-height:100px;max-width:200px;floa=
+t:right;padding:0;padding-left:4px;margin:auto" align=3D"right"><div style=
+=3D"padding:0;padding-bottom:16px;display:inline" dir=3D"ltr" class=3D"text=
+-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI, sans-se=
+rif; font-size: 16px; line-height: 1.6; color: #333333; text-align: left; d=
+isplay: inline; margin: 0;"><span>I share with you my friend experience she=
+ is young woman. She eaten 500=E2=80=93800 calories and what happened with =
+her when she eaten 800 to 500 calories a day. I discuss about th...</span><=
+/p></div><span> </span><div style=3D"padding:0;display:inline" dir=3D"ltr">=
+<p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 16px; =
+line-height: 1.6; color: #168de9; text-align: left; display: inline; margin=
+: 0;">Read more =C2=BB</p></div><br><div style=3D"float:left;padding-top:8p=
+x"><table><tr><td><img alt=3D"Upvote" height=3D"20" src=3D"https://qsf.fs.q=
+uoracdn.net/-4-ans_frontend_assets.icons.upvote_20_retina.png-26-3d9494ab59=
+c37e56.png" style=3D"text-decoration:none;display:block;border:0;outline:no=
+ne;height:20px;float:none;padding:0;margin:auto" align=3D"none"></td><td st=
+yle=3D"padding-right:16px"><div style=3D"padding:0" dir=3D"ltr" class=3D"te=
+xt-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI, sans-=
+serif; font-size: 13px; line-height: 1.2; color: #636466; text-align: left;=
+ margin: 0;">361</p></div></td><td><img alt=3D"Comment" height=3D"20" src=
+=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.comment_20_ret=
+ina.png-26-4dbd4e9124f23bec.png" style=3D"text-decoration:none;display:bloc=
+k;border:0;outline:none;height:20px;float:none;padding:0;margin:auto" align=
+=3D"none"></td><td style=3D"padding-right:16px"><div style=3D"padding:0" di=
+r=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: syste=
+m-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; color: #6364=
+66; text-align: left; margin: 0;">18</p></div></td></tr></table></div></spa=
+n></a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;padding-to=
+p:16px;padding-right:25%;padding-bottom:0px;padding-left:25%;word-break:bre=
+ak-word;" align=3D"center"><p style=3D"border-top: solid 0.5px #dee0e1; fon=
+t-size: 1px; width: 100%; margin: 0;"></p><!--[if mso | IE]><table align=3D=
+"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-t=
+op:solid 0.5px #dee0e1;font-size:1px;margin:0px auto;width:475px;" role=3D"=
+presentation" width=3D"475px" ><tr><td style=3D"height:0;line-height:0;"> &=
+nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxMHwxfDE0Nzc3NDM2NjY0=
+NTIwNzgifQ%3D%3D&amp;al_pri=3D1&amp;aoid=3DjYBTwdoSKH&amp;aoty=3D2&amp;aty=
+=3D4&amp;cp=3D10&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q=
+_aid=3DMsxxoXfaGW8&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; c=
+olor: inherit;"><span style=3D"color:#333333"><span>7 TYPES of NEGATIVITY T=
+O YOU should KILL</span></span></a></div></td></tr><tr><td style=3D"font-si=
+ze:0px;padding:0px;word-break:break-word;" align=3D"left"><table style=3D"c=
+olor:#000000;font-family:system-ui, Segoe UI, sans-serif;font-size:13px;lin=
+e-height:22px;table-layout:auto;width:100%;border:none;" border=3D"0" cellp=
+adding=3D"0" cellspacing=3D"0" width=3D"100%"><tr><td valign=3D"middle"><di=
+v style=3D"padding:0;padding-bottom:4px" dir=3D"ltr" class=3D"text-pass-col=
+or-to-links"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font=
+-size: 13px; line-height: 1.2; color: #333333; text-align: left; margin: 0;=
+"><span style=3D"color:#939598">Asked in <span style=3D"color:#333333"><spa=
+n style=3D"font-weight:700">Human mind readers</span></span><span> =E2=80=
+=A2 </span>Answered by Elia Juniana</span><span style=3D"color:#636466"> =
+=E2=80=A2 </span><a href=3D"https://www.quora.com/qemail/tc?aoid=3DMsxxoXfa=
+GW8&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D10&amp;et=3D2&amp;id=3Daa81fcdf7f4548=
+bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; c=
+olor: inherit;"><span style=3D"color:#636466">May 14</span></a></p></div></=
+td></tr></table></td></tr><tr><td style=3D"font-size:0px;padding:0px;word-b=
+reak:break-word;" align=3D"left"><div style=3D"font-family:system-ui, Segoe=
+ UI, sans-serif;font-size:16px;line-height:1.6;text-align:left;color:#33333=
+3;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3DeyJ0eXBlIjogMzMsICJ=
+oYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxMHwxfDE0Nzc3NDM2NjY0NTIwNzgifQ%3D%3D&a=
+mp;al_pri=3D0&amp;aoid=3DMsxxoXfaGW8&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D10&a=
+mp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" =
+style=3D"text-decoration:none;color:#333333"><span style=3D"color:#333333">=
+<img alt=3D"" height=3D"auto" src=3D"https://qph.fs.quoracdn.net/main-qimg-=
+3200b396c53dad9c7995bd8e014f884e" style=3D"text-decoration:none;display:blo=
+ck;border:0;outline:none;max-height:100px;max-width:200px;float:right;paddi=
+ng:0;padding-left:4px;margin:auto" align=3D"right"><div style=3D"padding:0;=
+padding-bottom:16px;display:inline" dir=3D"ltr" class=3D"text-pass-color-to=
+-links"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size=
+: 16px; line-height: 1.6; color: #333333; text-align: left; display: inline=
+; margin: 0;"><span style=3D"font-style:italic">1. PERFECTIONISM</span></p>=
+</div><span> </span><div style=3D"padding:0;padding-bottom:16px;display:inl=
+ine" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family=
+: system-ui, Segoe UI, sans-serif; font-size: 16px; line-height: 1.6; color=
+: #333333; text-align: left; display: inline; margin: 0;"><span>Trying to a=
+chieve something that's literally unattainable will only result in you feel=
+ing &quot;less than&quot;.</span></p></div><span> </span><div style=3D"padd=
+ing:0;padding-bottom:16px;display:inline" dir=3D"ltr" class=3D"text-pass-co=
+lor-to-links"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; fon=
+t-size: 16px; line-height: 1.6; color: #333333; text-align: left; display: =
+inline; margin: 0;"><span style=3D"font-style:italic">2.</span><span> </spa=
+n><span style=3D"font-style:italic">JUDGEMENT OVER YOURSELF AND OTHERS</spa=
+n></p></div><span> </span><div style=3D"padding:0;padding-bottom:16px;displ=
+ay:inline" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-=
+family: system-ui, Segoe UI, sans-serif; font-size: 16px; line-height: 1.6;=
+ color: #333333; text-align: left; display: inline; margin: 0;"><span>When =
+you are judg...</span></p></div><span> </span><div style=3D"padding:0;displ=
+ay:inline" dir=3D"ltr"><p style=3D"font-family: system-ui, Segoe UI, sans-s=
+erif; font-size: 16px; line-height: 1.6; color: #168de9; text-align: left; =
+display: inline; margin: 0;">Read more =C2=BB</p></div><br><div style=3D"fl=
+oat:left;padding-top:8px"><table><tr><td><img alt=3D"Upvote" height=3D"20" =
+src=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.upvote_20_r=
+etina.png-26-3d9494ab59c37e56.png" style=3D"text-decoration:none;display:bl=
+ock;border:0;outline:none;height:20px;float:none;padding:0;margin:auto" ali=
+gn=3D"none"></td><td style=3D"padding-right:16px"><div style=3D"padding:0" =
+dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: sys=
+tem-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; color: #63=
+6466; text-align: left; margin: 0;">2.9K</p></div></td><td><img alt=3D"Comm=
+ent" height=3D"20" src=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_asset=
+s.icons.comment_20_retina.png-26-4dbd4e9124f23bec.png" style=3D"text-decora=
+tion:none;display:block;border:0;outline:none;height:20px;float:none;paddin=
+g:0;margin:auto" align=3D"none"></td><td style=3D"padding-right:16px"><div =
+style=3D"padding:0" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=
+=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 13px; line-hei=
+ght: 1.2; color: #636466; text-align: left; margin: 0;">47</p></div></td></=
+tr></table></div></span></a></div></td></tr><tr><td style=3D"font-size:0px;=
+padding:0px;padding-top:16px;padding-right:25%;padding-bottom:0px;padding-l=
+eft:25%;word-break:break-word;" align=3D"center"><p style=3D"border-top: so=
+lid 0.5px #dee0e1; font-size: 1px; width: 100%; margin: 0;"></p><!--[if mso=
+ | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-top:solid 0.5px #dee0e1;font-size:1px;margin:0px aut=
+o;width:475px;" role=3D"presentation" width=3D"475px" ><tr><td style=3D"hei=
+ght:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxMXwxfDM5MzM4NjI4OCJ9=
+&amp;al_pri=3D1&amp;aoid=3DFtQExeqAma&amp;aoty=3D2&amp;aty=3D4&amp;cp=3D11&=
+amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3DFdWn6fHIU3=
+6&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inherit;"><=
+span style=3D"color:#333333"><span>Why is Myanmar called Myanmar and not Bu=
+rma?</span></span></a></div></td></tr><tr><td style=3D"font-size:0px;paddin=
+g:0px;word-break:break-word;" align=3D"left"><table style=3D"color:#000000;=
+font-family:system-ui, Segoe UI, sans-serif;font-size:13px;line-height:22px=
+;table-layout:auto;width:100%;border:none;" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" width=3D"100%"><tr><td valign=3D"middle"><div style=3D"pa=
+dding:0;padding-bottom:4px" dir=3D"ltr" class=3D"text-pass-color-to-links">=
+<p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 13px; =
+line-height: 1.2; color: #333333; text-align: left; margin: 0;"><span style=
+=3D"font-weight:700">Ismail Bashmori</span><span style=3D"color:#636466"> =
+=E2=80=A2 </span><a href=3D"https://www.quora.com/qemail/tc?aoid=3DFdWn6fHI=
+U36&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D11&amp;et=3D2&amp;id=3Daa81fcdf7f4548=
+bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; c=
+olor: inherit;"><span style=3D"color:#636466">Updated November 13, 2022</sp=
+an></a></p></div></td></tr></table></td></tr><tr><td style=3D"font-size:0px=
+;padding:0px;word-break:break-word;" align=3D"left"><div style=3D"font-fami=
+ly:system-ui, Segoe UI, sans-serif;font-size:16px;line-height:1.6;text-alig=
+n:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3D=
+eyJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxMXwxfDM5MzM4NjI4OCJ=
+9&amp;al_pri=3D0&amp;aoid=3DFdWn6fHIU36&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D1=
+1&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN=
+7" style=3D"text-decoration:none;color:#333333"><span style=3D"color:#33333=
+3"><div style=3D"padding:0;padding-bottom:16px;display:inline" dir=3D"ltr" =
+class=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui, Sego=
+e UI, sans-serif; font-size: 16px; line-height: 1.6; color: #333333; text-a=
+lign: left; display: inline; margin: 0;"><span>Years ago I read that Burma =
+had always been called Burma until the current military dictatorship gave t=
+he country a name of its own invention, Myanmar. Lazily I believed th...</s=
+pan></p></div><span> </span><div style=3D"padding:0;display:inline" dir=3D"=
+ltr"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size: 1=
+6px; line-height: 1.6; color: #168de9; text-align: left; display: inline; m=
+argin: 0;">Read more =C2=BB</p></div><br><div style=3D"float:left;padding-t=
+op:8px"><table><tr><td><img alt=3D"Upvote" height=3D"20" src=3D"https://qsf=
+.fs.quoracdn.net/-4-ans_frontend_assets.icons.upvote_20_retina.png-26-3d949=
+4ab59c37e56.png" style=3D"text-decoration:none;display:block;border:0;outli=
+ne:none;height:20px;float:none;padding:0;margin:auto" align=3D"none"></td><=
+td style=3D"padding-right:16px"><div style=3D"padding:0" dir=3D"ltr" class=
+=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe UI,=
+ sans-serif; font-size: 13px; line-height: 1.2; color: #636466; text-align:=
+ left; margin: 0;">1.8K</p></div></td><td><img alt=3D"Comment" height=3D"20=
+" src=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.comment_2=
+0_retina.png-26-4dbd4e9124f23bec.png" style=3D"text-decoration:none;display=
+:block;border:0;outline:none;height:20px;float:none;padding:0;margin:auto" =
+align=3D"none"></td><td style=3D"padding-right:16px"><div style=3D"padding:=
+0" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-family: =
+system-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; color: =
+#636466; text-align: left; margin: 0;">145</p></div></td></tr></table></div=
+></span></a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;padd=
+ing-top:16px;padding-right:25%;padding-bottom:0px;padding-left:25%;word-bre=
+ak:break-word;" align=3D"center"><p style=3D"border-top: solid 0.5px #dee0e=
+1; font-size: 1px; width: 100%; margin: 0;"></p><!--[if mso | IE]><table al=
+ign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"bo=
+rder-top:solid 0.5px #dee0e1;font-size:1px;margin:0px auto;width:475px;" ro=
+le=3D"presentation" width=3D"475px" ><tr><td style=3D"height:0;line-height:=
+0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td style=3D"font-size:0px;padd=
+ing:0px;word-break:break-word;"><div style=3D"height:16px;line-height:16px;=
+">=E2=80=8A</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:8px;word-break:break-word;" align=3D"left" class=3D"text-pass-col=
+or-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;font=
+-size:19px;font-weight:700;letter-spacing:-0.5px;line-height:1.4;text-align=
+:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_imp=3De=
+yJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxMnwxfDI2ODE5MzA0NiJ9=
+&amp;al_pri=3D1&amp;aoid=3DIme9Ufta3pY&amp;aoty=3D2&amp;aty=3D4&amp;cp=3D12=
+&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;q_aid=3DXhEF6p8TK=
+XW&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: none; color: inherit;">=
+<span style=3D"color:#333333"><span>What if no Doordasher wants to accept y=
+our order?</span></span></a></div></td></tr><tr><td style=3D"font-size:0px;=
+padding:0px;word-break:break-word;" align=3D"left"><table style=3D"color:#0=
+00000;font-family:system-ui, Segoe UI, sans-serif;font-size:13px;line-heigh=
+t:22px;table-layout:auto;width:100%;border:none;" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" width=3D"100%"><tr><td valign=3D"middle"><div styl=
+e=3D"padding:0;padding-bottom:4px" dir=3D"ltr" class=3D"text-pass-color-to-=
+links"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-size:=
+ 13px; line-height: 1.2; color: #333333; text-align: left; margin: 0;"><spa=
+n style=3D"font-weight:700">Rafael Santana</span><span style=3D"color:#6364=
+66"> =E2=80=A2 </span><a href=3D"https://www.quora.com/qemail/tc?aoid=3DXhE=
+F6p8TKXW&amp;aoty=3D1&amp;aty=3D4&amp;cp=3D12&amp;et=3D2&amp;id=3Daa81fcdf7=
+f4548bebdeea638bd96bb86&amp;uid=3Doe44DxaONN7" style=3D"text-decoration: no=
+ne; color: inherit;"><span style=3D"color:#636466">Updated January 30, 2022=
+</span></a></p></div></td></tr></table></td></tr><tr><td style=3D"font-size=
+:0px;padding:0px;word-break:break-word;" align=3D"left"><div style=3D"font-=
+family:system-ui, Segoe UI, sans-serif;font-size:16px;line-height:1.6;text-=
+align:left;color:#333333;"><a href=3D"https://www.quora.com/qemail/tc?al_im=
+p=3DeyJ0eXBlIjogMzMsICJoYXNoIjogIjI4Njc1OTgyODMzMDU2NTU5M3wxMnwxfDI2ODE5MzA=
+0NiJ9&amp;al_pri=3D0&amp;aoid=3DXhEF6p8TKXW&amp;aoty=3D1&amp;aty=3D4&amp;cp=
+=3D12&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44Dx=
+aONN7" style=3D"text-decoration:none;color:#333333"><span style=3D"color:#3=
+33333"><div style=3D"padding:0;padding-bottom:16px;display:inline" dir=3D"l=
+tr" class=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui, =
+Segoe UI, sans-serif; font-size: 16px; line-height: 1.6; color: #333333; te=
+xt-align: left; display: inline; margin: 0;"><span>This is a huge problem t=
+hat actually happens a loottt. Customers are under the impression that dash=
+ers are employees that work for doordash and a tip is nothing more than e..=
+.</span></p></div><span> </span><div style=3D"padding:0;display:inline" dir=
+=3D"ltr"><p style=3D"font-family: system-ui, Segoe UI, sans-serif; font-siz=
+e: 16px; line-height: 1.6; color: #168de9; text-align: left; display: inlin=
+e; margin: 0;">Read more =C2=BB</p></div><br><div style=3D"float:left;paddi=
+ng-top:8px"><table><tr><td><img alt=3D"Upvote" height=3D"20" src=3D"https:/=
+/qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.upvote_20_retina.png-26-3=
+d9494ab59c37e56.png" style=3D"text-decoration:none;display:block;border:0;o=
+utline:none;height:20px;float:none;padding:0;margin:auto" align=3D"none"></=
+td><td style=3D"padding-right:16px"><div style=3D"padding:0" dir=3D"ltr" cl=
+ass=3D"text-pass-color-to-links"><p style=3D"font-family: system-ui, Segoe =
+UI, sans-serif; font-size: 13px; line-height: 1.2; color: #636466; text-ali=
+gn: left; margin: 0;">5.7K</p></div></td><td><img alt=3D"Comment" height=3D=
+"20" src=3D"https://qsf.fs.quoracdn.net/-4-ans_frontend_assets.icons.commen=
+t_20_retina.png-26-4dbd4e9124f23bec.png" style=3D"text-decoration:none;disp=
+lay:block;border:0;outline:none;height:20px;float:none;padding:0;margin:aut=
+o" align=3D"none"></td><td style=3D"padding-right:16px"><div style=3D"paddi=
+ng:0" dir=3D"ltr" class=3D"text-pass-color-to-links"><p style=3D"font-famil=
+y: system-ui, Segoe UI, sans-serif; font-size: 13px; line-height: 1.2; colo=
+r: #636466; text-align: left; margin: 0;">1K</p></div></td></tr></table></d=
+iv></span></a></div></td></tr><tr><td style=3D"font-size:0px;padding:0px;pa=
+dding-top:32px;padding-bottom:32px;word-break:break-word;" align=3D"center"=
+ vertical-align=3D"middle"><table style=3D"border-collapse:separate;line-he=
+ight:100%;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presen=
+tation"><tbody><tr><td style=3D"border:1px solid null;border-radius:25px;cu=
+rsor:auto;height:50px;mso-padding-alt:8px 32px;background:#2e69ff;" align=
+=3D"center" bgcolor=3D"#2e69ff" role=3D"presentation" valign=3D"middle"><a =
+href=3D"https://www.quora.com/qemail/tc?aoid&amp;aoty=3D7&amp;aty=3D4&amp;c=
+p=3D0&amp;et=3D2&amp;id=3Daa81fcdf7f4548bebdeea638bd96bb86&amp;uid=3Doe44Dx=
+aONN7" style=3D"display:inline-block;background:#2e69ff;color:#ffffff;font-=
+family:system-ui, Segoe UI, sans-serif;font-size:14px;font-weight:500;line-=
+height:120%;margin:0;text-decoration:none;text-transform:none;padding:8px 3=
+2px;mso-padding-alt:0px;border-radius:25px;" target=3D"_blank">Read more in=
+ your feed</a></td></tr></tbody></table></td></tr></tbody></table></div><!-=
+-[if mso | IE]></td></tr></table><![endif]--></div><!--[if mso | IE]></td><=
+/tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]><=
+/td></tr></table><![endif]--></td></tr></tbody></table><table style=3D"back=
+ground:#ebf0ff;background-color:#ebf0ff;width:100%;border-radius:3px;" bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" align=3D=
+"center"><tbody><tr><td><!--[if mso | IE]><table align=3D"center" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" st=
+yle=3D"width:525px;" width=3D"525" bgcolor=3D"#ebf0ff" ><tr><td style=3D"li=
+ne-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div=
+ style=3D"margin:0px auto;border-radius:3px;max-width:525px;"><table style=
+=3D"width:100%;border-radius:3px;" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" role=3D"presentation" align=3D"center"><tbody><tr><td style=3D"dir=
+ection:ltr;font-size:0px;padding:24px;padding-bottom:16px;padding-top:32px;=
+text-align:center;"><!--[if mso | IE]><table role=3D"presentation" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vert=
+ical-align:top;width:477px;" ><![endif]--><div style=3D"font-size:0px;text-=
+align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%=
+;" class=3D"mj-column-per-100 mj-outlook-group-fix"><table style=3D"vertica=
+l-align:top;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100=
+%" role=3D"presentation"><tbody><tr><td style=3D"font-size:0px;padding:0px;=
+word-break:break-word;" align=3D"center"><div style=3D"font-family:system-u=
+i, Segoe UI, sans-serif;font-size:17px;font-weight:700;line-height:1.4;text=
+-align:center;color:#333333;">Never miss a story. Designed for readers on t=
+he go.</div></td></tr><tr><td style=3D"font-size:0px;padding:0px;word-break=
+:break-word;"><div style=3D"height:16px;line-height:16px;">=E2=80=8A</div><=
+/td></tr><table style=3D"text-align: center; margin: 0 auto;" align=3D"cent=
+er" class=3D"appDownloadLinks"><tr><td><table><tr><td style=3D"text-align:c=
+enter"><div style=3D"width:100%;display:inline-block"><a href=3D"https://ww=
+w.quora.com/app?campaign=3Demail_footer_links_experiment&amp;inject=3D1&amp=
+;landing_url=3Dhttps%3A%2F%2Fwww.quora.com%2Fqemail%2Ftc%3Faoid%26aoty%3D7%=
+26aty%3D4%26cp%3D0%26et%3D2%26id%3Daa81fcdf7f4548bebdeea638bd96bb86%26uid%3=
+Doe44DxaONN7&amp;source=3Ddigest&amp;target=3Diphone"><img alt=3D"Download =
+on the App Store" height=3D"40" src=3D"https://qsf.fs.quoracdn.net/-4-image=
+s.apple_app_store_badges.en.png-26-4e3b66753949d78b.png" style=3D"height:40=
+px;max-height:40px;margin-bottom:10px"></a><a href=3D"https://www.quora.com=
+/app?campaign=3Demail_footer_links_experiment&amp;inject=3D1&amp;landing_ur=
+l=3Dhttps%3A%2F%2Fwww.quora.com%2Fqemail%2Ftc%3Faoid%26aoty%3D7%26aty%3D4%2=
+6cp%3D0%26et%3D2%26id%3Daa81fcdf7f4548bebdeea638bd96bb86%26uid%3Doe44DxaONN=
+7&amp;source=3Ddigest&amp;target=3Dandroid"><img alt=3D"Get it on Google Pl=
+ay" height=3D"60" src=3D"https://play.google.com/intl/en_us/badges/images/g=
+eneric/en_badge_web_generic.png" style=3D"height:60px;max-height:60px"></a>=
+</div></td></tr></table></td></tr></table></tbody></table></div><!--[if mso=
+ | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[i=
+f mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table><table =
+style=3D"width:100%;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" align=3D"center"><tbody><tr><td><!--[if mso | IE]><table =
+align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"=
+" role=3D"presentation" style=3D"width:525px;" width=3D"525" ><tr><td style=
+=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-=
+-><div style=3D"margin:0px auto;max-width:525px;"><table style=3D"width:100=
+%;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" =
+align=3D"center"><tbody><tr><td style=3D"direction:ltr;font-size:0px;paddin=
+g:24px;padding-left:0px;padding-right:0px;padding-top:0px;text-align:center=
+;"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;wid=
+th:525px;" ><![endif]--><div style=3D"font-size:0px;text-align:left;directi=
+on:ltr;display:inline-block;vertical-align:top;width:100%;" class=3D"mj-col=
+umn-per-100 mj-outlook-group-fix"><table style=3D"vertical-align:top;" bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"present=
+ation"><tbody><tr><td style=3D"font-size:0px;padding:0px;word-break:break-w=
+ord;"><div style=3D"height:64px;line-height:64px;">=E2=80=8A</div></td></tr=
+><tr><td style=3D"font-size:0px;padding:0px;padding-bottom:8px;word-break:b=
+reak-word;" align=3D"center" class=3D"text-pass-color-to-links"><div style=
+=3D"font-family:system-ui, Segoe UI, sans-serif;font-size:11px;line-height:=
+1.6;text-align:center;color:#939598;"><div style=3D"font-weight:bold">Missi=
+ng out on Quora emails? Be sure to add us to your primary inbox.</div></div=
+></td></tr><tr><td style=3D"font-size:0px;padding:0px;padding-top:16px;padd=
+ing-bottom:8px;word-break:break-word;" align=3D"center" class=3D"text-pass-=
+color-to-links"><div style=3D"font-family:system-ui, Segoe UI, sans-serif;f=
+ont-size:11px;line-height:1.6;text-align:center;color:#939598;">This email =
+was sent by Quora (605 Castro Street, Mountain View, CA 94041).<br>If you d=
+on't want to receive this type of email in the future, please <a href=3D"ht=
+tps://www.quora.com/email_optout/qemail_unsubscribe?email_track_id=3Daa81fc=
+df7f4548bebdeea638bd96bb86&amp;t=3D1694983949003196&amp;token=3Dfa8e4a7d815=
+320925de2d6eae3928caef13db1bf18435813539d4161264eaa6fe386a52f0ffa399dc623f4=
+15115f0a03d8111dc794c7b6e5be7a12264bb29574&amp;type=3D2&amp;uid=3D228941974=
+6" style=3D"text-decoration: underline; color: inherit;">unsubscribe</a>.</=
+div></td></tr><tr><td style=3D"font-size:0px;padding:0px;word-break:break-w=
+ord;" align=3D"center" class=3D"text-pass-color-to-links"><div style=3D"fon=
+t-family:system-ui, Segoe UI, sans-serif;font-size:11px;line-height:1.6;tex=
+t-align:center;color:#939598;"><a href=3D"https://www.quora.com" style=3D"t=
+ext-decoration: underline; color: inherit;">https://www.quora.com</a></div>=
+</td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endi=
+f]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><!=
+[endif]--></td></tr></tbody></table></div></body></html>=
+
+--===============3968597362852605608==--

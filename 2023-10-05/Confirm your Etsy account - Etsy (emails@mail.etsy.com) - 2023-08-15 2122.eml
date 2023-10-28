@@ -1,0 +1,684 @@
+Received: from DM6PR20MB3475.namprd20.prod.outlook.com (2603:10b6:5:28f::11)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Wed, 16 Aug 2023
+ 02:22:40 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=Y/IB7wQrcOZzhJEo503iDAMHD7rABAXvKadBK/jT7Vn5GE2dRRWStq+5QYKV3FTj1A16h1xP6vsOWA2yoUCN81iuEXSyQGWGeoTdgYkLwfHbRvb/1bCAyBXQ02vG1XvqLVX4M8cyIKV9S6ufw/dkO0RiUsdSoBaNTyqxVacu5Y8hFgGPZ/JQQ2pQfQmHII3W2WDlILkMQeSqUGur9apAEEeZlwd89SA66Llv0n72sNPznhEx1ythsstA86G87L3HYFEgyy28PeJ62durEY7XboZqkrj2nd2fX/YbxfgpwrViIezs2p2ySUo2RKliZKhCcic9fSary2PhB37BJ+LfrA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ujNspz+temDeL/PZ0Iq3soh/CU+8YJCwmJztG9cr8Gk=;
+ b=E9zei+UNeMd0+5F9iwek3mhebGopgOSo+/l/xbAR2rjk+AmN6tsMKpT6KlXwa4HqysRsYJRpGd5hMO6cgJbXnE3Rr9dAP1+vzRi3nbwDc9dPpx3x17MDKQVOHgMktcxe92ZAwmMLLbH1ykkokf1XwYvaXt+5qKeNtNhAwFf9n6CqZPzLHM8UwBqi8MepssgnfHX3pWJq4qGiE2fchBJXyFwLE4V66KQQhIk9GAQVYyDqTvXnEyHXjszvYdQgjKluIg4p0vWT2G9wXan/OKh0Qx6uKqEVJG6mJlyuK0uuCj5bGGiHquBgOuVTrvfiHGcBCtkWsCeqIsNwD8Y1qLDt0g==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.219.43) smtp.rcpttodomain=outlook.com smtp.mailfrom=mail.etsy.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=mail.etsy.com; dkim=pass (signature was verified)
+ header.d=mail.etsy.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounce+ed2388.ad3265-tobinsilvestre022=sooners.us@mail.etsy.com]
+ dkim=[1,1,header.i=@mail.etsy.com] dmarc=[1,1,header.from=mail.etsy.com])
+Received: from BN9PR03CA0545.namprd03.prod.outlook.com (2603:10b6:408:138::10)
+ by DM6PR20MB3475.namprd20.prod.outlook.com (2603:10b6:5:28f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.29; Wed, 16 Aug
+ 2023 02:22:38 +0000
+Received: from BN1NAM02FT052.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:138:cafe::af) by BN9PR03CA0545.outlook.office365.com
+ (2603:10b6:408:138::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.33 via Frontend
+ Transport; Wed, 16 Aug 2023 02:22:38 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.219.43)
+ smtp.mailfrom=mail.etsy.com; dkim=pass (signature was verified)
+ header.d=mail.etsy.com;dmarc=pass action=none
+ header.from=mail.etsy.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of mail.etsy.com does not
+ designate 209.85.219.43 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.219.43; helo=mail-qv1-f43.google.com;
+Received: from mail-qv1-f43.google.com (209.85.219.43) by
+ BN1NAM02FT052.mail.protection.outlook.com (10.13.2.160) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.15 via Frontend Transport; Wed, 16 Aug 2023 02:22:38 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:D1E5DDB819C17CBEBBE8ADE43DDA8262363B7B4B1A510545CC987DDE0CB578F3;UpperCasedChecksum:AB14506681A4E01AA4797CFC1EE7121A15929676329C91B2DCC8EA65F949F210;SizeAsReceived:7651;Count:43
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6473676df98so7194086d6.3
+        for <tobinsilvestre@outlook.com>; Tue, 15 Aug 2023 19:22:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692152558; x=1692757358;
+        h=x-forwarded-for:sender:reply-to:from:mime-version:etsymail:subject
+         :to:message-id:date:dkim-signature:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ujNspz+temDeL/PZ0Iq3soh/CU+8YJCwmJztG9cr8Gk=;
+        b=kVEbjlZxXbEPrKSP4bTwcnYbSkpn56EqPnLZ1knrhk7VXo59qB8TAOvASrM5EPAD3M
+         mRKUPivHU5egY44TwqsNkbpMw2e0IjzuK50E1RFhP+lcUvwiPZhqM8q9Kwgt+MAUxFLO
+         vyL4Sz6k90Qo/phfocHI8S+G5O1Tahz3jQRwA38fD7ign15Uw9+MhUnwGu17MSRabS9C
+         1/T2UQGu37disOKua8cXe27ZZmAFQjmkUIe2DW2I01umIko+b0uqpnEpKUQxjLFc1W4x
+         LX3aRBKpVzBFsU1X6dV8JKnDRiS/iYqtCxRljxWmD7Wg45FvrpKgRGLf6sSckTKkMRJ7
+         /uTA==
+X-Gm-Message-State: AOJu0YzgfB8DrAPG2xzPLTK2r61iUP96ZK6sCn4BSUJDbDMIwwGxfEK+
+	lvSd2RoqBy08piMLJWbSVctYV1zIVj8DCbVUVA==
+X-Google-Smtp-Source: AGHT+IF7FJz6aKoZjQxWtfwX6dxfbWZUj0y7TpvDqoMk1frlpQzAVsuEJK9yeVdHEdLeNEQA+asJxw0BP6jKRsM/4roe1axyYIs=
+X-Received: by 2002:a0c:e208:0:b0:635:f48d:5b7a with SMTP id q8-20020a0ce208000000b00635f48d5b7amr493892qvl.23.1692152558291;
+        Tue, 15 Aug 2023 19:22:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692152558; cv=none;
+        d=google.com; s=arc-20160816;
+        b=E8jiXmzy2hlxSbWd9kdp4I4raM4UiQ3K3Wah5pOrhzv6rF8vI5E7dBVd/MLF8OEMLP
+         zBEN2jEVM7R0yj6yt9xt4oGtWjZC9/jW0vvS9d5KrDSxR4O6ma8Ql1NJf78WEQCXKA0d
+         dAYq0JLrNtFu7sznIBmIdAvpBpzWvTQKlI1uMfFZ/o5C8rDT/rKAlyr2qtlf/jPz1q+b
+         Q3gaBCqzeuqRNkO4NvBa84UNlKjJfOJcxgwIfFiO0JDIyOKvOvDMvVHtin5Smhj+xdCh
+         GZjiXQs4NKFCl8Ztwy0sUCB4HKjJU9puVjfYtf2oA4VENrBUkAZ0PDtLTZ8/nv2RDUps
+         k1og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=sender:reply-to:from:mime-version:etsymail:subject:to:message-id
+         :date:dkim-signature;
+        bh=ujNspz+temDeL/PZ0Iq3soh/CU+8YJCwmJztG9cr8Gk=;
+        fh=GikvcmYv5ChnUPahhHJzM4IdYxQaTvd9FLDdTD1wTj8=;
+        b=qngVGYUHz+RySxbeFQ1qtH3SNmL2hg93++2GBOlzYhCW8gCck8IcTHSNA90ii8NptA
+         0pS8ZbP84AlAVUPmw9yZ5KM7PWsrror4bfQOyGhYoSmcksn+D4g/BKeF+mdF7rp0F/tf
+         04UjmjX1pIKZpV3c2CZgzCZxAsZGWqodumgkMNeCgZIp9Be46qvuWCHgKYBkHJpQq/mO
+         ldKTQ4QW/510UDF7lyRuFCrPT2EvB2LuQHlw5WPuBkIp5uIPeEtV9rBCUfMgYW3klMby
+         7YLqSDS2jkRn/hNgLLh6qcsj07GNFBnZLXOMJvTVCmk1LXIjdFtlH8ZKMhRGeQ+rFm9w
+         T1Pg==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@mail.etsy.com header.s=k1 header.b=VgpltJvw;
+       spf=pass (google.com: domain of bounce+ed2388.ad3265-tobinsilvestre022=sooners.us@mail.etsy.com designates 143.55.229.77 as permitted sender) smtp.mailfrom="bounce+ed2388.ad3265-tobinsilvestre022=sooners.us@mail.etsy.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=mail.etsy.com
+Return-Path: bounce+ed2388.ad3265-tobinsilvestre022=sooners.us@mail.etsy.com
+Received: from mail229-77.mail.etsy.com (mail229-77.mail.etsy.com. [143.55.229.77])
+        by gmr-mx.google.com with UTF8SMTPS id uw14-20020a05620a4d8e00b007593c43f6edsi726477qkn.0.2023.08.15.19.22.38
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Aug 2023 19:22:38 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce+ed2388.ad3265-tobinsilvestre022=sooners.us@mail.etsy.com designates 143.55.229.77 as permitted sender) client-ip=143.55.229.77;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@mail.etsy.com header.s=k1 header.b=VgpltJvw;       spf=pass
+ (google.com: domain of
+ bounce+ed2388.ad3265-tobinsilvestre022=sooners.us@mail.etsy.com designates
+ 143.55.229.77 as permitted sender)
+ smtp.mailfrom="bounce+ed2388.ad3265-tobinsilvestre022=sooners.us@mail.etsy.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=mail.etsy.com
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mail.etsy.com;
+ q=dns/txt; s=k1; t=1692152557; x=1692159757; h=Sender: Sender: Reply-To:
+ From: From: Content-Type: MIME-Version: Subject: Subject: To: To: Message-Id:
+ Date; bh=ujNspz+temDeL/PZ0Iq3soh/CU+8YJCwmJztG9cr8Gk=;
+ b=VgpltJvw88naiQ8TQWSm58crRoXYliOFChS/UVFP7RIqejWJ54eXTDD86wbodS1nY3AiaHVld8+f1HAeP7FQJa7Yy299F46+sDncFcTU3oSqk61nU4smWlRj2zXhje6yY9ip+Jq3K4/2mi8g3khU2mJa0wkZe2IYBEd/WTyB4MI=
+X-Mailgun-Sending-Ip: 143.55.229.77
+X-Mailgun-Sid: WyIwYTIzMSIsInRvYmluc2lsdmVzdHJlMDIyQHNvb25lcnMudXMiLCJhZDMyNjUiXQ==
+Received: from mailrelay-green-rj5z.c.etsy-mailrelay-prod.internal
+ (67.84.188.35.bc.googleusercontent.com [35.188.84.67]) by e1f387518e2f with
+ SMTP id 64dc32edc7e5e165c9b92c97; Wed, 16 Aug 2023 02:22:37 GMT
+Received: from mailcache-green-zfvv.c.etsy-mailrelay-prod.internal (mailcache-green-zfvv.c.etsy-mailrelay-prod.internal [10.248.19.254])
+	by mailrelay-green-rj5z.c.etsy-mailrelay-prod.internal (Postfix) with ESMTP id A46B0325FB3
+	for <tobinsilvestre022@sooners.us>; Wed, 16 Aug 2023 02:22:37 +0000 (UTC)
+Received: from dsworker-green-kr29.c.etsy-web-prod.internal (dsworker-green-kr29.c.etsy-web-prod.internal [10.248.29.47])
+	by mailcache-green-zfvv.c.etsy-mailrelay-prod.internal (Postfix) with ESMTP id A2B8F2FC0C0
+	for <tobinsilvestre022@sooners.us>; Wed, 16 Aug 2023 02:22:37 +0000 (UTC)
+Received: from driveshaft.dsworker-green-kr29.c.etsy-web-prod.internal (localhost [127.0.0.1])
+	by dsworker-green-kr29.c.etsy-web-prod.internal (8.14.7/8.14.7) with ESMTP id 37G2MbLI012802
+	for <tobinsilvestre022@sooners.us>; Wed, 16 Aug 2023 02:22:37 GMT
+Date: Wed, 16 Aug 2023 02:22:37 GMT
+Message-Id: <202308160222.37G2MbLI012802@dsworker-green-kr29.c.etsy-web-prod.internal>
+X-Mailgun-Sending-Ip-Pool: 62ab7932bf72e320a3e4493d
+To: tobinsilvestre022@sooners.us
+Subject: Confirm your Etsy account
+X-YarnBlaster: transaction
+X-EmailType: email_confirmation_v2_series_part_1_010170_27219176993_0_0
+EtsyMail: works every time
+Content-Type: multipart/alternative; boundary="2ffda8facfdb02a6b5844700c76bebaefa9f5413c15f92e70fd4e6c7790ef4d4"
+From: Etsy <emails@mail.etsy.com>
+X-EUID: kR4tlC1C76zRGyGx66PQFqG1lfKy
+X-EAID: 1166419860500
+X-UTM-CAMPAIGN: email_confirmation_v2_series_part_1_010170_27219176993_0_0
+X-CAMPAIGN-LABEL: email_confirmation_v2_series_part_1
+X-UTM-SOURCE: lifecycle
+X-MAILJET-CAMPAIGN: email_confirmation_v2_series_part_1_010170_27219176993_0_0
+X-MJ-CUSTOMID: kR4tlC1C76zRGyGx66PQFqG1lfKy
+X-MJ-EVENTPAYLOAD: eyJldWlkIjoia1I0dGxDMUM3NnpSR3lHeDY2UFFGcUcxbGZLeSIsImVtYWlsX2FkZHJlc3NfaWQiOjExNjY0MTk4NjA1MDAsInV0bV9jYW1wYWlnbiI6ImVtYWlsX2NvbmZpcm1hdGlvbl92Ml9zZXJpZXNfcGFydF8xXzAxMDE3MF8yNzIxOTE3Njk5M18wXzAiLCJjYW1wYWlnbl9sYWJlbCI6ImVtYWlsX2NvbmZpcm1hdGlvbl92Ml9zZXJpZXNfcGFydF8xIiwidXRtX3NvdXJjZSI6ImxpZmVjeWNsZSJ9
+X-SMTPAPI: {"unique_args":{"euid":"kR4tlC1C76zRGyGx66PQFqG1lfKy","email_address_id":1166419860500,"utm_campaign":"email_confirmation_v2_series_part_1_010170_27219176993_0_0","campaign_label":"email_confirmation_v2_series_part_1","utm_source":"lifecycle"},"category":"email_confirmation_v2_series_part_1"}
+X-Mailgun-Variables: {"euid":"kR4tlC1C76zRGyGx66PQFqG1lfKy","email_address_id":1166419860500,"utm_campaign":"email_confirmation_v2_series_part_1_010170_27219176993_0_0","campaign_label":"email_confirmation_v2_series_part_1","utm_source":"lifecycle"}
+Reply-To: noreply@mail.etsy.com
+Sender: noreply@mail.etsy.com
+X-Forwarded-For: tobinsilvestre022@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 43
+X-MS-Exchange-Organization-ExpirationStartTime: 16 Aug 2023 02:22:38.5295
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 21ecec27-50e2-47cd-3733-08db9dffa947
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ BN1NAM02FT052:EE_|DM6PR20MB3475:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ BN1NAM02FT052.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 8/15/2023 10:37:50 PM
+X-MS-Office365-Filtering-Correlation-Id: 21ecec27-50e2-47cd-3733-08db9dffa947
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.219.43
+X-SID-PRA: EMAILS@MAIL.ETSY.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2023 02:22:38.4826
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21ecec27-50e2-47cd-3733-08db9dffa947
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ BN1NAM02FT052.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR20MB3475
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.6462009
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6678.025
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:0;pcwl:0;kl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(90014020)(91030020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(8820095)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPn/50es7IC76TwGtXPZknlngppExm8+XQ3XjuAnTyGvnQhc17r7OJVUiR6y0WOhbBXZY12FWOth6mqCI73KFcKk9ItKGh/c9d1BWHYK6HLHw5uaQJsCF1fL13kYOLR4b6G0Nmnt1a5ZpbM5J0tB8y4Npi2kC3J1lUTHB5uz3hcf6tU1h4Lm/s2EdWtEn+H180w5rsjZCyTD+g==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dHphMzJ4dXFiVzRaZitIa1ZxOVV6S3VLTkZkai9EbnJ0cWREVlNKSlpzenl3?=
+ =?utf-8?B?UjVzRGRyUThwVXhnSWQ2aC8yVFdjZi9wclNLS2VOOWliUVh2a0hrRTJrSEd0?=
+ =?utf-8?B?WS9pVTZUdkc1Z01NUWVBMzlIYk9CU0ZZVkRWZFNwVlcxOUt1Mis0ZUN1S2cw?=
+ =?utf-8?B?ZExtbDZlR0loeXBMQWVZSXhmOXhJZzJkUXRXZlFLbmsveWdINlhqRDYvTlR4?=
+ =?utf-8?B?bHVRN3lDNUczSE1Ub3I4VnJPdmhtZGJHakRaNDRWQUdoZVRzdG05bVExUEk0?=
+ =?utf-8?B?Tm9JbCtPaUJHL1dPU3Fya3ByKzFMV1lNV1laTDdsbVRyY2lEZjlTT3c0bytH?=
+ =?utf-8?B?T2trTUR6WlhRVGtLcFdIWmZKQ1pqNExsdjBTVHBRajh1ejQwdkJvSkN0OFdU?=
+ =?utf-8?B?OHUwTU96NEd6NGg1NTRhczNHSzVBWTZYUm95am5nNEl5VUIzNmtXdkI5NDVI?=
+ =?utf-8?B?K1RrRTlaUXdMdEVOMVZHMHViTDdJWlBMK2wyK3FOaklHVm1YMXFTcm9DdmQy?=
+ =?utf-8?B?TGZtYUwzYnlJWkJpWEhadEUyY2RFcUE0dGtuZGNiV3BERUQ4cnpaZTl1N0Y3?=
+ =?utf-8?B?YmgrNjRzK1Z0d0d4RHJwMGhSRjk3Zm14czJnNHVCMitqRjFwNW9JU0NFNDZT?=
+ =?utf-8?B?QUU4RWpFRE14eEZsd0xmbGdvZGhpK0x5WjJzdzY1aHNSSXg5WkZwYXREeGlK?=
+ =?utf-8?B?SGRPZm9VTDE4ZlNBZUlBOW5kcWFUM0dqNDlBdEgvWHQ5UkEzZjBLZUtTenFk?=
+ =?utf-8?B?ZUNaMXI0cGF3M0xaYUtMeDVBODkzVC9hcy9rWlhnNCtQb3hWdFJteHM5a01J?=
+ =?utf-8?B?dmVZMVpnamxUeUFPQTFBbmFGSDhOU25ab0x1bXZyTWhEeEZ2bFBXZ2ZtOEF1?=
+ =?utf-8?B?bGZjZkxCNjVMeDdTSklKejBxeml6REdKUTJHa0FkcmFiRk44UWYzeFdvcW5w?=
+ =?utf-8?B?REJMejRSdzJqTlAyS0c5bkYzZTk3cWVxZVR2MEVJUDBqblEvREphaDlIT2Yz?=
+ =?utf-8?B?TnZhVW01ZitkaG9OVy9pRENmUkFtZjkvMFloV2poc1o5TStFRFh6Zkc3WHdk?=
+ =?utf-8?B?Skk1S2VrQTk1KzIrVi9TYk9hMGg1dVI3V3lmM3VIYlkrMFA5cW1VK1o0cndY?=
+ =?utf-8?B?bDRLbXNpbW5Ua2pMY0VrcGNjNVRBUC9RV1RxSWhSRWJ5UGRFYWRiRXp5Q2Ir?=
+ =?utf-8?B?NDdkN3R2T1NoSllJRmp1L3BmQmt2Y3l0Q1NUV01ydlU0elQ1RkJDZDZYTWxy?=
+ =?utf-8?B?REJFTWw0N2ZJSVJleFA1aGVITmhXVGdNbHZCd0dsNENidWZ5T1ZRNlF2MzdH?=
+ =?utf-8?B?bUlmd2xjOEtLQkxRTmZKTmFVcndtVXNMUm90c2szRjVpNW9wOE9rS1ZEbnBM?=
+ =?utf-8?B?NExvY3FmNGxJc3E1aDRNY3ZlR0EydEFlbXMrVzAwQWR5ZE5PbXQ3SjJtSTZ3?=
+ =?utf-8?B?dVdmVW1qMTg0UW1OTmlLZG9tZS9JTjBWcjFhRTlBS1ArTkhXcTBaS2FLNnlp?=
+ =?utf-8?B?bjEyWk84NC9JYVJxeWZFV0o1Zmw0Mnk0WER6Y2lEcGNGWE15ZUtJRElqK3VW?=
+ =?utf-8?B?cGxQUEVvcmVkN0hwTkZsOWtVUDFQaXpxVEFwUWlVMmxqOVY5aHNyd1Vka1FU?=
+ =?utf-8?B?VTdsRVJ5Z0lpOFBFdElva042enJIVW91aElORUZkZUpYSHFzMzNjQnBuWXNk?=
+ =?utf-8?B?Y0RsUVdxYVVTenNKbzc1ZGlJTXIwbExYemFYWFVLMU9McmdPNnNKYWZzMWh6?=
+ =?utf-8?B?OTZEa0hIZUxRRWJRdUsvVEZML1pSdWVjUEcxem5tb0x0V3I5cWhEUW5oUjZX?=
+ =?utf-8?B?bGMrY1NCQVBJUkszbEhKQjBESDZEVlNicExFcllWSFFrMmI2V2RJTEprUDhv?=
+ =?utf-8?B?ek5xdDBrVHNEYnpDa1RhQUJlVjVLUE9tdHhtbjJqWm00aHdNOWRiTlkzS1k0?=
+ =?utf-8?B?Qi91YWRHU01lUVRlQy9qN09rbW8rWHdTeFpBMDQ1MUVsWEZqQ25ONXVsdC81?=
+ =?utf-8?B?RmFkdGV3ZVJXTjB6a2hDOGhDTjFGRVVNMHArWHUvQUtTTWZ1c1h1eGFRNG1x?=
+ =?utf-8?B?aENRZXUzRnVtc3JUSHYrMGtBd3dFdTNGbVBnSUd0ZXloL1RId2xUd0k2VS9x?=
+ =?utf-8?B?NHI5bHNBSmNMbFJGWGw3dklObVN3Wi9rOTV0RTU0K2J4cE1NWk5kV3BES0ZL?=
+ =?utf-8?B?R1E9PQ==?=
+MIME-Version: 1.0
+
+--2ffda8facfdb02a6b5844700c76bebaefa9f5413c15f92e70fd4e6c7790ef4d4
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi!=0AWe're so excited you've decided to join Etsy's vibrant, creative=0Aco=
+mmunity. Before we can lay out the welcome mat and give you access=0Ato all=
+ things Etsy, we need you to confirm your Etsy account.=0Ahttps://www.etsy.=
+com/confirm?email=3Dtobinsilvestre022%40sooners.us&user_name=3Dqmvlotiign7t=
+cv21&code=3D4e35ab8abfd84bd8ce43696f797b030c&action=3Dregister&from_page=3D=
+=0A=0ANeed help? You'll find answers to lots of questions here and you can =
+chat with Etsy Support:=0Ahttps://www.etsy.com/help=0A=0AEnjoy!=0AThe Etsy =
+Team
+
+--2ffda8facfdb02a6b5844700c76bebaefa9f5413c15f92e70fd4e6c7790ef4d4
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><i=
+mg style=3D"position: absolute; opacity: 0; left: -9000px;" width=3D"1" hei=
+ght=3D"1" src=3D"https://www.etsy.com/mailinglist/beacon/?campaign_label=3D=
+email_confirmation_v2_series_part_1&amp;utm_source=3Dlifecycle&amp;utm_camp=
+aign=3Demail_confirmation_v2_series_part_1_010170_27219176993_0_0&amp;utm_m=
+edium=3Demail&amp;utm_content=3D&amp;email_sent=3D1692152557&amp;euid=3DkR4=
+tlC1C76zRGyGx66PQFqG1lfKy&amp;eaid=3D1166419860500&amp;x_eaid=3D5ce768a97e&=
+amp;verification_code=3D4e35ab8abfd84bd8ce43696f797b030c">
+<head>
+    <style type=3D"text/css">
+                    table th table { width: 596px !important; }
+    table th table table { width: 100% !important; }
+        bdo { width: 31% !important; }
+                        bdo { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo { padding:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo { padding:
+        0 0 0 2.333%                        !important; }
+                    bdo + bdo + bdo + bdo { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo + bdo + bdo + bdo { padding:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo { padding:
+        0 0 0 2.333%                        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo { padding=
+:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo { p=
+adding:
+        0 0 0 2.333%                        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo { padding:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo + bdo { padding:
+        0 0 0 2.333%                        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo + bdo + bdo { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo + bdo + bdo + bdo { padding:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo + bdo + bdo + bdo + bdo { padding:
+        0 0 0 2.333%                        !important; }
+            dl > dt, dl > div { width: 48.201% !important; display: inline-=
+block !important; padding: 0 3.598% 0 0 !important; }
+    dl > dt + dt, dl > dt + div, dl > div + dt { padding: 0 !important; }
+    dl > dt:only-of-type { width: 30.935% !important; }
+    dl > div { width: 65.468% !important; }
+    .col-33 { width: 30.935% !important; }
+    .col-66 { width: 65.468% !important; }
+        ol { overflow: hidden; display: table; width: 100%; }
+    ol li { display: table-row !important; text-align: left !important; }
+    ol li > div { display: table-cell !important; padding: 0 !important; te=
+xt-align: left; }
+    ol li > div + div { text-align: right; }
+        var > a { background: transparent url(https://www.etsy.com/images/e=
+mail/meteor/canvas/call-to-action-arrow.png) right center no-repeat !import=
+ant; text-align: right !important; padding: 0 18px 0 0 !important; }
+        dfn { width: 33% !important; max-width: 33% !important; }
+    table th dfn table { width: 90% !important; }
+    dfn + a td + td + td > div { width: auto !important; }
+        a img { border: none !important; }
+        cite > dl > dt { text-align: left !important; }
+    cite > dl > div { text-align: right !important; }
+
+        @media (max-width: 654px) {
+        .content { width: auto !important; }
+        table[class=3Dproteus_logo_header] { width: 100% !important; }
+        dl[class=3Dproteus_twocol] > dt, dl[class=3Dproteus_twocol] > div {=
+ width: 100% !important; display: block !important; padding: 0; }
+        dl[class=3Dproteus_twocol] > :first-child { padding: 0 0 12px 0 !im=
+portant; }
+        ol[class=3Dproteus_text_with_button] li > div { width: 100% !import=
+ant; display: block !important; padding: 10px 0 18px 0 !important; text-ali=
+gn: center !important; }
+        ol[class=3Dproteus_text_with_button] li > div + div { padding: 0 !i=
+mportant; }
+        div[class=3D"text-button-cta"] div {
+            float: none !important;
+            display: block !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+        div[class=3D"text-button-cta"] div + div img {
+            width: 60% !important;
+            display: block !important;
+            margin: 0 auto -20px !important;
+            float: none !important;
+            padding: 5px 0;
+        }
+
+        div[class=3D"proteus_shop_header"] {
+            width: 100% !important;
+        }
+
+        div[class=3D"proteus_shop_header"] div {
+            width: 100% !important;
+            text-align: center !important;
+        }
+
+        div[class=3D"proteus_category_nav"] table {
+            width: 100% !important;
+            text-align: center !important;
+        }
+
+        cite[class=3Dproteus_logo_header] > dl > dt, cite[class=3Dproteus_l=
+ogo_header] > dl > div { text-align: center !important; }
+    }
+
+   =20
+    @media (max-width: 454px) {
+        .hide {visibility: hidden !important; display: none !important;}
+        .hide-small { visibility: hidden !important; display: none !importa=
+nt; }
+        .show-small { visibility: visible !important; display: block !impor=
+tant; }
+                bdo[yahoo] { width: 100% !important; padding: 0 !important;=
+ }
+        bdo.proteus-wrap-two[yahoo] { width: 48% !important; }
+        bdo.proteus-wrap-two:nth-of-type(2n + 1) { padding: 0 2% 0 0 !impor=
+tant; }
+        bdo.proteus-wrap-two:nth-of-type(2n + 2) { padding: 0 0 0 2% !impor=
+tant; }
+        dfn[yahoo] { max-width: none !important; width: 49.7% !important; b=
+order-bottom: none;}
+        table th dfn, table th dfn table{ border-right: none !important; }
+        dfn[yahoo]:first-of-type, dfn[yahoo]:last-of-type { width: 99% !imp=
+ortant; }
+        var[class=3Dproteus_cta_link] a { background: #e6f5f9 !important; t=
+ext-align: center !important; padding: 5% !important; }
+   }
+
+
+            </style>
+</head>
+<body style=3D"-webkit-text-size-adjust: none; -moz-text-size-adjust: none;=
+ -ms-text-size-adjust: 100%; margin: 0 !important; padding 0 !important;">
+    <style type=3D"text/css">
+                    table th table { width: 596px !important; }
+    table th table table { width: 100% !important; }
+        bdo { width: 31% !important; }
+                        bdo { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo { padding:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo { padding:
+        0 0 0 2.333%                        !important; }
+                    bdo + bdo + bdo + bdo { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo + bdo + bdo + bdo { padding:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo { padding:
+        0 0 0 2.333%                        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo { padding=
+:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo { p=
+adding:
+        0 0 0 2.333%                        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo { padding:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo + bdo { padding:
+        0 0 0 2.333%                        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo + bdo + bdo { padding:
+                0 2.333% 0 0                !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo + bdo + bdo + bdo { padding:
+                        0 1.167%        !important; }
+                    bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + bdo + b=
+do + bdo + bdo + bdo + bdo + bdo { padding:
+        0 0 0 2.333%                        !important; }
+            dl > dt, dl > div { width: 48.201% !important; display: inline-=
+block !important; padding: 0 3.598% 0 0 !important; }
+    dl > dt + dt, dl > dt + div, dl > div + dt { padding: 0 !important; }
+    dl > dt:only-of-type { width: 30.935% !important; }
+    dl > div { width: 65.468% !important; }
+    .col-33 { width: 30.935% !important; }
+    .col-66 { width: 65.468% !important; }
+        ol { overflow: hidden; display: table; width: 100%; }
+    ol li { display: table-row !important; text-align: left !important; }
+    ol li > div { display: table-cell !important; padding: 0 !important; te=
+xt-align: left; }
+    ol li > div + div { text-align: right; }
+        var > a { background: transparent url(https://www.etsy.com/images/e=
+mail/meteor/canvas/call-to-action-arrow.png) right center no-repeat !import=
+ant; text-align: right !important; padding: 0 18px 0 0 !important; }
+        dfn { width: 33% !important; max-width: 33% !important; }
+    table th dfn table { width: 90% !important; }
+    dfn + a td + td + td > div { width: auto !important; }
+        a img { border: none !important; }
+        cite > dl > dt { text-align: left !important; }
+    cite > dl > div { text-align: right !important; }
+
+        @media (max-width: 654px) {
+        .content { width: auto !important; }
+        table[class=3Dproteus_logo_header] { width: 100% !important; }
+        dl[class=3Dproteus_twocol] > dt, dl[class=3Dproteus_twocol] > div {=
+ width: 100% !important; display: block !important; padding: 0; }
+        dl[class=3Dproteus_twocol] > :first-child { padding: 0 0 12px 0 !im=
+portant; }
+        ol[class=3Dproteus_text_with_button] li > div { width: 100% !import=
+ant; display: block !important; padding: 10px 0 18px 0 !important; text-ali=
+gn: center !important; }
+        ol[class=3Dproteus_text_with_button] li > div + div { padding: 0 !i=
+mportant; }
+        div[class=3D"text-button-cta"] div {
+            float: none !important;
+            display: block !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+        div[class=3D"text-button-cta"] div + div img {
+            width: 60% !important;
+            display: block !important;
+            margin: 0 auto -20px !important;
+            float: none !important;
+            padding: 5px 0;
+        }
+
+        div[class=3D"proteus_shop_header"] {
+            width: 100% !important;
+        }
+
+        div[class=3D"proteus_shop_header"] div {
+            width: 100% !important;
+            text-align: center !important;
+        }
+
+        div[class=3D"proteus_category_nav"] table {
+            width: 100% !important;
+            text-align: center !important;
+        }
+
+        cite[class=3Dproteus_logo_header] > dl > dt, cite[class=3Dproteus_l=
+ogo_header] > dl > div { text-align: center !important; }
+    }
+
+   =20
+    @media (max-width: 454px) {
+        .hide {visibility: hidden !important; display: none !important;}
+        .hide-small { visibility: hidden !important; display: none !importa=
+nt; }
+        .show-small { visibility: visible !important; display: block !impor=
+tant; }
+                bdo[yahoo] { width: 100% !important; padding: 0 !important;=
+ }
+        bdo.proteus-wrap-two[yahoo] { width: 48% !important; }
+        bdo.proteus-wrap-two:nth-of-type(2n + 1) { padding: 0 2% 0 0 !impor=
+tant; }
+        bdo.proteus-wrap-two:nth-of-type(2n + 2) { padding: 0 0 0 2% !impor=
+tant; }
+        dfn[yahoo] { max-width: none !important; width: 49.7% !important; b=
+order-bottom: none;}
+        table th dfn, table th dfn table{ border-right: none !important; }
+        dfn[yahoo]:first-of-type, dfn[yahoo]:last-of-type { width: 99% !imp=
+ortant; }
+        var[class=3Dproteus_cta_link] a { background: #e6f5f9 !important; t=
+ext-align: center !important; padding: 5% !important; }
+   }
+
+
+            </style>
+
+    <table style=3D"width: 100%; border-spacing: 0;" cellpadding=3D"0" cell=
+spacing=3D"0">
+        <tr><th style=3D"border-top: solid 5px #FFFFFF; font-weight: normal=
+; text-align: center; background: #ffffff; border-bottom: solid 1px #FFFFFF=
+;">
+    <table style=3D"width: 100%; max-width: 596px; border-spacing: 0; margi=
+n: 0 auto;" class=3D"content" cellpadding=3D"0" cellspacing=3D"0" align=3D"=
+center"><tr><td>
+    <table style=3D"margin: 0%; width: 100%; border-spacing: 0; table-layou=
+t: fixed;" cellpadding=3D"0" cellspacing=3D"0"><tr><td style=3D"padding: 17=
+px 3.358% 0px; ">
+    <cite style=3D"text-align: center; display: block; font-style: normal;"=
+ class=3D"proteus_logo_header">
+    <span style=3D"font-size: 0">Just one more step.</span>            <tab=
+le cellpadding=3D"0" cellspacing=3D"0" style=3D"width: 100%; margin: 0; pad=
+ding: 0;"><tr><td align=3D"center"><div style=3D"width: 100%;">        <a h=
+ref=3D"https://www.etsy.com?ref=3Dproteus_logo&amp;campaign_label=3Demail_c=
+onfirmation_v2_series_part_1&amp;utm_source=3Dlifecycle&amp;utm_campaign=3D=
+email_confirmation_v2_series_part_1_010170_27219176993_0_0&amp;utm_medium=
+=3Demail&amp;utm_content=3D&amp;email_sent=3D1692152557&amp;euid=3DkR4tlC1C=
+76zRGyGx66PQFqG1lfKy&amp;eaid=3D1166419860500&amp;x_eaid=3D5ce768a97e&amp;v=
+erification_code=3D4e35ab8abfd84bd8ce43696f797b030c&amp;link_clicked=3D0" t=
+itle=3D"Etsy.com" style=3D"display: inline-block;"><img src=3D"https://www.=
+etsy.com/images/email/etsy_logo@3x.png" border=3D"0" alt=3D"Etsy" data-no-t=
+ranslate=3D"true" height=3D"34"></a>
+    </div></td></tr></table>    </cite>
+    </td></tr></table>
+    </td></tr></table>
+    </th></tr>
+    <tr><th style=3D"background: #FFFFFF; height: 28px;"></th></tr>
+            <tr><th style=3D"background: #FFFFFF; font-weight: normal; text=
+-align: left; ">
+    <table style=3D"width: 100%; max-width: 596px; border-spacing: 0; margi=
+n: 0 auto;" class=3D"content" cellpadding=3D"0" cellspacing=3D"0" align=3D"=
+center">
+    <tr>
+    <td><table style=3D"margin: 0%; width: 100%; border-spacing: 0; table-l=
+ayout: fixed; font-family: Arial, Helvetica, sans-serif;" cellpadding=3D"0"=
+ cellspacing=3D"0">
+        <tr><td style=3D"padding: 0 3.358%; font-size: 16px; color: #444; l=
+ine-height: 24px;"><script type=3D"application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "EmailMessage",
+        "description": "Confirm the email address associated with your Etsy=
+ account",
+        "action": {
+            "@type": "ConfirmAction",
+            "name": "Confirm Etsy Account",
+            "handler": {
+                "@type": "HttpActionHandler",
+                "url": "https://www.etsy.com/confirm?email=3Dtobinsilvestre=
+022%40sooners.us&user_name=3Dqmvlotiign7tcv21&code=3D4e35ab8abfd84bd8ce4369=
+6f797b030c&action=3Dregister&from_page=3D&from_quick_action=3D1"
+            }
+        }
+    }
+</script>
+
+   =20
+        <table cellpadding=3D"0" cellspacing=3D"0" style=3D"width: 100%; ma=
+rgin: 0; padding: 0;"><tr><td align=3D"center"><div style=3D"width: 100%;">
+                    Hi Tobin! To finish signing up, just confirm that we've=
+ got the right email.
+       =20
+        <div style=3D"height: 20px;"></div>
+           =20
+<a style=3D"background-color:#222222;
+    border-bottom-left-radius:24px;
+    border-bottom-right-radius:24px;
+    border-top-left-radius:24px;
+    border-top-right-radius:24px;
+    border-width:2px;
+    border-color: #222222;
+    border-style:solid;
+    box-sizing:border-box;
+    color:#FFFFFF;
+    display:inline-block;
+    font-family:-apple-system, system-ui, Roboto, &quot;Droid Sans&quot;, &=
+quot;Segoe UI&quot;, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
+    min-width:48px;
+    padding: 10px 18px;
+    text-decoration-line:none;
+    text-decoration:none;
+    vertical-align:middle;
+    width: auto" href=3D"https://www.etsy.com/confirm?email=3Dtobinsilvestr=
+e022%40sooners.us&amp;user_name=3Dqmvlotiign7tcv21&amp;code=3D4e35ab8abfd84=
+bd8ce43696f797b030c&amp;action=3Dregister&amp;from_page=3D&amp;campaign_lab=
+el=3Demail_confirmation_v2_series_part_1&amp;utm_source=3Dlifecycle&amp;utm=
+_campaign=3Demail_confirmation_v2_series_part_1_010170_27219176993_0_0&amp;=
+utm_medium=3Demail&amp;utm_content=3D&amp;email_sent=3D1692152557&amp;euid=
+=3DkR4tlC1C76zRGyGx66PQFqG1lfKy&amp;eaid=3D1166419860500&amp;x_eaid=3D5ce76=
+8a97e&amp;verification_code=3D4e35ab8abfd84bd8ce43696f797b030c&amp;link_cli=
+cked=3D1">            Confirm Account
+        </a>
+        </div></td></tr></table>
+    <div style=3D"height: 40px;"></div>
+    <table cellpadding=3D"0" cellspacing=3D"0" style=3D"width: 100%; margin=
+: 0; padding: 0;"><tr><td align=3D"center"><div style=3D"width: 100%;">    =
+    <span style=3D"font-size: 12px; line-height: 20px; color: #777777;">By =
+clicking &quot;Confirm Account,&quot; you agree to Etsy's <a href=3D"https:=
+//www.etsy.com/legal/terms-of-use?ref=3Dreg&amp;campaign_label=3Demail_conf=
+irmation_v2_series_part_1&amp;utm_source=3Dlifecycle&amp;utm_campaign=3Dema=
+il_confirmation_v2_series_part_1_010170_27219176993_0_0&amp;utm_medium=3Dem=
+ail&amp;utm_content=3D&amp;email_sent=3D1692152557&amp;euid=3DkR4tlC1C76zRG=
+yGx66PQFqG1lfKy&amp;eaid=3D1166419860500&amp;x_eaid=3D5ce768a97e&amp;verifi=
+cation_code=3D4e35ab8abfd84bd8ce43696f797b030c&amp;link_clicked=3D2" style=
+=3D"color: #000000;">Terms of Use</a> and <a href=3D"https://www.etsy.com/l=
+egal/privacy?ref=3Dreg&amp;campaign_label=3Demail_confirmation_v2_series_pa=
+rt_1&amp;utm_source=3Dlifecycle&amp;utm_campaign=3Demail_confirmation_v2_se=
+ries_part_1_010170_27219176993_0_0&amp;utm_medium=3Demail&amp;utm_content=
+=3D&amp;email_sent=3D1692152557&amp;euid=3DkR4tlC1C76zRGyGx66PQFqG1lfKy&amp=
+;eaid=3D1166419860500&amp;x_eaid=3D5ce768a97e&amp;verification_code=3D4e35a=
+b8abfd84bd8ce43696f797b030c&amp;link_clicked=3D3" style=3D"color: #000000;"=
+>Privacy Policy</a>. Etsy may send you communications; you may change your =
+preferences in your account settings.</span>
+    </div></td></tr></table>
+    <div style=3D"height: 20px;"></div>
+    <table cellpadding=3D"0" cellspacing=3D"0" style=3D"width: 100%; margin=
+: 0; padding: 0;"><tr><td align=3D"center"><div style=3D"width: 100%;">    =
+    <span style=3D"font-size: 12px; line-height: 20px; color: #777777;">If =
+you didn't create this account, <a href=3D"https://www.etsy.com/help/contac=
+t?campaign_label=3Demail_confirmation_v2_series_part_1&amp;utm_source=3Dlif=
+ecycle&amp;utm_campaign=3Demail_confirmation_v2_series_part_1_010170_272191=
+76993_0_0&amp;utm_medium=3Demail&amp;utm_content=3D&amp;email_sent=3D169215=
+2557&amp;euid=3DkR4tlC1C76zRGyGx66PQFqG1lfKy&amp;eaid=3D1166419860500&amp;x=
+_eaid=3D5ce768a97e&amp;verification_code=3D4e35ab8abfd84bd8ce43696f797b030c=
+&amp;link_clicked=3D4" style=3D"color: #000000;">contact Etsy support</a>.<=
+/span>
+    </div></td></tr></table>
+    <div style=3D"height: 28px;"></div><div style=3D"text-align: center; pa=
+dding: 0 2% 0; font-size: 12px; line-height: 20px; color: #777;">
+                If you live in North America or South America, this email i=
+s sent by Etsy, Inc., 117 Adams Street, Brooklyn, NY 11201, USA; if you liv=
+e elsewhere, this email is sent by Etsy Ireland UC, a subsidiary of Etsy, I=
+nc., 66/67 Great Strand Street, Dublin 1, D01 RW84, Ireland having company =
+registration number 495696 and VAT registration number IE9777587C.
+You are receiving this email because you registered on <a title=3D"Etsy" hr=
+ef=3D"https://www.etsy.com?ref=3Dlegal_footer&amp;campaign_label=3Demail_co=
+nfirmation_v2_series_part_1&amp;utm_source=3Dlifecycle&amp;utm_campaign=3De=
+mail_confirmation_v2_series_part_1_010170_27219176993_0_0&amp;utm_medium=3D=
+email&amp;utm_content=3D&amp;email_sent=3D1692152557&amp;euid=3DkR4tlC1C76z=
+RGyGx66PQFqG1lfKy&amp;eaid=3D1166419860500&amp;x_eaid=3D5ce768a97e&amp;veri=
+fication_code=3D4e35ab8abfd84bd8ce43696f797b030c&amp;link_clicked=3D5" styl=
+e=3D"color: #777; font-weight: normal; text-decoration: underline;">Etsy.co=
+m</a> with this email address.            <br><br>
+        Copyright =C2=A9 2023 Etsy, Inc, an affiliate of Etsy Ireland UC. A=
+ll rights reserved.
+</div></td></tr>
+        </table></td>
+    </tr>
+    </table>
+    </th></tr>
+        </table>
+<img width=3D"1px" height=3D"1px" alt=3D"" src=3D"http://email.mail.etsy.co=
+m/o/eJyM0EFu3CAUgOHTlJ2tx7MNZsFqpFpVW6mdCyBsnidoMEwAz8Q5fZRE2ecA_7_4FrvdrL9=
+EE-xMQdNmfTBLiqvPm60-RXNHUyh7KuZmczWcOW1dh2JgpLlQyAccBsk-S-tcplKMd5pzIXquRg=
+EDAKPdO3099zWc-EmK1_N0TC9C_Pv_83niYf19sCe9WBhEb_tOgV0BnbO8E72cHYy9lKtiXiNgB=
+yMXgIhtJyf8O__5BRxHwB89uPJI-Uq5uWSi2FwzqnZpqZajedDc3HJyrY-VcrSBZV3T7GPx4U6l=
+ZgJ8X5SUIuXS7oXtdTNfPN-BMcCBSzAokSsuhVKdAQMfn5L2vJAOfqXlWAK9BQAA___MIHvF"><=
+/body>
+
+--2ffda8facfdb02a6b5844700c76bebaefa9f5413c15f92e70fd4e6c7790ef4d4--

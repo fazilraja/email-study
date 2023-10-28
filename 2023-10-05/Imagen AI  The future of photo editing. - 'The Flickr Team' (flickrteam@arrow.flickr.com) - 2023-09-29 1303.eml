@@ -1,0 +1,863 @@
+Received: from PH0PR20MB3734.namprd20.prod.outlook.com (2603:10b6:510:21::7)
+ by PH8PR20MB5368.namprd20.prod.outlook.com with HTTPS; Fri, 29 Sep 2023
+ 18:03:16 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=ShGHjvoSpGyWMsiN7z4lUajlUaEiT5Hq4J4fxJIUmhPoIkpxnUwGTZVDevp0nBs2IaFwFGaw9pJM74z1/KZQZwmxED16xHbB4X+sXPMeGSm9UN/nXwvMRAC8Vr+fju/l7RrlbcOcOeROpv0kKeFtGaGKbw5tWiyQ2HG3yX45p4Yh6fkos0l50VSLDFLT8pPpvlpMAlSxm0SByEYC0A1hO8kUV5IL3m7G5PzuSHW1dinY/9xpbpM/2XZQoslc4XkMifHsfe4+YjysdOhZhMbiUbk+l+Bb/Wot5zZ5/1Zlf1mgJpE5xDig0PNeLj9hNSt+pE+xmW+XPZsvsbGAjxVK+w==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xvdjtnjC9V0PbMrMxUjWIRW2URe1Q1Z0ZCHBaZNRaIA=;
+ b=dahIo1mrzm/ahHEvKaaMdtWrwtLv0lDR1DYtUv9TNGfXdWbr3LsWDMj6/bLoeeIR8YNVvGE4UyBeVE6Ml+KWnCsZn6n18FrahpD30YFVkToOlCBvo7f1fo+iWaBr1Xlr2xr5JrI2uOH9M/+k5QUSReC9Nzk0n1hTvkDN9XjHvjuWe5q4Dyejgve7EMWqYJtZXwK+GfRM1VKEG1EfGOLaQVa2V4wnxK/MvAlXIsTgY+eK1yz+n3Sar4Cy7uGvjFX32CmlneBlTys85KYf99342ybQx3NsuEnd44qFs51mKWrLGFN6a/GJhELmrFMUFohz9AbCiFbc4XxDkiQlgUAu+A==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.210.54) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=spmailtechnol.com; dmarc=pass (p=none sp=none pct=100)
+ action=none header.from=arrow.flickr.com; dkim=pass (signature was verified)
+ header.d=arrow.flickr.com; arc=pass (0 oda=1 ltdi=1
+ dkim=[1,1,header.i=@arrow.flickr.com] dmarc=[1,1,header.from=flickr.com])
+Received: from BL6PEPF00016418.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:22e:400:0:1004:0:7) by PH0PR20MB3734.namprd20.prod.outlook.com
+ (2603:10b6:510:21::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.21; Fri, 29 Sep
+ 2023 18:03:14 +0000
+Received: from BL02EPF0001A108.namprd05.prod.outlook.com
+ (2a01:111:f403:c922::1) by BL6PEPF00016418.outlook.office365.com
+ (2603:1036:903:4::a) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.35 via Frontend
+ Transport; Fri, 29 Sep 2023 18:03:13 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.210.54)
+ smtp.mailfrom=spmailtechnol.com; dkim=pass (signature was verified)
+ header.d=arrow.flickr.com;dmarc=pass action=none
+ header.from=arrow.flickr.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ spmailtechnol.com discourages use of 209.85.210.54 as permitted sender)
+Received: from mail-ot1-f54.google.com (209.85.210.54) by
+ BL02EPF0001A108.mail.protection.outlook.com (10.167.241.138) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.14 via Frontend Transport; Fri, 29 Sep 2023 18:03:13 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:2DF8635982A0AE1E5596582DE615C34A92790895CC0C395C535DA05E6AD4F28C;UpperCasedChecksum:0D1C32D8E18E4C4A5E1A3A2CE5E18FFCC3B8EF247D8455088660EAD93CC428C1;SizeAsReceived:5799;Count:29
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6c4e38483d2so5748463a34.1
+        for <tobinsilvestre@outlook.com>; Fri, 29 Sep 2023 11:03:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696010593; x=1696615393;
+        h=x-forwarded-for:list-id:list-unsubscribe:feedback-id:from:subject
+         :reply-to:mime-version:date:message-id:to:dkim-signature
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xvdjtnjC9V0PbMrMxUjWIRW2URe1Q1Z0ZCHBaZNRaIA=;
+        b=wVYfOb1RHI25CKGGvMTL4+vr/riUaeM+5qqDgvL5wj2EACf7ml4LkYNmZ04PxM9SI5
+         6kYCWUuhRtyOjuIZhuhQq4MnNeog2OsTyCuHvOiIsBhEkMHeTHBSuKQ/xu/pWUeeLuYi
+         ExGLcnTbD92YkRwUNtzhijp1rcF12FykEj+d4v+T/Lb5KLWYwrIgwIgWrs+YlLQNOb1l
+         tOca3XBIY7LEM8B3uSWo1FkV+6b4dwFyg/mwQt2D1zJsS10pdXaCd9fZHNG9p0jO3K5e
+         wgnaOgs+0bKb6zIGWyMzi4vLo0TtSsp2oVHyrG1O9mkw1YMBZaKDN0R2nS/SC+GMCVP7
+         ZdTA==
+X-Gm-Message-State: AOJu0YzUsXezh3P3ir5NsK0bIVQd7fyq3UgVnh6ynVPbW4p6/R/hhYWe
+	d9hopCh+esaqtMaEnmBgO2Oa7eHkHK2N1Sc0ug==
+X-Google-Smtp-Source: AGHT+IF/OAgkI6muNhxZor9xxpx5ZqP1pq/47qeP029bdrRUjOmv+dC3fJVsXpFzCg6A6iwHYuFXnlToGi4LX9jklPRinZ8f9Ek=
+X-Received: by 2002:a05:6830:468a:b0:6c6:3ea5:cdbf with SMTP id ay10-20020a056830468a00b006c63ea5cdbfmr2559208otb.28.1696010593677;
+        Fri, 29 Sep 2023 11:03:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1696010593; cv=none;
+        d=google.com; s=arc-20160816;
+        b=FN3fCDUOXpBfhHNx+R+jUgp4j9rxyK180e9QJeO5XtLAbEPwjmtTjl1m/aTaMaBG2a
+         SUQZO1/tw0ngc3DbLYWQtG+xZfR3zegUoIXqMTzcQScC2K5srpwAsnJCv4ysRvUhe0u4
+         FwqQ/P+iQ8a03p4ij9XDML4019nwOxzemlw3jqlJQpLFcgsOpXw+Qd915zAihu5EOMOM
+         AqObXmExdPdJyIuTokVBTE//xP+upahNVQFCQeYjmbKCqSkE3rla54ui8vL8SB2JA3Ql
+         xgoiHPD1yLO1YNpkkMAPskwzxp1W7cexIRmPt/gJ4n5VqPrIqAGKol4qXOrCmsim3aNz
+         Ly/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-id:list-unsubscribe:feedback-id:from:subject:reply-to
+         :mime-version:date:message-id:to:dkim-signature;
+        bh=xvdjtnjC9V0PbMrMxUjWIRW2URe1Q1Z0ZCHBaZNRaIA=;
+        fh=gm9TEPWo+3joWjeDBjGFeAYhKh2eqdizmTC8fx2mik0=;
+        b=fFytyeyTfUjF/BuOycHTDsV4Rss/cRCpDQ62MkPfmMRkXcPLD3snSoeN8vxAnAbZJV
+         JU7c2GhssKB0qkmPOGst7bo1FaYHpeFTABocfhZtj86TrwaAkIwTnAgTQVe0bpYK556e
+         U/UkxSj7LC5EaTUbn7SWUqqIfO3XOCDmERh1tlsP8po8T9uVcsTHsh4TBfkyuNfg78WC
+         8TuyAq8lzTvMLdRLpyV+FN0RYze97VSBPJAk4k0G18Zc2p7YQHofws0Jvz/sTdYTBgDi
+         qt0LVd+tPPjmyFkAuZMZRKt56fgc140phxD7yQk1XCuf2ww+Hk8rckgu1+CoIRRoduHJ
+         UA4A==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@arrow.flickr.com header.s=scph0319 header.b=FrDsSaFW;
+       spf=pass (google.com: domain of msprvs1=19636dcsjk359=bounces-251629@spmailtechnol.com designates 147.253.213.22 as permitted sender) smtp.mailfrom="msprvs1=19636dCSjK359=bounces-251629@spmailtechnol.com";
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=flickr.com
+Return-Path: msprvs1=19636dCSjK359=bounces-251629@spmailtechnol.com
+Received: from mta-213-22.sparkpostmail.com (mta-213-22.sparkpostmail.com. [147.253.213.22])
+        by gmr-mx.google.com with ESMTPS id eb4-20020a0568306dc400b006c61ec72005si635488otb.1.2023.09.29.11.03.13
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 29 Sep 2023 11:03:13 -0700 (PDT)
+Received-SPF: pass (google.com: domain of msprvs1=19636dcsjk359=bounces-251629@spmailtechnol.com designates 147.253.213.22 as permitted sender) client-ip=147.253.213.22;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@arrow.flickr.com header.s=scph0319 header.b=FrDsSaFW;
+       spf=pass (google.com: domain of
+ msprvs1=19636dcsjk359=bounces-251629@spmailtechnol.com designates
+ 147.253.213.22 as permitted sender)
+ smtp.mailfrom="msprvs1=19636dCSjK359=bounces-251629@spmailtechnol.com";
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=flickr.com
+X-MSFBL: URDfzc6JFhvDFcaOH5t+Xbw8kDSBtDHr/wd2LPrNXwY=|eyJtZXNzYWdlX2lkIjo
+	iNjUxNDVlMTExNzY1OGZkZDIxZDgiLCJzdWJhY2NvdW50X2lkIjoiMCIsInIiOiJ
+	0b2JpbnNpbHZlc3RyZTA4OUBzb29uZXJzLnVzIiwidGVuYW50X2lkIjoic3BjIiw
+	iY3VzdG9tZXJfaWQiOiIyNTE2MjkifQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arrow.flickr.com;
+	s=scph0319; t=1696010590; i=@arrow.flickr.com;
+	bh=xvdjtnjC9V0PbMrMxUjWIRW2URe1Q1Z0ZCHBaZNRaIA=;
+	h=To:Message-ID:Date:Content-Type:Subject:From:List-Unsubscribe:
+	 From:To:Cc:Subject;
+	b=FrDsSaFWSJBIIFL0qyLLN52FP56SX3ZB9G0dyBau994q+TUCaB6yipETDv1ULv7x8
+	 OXS6tnnxMd5Z68d7HE8FeCmhVPjBFMaYno7TGjXI1FatM2rRuPKiXjIojfseuY6CHv
+	 klAHWE3RWfIzDhj1tyuI46eBJRtsLu6fbE/S1ewg=
+To: tobinsilvestre089@sooners.us
+Message-ID: <12.8D.14185.E5117156@ju.mta1vrest.cc.prd.sparkpost>
+Date: Fri, 29 Sep 2023 18:03:10 +0000
+Content-Type: multipart/alternative; boundary="_----Bj5eEASnkf2L/t4lleWATQ===_01/8D-14185-E5117156"
+Reply-To: noreply@flickr.com
+Subject: Imagen AI: The future of photo editing.
+X-Campaign-ID: 7843868
+From: "The Flickr Team" <flickrteam@arrow.flickr.com>
+X-Message-ID: 5ffa713226d44699a4c7f91dae238cc0
+X-Feedback-ID: 10429899:7843868:17839:iterable
+Feedback-ID: 10429899:7843868:17839:iterable
+List-Unsubscribe: <mailto:unsubscribe@unsub.spmta.com?subject=unsubscribe:g-UaluzOA-xFbqD-ILcC7LnRm17_TZ_1sAxZa3FevkE~|eyAicmNwdF90byI6ICJ0b2JpbnNpbHZlc3RyZTA4OUBzb29uZXJzLnVzIiwgInRlbmFudF9pZCI6ICJzcGMiLCAiY3VzdG9tZXJfaWQiOiAiMjUxNjI5IiwgInN1YmFjY291bnRfaWQiOiAiMCIsICJtZXNzYWdlX2lkIjogIjY1MTQ1ZTExMTc2NThmZGQyMWQ4IiB9>
+List-Id: <spc.251629.0.sparkpostmail.com>
+X-Forwarded-For: tobinsilvestre089@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 29
+X-MS-Exchange-Organization-ExpirationStartTime: 29 Sep 2023 18:03:13.8815
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 6b45fcd3-fe4f-440a-8b12-08dbc116598b
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF0001A108:EE_|PH0PR20MB3734:EE_|PH8PR20MB5368:EE_
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF0001A108.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/29/2023 8:47:49 AM
+X-MS-Office365-Filtering-Correlation-Id: 6b45fcd3-fe4f-440a-8b12-08dbc116598b
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.210.54
+X-SID-PRA: FLICKRTEAM@ARROW.FLICKR.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2023 18:03:13.8347
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b45fcd3-fe4f-440a-8b12-08dbc116598b
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF0001A108.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR20MB3734
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.5844898
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.022
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90012020)(91020020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPneq4vr15IWFeNvggqWpSxKq8Sd7gXHpUdnjH1MbiUZJWTSReMcDzc/4ukXL1eWNVJU4JvMqRD8p0RwaHNBPP72V8hC2K6uz1qHDXhQec6OH3SIPzSoR1H1bZrubfEKEMRDrz9E758XeBMaCtqY7BYL2w3x2VsldCkG93pFZ3XQVBIekPNhQ7lE21X8hs4CWGY=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WVBGQlhUN2pMcEUvRDVNdHVtbW9panFqK0JxWGNoSFI5QlNzOFNKSTc4MDlo?=
+ =?utf-8?B?MjZiVjJQMTB4TmtiZUhGVVd3R2tyWFExeHNoY2ZaZENicFlTZEJvRk9nam1Z?=
+ =?utf-8?B?L3dTQitCRDV6WUFLVzFTR1pxWkwxbGFQUlMvV1ZaQW0wWi9WTGpSZ3NaN3FX?=
+ =?utf-8?B?ZHhIZDBhSlY3SzJ3dEF5MHF6dWVGVFdKSTlhY29TL21qRk1oOEJGTXF1Q0Q1?=
+ =?utf-8?B?WFNvL2lOL3NGNSt6T0c0U1JYNk9mRFVlRXVWd1V2cU9JQUpSWS9mVDF0dFNM?=
+ =?utf-8?B?eUx4TFBwZzdmYnhEaTZ6dG43M3gwSHdVOUMrK0I0Q1BHcFRYd0l1V1FRemtD?=
+ =?utf-8?B?RXNNaTF0b0F2NVFUQTlsdjZyVlBPNkhIOGxnaVlxQ3llem82eGRyNFNyREFM?=
+ =?utf-8?B?em5rRTdIaEZzYitWbTJsSnk4R3NUdU9hV25PWHpXanRDcVAzVXRnaVFnTTRn?=
+ =?utf-8?B?clUrdWNsK1N3YUprMlpqTDJFQWVXU1V0WlJqVkNXeEJxQ3pCb2ViWGZRT29W?=
+ =?utf-8?B?aHdBV3NNMk9vMDRQYmVuVDhzd00rMUFicjRNSy9uaFhKckxVOFlDVXVoZVU3?=
+ =?utf-8?B?M1VVTnhseVpMcS9wMllkU1UyclN2VDJTUldMNjZWTGVFeENQZDBNaG1qNmhR?=
+ =?utf-8?B?K0ZkalRmZ3FvTFBPYVFxSXduRnBwNTNnb0wvWU85aFRKZDZySFhtaVNzSHRE?=
+ =?utf-8?B?NllUd2RsZzFIYzd3VmY5ZGcvV0NKc2pWYWNWM1BXRFk1K0NqQ0x5N1ROalE3?=
+ =?utf-8?B?SFNWQTAxMzdCYkpNYzIzejlQem9lclg5TTc2ZzQvU3cxUDN4dnJEa3ZsTmVP?=
+ =?utf-8?B?NlBNTTFEdTlYbVJpY2FvSEZwSUM3SjFSOUthblpIS2lhb21yTDdydTRzbTVj?=
+ =?utf-8?B?SU81YS9nUmV3b2daUWY5TFN0VTJCQjhWN2pwVzhXTWM4RkpycFBzaTdGNDJ3?=
+ =?utf-8?B?MCt6Q1E2M1lGN25NOTlIWkpOVG50ZjFuRkF5cXIyUTlDK3VJVVhSQ1BaelFv?=
+ =?utf-8?B?QUVuSENhVWswNE9vQ3RIQndpck93QWpVODVua014Qko4SC84ajQ3U05kc0No?=
+ =?utf-8?B?eldSR1ZKUGt3TkVtMDIxQzVGL2I0Yis3QVFBQkJuNnk1QXlrUkYxeVp0RTlr?=
+ =?utf-8?B?aFlTMzRGVXo2aGJSaHdYZUs2eTMrSW45THZ0dE5Yb2JWVDk5N0hzMGlpM1gz?=
+ =?utf-8?B?WXp4aFBqWUYwMXBmZEtzdXNxeGg2c21RQlhycldLM0Znb0FtRWNGbWJGTkdw?=
+ =?utf-8?B?SWMwWi9jVSttWjBOQjBOekRua0N0R2V4T0JSRHJYeEZhM2tJbFE5OUhGRXNU?=
+ =?utf-8?B?MDRuQm03N0tDaFhJWTV0QTNvVm9acGJiSGh0d1VLZVF2K3R1MVR3UmtQZk5E?=
+ =?utf-8?B?dnBWZmF6dEc2MDk5VTEwMVAzYWZ4aERUWEF4VTEwdFN5TkJqcEhzaEMzdVBR?=
+ =?utf-8?B?NVMxeEZwSWJLUmY1d3hUWGF4Y2N5T3NVVUd4azU3RzhwMmE4ZHd0ZklQalJk?=
+ =?utf-8?B?djFJVS84MzRqWHZSU1NOQVNpd1UwU2VRVUpPaW1FYlJlNmp6RVlkcWUzTmNh?=
+ =?utf-8?B?KzJ5bWNRU003SHRjaHZOektEZDAvVjNKRlJPaGJuVnE0dHpaSzhiUHF6dEFO?=
+ =?utf-8?B?cjlUSXEwcndVSDNFMjNiOW1HenJ0V1hPUDNleEVRR052UXY2dCsrQytDM0FR?=
+ =?utf-8?B?N1pyNEFhMjE2Vk9CL3BpU2ZvSHVGU3JpaGkrbGt1aGt6VkhGblU5REo4alZI?=
+ =?utf-8?B?Vit3aU9QbGtKeXBvTHVSOFNGL3U5SVN1QlgzbDJyZ3FrNzVpV1lMUklab3E4?=
+ =?utf-8?B?V2tzOG5oaDRjM1NhVm1uSUJEMnVhVXpoWkxXcmVPN04rL0RMY2dVbElSVVAx?=
+ =?utf-8?B?dHZRN1Rmbjgzcnp2QWkvYXUxaldsNE5IQmJOMzdmMjZZbTVrUVJzcTFJdDVM?=
+ =?utf-8?B?aHRsYi9HOG5UMkFrZm5QbFBmU2NMenRlbFhxaERuV01PMUI2WWlUVkxKclhv?=
+ =?utf-8?B?Ymw4QzNaWjl4RC9qdTZ6dDgxWkNvSWdtRmtJQStmWjFNMVdRZ21tZG9PK0R3?=
+ =?utf-8?B?SDYxZjcxYnZjOHZQR2RlejZjNFRIWTdsNVhSZGFaSnYzV2dMa0pCeThxQWll?=
+ =?utf-8?Q?WM/UR8wCg7eWOrhdlskIQEfd9?=
+MIME-Version: 1.0
+
+--_----Bj5eEASnkf2L/t4lleWATQ===_01/8D-14185-E5117156
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+
+Check out this cosmic perk from our friends at Imagen! =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =0A=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =0A=E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =0A=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =0A <https://www.flickr.com/> =0A=0A =0A<=
+https://imagen-ai.com/=3Futm_source=3DFlickr&utm_campaign=3DNewsletter_Sep2=
+3&utm_content=3DeBlast>=0A =0A<https://imagen-ai.com/=3Futm_source=3DFlickr=
+&utm_campaign=3DNewsletter_Sep23&utm_content=3DeBlast>=0A=0AOur friends at =
+Imagen want to help you maximize your photography potential =0Awith their A=
+I-powered, cloud-integrated solution for Lightroom Classic. Your =0Aediting=
+ time can be cut by 96%, freeing up your time to get creative while =0Alett=
+ing AI do the heavy lifting.=0A=0A =0A<https://imagen-ai.com/=3Futm_source=
+=3DFlickr&utm_campaign=3DNewsletter_Sep23&utm_content=3DeBlast>=0A =0A<http=
+s://imagen-ai.com/=3Futm_source=3DFlickr&utm_campaign=3DNewsletter_Sep23&ut=
+m_content=3DeBlast>=0A=0AImagen streamlines culling, backs up your work, of=
+fers consistent and precise =0Aedits, all while keeping you in the driver=
+=E2=80=99s seat. Ready to transform your =0Aworkflow=3F=0A=0A=0AClaim your =
+1,000* free edits today =0A<https://imagen-ai.com/=3Futm_source=3DFlickr&ut=
+m_campaign=3DNewsletter_Sep23&utm_content=3DeBlast>=0A=0A* Valued at $50=0A=
+=0A =0A<https://imagen-ai.com/=3Futm_source=3DFlickr&utm_campaign=3DNewslet=
+ter_Sep23&utm_content=3DeBlast>=0A=0A <http://flickr.com/flickr>  <https://=
+www.facebook.com/flickr/>  =0A<http://twitter.com/flickr>  <https://www.ins=
+tagram.com/flickr/> =0A=0A <https://www.climateneutral.org>  <https://www.c=
+onservationalliance.com> =0A=0A <https://www.tugboatinstitute.com/certified=
+-evergreen/>  =0A<https://inc-bestworkplaces.secure-platform.com/a/>  =0A<h=
+ttps://www.greatplacetowork.com> =0A=0AYour use of Flickr is subject to the=
+ Flickr Terms & Conditions of Use =0A<https://www.flickr.com/help/terms> an=
+d Community Guidelines =0A<https://www.flickr.com/help/guidelines>. =0A=0A =
+Note: This message is in reference to  Flickr account 199147830@N03 =0A<htt=
+ps://www.flickr.com/people/199147830@N03/>.=0A=0AView in browser =0A<https:=
+//links.flickr.com/e/evib=3F_t=3D40ac9f0c38d540238d36950e58265982&_m=3D5ffa=
+713226d44699a4c7f91dae238cc0&_e=3DoJuvnkWwYV5_7kdyYNN2fXUemG2iQ63OALEVvgsez=
+cTfwrU46Orzy0_SW9Agcqp4>=0A |Unsubscribe =0A<https://links.flickr.com/e/enc=
+ryptedUnsubscribe=3F_r=3D40ac9f0c38d540238d36950e58265982&_s=3D5ffa713226d4=
+4699a4c7f91dae238cc0&_t=3DoJuvnkWwYV5_7kdyYNN2fXUemG2iQ63OALEVvgsezcQpr4xMk=
+vlNguzc01jwPbqqgCrUfCc7poHECDZLFvUxhHA9Vomec7t7-OvHmg1vP0iPidoQ69R5WLRH3syI=
+GpQ->=0A=0A=C2=A9 2023 Flickr, P.O. Box 390123, Mountain View, CA 94039
+--_----Bj5eEASnkf2L/t4lleWATQ===_01/8D-14185-E5117156
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="UTF-8"
+
+<!DOCTYPE html><html lang=3D"en" xmlns=3D"http://www.w3.org/1999/xhtml" xml=
+ns:o=3D"urn:schemas-microsoft-com:office:office" xmlns:v=3D"urn:schemas-mic=
+rosoft-com:vml" style=3D"font-family: sofia-pro, sans-serif; -ms-text-size-=
+adjust: 100%; -webkit-text-size-adjust: 100%; color: #666666; -webkit-font-=
+smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smooth: au=
+to; margin: 0 auto !important; padding: 0 !important; height: 100% !importa=
+nt; width: 100% !important;"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><!=
+-- utf-8 works for most cases --><meta name=3D"viewport" content=3D"width=
+=3Ddevice-width"><!-- Forcing initial-scale shouldn't be necessary --><meta=
+ http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!-- Use the latest (=
+edge) version of IE rendering engine --><meta name=3D"x-apple-disable-messa=
+ge-reformatting"><!-- Disable auto-scale in iOS 10 Mail entirely --> <title=
+></title> <!-- The title tag shows in email notifications, like Android 4.4=
+. --> <link rel=3D"stylesheet" type=3D"text/css" href=3D"https://cloud.typo=
+graphy.com/7363674/7207412/css/fonts.css"> <!-- Web Font / @font-face : BEG=
+IN --><!-- NOTE: If web fonts are not required, lines 10 - 27 can be safely=
+ removed. --><!-- Desktop Outlook chokes on web font references and default=
+s to Times New Roman, so we force a safe fallback font. --> <style type=3D"=
+text/css">@import url("https://use.typekit.net/dzg6yyr.css");*{font-family:=
+sofia-pro,sans-serif}</style> <!-- Web Font / @font-face : END --> <!-- CSS=
+ Reset : BEGIN --> <style type=3D"text/css">html,body{margin:0 auto!importa=
+nt;padding:0!important;height:100%!important;width:100%!important;color:#66=
+6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font=
+-smooth:auto}u+#body a,#MessageViewBody a{color:inherit;text-decoration:non=
+e;font-size:inherit;font-family:inherit;font-weight:inherit;line-height:inh=
+erit}*{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;margin:0;pad=
+ding:0}div[style*=3D"margin: 16px 0"]{margin:0!important}table,td{mso-table=
+-lspace:0!important;mso-table-rspace:0!important}table{border-spacing:0!imp=
+ortant;border-collapse:collapse!important;table-layout:fixed!important;marg=
+in:0 auto!important}img{-ms-interpolation-mode:bicubic}a{color:inherit;text=
+-decoration:none;font-size:inherit;font-family:inherit;font-weight:inherit;=
+line-height:inherit}a[x-apple-data-detectors],.unstyle-auto-detected-links =
+a,.aBn{border-bottom:0!important;cursor:default!important;color:inherit!imp=
+ortant;text-decoration:none!important;font-size:inherit!important;font-fami=
+ly:inherit!important;font-weight:inherit!important;line-height:inherit!impo=
+rtant}.a6S{display:none!important;opacity:.01!important}.im{color:inherit!i=
+mportant}img.g-img+div{display:none!important}@media only screen and (min-d=
+evice-width:320px) and (max-device-width:374px){u ~ div .email-container{mi=
+n-width:320px!important}}@media only screen and (min-device-width:375px) an=
+d (max-device-width:413px){u ~ div .email-container{min-width:375px!importa=
+nt}}@media only screen and (min-device-width:414px){u ~ div .email-containe=
+r{min-width:414px!important}}</style> <!-- What it does: Makes background i=
+mages in 72ppi Outlook render at correct size. --><!--[if gte mso 9]><xml> =
+<o:OfficeDocumentSettings> <o:AllowPNG/> <o:PixelsPerInch>96</o:PixelsPerIn=
+ch> </o:OfficeDocumentSettings> </xml><![endif]--><!-- CSS Reset : END --><=
+!-- Progressive Enhancements : BEGIN --> <style type=3D"text/css">h1{font-f=
+amily:sofia-pro,sans-serif;font-size:28px;line-height:42px;font-weight:500;=
+margin:0 0 18px 0;color:#f79a31;text-align:left}h2{font-family:sofia-pro,sa=
+ns-serif;font-size:24px;line-height:34px;font-weight:600;margin:0 0 24px 0;=
+color:#65abc8}h3{font-family:sofia-pro,sans-serif;font-size:16px;line-heigh=
+t:28px;font-weight:400;margin:0 0 12px 0;color:#6eb800}h4{font-family:sofia=
+-pro,sans-serif;font-size:24px;line-height:36px;font-weight:500;margin:0 32=
+px 24px 36px;color:#fff}h5{font-family:sofia-pro,sans-serif;font-size:38px;=
+line-height:50px;font-weight:800;margin:0;color:#fff}p{font-family:sofia-pr=
+o,sans-serif;font-size:18px;line-height:30px;font-weight:400;margin:0 0 24p=
+x 0;color:#fff}ul{font-family:sofia-pro,sans-serif;font-size:18px;line-heig=
+ht:30px;font-weight:300;margin:0 0 24px 0;color:#fff}.list-title{font-famil=
+y:sofia-pro,sans-serif;font-size:16px;line-height:16px;font-weight:500;marg=
+in:0 0 24px 0;color:#ffc289}.list-copy{font-family:sofia-pro,sans-serif;fon=
+t-size:16px;line-height:28px;font-weight:500;margin:0 24px 0 0;color:#fff;p=
+adding:0 0 36px 12px}small{font-family:sofia-pro,sans-serif;font-size:14px;=
+line-height:28px;font-weight:500;margin:0 0 24px 0;display:block;color:#666=
+}.number{font-family:"Gotham Cond A","Gotham Cond B","Open Sans",Arial,sans=
+-serif;font-style:normal;font-weight:500;font-size:63px;line-height:0;margi=
+n:24px 0 0 0;color:#ffc289;padding:0 0 0 12px}.center{text-align:center}.le=
+ft{text-align:left}.right{text-align:right}.body-border{border:1px solid #d=
+de2eb;margin-bottom:24px;display:block}.button-space{padding-top:0;padding-=
+bottom:32px;padding-left:72px;padding-right:72px}.button-box{display:block;=
+padding:16px 0}.button-td{border-collapse:collapse;text-align:center;backgr=
+ound-color:#0065df;border-radius:5px}.button-a{display:block;padding-top:23=
+px;padding-bottom:24px;padding-left:36px;padding-right:36px;color:#fff!impo=
+rtant;text-transform:none;text-decoration:none;font-family:sofia-pro,sans-s=
+erif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing=
+:1px}.button-td,.button-a{transition:all 100ms ease-in}.button-td-primary:h=
+over,.button-a-primary:hover{background:##128fdc!important;border-color:#12=
+8fdc!important}.text-link{color:#6eb800!important;text-decoration:none;padd=
+ing-top:0;padding-bottom:0;padding-right:0;padding-left:0;font-weight:500;f=
+ont-style:normal}.text-link-blue{color:#65abc8!important;text-decoration:no=
+ne;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;font-weigh=
+t:500;font-style:normal}.secondary-button-td{border-collapse:collapse;text-=
+align:center;background-color:#fff}.secondary-button-a{display:block;paddin=
+g-top:0;padding-bottom:0;padding-left:0;padding-right:0;color:#6eb800!impor=
+tant;text-transform:none;text-decoration:none;font-family:sofia-pro,sans-se=
+rif;font-weight:500;font-size:16px;line-height:16px}.secondary-button-td,.s=
+econdary-button-a{transition:all 100ms ease-in}.secondary-button-td-primary=
+:hover,.secondary-button-a-primary:hover{background:#fff!important;border-c=
+olor:#fff!important;color:#5c9900!important}.link-arrow{padding-top:3px}.lo=
+go{text-align:center;padding-top:36px;padding-left:36px;padding-right:36px;=
+padding-bottom:24px}.hero{text-align:left;padding-top:0;padding-left:0;padd=
+ing-right:0;padding-bottom:0;display:block}.right-pad{padding-right:24px}.l=
+eft-pad{padding-left:24px}.content-box{text-align:left;padding-top:32px;pad=
+ding-left:84px;padding-right:84px;padding-bottom:0;font-family:"Gotham A","=
+Gotham B","Open Sans",Arial,sans-serif;display:block}.grid-box{padding-top:=
+24px;padding-left:24px;padding-right:24px;padding-bottom:24px;display:block=
+}.content-box-start{padding-top:48px!important;padding-bottom:16px!importan=
+t}.content-box-end{padding-bottom:36px!important}.content-box-small{text-al=
+ign:left;padding-top:32px;padding-left:90px;padding-right:90px;padding-bott=
+om:0;font-family:"Gotham A","Gotham B","Open Sans",Arial,sans-serif;display=
+:block}.content-box-video{text-align:left;padding-top:0;padding-left:48px;p=
+adding-right:48px;padding-bottom:12px;display:block}.call-out-box{text-alig=
+n:center;padding:24px 32px 0;display:block}.call-out-box p{margin-bottom:0!=
+important}.hero_image img{width:100%}.orange-line{padding:0 48px 0 48px}.to=
+p-pad-big{padding-top:48px!important}.bottom-pad-big{padding-bottom:48px!im=
+portant}.top-pad-small{padding-top:24px!important}.bottom-pad-small{padding=
+-bottom:24px!important}.list-pad-right{padding-top:0;padding-bottom:0;paddi=
+ng-right:48px;padding-left:0}.list-pad-right2{padding-top:0;padding-bottom:=
+0;padding-right:0;padding-left:24px;line-height:24px}.list-pad-left{padding=
+-top:0;padding-bottom:0;padding-left:48px;padding-right:0}.x-pad-top{paddin=
+g-top:0!important}.x-pad-bottom{padding-bottom:0!important}.border-flush{pa=
+dding-top:0;padding-bottom:40px;padding-right:0;padding-left:0}.border-pad{=
+padding-top:0;padding-bottom:18px;padding-right:48px;padding-left:48px}.hel=
+p-block{background-color:#f0f0f0;margin-bottom:24px}.help-block .content-bo=
+x{padding-top:12px!important}.question-box{text-align:center;padding:24px 2=
+4px 0 36px;display:block}.question-box p{margin-bottom:0!important;line-hei=
+ght:24px}.help-arrow{width:30px;max-width:30px;border-width:0;height:auto;m=
+argin-right:0;padding-top:6px}.help-arrow-pad{padding-top:0;padding-bottom:=
+0;padding-left:20px;padding-right:0}#sub-desktop{display:block;max-width:10=
+0%!important}#sub-mobile{display:none}.footer-section{padding:36px 24px 36p=
+x;background-color:#f2f2f2}.attribution{padding:0;margin:0;font-size:11px;c=
+olor:#333;font-family:sofia-pro,sans-serif}.attribution a{text-decoration:u=
+nderline;text-decoration:none!important;padding-top:1px;padding-bottom:1px;=
+padding-right:0;padding-left:0;color:#006dac}.legal{padding:0;margin:0;font=
+-size:14px;line-height:28px;color:#666;font-family:sofia-pro,sans-serif}.le=
+gal a{text-decoration:underline!important;border-bottom-width:1px;border-bo=
+ttom-style:solid;border-bottom-color:#dedede;padding-bottom:1px;padding-rig=
+ht:0;padding-left:0;color:#666!important}.icons{text-align:center;backgroun=
+d-color:#f2f2f2;padding-top:12px;padding-bottom:12px;padding-right:12px;pad=
+ding-left:12px}.app-icon{width:168px;height:60px}.arrow-link{width:18px;max=
+-width:18px;border-width:0;height:auto;margin-bottom:-4px;bottom:-4px}.body=
+-border{border:1px solid #dde2eb;margin-bottom:24px;display:block}.certs{te=
+xt-align:center;background-color:#f2f2f2;width:50px;padding-top:12px;paddin=
+g-bottom:12px;padding-right:12px}.certs img{height:40px}</style> <!-- Mobil=
+e Styles --> <style type=3D"text/css">@media only screen and (max-width:599=
+px){h1{font-size:28px!important;line-height:40px!important}h4{font-family:s=
+ofia-pro,sans-serif!important;font-size:20px!important;line-height:32px!imp=
+ortant;font-weight:500!important;margin:24px 24px 24px!important;color:#fff=
+!important}.number{font-family:sofia-pro,sans-serif;font-style:normal!impor=
+tant;font-weight:500!important;font-size:63px!important;line-height:0!impor=
+tant;margin:0 0 24px 0!important;color:#ffc289!important;padding:0 0 12px 0=
+!important}.extra{padding-bottom:96px!important}.extra1{padding-bottom:120p=
+x!important}.col{width:100%!important;display:block!important;padding:0 0 0=
+ 0!important}.hero_image img{width:100%;display:block;padding:0;text-align:=
+center}.hero{padding-left:0!important;padding-right:0!important}.content-bo=
+x{padding-left:24px!important;padding-right:24px!important}.content-box-sta=
+rt{padding-top:48px!important}.content-box-end{padding-bottom:32px!importan=
+t}.content-box-video{text-align:left!important;padding-top:0!important;padd=
+ing-left:12px!important;padding-right:12px!important;padding-bottom:12px!im=
+portant;display:block!important}.content-box-video-top{text-align:left!impo=
+rtant;padding-top:12px!important;padding-left:12px!important;padding-right:=
+12px!important;padding-bottom:12px!important;display:block!important}.call-=
+out-box p{font-size:14px!important;line-height:22px!important}.app-icon{wid=
+th:132px;height:47px}#sub-desktop{display:none}#sub-mobile{display:block;ma=
+x-width:100%!important}.orange-line{padding:0 24px 0 24px!important}.border=
+-pad{padding-right:24px!important;padding-left:24px!important}.certs{text-a=
+lign:center!important;background-color:#f2f2f2!important;width:50px!importa=
+nt;padding-top:12px!important;padding-bottom:12px!important;padding-right:1=
+2px!important}.certs img}}</style> <style type=3D"text/css">@media only scr=
+een and (max-width:480px){.spacer{display:none}.col{width:100%;display:bloc=
+k}.hero_image img{width:100%}</style> <!-- Progressive Enhancements : END -=
+-> </head> <!-- The email background color (#222222) is defined in three pl=
+aces: 1. body tag: for most email clients 2. center tag: for Gmail and Inbo=
+x mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero,=
+ Comcast, freenet, Mail.ru, Orange.fr 3. mso conditional: For Windows 10 Ma=
+il --> <body id=3D"body" class=3D"body" style=3D"font-family: sofia-pro, sa=
+ns-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color=
+: #666666; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: gr=
+ayscale; font-smooth: auto; mso-line-height-rule: exactly; background-color=
+: #E3E3E3; margin: 0 auto !important; height: 100% !important; width: 100% =
+!important; padding: 0 !important;" width=3D"100%">
+<div style=3D"color:transparent;visibility:hidden;opacity:0;font-size:0px;b=
+order:0;max-height:1px;width:1px;margin:0px;padding:0px;border-width:0px!im=
+portant;display:none!important;line-height:0px!important;"><img border=3D"0=
+" width=3D"1" height=3D"1" src=3D"http://post.spmailtechnol.com/q/yvsK6198b=
+PW4p_AOl1SITA~~/AAPW7QA~/RgRm-ZZePVcDc3BjQgplFF4RF2WP3SHYUhx0b2JpbnNpbHZlc3=
+RyZTA4OUBzb29uZXJzLnVzWAQAAAAA" alt=3D""></div>
+<span style=3D"color:transparent;visibility:hidden;display:none;opacity:0;h=
+eight:0;width:0;font-size:0;"></span><img src=3D"https://links.flickr.com/e=
+/eo?_t=3D40ac9f0c38d540238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91d=
+ae238cc0&amp;_e=3DoJuvnkWwYV5_7kdyYNN2fXUemG2iQ63OALEVvgsezcQpr4xMkvlNguzc0=
+1jwPbqqgCrUfCc7poHECDZLFvUxhHA9Vomec7t7-OvHmg1vP0hZFq7c5ZtnIXERgEcU91T3LSjt=
+fOEsMtKOUvwJVskXXQ%3D%3D" style=3D"border:0;width:1px;height:1px;border-wid=
+th:0px!important;display:none!important;line-height:0!important;" width=3D"=
+1" height=3D"1"> <center style=3D"font-family: sofia-pro, sans-serif; -ms-t=
+ext-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: =
+0; width: 100%; background-color: #E3E3E3;"><!--[if mso | IE]><table role=
+=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"background-color: #E3E3E3;"> <tr> <td><![endif]--><!-- Visu=
+ally Hidden Preheader Text : BEGIN --> <div style=3D"-ms-text-size-adjust: =
+100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0; display: none;=
+ font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity=
+: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">Check out t=
+his cosmic perk from our friends at Imagen! </div> <!-- Visually Hidden Pre=
+header Text : END --><!-- Create white space after the desired preview text=
+ so email clients don=E2=80=99t pull other distracting text into the inbox =
+preview. Extend as necessary. --><!-- Preview Text Spacing Hack : BEGIN -->=
+ <div style=3D"-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; =
+margin: 0; padding: 0; display: none; font-size: 1px; line-height: 1px; max=
+-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; =
+font-family: sans-serif;">=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp; </div> <!-- Previ=
+ew Text Spacing Hack : END --><!-- Set the email width. Defined in two plac=
+es: 1. max-width for all clients except Desktop Windows Outlook, allowing t=
+he email to squish on narrow but never go wider than 600px. 2. MSO tags for=
+ Desktop Windows Outlook enforce a 600px width. --> <div class=3D"email-con=
+tainer" style=3D"font-family: sofia-pro, sans-serif; -ms-text-size-adjust: =
+100%; -webkit-text-size-adjust: 100%; padding: 0; max-width: 648px; margin:=
+ 0 auto;"><!--[if mso]><table align=3D"center" role=3D"presentation" cellsp=
+acing=3D"0" cellpadding=3D"0" border=3D"0" width=3D"600"> <tr> <td><![endif=
+]--><!-- Email Body : BEGIN --> <table align=3D"center" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"font-family: s=
+ofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust:=
+ 100%; padding: 0; mso-table-lspace: 0pt !important; mso-table-rspace: 0pt =
+!important; border-spacing: 0 !important; border-collapse: collapse !import=
+ant; table-layout: fixed !important; margin: 0 auto !important;" width=3D"1=
+00%"><!-- Email Header : BEGIN --> <tbody style=3D"font-family: sofia-pro, =
+sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; mar=
+gin: 0; padding: 0;"> <tr style=3D"font-family: sofia-pro, sans-serif; -ms-=
+text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding:=
+ 0;"> <td class=3D"logo bottom-pad-small" style=3D"font-family: sofia-pro, =
+sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; mar=
+gin: 0; padding: 0; text-align: center; padding-top: 36px; padding-left: 36=
+px; padding-right: 36px; mso-table-lspace: 0pt !important; mso-table-rspace=
+: 0pt !important; padding-bottom: 24px !important;" align=3D"center"> <a ta=
+rget=3D"_blank" href=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c38d54=
+0238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB=
+0pEpfQRSpnGWfdJA3LOF-D-hj259Vo-NknmMNxIIfM7CeWQA7RMgiekBZvLlt-KQc6yE-ohd9Z1=
+0FLFixmVfpQ2uVK0Zf6gysQuvmt0uJxSDvLVvJC5lRgXVtrc1X02WNupkDp4RW5bfCLdnE8L-31=
+mkYkj81G_iZxbFr6Tgf8LmKXkz86JycrkMW9QPrE2_s2sRSGY4J5d7xzPzbw%3D%3D" style=
+=3D"-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; =
+padding: 0; color: inherit; text-decoration: none; font-size: inherit; font=
+-family: inherit; font-weight: inherit; line-height: inherit;"> <img width=
+=3D"86" alt=3D"Flickr" style=3D"font-family: sofia-pro, sans-serif; -ms-tex=
+t-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0;=
+ -ms-interpolation-mode: bicubic; border-width: 0;" src=3D"https://photos.s=
+mugmug.com/Email/Flickr-Marketing/Design-Assets/i-zKtvpWW/0/90a1f0d4/O/flic=
+kr-logo-color%402x.png"> </a> </td> </tr> <!-- 1 Column Text + Button : BEG=
+IN --> <tr class=3D"" style=3D"font-family: sofia-pro, sans-serif; -ms-text=
+-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0;"=
+> <td style=3D"font-family: sofia-pro, sans-serif; -ms-text-size-adjust: 10=
+0%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0; background: #0C1=
+82E; mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important;"> =
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentatio=
+n" width=3D"100%" style=3D"font-family: sofia-pro, sans-serif; -ms-text-siz=
+e-adjust: 100%; -webkit-text-size-adjust: 100%; padding: 0; mso-table-lspac=
+e: 0pt !important; mso-table-rspace: 0pt !important; border-spacing: 0 !imp=
+ortant; border-collapse: collapse !important; table-layout: fixed !importan=
+t; margin: 0 auto !important;"> <tbody style=3D"font-family: sofia-pro, san=
+s-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin=
+: 0; padding: 0;"> <tr style=3D"font-family: sofia-pro, sans-serif; -ms-tex=
+t-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0;=
+"> <td class=3D"hero" style=3D"font-family: sofia-pro, sans-serif; -ms-text=
+-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0; =
+text-align: left; padding-top: 0px; padding-left: 0px; padding-right: 0px; =
+padding-bottom: 0; display: block; mso-table-lspace: 0pt !important; mso-ta=
+ble-rspace: 0pt !important;" align=3D"left"> <a href=3D"https://links.flick=
+r.com/u/click?_t=3D40ac9f0c38d540238d36950e58265982&amp;_m=3D5ffa713226d446=
+99a4c7f91dae238cc0&amp;_e=3DLLCB0pEpfQRSpnGWfdJA3BuCrFrLbtYFomGfEzE6fxcvfEn=
+oGrxwj9xyazHql0oU6JiTtM5Gsg8eeWXON6OnSinVyiBR4Atx9lT_X3jElCOOCCdGxN9n5zjXbt=
+YWq-jVTx3Nsu9n-zEDnlGQMlxyss19yYHBh2RmRb6NdZcneIkmhfmwd-W2SBLmS07CAvoIrp2H4=
+P55mD3iEDwP2GIgwQgnh16RcfNXHDqeMOOxlWElrBpYKKiu96AdHpVMBNcVLFKvM8dfp-Bcz8A8=
+-nEffN67KzsfMciGxHO2sN80TKE%3D" style=3D"-ms-text-size-adjust: 100%; -webki=
+t-text-size-adjust: 100%; margin: 0; padding: 0; color: inherit; text-decor=
+ation: none; font-size: inherit; font-family: inherit; font-weight: inherit=
+; line-height: inherit;"><img alt=3D"Flickr x Imagen AI. Cull, edit, and ba=
+ck up with ease." border=3D"0" class=3D"g-img" style=3D"font-family: sofia-=
+pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%=
+; padding: 0; -ms-interpolation-mode: bicubic; width: 100%; max-width: 648p=
+x; height: auto; margin: auto; display: block;" src=3D"https://photos.smugm=
+ug.com/Email/Flickr-Marketing/2023/Imagen-AI/Imagen-AI-Promo/i-KCjjJCr/0/43=
+8d57e7/O/header-imagen-ai.png"></a> </td> </tr> <tr style=3D"font-family: s=
+ofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust:=
+ 100%; margin: 0; padding: 0;"> <td class=3D"hero" style=3D"font-family: so=
+fia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: =
+100%; margin: 0; padding: 0; text-align: left; padding-top: 0px; padding-le=
+ft: 0px; padding-right: 0px; padding-bottom: 0; display: block; mso-table-l=
+space: 0pt !important; mso-table-rspace: 0pt !important;" align=3D"left"> <=
+a href=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c38d540238d36950e582=
+65982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB0pEpfQRSpnGWfd=
+JA3BuCrFrLbtYFomGfEzE6fxcvfEnoGrxwj9xyazHql0oU6JiTtM5Gsg8eeWXON6OnSinVyiBR4=
+Atx9lT_X3jElCOOCCdGxN9n5zjXbtYWq-jV18NZq4_OuiAWjHQfQsPTpFBC-YpLp13u2YoVIdhe=
+WBx5QXtZMwWXJtXip218j2WO3dQbe-W6NZwuzffUC8-FRB0Mi__IgHjMN7nCmHUPzRJ4RUjyGJW=
+bKPZ8_d4VGJCSE6R9Unq5-8iBF9eds8Ock6xyBou0HYpF1Txy1Yl2_a4%3D" style=3D"-ms-t=
+ext-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: =
+0; color: inherit; text-decoration: none; font-size: inherit; font-family: =
+inherit; font-weight: inherit; line-height: inherit;"><img alt=3D"Imagen. E=
+dit 1,500 photos in under 10 minutes" border=3D"0" class=3D"g-img" style=3D=
+"font-family: sofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-te=
+xt-size-adjust: 100%; padding: 0; -ms-interpolation-mode: bicubic; width: 1=
+00%; max-width: 648px; height: auto; margin: auto; display: block;" src=3D"=
+https://photos.smugmug.com/Email/Flickr-Marketing/2023/Imagen-AI/Imagen-AI-=
+Promo/i-MTFxwTt/0/e1c9542e/O/1500in10.gif"></a> </td> </tr> <tr style=3D"fo=
+nt-family: sofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-=
+size-adjust: 100%; margin: 0; padding: 0;"> <td class=3D"content-box top-pa=
+d-big bottom-pad-big" style=3D"-ms-text-size-adjust: 100%; -webkit-text-siz=
+e-adjust: 100%; margin: 0; padding: 0; text-align: left; padding-left: 84px=
+; padding-right: 84px; font-family: 'Gotham A', 'Gotham B', 'Open Sans',Ari=
+al,sans-serif; display: block; mso-table-lspace: 0pt !important; mso-table-=
+rspace: 0pt !important; padding-top: 48px !important; padding-bottom: 48px =
+!important;" align=3D"left"> <p style=3D"-ms-text-size-adjust: 100%; -webki=
+t-text-size-adjust: 100%; padding: 0; font-family: sofia-pro, sans-serif; f=
+ont-size: 18px; font-weight: 400; margin: 0 0px 24px 0; color: #FFFFFF; lin=
+e-height: 36px !important;">Our friends at Imagen want to help you maximize=
+ your photography potential with their AI-powered, cloud-integrated solutio=
+n for Lightroom Classic. Your editing time can be cut by 96%, freeing up yo=
+ur time to get creative while letting AI do the heavy lifting. </p> </td> <=
+/tr> <!-- Button : END --> <tr style=3D"font-family: sofia-pro, sans-serif;=
+ -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; pad=
+ding: 0;"> <td class=3D"content-box hero bottom-pad-big" style=3D"-ms-text-=
+size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0; t=
+ext-align: left; padding-top: 32px; padding-left: 84px; padding-right: 84px=
+; font-family: 'Gotham A', 'Gotham B', 'Open Sans',Arial,sans-serif; displa=
+y: block; background: #0C182E; mso-table-lspace: 0pt !important; mso-table-=
+rspace: 0pt !important; padding-bottom: 48px !important;" align=3D"left"> <=
+a href=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c38d540238d36950e582=
+65982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB0pEpfQRSpnGWfd=
+JA3BuCrFrLbtYFomGfEzE6fxcvfEnoGrxwj9xyazHql0oU6JiTtM5Gsg8eeWXON6OnSinVyiBR4=
+Atx9lT_X3jElCOOCCdGxN9n5zjXbtYWq-jVc74deHPSBFxoqlvpzdaWsYUuHDbElPZH2SqZd1zf=
+H3esscHu4jqpl8POURLkw4XNxEPugH4rHOgJqQkkMPsUMoRAy3xlvQjTJjDEzAZH9ThC15sw2UV=
+opssacTuIHZ25-Mi5sERb8kg2HuqPNeBdoYIsmIBGu4JBG8lqvzwf3u4%3D" style=3D"-ms-t=
+ext-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: =
+0; color: inherit; text-decoration: none; font-size: inherit; font-family: =
+inherit; font-weight: inherit; line-height: inherit;"><img alt=3D"Experimen=
+t with ease." border=3D"0" class=3D"g-img" style=3D"font-family: sofia-pro,=
+ sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; pa=
+dding: 0; -ms-interpolation-mode: bicubic; width: 100%; max-width: 648px; h=
+eight: auto; margin: auto; display: block;" src=3D"https://photos.smugmug.c=
+om/Email/Flickr-Marketing/2023/Imagen-AI/Imagen-AI-Promo/i-dXTF2r4/0/fbb418=
+98/O/before-after.png"></a> </td> </tr> <tr style=3D"font-family: sofia-pro=
+, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; m=
+argin: 0; padding: 0;"> <td class=3D"content-box hero bottom-pad-big" style=
+=3D"-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; =
+padding: 0; text-align: left; padding-top: 32px; padding-left: 84px; paddin=
+g-right: 84px; font-family: 'Gotham A', 'Gotham B', 'Open Sans',Arial,sans-=
+serif; display: block; background: #0C182E; mso-table-lspace: 0pt !importan=
+t; mso-table-rspace: 0pt !important; padding-bottom: 48px !important;" alig=
+n=3D"left"> <a href=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c38d540=
+238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB0=
+pEpfQRSpnGWfdJA3BuCrFrLbtYFomGfEzE6fxcvfEnoGrxwj9xyazHql0oU6JiTtM5Gsg8eeWXO=
+N6OnSinVyiBR4Atx9lT_X3jElCOOCCdGxN9n5zjXbtYWq-jVZzB5Q9hMMt5fSMT42aIyI0CHfC2=
+uCzORGDuEr0njSfyw-Q2bGN_eWYszMKYKI_F5LJpgmNB-y_KcZfjSSeM5xLaptjWrxtN5QH5GFW=
+ozJpO03wassC77wWe7rrX7TMzoz9ncjQ7F76EBcbo2T3rLq-MGcnDUvN2vD9aemiVNIbo%3D" s=
+tyle=3D"-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin:=
+ 0; padding: 0; color: inherit; text-decoration: none; font-size: inherit; =
+font-family: inherit; font-weight: inherit; line-height: inherit;"><img alt=
+=3D"Experiment with ease." border=3D"0" class=3D"g-img" style=3D"font-famil=
+y: sofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adj=
+ust: 100%; padding: 0; -ms-interpolation-mode: bicubic; width: 100%; max-wi=
+dth: 648px; height: auto; margin: auto; display: block;" src=3D"https://pho=
+tos.smugmug.com/Email/Flickr-Marketing/2023/Imagen-AI/Imagen-AI-Promo/i-fwr=
+d4mk/0/03252768/O/advanced-straightening.gif"></a> </td> </tr> <tr style=3D=
+"font-family: sofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-te=
+xt-size-adjust: 100%; margin: 0; padding: 0;"> <td class=3D"content-box bot=
+tom-pad-big" style=3D"-ms-text-size-adjust: 100%; -webkit-text-size-adjust:=
+ 100%; margin: 0; padding: 0; text-align: left; padding-top: 32px; padding-=
+left: 84px; padding-right: 84px; font-family: 'Gotham A', 'Gotham B', 'Open=
+ Sans',Arial,sans-serif; display: block; mso-table-lspace: 0pt !important; =
+mso-table-rspace: 0pt !important; padding-bottom: 48px !important;" align=
+=3D"left"> <p style=3D"-ms-text-size-adjust: 100%; -webkit-text-size-adjust=
+: 100%; padding: 0; font-family: sofia-pro, sans-serif; font-size: 18px; fo=
+nt-weight: 400; margin: 0 0px 24px 0; color: #FFFFFF; text-align: center; l=
+ine-height: 36px !important;">Imagen streamlines culling, backs up your wor=
+k, offers consistent and precise edits, all while keeping you in the driver=
+=E2=80=99s seat. Ready to transform your workflow? </p> </td> </tr> <!-- Bu=
+tton : BEGIN --> <tr style=3D"font-family: sofia-pro, sans-serif; -ms-text-=
+size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0;">=
+ <td class=3D"button-box bottom-pad-small" style=3D"font-family: sofia-pro,=
+ sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; ma=
+rgin: 0; display: block; padding: 16px 0; mso-table-lspace: 0pt !important;=
+ mso-table-rspace: 0pt !important; padding-bottom: 24px !important;"> <tabl=
+e align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D=
+"presentation" style=3D"font-family: sofia-pro, sans-serif; -ms-text-size-a=
+djust: 100%; -webkit-text-size-adjust: 100%; padding: 0; mso-table-lspace: =
+0pt !important; mso-table-rspace: 0pt !important; border-spacing: 0 !import=
+ant; border-collapse: collapse !important; table-layout: fixed !important; =
+margin: 0 auto !important;"> <tbody style=3D"font-family: sofia-pro, sans-s=
+erif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0=
+; padding: 0;"> <tr style=3D"font-family: sofia-pro, sans-serif; -ms-text-s=
+ize-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0;"> =
+<td class=3D"button-td button-td-primary" style=3D"font-family: sofia-pro, =
+sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; mar=
+gin: 0; padding: 0; border-collapse: collapse; text-align: center; backgrou=
+nd-color: #0065DF; border-radius: 5px; transition: all 100ms ease-in; mso-t=
+able-lspace: 0pt !important; mso-table-rspace: 0pt !important;" align=3D"ce=
+nter" bgcolor=3D"#0065DF"><a class=3D"button-a button-a-primary" href=3D"ht=
+tps://links.flickr.com/u/click?_t=3D40ac9f0c38d540238d36950e58265982&amp;_m=
+=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB0pEpfQRSpnGWfdJA3BuCrFrLbt=
+YFomGfEzE6fxcvfEnoGrxwj9xyazHql0oU6JiTtM5Gsg8eeWXON6OnSinVyiBR4Atx9lT_X3jEl=
+COOCCdGxN9n5zjXbtYWq-jV3Jv562ggZCt31XWD8t8rPFnH7hJ7oct6RqP6rcmu0RNDE4ivWT57=
+mmcqDSShf82LjpsNUzD61bUvpv2TWfZa6g9SF1A0D4vmrYX64lxknQgB9jB-qgl4KWvnh2sJyuO=
+Kj-o3PT3k3ALan_XDrsvCJuNG_6L_SQPM_L_G3VEOXM0%3D" style=3D"-ms-text-size-adj=
+ust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0; line-heig=
+ht: inherit; display: block; padding-top: 23px; padding-bottom: 24px; paddi=
+ng-left: 36px; padding-right: 36px; text-transform: none; text-decoration: =
+none; font-family: sofia-pro, sans-serif; font-weight: 700; font-size: 13px=
+; text-transform: uppercase; letter-spacing: 1px; transition: all 100ms eas=
+e-in; color: #FFFFFF !important;">Claim your 1,000* free edits today</a> </=
+td> </tr> </tbody> </table> </td> </tr> <tr style=3D"font-family: sofia-pro=
+, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; m=
+argin: 0; padding: 0;"> <td class=3D"content-box bottom-pad-big" style=3D"-=
+ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; paddi=
+ng: 0; text-align: left; padding-top: 32px; padding-left: 84px; padding-rig=
+ht: 84px; font-family: 'Gotham A', 'Gotham B', 'Open Sans',Arial,sans-serif=
+; display: block; mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !=
+important; padding-bottom: 48px !important;" align=3D"left"> <p style=3D"-m=
+s-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; font-weight: 400;=
+ padding: 0; margin: 0; font-size: 14px; line-height: 28px; color: #666666;=
+ font-family: sofia-pro, sans-serif; text-align: center;" class=3D"legal">*=
+ Valued at $50</p> </td> </tr> <!-- Button : END --> <tr style=3D"font-fami=
+ly: sofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-ad=
+just: 100%; margin: 0; padding: 0;"> <td class=3D"hero" style=3D"font-famil=
+y: sofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adj=
+ust: 100%; margin: 0; padding: 0; text-align: left; padding-top: 0px; paddi=
+ng-left: 0px; padding-right: 0px; padding-bottom: 0; display: block; mso-ta=
+ble-lspace: 0pt !important; mso-table-rspace: 0pt !important;" align=3D"lef=
+t"> <a href=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c38d540238d3695=
+0e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB0pEpfQRSp=
+nGWfdJA3BuCrFrLbtYFomGfEzE6fxcvfEnoGrxwj9xyazHql0oU6JiTtM5Gsg8eeWXON6OnSinV=
+yiBR4Atx9lT_X3jElCOOCCdGxN9n5zjXbtYWq-jVOfX1fT7Gjo09NByIxbfefMzbUTZk9aQeWUN=
+V_ONenX0OoO66dowwCXLXkgcLv8WPFdbp1WQiNIKl_zcCm07SehIdSb5RU9gCp1yewlAnqV4tX0=
+MuWkGL5z3yQKoP9qrZBq2FbPaT2YRTjwl1GTXGNbifd3opiNWrZuAAUF6tSjU%3D" style=3D"=
+-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padd=
+ing: 0; color: inherit; text-decoration: none; font-size: inherit; font-fam=
+ily: inherit; font-weight: inherit; line-height: inherit;"><img alt=3D"Imag=
+en. We've got your Back(up)" border=3D"0" class=3D"g-img" style=3D"font-fam=
+ily: sofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-a=
+djust: 100%; padding: 0; -ms-interpolation-mode: bicubic; width: 100%; max-=
+width: 648px; height: auto; margin: auto; display: block; padding-right: 24=
+px;" src=3D"https://photos.smugmug.com/Email/Flickr-Marketing/2023/Imagen-A=
+I/Imagen-AI-Promo/i-W7PgX45/0/15db0bb7/O/backup-cloud_00002.gif"></a> </td>=
+ </tr> </tbody> </table> <!-- List + Icon : END --> <table style=3D"font-fa=
+mily: sofia-pro, sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-=
+adjust: 100%; padding: 0; mso-table-lspace: 0pt !important; mso-table-rspac=
+e: 0pt !important; border-spacing: 0 !important; border-collapse: collapse =
+!important; table-layout: fixed !important; margin: 0 auto !important;"> <t=
+body style=3D"font-family: sofia-pro, sans-serif; -ms-text-size-adjust: 100=
+%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0;"> </tbody> </tabl=
+e> <!-- END BORDER --> </td></tr></tbody> </table> <!-- begin email unsub f=
+ooter --> <!-- Email Footer : BEGIN --> <table align=3D"center" role=3D"pre=
+sentation" cellspacing=3D"0" cellpadding=3D"0" border=3D"0" width=3D"100%" =
+style=3D"margin: auto;"> <tr> <td class=3D"icons" style=3D"text-align:cente=
+r;padding-top:0px;padding-bottom:0px;padding-right:16px;padding-left:16px;"=
+> <center> <table width=3D"280" align=3D"center" style=3D"border-spacing:0;=
+color: #4a4a4a;font-family: proxima-nova, Proxima Nova, sans-serif, Arial, =
+Helvetica, sans-serif;"> <tbody> <tr> <td width=3D"40" class=3D"icons" styl=
+e=3D"text-align:center;padding-top:16px;padding-bottom:16px;padding-right:1=
+6px;padding-left:16px;"><a target=3D"blank" style=3D"color:#ee6a56;text-dec=
+oration:underline;" href=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c3=
+8d540238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3D=
+4YPH7DB0Iup7BLaPSZD7_Edx5pg7HKsDyFkiGSs8OYDUpAUyCHCDuujfSxCVMuPeiytBCIuIsvt=
+y7c_L4UIKobNtsoxC2HqzDja089RG8F0f_D7CighDMPsmfRkNOJqmChznhYI305OSCNrt6O3ZiE=
+Db8NFBibyLkqe59DpPztg6jsuuJYKWPmMM9wXOmpNRttpIQRgWsBDo4bzJyNHTtQ%3D%3D"><im=
+g height=3D"30" alt=3D"Flickr" style=3D"border-width:0;" src=3D"https://pho=
+tos.smugmug.com/Email/Flickr-Marketing/Footer-Icons/i-vrwDWLd/0/92bf6c39/O/=
+Flickr.png"></a> </td> <td width=3D"40" class=3D"icons" style=3D"text-align=
+:center;padding-top:16px;padding-bottom:16px;padding-right:16px;padding-lef=
+t:16px;"><a target=3D"blank" style=3D"color:#ee6a56;text-decoration:underli=
+ne;" href=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c38d540238d36950e=
+58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB0pEpfQRSpnG=
+WfdJA3JenHag1Vv2uAPIFQbIqdUcfDYFGPIAqd63O44OUg6aE6XtdHJpaywRjIb4zWFnU9p-wEn=
+HRaIqjKkOdRQEgWJBgiRCwdKZebJESEypqBq6FkyW_m626S_YfmH9R35GzFyqCAeyVkrDp2qNPy=
+sC2VnXsC-R2XZKtF6sETSb57MW8WyT2rd2yTiMkKNN6SWqnwrxU_ao4SE2u9BrUPiPOSEE%3D">=
+<img width=3D"30" height=3D"30" alt=3D"Facebook" style=3D"border-width:0;" =
+src=3D"https://photos.smugmug.com/Email/Flickr-Marketing/Footer-Icons/i-TVC=
+Q2Pm/0/4bfbcd4f/O/Facebook.png"></a> </td> <td width=3D"40" class=3D"icons"=
+ style=3D"text-align:center;padding-top:16px;padding-bottom:16px;padding-ri=
+ght:16px;padding-left:16px;"><a target=3D"blank" style=3D"color:#ee6a56;tex=
+t-decoration:underline;" href=3D"https://links.flickr.com/u/click?_t=3D40ac=
+9f0c38d540238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;=
+_e=3DmnxdbKG8P6YDT_5qkaesHX1HNwxWoRv8VSSFaSO8rnDEwJWMQBYqZ3NNBB48XTZCgMQqI6=
+xvZ6QBq6XYEt1HIJH5ukmVzGnXDHUVecBsHkvC9LLw7pL-vx2Lkiu-hylPzXfRRpUL4RggYvzKM=
+hOXIbT0lnoXc79wgROq6ZysmCvcNT-kNV5oHk7Cmq7PXmHZGzHCKzoOIY8Q8UJijyuDLg%3D%3D=
+"><img width=3D"30" height=3D"30" alt=3D"Twitter" style=3D"border-width:0;"=
+ src=3D"https://photos.smugmug.com/Email/Flickr-Marketing/Footer-Icons/i-Vq=
+8BBrS/0/8fbd432b/O/Twitter.png"></a> </td> <td width=3D"40" class=3D"icons"=
+ style=3D"text-align:center;padding-top:16px;padding-bottom:16px;padding-ri=
+ght:16px;padding-left:16px;"><a target=3D"blank" style=3D"color:#ee6a56;tex=
+t-decoration:underline;" href=3D"https://links.flickr.com/u/click?_t=3D40ac=
+9f0c38d540238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;=
+_e=3DLLCB0pEpfQRSpnGWfdJA3LBEyUqxJQTP3WbIApfWSxCspYf_1wDYEbTLEbYr9fAEJuzJrV=
+sJzUYhhPcJc1Vaua3uXbJSokcHZzuXT0xLSbi0DavY8T4rGDUXtFSwYTrwXyvbSp_I2hsxZwRzM=
+8_csWvcQZGeCFEJV0y-MclLrx6-1Vkf-07D0IR7JFYA3SCkdYqp6pKeZIZXY7jYTAT7baWZFfMa=
+I_JI2ygiYJoj97c%3D"><img width=3D"30" height=3D"30" alt=3D"Instagram" style=
+=3D"border-width:0;" src=3D"https://photos.smugmug.com/Email/Flickr-Marketi=
+ng/Footer-Icons/i-Qz44Bgp/0/47dd5a73/O/Instagram.png"></a> </td> </tr> </tb=
+ody> </table> </center> </td> </tr> </table> <!-- Email Footer : END --> <t=
+able width=3D"100%" align=3D"center" padding-top=3D"20px"> <tbody> <tr> <td=
+ class=3D"footer-section x-pad-top x-pad-bottom"> <center> <table align=3D"=
+center"> <tbody> <tr style=3D"text-align: center;"> <td width=3D"50" class=
+=3D"icons" style=3D"text-align: center; padding-right: 24px"><a target=3D"b=
+lank" href=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c38d540238d36950=
+e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB0pEpfQRSpn=
+GWfdJA3BiV-mt-GwwrapCp2N7fh-XYNmSGGG7K29iL3S3lVwuFutkQrw6yKlsZ0K6DcU0ezjIFx=
+jKg8Xr3uRNJqdXMO2E44aqIpniwLTL7MV9_LQTMZJ4Hy87ovGpFl4GBU8qoDehvckyE4QbRQmlz=
+YKO3otDUw5Gxc4k4g0eBeccaxphMfdSBDPHH_fZzknm20F5RpJnXfIH_ANAR9tyMT70BHIM%3D"=
+><img height=3D"30px" alt=3D"Climate Neutral" style=3D"border-width:0;" src=
+=3D"https://photos.smugmug.com/photos/i-pJWm9w4/0/a0512d8d/S/i-pJWm9w4-S.pn=
+g"></a></td> <td width=3D"50" class=3D"icons" style=3D"text-align: center;p=
+adding-right: 24px"><a target=3D"blank" href=3D"https://links.flickr.com/u/=
+click?_t=3D40ac9f0c38d540238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f9=
+1dae238cc0&amp;_e=3DLLCB0pEpfQRSpnGWfdJA3A3yBOW-tgYV_dIp9JYPk53qEUwOo9bpotA=
+pQy9LOVXFJ5Y9FiuNBWCYxvp8Z10Ox7IWqHK-nrEmZEsquCSCVUlOqGmDrcu-w6sc1KlcERWNfn=
+tMiOAeFYdvtEy09KI31BNEod84-juIElFudFZx-aSGxVZpkn1UNuzymLVsv1vtsycAl7VXDm-ek=
+ta4K3kUdX62VAgOzLoIFvvEf0_Dk78%3D"><img height=3D"30px" alt=3D"The Conserva=
+tion Alliance" style=3D"border-width:0;" src=3D"https://photos.smugmug.com/=
+photos/i-jrggn3h/0/74204249/O/i-jrggn3h.png"></a></td> </tr> </tbody> </tab=
+le> </center> </td> </tr> <tr> <td class=3D"footer-section x-pad-top x-pad-=
+bottom"> <center> <table align=3D"center"> <tbody> <tr style=3D"text-align:=
+ center;"> <td width=3D"50" class=3D"icons" style=3D"text-align: center;pad=
+ding-right: 24px"><a target=3D"blank" href=3D"https://links.flickr.com/u/cl=
+ick?_t=3D40ac9f0c38d540238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91d=
+ae238cc0&amp;_e=3DLLCB0pEpfQRSpnGWfdJA3F2cOEdSD50c7VKZn6ZkuDnNi5Z-yLMq2Ln47=
+9Txrhj72B56OCVnT8td3bUTnmXiwD0Jb_RTrE6f2P0jUxml9HpyVxg4btWbH99EMqXoRUkRgzZo=
+SAl7vEDpTpBrY2XDW19iVBZdhnLgx75WdusFIbXzo5JRmHRKa4ongxA2GS0_KZode_o866_zh4R=
+UfQtmLIDYukJJfDDJVv0V8m0C-YdTjBfj4wCTp_G5MJme-1zt"><img height=3D"30px" alt=
+=3D"Certified Evergreen" style=3D"border-width:0;" src=3D"https://photos.sm=
+ugmug.com/photos/i-NRx7XzH/0/7cf2198c/S/i-NRx7XzH-S.png"></a></td> <td widt=
+h=3D"50" class=3D"icons" style=3D"text-align: center; padding-right: 12px;"=
+><a target=3D"blank" href=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c=
+38d540238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=
+=3DLLCB0pEpfQRSpnGWfdJA3AfvVd7_M1fxMpJ2sKFpzZNkXMVuf_179wUcDIsDzCHfV4i56Igu=
+45FquCjA74U-xq-L7rTVPfr8PmE-G6x6auvORiLoiUruekCCLEZFA5Op5PkuSqaRO2tkAnYzfvq=
+RVDd9T9kIhDFiQa0Qzxb9viqqVtPmZNoTM0w1gGsqspz_s08twQ1uyNf1_ZBp_If_qlV1yhvy37=
+xqaFHp3pw19kuGBas2riYTyo1OBYoC3CTN"><img height=3D"30px" alt=3D"Inc. Best W=
+orkplaces" style=3D"border-width:0;" src=3D"https://photos.smugmug.com/phot=
+os/i-kVZFVK2/0/84235c05/M/i-kVZFVK2-M.png"></a></td> <td width=3D"50" class=
+=3D"icons" style=3D"text-align: center;"><a target=3D"blank" href=3D"https:=
+//links.flickr.com/u/click?_t=3D40ac9f0c38d540238d36950e58265982&amp;_m=3D5=
+ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB0pEpfQRSpnGWfdJA3AUklWZcpehIHD=
+HAVcS5LSYHd6wL_d5a7T3znsWj3MK8WY_TQLoy2CqB28EQgRRGj6-vZdUtzSGba2OpV4gCRRy27=
+wSJLiQpp94CyntGUwoVQFcF-uEWACUJN3Xw_-8rLmKiWXFJ4ai8NKqIH6I0orZO3MMdxXo1Ra8_=
+n74lBAzwWGSCaB6Qa3WkyprqKUPtAW2ygtOVj83TSc5Q4CoPxpI%3D"><img height=3D"30px=
+" alt=3D"Great Place To Work" style=3D"border-width:0;" src=3D"https://phot=
+os.smugmug.com/photos/i-KjgCRft/0/c2c3721e/M/i-KjgCRft-M.png"></a></td> </t=
+r> </tbody> </table> </center> </td> </tr> </tbody> </table> <!-- begin ema=
+il unsub footer --> <table style=3D"width:100%;" cellspacing=3D"0" cellpadd=
+ing=3D"0" border=3D"0"> <tbody> <tr> <td align=3D"center"> <div class=3D"fo=
+oter-section"> <p class=3D"legal" style=3D"color: #888888;font-size: 11px !=
+important;">Your use of Flickr is subject to the <a target=3D"_blank" href=
+=3D"https://links.flickr.com/u/click?_t=3D40ac9f0c38d540238d36950e58265982&=
+amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DLLCB0pEpfQRSpnGWfdJA3HTE=
+N3u8wMk5yUbl-pvLZURHckhEnAvtbq5CHLL-lrS_YgC65kcEzfqP4ki95GDxrWIg1Ga5CNdwjEF=
+dI4sCZW8F5OU0tXFGgQF-u50NbTq7TTjG7ep4h7IEfev_RsYEsbde7JeqNtc5g0T7UsoFSF0QjF=
+LAeaW_rdb_na-wEvavGd7k81z2JKCWRoqlYJLIbbhZJe1MOPZ6Ly2bMPB3kGQ%3D" style=3D"=
+color: #888888;font-size: 11px !important;">Flickr Terms &amp; Conditions o=
+f Use</a> and <a target=3D"_blank" style=3D"text-decoration:underline; colo=
+r: #888888;font-size: 11px !important;" href=3D"https://links.flickr.com/u/=
+click?_t=3D40ac9f0c38d540238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f9=
+1dae238cc0&amp;_e=3DLLCB0pEpfQRSpnGWfdJA3HTEN3u8wMk5yUbl-pvLZUT7bg_6aqFbEis=
+mIzO0T4Y-O26Y1eDSyL7xZGm5PRWo9fAshEnfRYIlKMtTo7VXjeuiyRMQohYaDkPRocL0vLbiUT=
+29zkg5mUGWdtpNn5f99dCflvFncU15LGD7cM0m72LNj6ix67RWhR6Fs60YdThNPt6MEgtGZZJhG=
+0XjVCO5cGtvENdw11DbohzDE7BUwZY%3D">Community Guidelines</a>. </p> <p class=
+=3D"legal" style=3D"color: #888888;font-size: 11px !important;"> Note: This=
+ message is in reference to <a href=3D"https://links.flickr.com/u/click?_t=
+=3D40ac9f0c38d540238d36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238c=
+c0&amp;_e=3DLLCB0pEpfQRSpnGWfdJA3E8cq9WJqUH1zMy4zXGqU8fLNmmnKyKT_P3f33F0S6b=
+hYeo7qQkF9ZPodVw3QG0omXzF75odwqpybIg0d1xT3tyMQaTIV6xoKur3kOCH3k-CQOPH1CUwsw=
+Q7SX1KwQ8C8ZLu8G88y9GyOYu4oT_lPa5hkM7WwOGoJwVA7Pz6c2tv33bZ-uQUSMuM3Jfqj0oRE=
+J8MUpJbwbEXGWLEhSJ76ZOYb4ujFpVDTEeTjXLp__sq" style=3D"text-decoration: unde=
+rline;color: #888888;font-size: 11px;"> Flickr account 199147830@N03</a>.</=
+p> <p class=3D"legal" style=3D"color: #888888;font-size: 11px;"><a target=
+=3D"_blank" href=3D"https://links.flickr.com/e/evib?_t=3D40ac9f0c38d540238d=
+36950e58265982&amp;_m=3D5ffa713226d44699a4c7f91dae238cc0&amp;_e=3DoJuvnkWwY=
+V5_7kdyYNN2fXUemG2iQ63OALEVvgsezcTfwrU46Orzy0_SW9Agcqp4" style=3D"color: #8=
+88888;font-size: 11px !important;">View in browser</a>&nbsp;&nbsp;&nbsp;|&n=
+bsp;&nbsp;&nbsp;<a target=3D"_blank" href=3D"https://links.flickr.com/e/enc=
+ryptedUnsubscribe?_r=3D40ac9f0c38d540238d36950e58265982&amp;_s=3D5ffa713226=
+d44699a4c7f91dae238cc0&amp;_t=3DoJuvnkWwYV5_7kdyYNN2fXUemG2iQ63OALEVvgsezcQ=
+pr4xMkvlNguzc01jwPbqqgCrUfCc7poHECDZLFvUxhHA9Vomec7t7-OvHmg1vP0iPidoQ69R5WL=
+RH3syIGpQ-" style=3D"color: #888888; font-size: 11px !important;">Unsubscri=
+be</a> </p> <p class=3D"legal" style=3D"font-family:sofia-pro, sans-serif !=
+important; color: #888888 !important;font-size: 11px !important;">=C2=A9 20=
+23 Flickr, <span style=3D"font-family:sofia-pro, sans-serif !important; col=
+or: #888888 !important;font-size: 11px !important;" class=3D"appleLink">P.O=
+. Box 390123, Mountain View, CA 94039</span> </p> </div> </td> </tr> </tbod=
+y> </table> <!-- begin email unsub footer --> <!-- begin email unsub footer=
+ --> <!--[if mso]></td> </tr> </table><![endif]--> </div> <!--[if mso | IE]=
+></td> </tr> </table><![endif]--> </center>=20
+<img border=3D"0" width=3D"1" height=3D"1" alt=3D"" src=3D"http://post.spma=
+iltechnol.com/q/oBiTQIb3J5Pg6Rbulrwrlw~~/AAPW7QA~/RgRm-ZZePlcDc3BjQgplFF4RF=
+2WP3SHYUhx0b2JpbnNpbHZlc3RyZTA4OUBzb29uZXJzLnVzWAQAAAAA">
+</body> </html>=
+
+--_----Bj5eEASnkf2L/t4lleWATQ===_01/8D-14185-E5117156--

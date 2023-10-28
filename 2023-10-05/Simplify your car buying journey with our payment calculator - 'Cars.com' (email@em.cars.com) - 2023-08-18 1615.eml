@@ -1,0 +1,825 @@
+Received: from CH0PR20MB3996.namprd20.prod.outlook.com (2603:10b6:610:c6::17)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Fri, 18 Aug 2023
+ 21:15:13 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=RlhMvTg2AmYW/TW7y/ZLHgnwaeQPB9vc5rU3LanoYggl1Oz4NVYFU7xPPsNBhJcwNhlWeCb0UaAUBRWdMrRVz8znfqiNS2nFJgG4YqjoLf2ACKaUV5gl9X8Gh5kQNe9HMeJysZL5RnZ1O/Eh9ttxeyI974xr4or74zAaWYT3c6jJbwDCurAtF40AUbw7uEzXZHu94o22Zsk7R2tXEcRoiLlN5OHsD8zRtj35D/vxW07jA5MukBux2MEyNf6LN9vXXzcka/qbX0f53VrFAd3x0/+IXuvbmancpM+uZXA1zxR9ZUEVKkwrOWbvDSwX9e1dFu+RaPGD8hXtVoMPHvxAgA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Tfnf/mAiY2b2ysAtWxQl98vUzwVAbZKz/beM78uePx4=;
+ b=iLas7G8AeoSb7g7sLg8n13OTeLIAcZVBgGuvkWV1JndEbXCwW3bjmuj8pemIgXtnbYKfeV7Js30ITNahDWjyUTPoBVMDIyUIOHQ+Ggf8K3Jp/H/LC7B31JR5jkUBcEWvM5r7zhGrp9ALnODProq57/BKxjOAwkOZPFLc8/Nr0tIQSbQYhY6m+sczVFPKiXmyNv+jCr0lEXW6h9u4gxo6Tpnc3cbont/jQhRdgmUqMsdrSPSvHBFHWjJBHN1K6vXozGHtfeCCKGSH29YQHfC1eU+rGIY2m7K6uMVqPYYxf2lDHrnIHqiqB5Tc/Qmyz0pi62dKEDnYoUzdWKbf0xrqlw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.166.179) smtp.rcpttodomain=outlook.com smtp.mailfrom=em.cars.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=em.cars.com;
+ dkim=pass (signature was verified) header.d=em.cars.com; arc=pass (0 oda=1
+ ltdi=1
+ spf=[1,1,smtp.mailfrom=msprvs1=19594cbeycafv=bounces-236543@em.cars.com]
+ dkim=[1,1,header.i=@em.cars.com] dmarc=[1,1,header.from=em.cars.com])
+Received: from SA1PR03CA0009.namprd03.prod.outlook.com (2603:10b6:806:2d3::20)
+ by CH0PR20MB3996.namprd20.prod.outlook.com (2603:10b6:610:c6::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Fri, 18 Aug
+ 2023 21:15:10 +0000
+Received: from SA2PEPF000015CC.namprd03.prod.outlook.com
+ (2603:10b6:806:2d3:cafe::4a) by SA1PR03CA0009.outlook.office365.com
+ (2603:10b6:806:2d3::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20 via Frontend
+ Transport; Fri, 18 Aug 2023 21:15:10 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.166.179)
+ smtp.mailfrom=em.cars.com; dkim=pass (signature was verified)
+ header.d=em.cars.com;dmarc=pass action=none
+ header.from=em.cars.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ em.cars.com discourages use of 209.85.166.179 as permitted sender)
+Received: from mail-il1-f179.google.com (209.85.166.179) by
+ SA2PEPF000015CC.mail.protection.outlook.com (10.167.241.202) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.14 via Frontend Transport; Fri, 18 Aug 2023 21:15:10 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:3F3D6C949662A3EA101DF86238D37784F880A4B1AE357E6079EFBC33DE21AE61;UpperCasedChecksum:A9084B9127C364A3D789353768F4439EFEFC33F777FCBFB321C3009058F182D6;SizeAsReceived:5755;Count:29
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-34992fd567bso3611925ab.1
+        for <tobinsilvestre@outlook.com>; Fri, 18 Aug 2023 14:15:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692393310; x=1692998110;
+        h=x-forwarded-for:list-id:list-unsubscribe:feedback-id:from:subject
+         :reply-to:mime-version:date:message-id:to:dkim-signature
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tfnf/mAiY2b2ysAtWxQl98vUzwVAbZKz/beM78uePx4=;
+        b=MjeAmmOxIohSYCLcPbNK6rIcW2pVrDbLCr4/eeA6i+fV5tQvimLrWKIFc0auC1npFO
+         Kp/d4hFTPSPca1Ahl/d2tpd+3z4Qf2jSD7cWMAHTvoeBgEg8RhMktJITvRHYepXXR1Yl
+         70RxILx5YVgQ/qDCvraCsnkptWpimuQ2y0ZfzSgcpiER8uYJdtxLpV4WPAfgGZeHkZMl
+         LGx36RGjASZYUGlEXAHDHHuplJj6N9zHL9zsaE/2q9mqxkbYkrnQJfRwdhGBZy9ofqf3
+         2MOnUvuL//cIQ3qeOUdsp7bmxzl4T6D0R9xWtI4JA2b2JsqIT94BSuD69AevCLSQMozc
+         WV7w==
+X-Gm-Message-State: AOJu0YxVcyW5O3kaGnVNdn5FSaaklQFZ4Zx36Zl4ImRX8ogbAglzmiPN
+	6OQyGb7PqJGFYOCLbCnls5a0hUHKpb1tb3SKcQ==
+X-Google-Smtp-Source: AGHT+IGw5Ye1pRVJ9fjwx8G1WDBwzbJPFyAaNgWKybVRqIt+BA8lryDsbnBrnXcOQ2tJjitnmYczetcO2LwLJOVcONW8EVepthk=
+X-Received: by 2002:a05:6e02:1d96:b0:34a:95f9:650c with SMTP id h22-20020a056e021d9600b0034a95f9650cmr454223ila.10.1692393309999;
+        Fri, 18 Aug 2023 14:15:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692393309; cv=none;
+        d=google.com; s=arc-20160816;
+        b=jvxtF074YusEjP5D4AUHXI9LTAjoMVMLHz8KPafpLuig2n4WeQg0ZDl8RSYDrPI2oy
+         BUI8DOXjaAu3f+aXIoAWYtIsjA0jWgkaAfYW6aFh2vTb8T1X7PnDE3JxfY5GftzXHckt
+         BKkL0BOyfTVhyA/ntXcurk3nfNmOPyZry0DBF+d1iJ67SDMeXJrt5412hCYbI2OU+IT3
+         wpbD/WBBQQlQ/M8AwGwJmveMKJoDuIlfPsnJHmR7BhWIkfiQTllai1ls5WELzLBi4HTs
+         FbFWNm1T56gl2wt3Lx1gMH9jtOek4IvTWmJFnzsT/dCEExBn35CjE8Vd3sZ5BJ4arQz9
+         tRAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-id:list-unsubscribe:feedback-id:from:subject:reply-to
+         :mime-version:date:message-id:to:dkim-signature;
+        bh=Tfnf/mAiY2b2ysAtWxQl98vUzwVAbZKz/beM78uePx4=;
+        fh=Tsyk2kWgq8sM3WOW/KFQXxKSeG2PmykFIJP4258i6WQ=;
+        b=a9bfXhk9OUMl1cysm6yJrhrIEnZosCuZUcisDOaFEHWnqZAkj+3jdoB+QvyGeC2Aac
+         qM3XBgJCUJEFFNWBM5Cv/aHnVs6bJIDxXFXLMRLbDBGX/bNohWkWeqyS1KSwY15ynblp
+         pnKepN47QTBpC+DNzmNouspcLb+eC+vluZZ8H/s5tj4Kj2LrEE50wIUyANPEQcx7n/zt
+         QlI2oTNUiaPefwPQD6Hr8PdlzPoT8iJG971bfiIYPrBVSSqBf2z47YkD2jgWrUq8JGhu
+         ucoeAlPany3RpJCp5xBD7TCPVJTu0XNpMyeoc1j1MYdpe2X8xeQnhVzqD51ljZcp45yn
+         yj2A==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@em.cars.com header.s=scph0918 header.b=lDmfJRQB;
+       spf=pass (google.com: domain of msprvs1=19594cbeycafv=bounces-236543@em.cars.com designates 147.253.210.56 as permitted sender) smtp.mailfrom="msprvs1=19594cbEYcAfv=bounces-236543@em.cars.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=em.cars.com
+Return-Path: msprvs1=19594cbEYcAfv=bounces-236543@em.cars.com
+Received: from mta-210-56.sparkpostmail.com (mta-210-56.sparkpostmail.com. [147.253.210.56])
+        by gmr-mx.google.com with ESMTPS id cp5-20020a056638480500b00430a46a98a8si126701jab.5.2023.08.18.14.15.09
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Aug 2023 14:15:09 -0700 (PDT)
+Received-SPF: pass (google.com: domain of msprvs1=19594cbeycafv=bounces-236543@em.cars.com designates 147.253.210.56 as permitted sender) client-ip=147.253.210.56;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@em.cars.com header.s=scph0918 header.b=lDmfJRQB;       spf=pass
+ (google.com: domain of msprvs1=19594cbeycafv=bounces-236543@em.cars.com
+ designates 147.253.210.56 as permitted sender)
+ smtp.mailfrom="msprvs1=19594cbEYcAfv=bounces-236543@em.cars.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=em.cars.com
+X-MSFBL: knWFB1QWqgVCC7s1eDJNsbM6+nIFgRTT5PExblIb/c8=|eyJtZXNzYWdlX2lkIjo
+	iNjRkYjVjZGZkZjY0YTczYTI1ODQiLCJzdWJhY2NvdW50X2lkIjoiMCIsInRlbmF
+	udF9pZCI6InNwYyIsInIiOiJ0b2JpbnNpbHZlc3RyZTAyN0Bzb29uZXJzLnVzIiw
+	iY3VzdG9tZXJfaWQiOiIyMzY1NDMifQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=em.cars.com;
+	s=scph0918; t=1692393308; i=@em.cars.com;
+	bh=Tfnf/mAiY2b2ysAtWxQl98vUzwVAbZKz/beM78uePx4=;
+	h=To:Message-ID:Date:Content-Type:Subject:From:List-Unsubscribe:
+	 From:To:Cc:Subject;
+	b=lDmfJRQBd4RCwQJmCjv90AjLbD4tN4LW/M2PwlgHOeSykWRWXAxMhT7Hd7yVWoRVr
+	 1Ru2Xsy21L0k+2Z3NAeVN7O4dLV1/S2Er3KwQ9cWOqi2/MA02MlcfLPyVUnOCLN61u
+	 WJCCz/UA0lpBl9HGGiT8JAHUrYKhw5Eq6loMgP0s=
+To: tobinsilvestre027@sooners.us
+Message-ID: <52.48.13701.C5FDFD46@ht.mta1vrest.cc.prd.sparkpost>
+Date: Fri, 18 Aug 2023 21:15:08 +0000
+Content-Type: multipart/alternative; boundary="_----Y+Yc1zvAL3idQ9IWd6oCpA===_91/48-13701-C5FDFD46"
+Reply-To: donotreply@cars.com
+Subject: Simplify your car buying journey with our payment calculator
+X-Campaign-ID: 6958776
+From: "Cars.com" <email@em.cars.com>
+X-Message-ID: 2b049c865c4a4cbd9d38d245bab9d3f5
+X-Feedback-ID: 9299711:6958776:11024:iterable
+Feedback-ID: 9299711:6958776:11024:iterable
+List-Unsubscribe: <mailto:unsubscribe@unsub.spmta.com?subject=unsubscribe:ZoEcGExNmzMtcl-tpRhQk2KTul0wIYZoNvDuH2jyels~|eyAicmNwdF90byI6ICJ0b2JpbnNpbHZlc3RyZTAyN0Bzb29uZXJzLnVzIiwgInRlbmFudF9pZCI6ICJzcGMiLCAiY3VzdG9tZXJfaWQiOiAiMjM2NTQzIiwgIm1lc3NhZ2VfaWQiOiAiNjRkYjVjZGZkZjY0YTczYTI1ODQiLCAic3ViYWNjb3VudF9pZCI6ICIwIiB9>
+List-Id: <spc.236543.0.sparkpostmail.com>
+X-Forwarded-For: tobinsilvestre027@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 29
+X-MS-Exchange-Organization-ExpirationStartTime: 18 Aug 2023 21:15:10.1919
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 7dcba73b-c15b-460f-8c96-08dba0303473
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ SA2PEPF000015CC:EE_|CH0PR20MB3996:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ SA2PEPF000015CC.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 8/18/2023 3:45:02 AM
+X-MS-Office365-Filtering-Correlation-Id: 7dcba73b-c15b-460f-8c96-08dba0303473
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.166.179
+X-SID-PRA: EMAIL@EM.CARS.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2023 21:15:10.1606
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7dcba73b-c15b-460f-8c96-08dba0303473
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ SA2PEPF000015CC.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR20MB3996
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.9525477
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6678.031
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:0;pcwl:0;kl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(90014020)(91030020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(8820095)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPncQIpCQhJuP224Y/PTXZokZl+M8Gju0zwYeZiHECsLpIxqzAAU2xzvzvkNOBx0ir3AOcnFKP+lNYZSIVAydMR4ds8wULejNSZoEPFcrtUfPAoWXLteYXerDoi5xmwXUFn8brMH8sdvr72pMIIN3FqGrX/JwwML4KANCl6eUCfaPOXS3YOLXcTtO+AG0uiKACo+RmkqhpfGlA==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TjduN293MUxVYTUrbU1uYmRyK0xNU0xUQ1JYYlBhRkVYQ3VITlBDUElydWZu?=
+ =?utf-8?B?eFNYRS9Wa2FhMDZQQXExQWNleC8rZGhPb0dYWnFXczU2L3I5L01UUGpHZ2xj?=
+ =?utf-8?B?WWp0cDJSTHBMZEJOb2NBdFY0R1ZGS09yQnJRQ1phNk9wRHhOOVJXN3ZVenM0?=
+ =?utf-8?B?N1hPT0VVZURZSWl1bVFvNnZPYjJzZ2R2Skl1dVg1VkM4N1dZaEFRYVIyWUU3?=
+ =?utf-8?B?TTlrVHFyQjBJL1J3RFZmZCtMVVRiN1dwNmRqR1cvK2VOWGhTWVFXa1Rhc3dq?=
+ =?utf-8?B?dmZHSUl1ZlM4QU00R25Ha01xYm1UM2JwMXlmZzgrc2Y2SlFhQ3NsQ1gyMVZI?=
+ =?utf-8?B?TjdxODIyaUVYcDRYTVNBSXJabnZDd3RaQXJacFZsUVJvMzF2ZUFyaTRCY0Ja?=
+ =?utf-8?B?ZG12bWxhcjQ1bEZ0OHQ3bk02NHVxL25Wa2dwQjVpSVpDWXp2ZG85OXFMcTNX?=
+ =?utf-8?B?eTg4VkJqaklWcVFGZWhhSHpuQjNTcFJhc1pyU3dnQTJTWlV0ZWt1L3YzQTQ2?=
+ =?utf-8?B?aW5WelJhakFoTDNGTDcyT0Q5ay8yd3I4WWUwczVtWk1VUm1QZTUrblh0VHBx?=
+ =?utf-8?B?T3k1MWNZeHRjdnN2Ny9yQnZGMVd2SkpvVW5aekVuRlEyaGRtcVFQMFluQ0Nv?=
+ =?utf-8?B?QzRDYzQ2UEgxL0RVY2pWOWpEVVBnVXVDbDZMam5sWGtFUW5kdDZkV2dsMzRY?=
+ =?utf-8?B?eUdYZ3U2YjNjdms4RGFYQ2FnOWo2U1hGamxIVTBkNy9LUmNlT2J4OGlwQWo4?=
+ =?utf-8?B?WUFLK3h3dk1CRVQvYStXYVhEc2VZREhFeHc1Rnc3ZTJ3RGFaVmw2dHQ5b1gr?=
+ =?utf-8?B?ZzNVL1lrNHI1VUhCSlpabG9zbGt2QlhROGI0OXIvSnJhSm5NMXhoWGF2R2kr?=
+ =?utf-8?B?R2JQSGFjbERGTXJUdUhsYzhIemRPMDI1WUhkMHRWNnFCRVl1dzg1eUk3MTJL?=
+ =?utf-8?B?OHhEdVJIYTlCa1I0d0ZvWW1palpZcFphS1g2R3hMcnhQRnZTTDQ1Y0JnbjBQ?=
+ =?utf-8?B?M2VoNXI1d25jckNBMVU3d3YzOVlKRWxSaWNYeXc5M29Qb3dXeUNPTmNHc2Rs?=
+ =?utf-8?B?bXpYZlhwdUhuZ08ySDl0Yks0SHhheWk4aUFqUlUxcndxMkt4dHhFMnd6SVYr?=
+ =?utf-8?B?SUhyWjFUbkdRVEUvSTFiMFdJNndtM2p2SjJZNHg3RGx1N05udDd2S1lOU21u?=
+ =?utf-8?B?SnpqRUpCNXMvVWxHSEJNTVRKc2REUEVnYm9ndmNNVENxallySzdUYXBWbC9y?=
+ =?utf-8?B?SG54bTZMVVM0QkwzSkVHeGduOTR3dmg1bDNqcVJjdWRxWm1YcXNxN01vK1BG?=
+ =?utf-8?B?TFZRcnNHMTgrUzRsZ2EwNGJuazJMaFhXRmhPL0UyOWpuaUxPQVRDVGYvc1Uz?=
+ =?utf-8?B?ZG42UE5qQWp2bkQ1dXNoU1k1M2ViMDR0d2lZaXBNcjNMd1F6WXJieWt3dEZz?=
+ =?utf-8?B?N2dnUEl5U0tHcW4yeDRyY2V3S0pYRndDSVFRbVFWVEk3dEFzMThiejNnWi91?=
+ =?utf-8?B?dnk1d09PVVNUc3UzWkhMdnpIS2h6MmNNaloxcG9TS1hCSGZUS0krSHBuM1NZ?=
+ =?utf-8?B?Tll5dzg0QWNCVUtIMGxLUlF5VWw0UW5tTllVb09JK1c5bzBEWjVIREZaTm5x?=
+ =?utf-8?B?OXBhd0pEeEVTbzRQVXBGeURNVThWbUFWMHdNSWt5dVdMSGZFRXMzWVFRdVF6?=
+ =?utf-8?B?NUF5d3REV2xrMExoQjYyekNtWEM4V2t4cWFWZHlNR3hoZ2tmNkdYR1ZWSVVj?=
+ =?utf-8?B?aUxCL1JVM2xpRlpHZ01uU3lKUDROUkhpVmNNNWlDeitQSktBZjRWQ0lsTzRL?=
+ =?utf-8?B?c0pnL0pUNWhwNWZuOG9hTXZwSVVWd3ZyOUk0MDN0bTRDd1BKM0NYdHhRMGoy?=
+ =?utf-8?B?VXJ3Q0l2UC9kUFZMUVNLTUtMRjMzZUpjYWVOZVp3UjM2VFp1eW52MG9HQ2Jj?=
+ =?utf-8?B?ZlAwcXNRUnJJNERaRkdzM2RVRkVVR3dRL1pHblJ2N0dwempwSVRSV1NqN2JZ?=
+ =?utf-8?B?ZE51dWhrd3dSYkM3OEsrV011L3pOenFHWFBSQjRtcFpuT05VRHJrOFQ1dW04?=
+ =?utf-8?B?d0kzWkVncUJQTUxTSnpVcWdqbWJlcWxHeU5Bd3loNSt0S0lhMW4xV0E3V0ta?=
+ =?utf-8?B?ZTlRUi95S0ozS2dBTnlZQnVUUW4yOTM0aStpdXR6OHFsOEpIaUtpcS9jWDNw?=
+ =?utf-8?Q?b6UEoJOmKPmTiVue2yJMzVM=3D?=
+MIME-Version: 1.0
+
+--_----Y+Yc1zvAL3idQ9IWd6oCpA===_91/48-13701-C5FDFD46
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+
+Cars.com =0A=0A=0A=0A=0A <https://www.cars.com/=3Femc=3Dacqem22&aff=3Dacqem=
+22> =0A=0A=0A=0A=0ASee all the possibilities in your price range =0AExplore=
+ all the vehicles in your=0A budget, based on your=0A personalized price ra=
+nge. Don't=0A worry, we'll do the math. =0A=0AGet started <https://www.cars=
+.com/car-loan-calculator/=3Femc=3Dacqem22&aff=3Dacqem22>=0A <https://www.c=
+ars.com/car-loan-calculator/=3Femc=3Dacqem22&aff=3Dacqem22> =0A=0AMake sure=
+ the price is right=0A=0A We=E2=80=99re here to help you find the right dea=
+l for you. It=E2=80=99s easy. =0A=0A=0A=0A Search by your budget =0AExplore=
+ vehicles within your=0A personalized price range, based on=0A your ideal m=
+onthly payment. =0A=0AExplore your range =0A<https://www.cars.com/car-loan-=
+calculator/=3Femc=3Dacqem22&aff=3Dacqem22> =0A=0A Search by great deals =0A=
+Filter by vehicles our supercomputer=0A says are great deals, based on=0A r=
+eal=E2=80=91time market pricing. =0A=0AShop great deals =0A<https://www.car=
+s.com/shopping/results/=3Fdeal_ratings[]=3Dgreat&dealer_id=3D&keyword=3D&li=
+st_price_max=3D&list_price_min=3D&makes[]=3D&maximum_distance=3Dall&mileage=
+_max=3D&monthly_payment=3D&page_size=3D20&sort=3Dbest_match_desc&stock_type=
+=3Dall&year_max=3D&year_min=3D&emc=3Dacqem22&aff=3Dacqem22>=0A=0ABecome a c=
+ar shopping expert=0A=0A Our expert team=E2=80=99s reviews and advice are h=
+ere to help you get the right deal. =0A=0A=0A=0A The Cars.com Buying Guide =
+=0A=0AView Guide =0A<https://www.cars.com/articles/cars-com-buying-guide-ho=
+w-to-buy-a-car-422517/=3Femc=3Dacqem22&aff=3Dacqem22>=0A=0A First Time Buye=
+r Tips =0A=0AView Guide =0A<https://www.cars.com/news/first-time-buyers/=3F=
+emc=3Dacqem22&aff=3Dacqem22> =0A=0A=0A To Buy New Or Used=3F =0A=0AView Gui=
+de =0A<https://www.cars.com/articles/first-time-buyers-new-used-or-certifie=
+d-pre-owned-1420680432617/=3Femc=3Dacqem22&aff=3Dacqem22>=0A=0A What=E2=80=
+=99s A Good Rate=3F =0A=0AView Guide =0A<https://www.cars.com/articles/firs=
+ttimebuyers-how-much-should-i-spend-on-my-car-1420668844892/=3Femc=3Dacqem2=
+2&aff=3Dacqem22>=0A=0A=0A=0A=0A=0A New Cars  =0A<https://www.cars.com/shopp=
+ing/results/=3Fstock_type=3Dnew&makes%5B%5D=3D&models%5B%5D=3D&list_price_m=
+ax=3D&maximum_distance=3Dall&emc=3Dacqem22&aff=3Dacqem22>=0A=0A Used Cars  =
+=0A<https://www.cars.com/shopping/results/=3Fstock_type=3Dused&makes%5B%5D=
+=3D&models%5B%5D=3D&list_price_max=3D&maximum_distance=3Dall&emc=3Dacqem22&=
+aff=3Dacqem22>=0A=0A Sell Your Car  <https://www.cars.com/sell/=3Femc=3Dacq=
+em22&aff=3Dacqem22> =0A=0A <https://www.cars.com/=3Femc=3Dacqem22&aff=3Dacq=
+em22> =0A Download our app experience =0A=0A <https://cars.onelink.me/42363=
+56000/7554a12d/=3Femc=3Dacqem22&aff=3Dacqem22>  =0A<https://cars.onelink.me=
+/4236356000/7554a12d/=3Femc=3Dacqem22&aff=3Dacqem22> =0A Follow for news, r=
+eviews, and tips =0A=0A <https://www.youtube.com/user/Carscom/>  <https://w=
+ww.tiktok.com/@carsdotcom> =0A <https://www.facebook.com/CarsDotCom/>  =0A<=
+https://www.instagram.com/carsdotcom/=3Fhl=3Den>  =0A<https://www.pinterest=
+.com/carsdotcom/> =0A=0A=0A=0A This email was sent to =0A =C2=AE 2023 Cars=
+.com All rights reserved.=0A Cars.com 300 S Riverside Plaza, Suite 1000, C=
+hicago IL 60606=0A We value your privacy, Cars.com Privacy Statement =0A<ht=
+tps://www.cars.com/about/privacy/=3F=3Femc=3Dacqem22&aff=3Dacqem22>.=0AUnsu=
+bscribe =0A<http://emlinks.cars.com/e/eh=3F_t=3D47f16e37803d44c8a302ee7782c=
+80abb&_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&_e=3DXtNif7xpuqGQE4M1Ef7A9iGoso=
+uquEjzSf0iKdUb87ttHgxnqhJc3lEDfgAS_foNHwRIWb56I9vQkcSfQNbr7XimdHUX2GI01OTC6=
+4nrlRC3bwOC6YW-gJL1JSgFFsVeCwwTDBZupn7g7CJufR8p-fsEtChssxIYvDE2wXvOI-knn2n_=
+ecFlh5UhtPjRIpkPzopcw_c7RFI6TBPgWpeA_AhHxjbRnP7fj17-Ya8UE5yACGxBDwP4TvUX9GL=
+XMVVDbShI55FVGNbRtf2ImpKis_GBfd6HsWDbmkXlGEAZctqF1LRFR_RORV1DLimX0xzxItbNer=
+d9dwp0eqCD16e2uk4TcDpIV6G_BEog4XINBV0%3D>=0AManage Preferences =0A<https://=
+www.cars.com/email-preferences/=3Femc=3Dacqem22&aff=3Dacqem22>
+--_----Y+Yc1zvAL3idQ9IWd6oCpA===_91/48-13701-C5FDFD46
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="UTF-8"
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "https://www.w3.or=
+g/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns=3D"https://www.w3.org/1999/x=
+html" xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" lang=3D"en" xml:lang=3D"en" style=3D"width: 100%;"=
+><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"></=
+head> <head>  <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"> <=
+!--[if !mso><!-- --> <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3De=
+dge"> <!--<![endif--> <meta content=3D"width=3Ddevice-width; initial-scale=
+=3D1.0; maximum-scale=3D1.0; user-scalable=3Dno;" name=3D"viewport"> <meta =
+name=3D"viewport" content=3D"width=3Ddevice-width"> <meta name=3D"robots" c=
+ontent=3D"noindex, no follow"> <meta name=3D"x-apple-disable-message-reform=
+atting"> <link rel=3D"preconnect" href=3D"https://fonts.gstatic.com"> <link=
+ href=3D"https://fonts.googleapis.com/css2?family=3DInter:wght@400;700&amp;=
+display=3Dswap" rel=3D"stylesheet"> <title>Cars.com</title> <style type=3D"=
+text/css">.ExternalClass{width:100%}.ExternalClass,.ExternalClass p,.Extern=
+alClass span,.ExternalClass font,.ExternalClass td,.ExternalClass div{line-=
+height:100%}table td p{border-collapse:collapse;mso-table-lspace:0;mso-tabl=
+e-rspace:0}h1,h2,h3,h4,h5,h6{font-size:inherit;padding:0;margin:0;color:bla=
+ck;line-height:100%}.applelinks a{text-decoration:none;color:inherit!import=
+ant}a{color:black;text-decoration:none}a,a:link,a:visited{color:inherit;tex=
+t-decoration:none}span.MsoHyperlink{mso-style-priority:99;color:inherit}spa=
+n.MsoHyperlinkFollowed{mso-style-priority:99;color:inherit}img{border:0!imp=
+ortant}.dn{display:none!important}body{font-family:Segoe UI,Arial,sans-seri=
+f;font-size:14px;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;-w=
+ebkit-font-smoothing:antialiased;margin:0;padding:0;width:100%!important}.l=
+inkopacity:hover{opacity:.8!important}.button:hover{background-color:#25085=
+8!important;border:2px solid #250858!important}.buttonprimary:hover{backgro=
+und-color:#250858!important;border:2px solid #250858!important}.buttonghost=
+:hover{background-color:#65299d!important}.buttonghost:hover span{color:whi=
+te!important}.buttonghostsecondary:hover{background-color:white!important;b=
+order:2px solid #65299d!important}.buttonghostsecondary:hover span{color:#6=
+5299d!important}.buttonpink:hover{background-color:#a801b7!important;border=
+:2px solid #a801b7!important}@media all{*[class~=3Dow100]{width:100%!import=
+ant}.sharp{font-family:'SharpSans',Helvetica,Arial!important}.inter{font-fa=
+mily:'Inter',Helvetica,Arial!important}}@media only screen and (max-width:4=
+80px){.w100m,.column50,.column33,.column25,.column75,.column66{width:100%!i=
+mportant}.w90m{width:90%!important}.w85m{width:85%!important}.expandm{width=
+:100%!important;display:block!important}.resizem{width:100%!important;heigh=
+t:auto!important}.resize90m{width:90%!important;height:auto!important}.hide=
+m{display:none!important}.h1main{font-size:30px!important}.h1m{font-size:26=
+px!important}.h2m{font-size:14px!important}.subheadingm{font-size:22px!impo=
+rtant}.h3m{font-size:13px!important}.tcenterm{text-align:center!important}.=
+tleftm{text-align:left!important}.trightm{text-align:right!important}.heigh=
+t0m{height:0!important}.showm{display:block!important;max-height:1000px!imp=
+ortant;width:100%!important;overflow:visible!important;align:center!importa=
+nt}.bg{background-image:none!important;background-size:100% auto!important}=
+.logo{width:100px!important;height:auto!important}.bg-size{background-size:=
+auto 100%!important;background-position:top!important}.bg-position{backgrou=
+nd-position:60% 50%!important}.padhero{padding-top:80px!important}.border0m=
+{border:0!important}.padthero{padding-top:40%!important}.borderlr0m{border-=
+left:0!important;border-right:0!important}.borderl0m{border-left:0!importan=
+t}.pad0m{padding:0!important}.padl0m{padding-left:0!important}.padl10m{padd=
+ing-left:10px!important}.padlr0m{padding-left:0!important;padding-right:0!i=
+mportant}.padt0m{padding-top:0!important}.padt5m{padding-top:5px!important}=
+.padt10m{padding-top:10px!important}.paddingtb15m{padding-top:13px!importan=
+t;padding-bottom:13px!important}.padt10m{padding-top:10px!important}.padt20=
+m{padding-top:20px!important}.padt30m{padding-top:30px!important}.padt40m{p=
+adding-top:40px!important}.padb0m{padding-bottom:0!important}.padb5m{paddin=
+g-bottom:5px!important}.padb10m{padding-bottom:10px!important}.padb20m{padd=
+ing-bottom:20px!important}.padb30m{padding-bottom:30px!important}.padb40m{p=
+adding-bottom:40px!important}}@media only screen and (max-width:711px){.ow1=
+00{width:100%!important}.w100{width:100%!important}.w90{width:90%!important=
+}.w80{width:80%!important}.hide{display:none!important}.resize{width:100%!i=
+mportant;height:auto!important}.resize img{max-width:100%!important;height:=
+auto!important}.resize a{width:auto!important;height:auto!important}.expand=
+{width:100%!important;display:block!important}.expand2{display:block!import=
+ant}.height0{height:0!important}.column50{width:50%}.column50a{width:50%}.c=
+olumn33{width:33.33%}.column25{width:25%}.column75{width:75%}.column66{widt=
+h:66%}.tcenter{text-align:center!important}.show{display:block!important;ma=
+x-height:1000px!important;width:100%!important;overflow:visible!important;a=
+lign:center!important}.bannerside{padding-top:105px!important}.bgbuttonpadb=
+{padding-bottom:180px;padding-bottom:55%}.bgsidebutton{width:10%!important}=
+.border0{border:0!important}.borderlr0{border-left:0!important;border-right=
+:0!important}.pad0{padding:0!important}.padlr0{padding-left:0!important;pad=
+ding-right:0!important}.padt0{padding-top:0!important}.padt5{padding-top:5p=
+x!important}.padt10{padding-top:10px!important}.padt20{padding-top:20px!imp=
+ortant}.padt30{padding-top:30px!important}.padb0{padding-bottom:0!important=
+}.padb5{padding-bottom:5px!important}.padb10{padding-bottom:10px!important}=
+.padb20{padding-bottom:20px!important}.padb30{padding-bottom:30px!important=
+}.padLR10{padding-left:10px!important;padding-right:10px!important}.padLR20=
+{padding-left:20px!important;padding-right:20px!important}.copym{font-size:=
+15px!important}.table_center{margin:0 auto!important}}@font-face{font-famil=
+y:'SharpSans';font-display:swap;src:local('Sharp Sans Display No1 Bold'),lo=
+cal('SharpSansDisplayNo1-Bold'),url('https://images.cars.com/explorecars/up=
+loads/SharpSansDisplayNo1-Bold.woff2') format('woff2'),url('https://images.=
+cars.com/explorecars/uploads/SharpSansDisplayNo1-Bold.woff') format('woff')=
+,url('https://images.cars.com/explorecars/uploads/SharpSansDisplayNo1-Bold.=
+ttf') format('truetype');font-weight:normal;font-weight:700}</style> <!--[i=
+f mso> <style type=3D"text/css">body{margin:0!important;padding:0!important=
+;font-family:Segoe UI,Arial,sans-serif}table,td,div,p{font-family:Segoe UI,=
+Arial,sans-serif;line-height:normal}</style> <xml> <o:OfficeDocumentSetting=
+s> <o:AllowPNG/> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSe=
+ttings> </xml> <![endif--> </head> <body class=3D"tli" style=3D"font-family=
+: Segoe UI, Arial, sans-serif; font-size: 14px; -webkit-font-smoothing: ant=
+ialiased; -webkit-text-size-adjust: none; -ms-text-size-adjust: none; paddi=
+ng: 0; margin: 0; background-color: #F9F9F9; width: 100% !important;">
+<div style=3D"color:transparent;visibility:hidden;opacity:0;font-size:0px;b=
+order:0;max-height:1px;width:1px;margin:0px;padding:0px;border-width:0px!im=
+portant;display:none!important;line-height:0px!important;"><img border=3D"0=
+" width=3D"1" height=3D"1" src=3D"http://post.spmailtechnolo.com/q/ifIR9HHF=
+glPh74I3S5tirA~~/AAOb_wA~/RgRmwmRcPVcDc3BjQgpk21zf32SnOiWEUhx0b2JpbnNpbHZlc=
+3RyZTAyN0Bzb29uZXJzLnVzWAQAAAAA" alt=3D""></div>
+<span style=3D"color:transparent;visibility:hidden;display:none;opacity:0;h=
+eight:0;width:0;font-size:0;"></span><img src=3D"http://emlinks.cars.com/e/=
+eo?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245b=
+ab9d3f5&amp;_e=3DXf5Z3YoEVINLviNa3kEHMHjq9fZVoOaBDZZFRdHIYxlwxD8MpnVp1a1Y20=
+LRl1eSK8Y3udYigZa0tq2fDuqgUj7pv5_fLJP9Y2pJu04h8QVrOLryNLWtwsNKMD78XXgbXUlv4=
+9UGGabnp8Z76rpNoA%3D%3D" style=3D"border:0;width:1px;height:1px;border-widt=
+h:0px!important;display:none!important;line-height:0!important;" width=3D"1=
+" height=3D"1"> <!-- Variable Definition: --> <table width=3D"100%" border=
+=3D"0" align=3D"center" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:=
+ 100%;" role=3D"presentation"> <tr> <td align=3D"center" style=3D"backgroun=
+d-color: #F9F9F9;"> <table class=3D"w100" width=3D"711" border=3D"0" align=
+=3D"center" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"> <tr>=
+ <td align=3D"center"> <table width=3D"100%" border=3D"0" style=3D"backgrou=
+nd-color: #ffffff;" align=3D"center" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation"> <!-- HEADER START --> <tr> <td align=3D"center" style=
+=3D""> <table width=3D"100%" border=3D"0" align=3D"center" cellpadding=3D"0=
+" cellspacing=3D"0"> <tr> <td align=3D"center"> <table width=3D"100%" borde=
+r=3D"0" align=3D"center" cellpadding=3D"0" cellspacing=3D"0"> <tr> <td vali=
+gn=3D"bottom"> <a href=3D"http://emlinks.cars.com/u/click?_t=3D47f16e37803d=
+44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtN=
+if7xpuqGQE4M1Ef7A9mngViOHQYrQHED07e4Vtv10zTiDpFqCjpLCdZo2FrxxzojaEMvB4q5wK9=
+3vN5bNEjo73XzjXBBPg80cYd_hknw-NylX0A6RQgds_4Tnn_FeMnNzbEERgea-AsmNueKnhQAqV=
+LxfNzif9iGmFiYhFyQWwGgn-ptXJjZJ7HPqhvSRUYX0U793VYXNKnjJiFuNLzd_BhJaP2lZn0i7=
+c4U0QnU%3D" target=3D"_blank" style=3D"color: #65299d; text-decoration: und=
+erline;"> <img class=3D"expandm expand" src=3D"https://img.carsdn.co/image/=
+upload/c_scale,w_1200/v1683302312/email/CARS2303-Artboard_35-100.jpg" width=
+=3D"100%" alt=3D""> </a> </td> </tr> </table> </td> </tr> </table> </td> </=
+tr> <!-- HEADER END --> <!-- MODULE INSERT START --> <!-- HERO START --> <t=
+r> <td class=3D"padt0m" align=3D"center" style=3D"padding: 40px 0px;"> <tab=
+le class=3D"w100m" align=3D"center" width=3D"90%" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0" role=3D"presentation"> <tr> <td style=3D"backgroun=
+d-color: #ffffff;"> <table width=3D"100%" border=3D"0" cellspacing=3D"0" ce=
+llpadding=3D"0" role=3D"presentation"> <tr> <td class=3D"expand" valign=3D"=
+middle"> <table class=3D"column50" width=3D"319" border=3D"0" align=3D"left=
+" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"> <tr> <td class=
+=3D"padt30m padLR10" align=3D"center" style=3D"padding-top: 25px; padding-b=
+ottom: 30px;"> <table width=3D"100%" border=3D"0" align=3D"center" cellpadd=
+ing=3D"0" cellspacing=3D"0" role=3D"presentation"> <!-- HEADLINE START --> =
+<tr> <td class=3D"sharp" style=3D"text-align: left; font-size: 40px; line-h=
+eight: 48px; color: #000000; font-family: Arial, sans-serif; font-weight: 7=
+00;">See all the possibilities in your price&nbsp;range</td> </tr> <!-- HEA=
+DLINE END --> <!-- COPY START --> <tr> <td class=3D"inter" style=3D"padding=
+-top: 10px; text-align: left; font-size: 18px; line-height: 28px; color: #0=
+00000; font-family: Arial, sans-serif; ">Explore all the vehicles in your<b=
+r class=3D"hide"> budget, based on your<br class=3D"hide"> personalized pri=
+ce range. Don't<br class=3D"hide"> worry, <strong>we'll do the&nbsp;math.</=
+strong></td> </tr> <!-- COPY END --> <!-- / BUTTON START --> <tr> <td align=
+=3D"left" style=3D"padding-top: 20px;"> <table border=3D"0" align=3D"left" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"> <tr> <!-- BUTTON=
+ --> <td class=3D"inter h2m buttonsecondary" align=3D"center" style=3D"-web=
+kit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; overfl=
+ow: hidden; border: 2px solid #65299d; padding-left: 60px; padding-right: 6=
+0px; padding-top: 17px; padding-bottom: 17px; background-color: #65299d; ov=
+erflow: hidden; font-size: 15px; color: #ffffff; font-family: Arial, sans-s=
+erif; text-align: center; font-weight: 700;"><a href=3D"http://emlinks.cars=
+.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cb=
+d9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9hglgV-QnHPUZse2EpRsVNrsxxq0=
+CGvu4UEuT-KAhJdo1IOZbYmQ_rJ05yoY_45mZIaherGqcQESA-HozwZqyAR1uHHur38tosOLHTq=
+wzRmYgGE20qgVj-M7WyE_kh-BvLJRRND7HaSd_uwJ9_V3AoyX8eRFgtvJnVMfdzZrq1fBWv99RU=
+saYvtPGbpJfnDpR1Ifh1MreoMw-RuhXe-qS4VBmA3fROxAxPAeyRwLbRvf1JclUdTnSpD7CrjvN=
+GX76w%3D%3D" style=3D"color: #ffffff; text-decoration: none;"><span style=
+=3D"display: block; width: 100%;">Get started</span></a></td> </tr> </table=
+> </td> </tr> <!-- BUTTON END / --> </table> </td> </tr> </table> </td> <td=
+ class=3D"expand" valign=3D"middle" style=3D""> <table class=3D"column50" w=
+idth=3D"319" border=3D"0" align=3D"left" cellpadding=3D"0" cellspacing=3D"0=
+" role=3D"presentation"> <tr> <!-- IMAGE --> <td align=3D"center"> <a href=
+=3D"http://emlinks.cars.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&a=
+mp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9hglg=
+V-QnHPUZse2EpRsVNrsxxq0CGvu4UEuT-KAhJdo1IOZbYmQ_rJ05yoY_45mZIaherGqcQESA-Ho=
+zwZqyAQA5wbjWFM2uUyaKorYMYZzaqS-JHh1D-FQgGAB3WWntSo9oN0eFccJYBl9i2dfw9Z1Rqx=
+OcZv1ulaF2n9gtEUHhC4igYK5gLwnJXt_Z16CIh0ru3XKLmPutjCADnz1am80CKFUOCm58G260J=
+HBfnJETILcr8YwzjVK-vIulfo01A%3D%3D"> <img src=3D"https://img.carsdn.co/imag=
+e/upload/v1684849661/email/EM2-Img_HERO-04.png" width=3D"319" alt=3D"" styl=
+e=3D"display: block; border: 0; color: black; font-size: 20px; font-weight:=
+ 700; font-family: sans-serif; max-width: 100%;" class=3D"resize linkopacit=
+y"></a> </td> </tr> </table> </td> </tr> </table> </td> </tr> </table> </td=
+> </tr> <!-- HERO END --> <!-- PRO TIP #3 START --> <tr> <td bgcolor=3D"#ed=
+e9f2" class=3D"padLR10" style=3D"padding: 40px 50px 40px 50px;"> <table bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" style=3D"" rol=
+e=3D"presentation"> <tr> <td class=3D"sharp" style=3D"text-align: center; f=
+ont-size: 18px; line-height: 36px; color: #000000; font-family: Arial, sans=
+-serif; "> <span style=3D"color: #000000; font-weight: 700;font-size: 24px;=
+ line-height: 36px;">Make sure the price is&nbsp;right</span><br class=3D"h=
+ide"> </td> </tr> <td class=3D"sharp" style=3D"padding-top: 10px;text-align=
+: center; font-size: 18px; line-height: 28px; color: #000000; font-family: =
+Arial, sans-serif; "> We=E2=80=99re here to help you find the right deal fo=
+r you. It=E2=80=99s&nbsp;easy.</td> </table> </td> </tr> <!-- PRO TIP #3 EN=
+D --> <!-- SEARCH BY START --> <tr> <td align=3D"center" valign=3D"top" bgc=
+olor=3D"#ede9f2"> <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" w=
+idth=3D"85%" style=3D"" role=3D"presentation"> <tr> <td class=3D"expand" wi=
+dth=3D"320" align=3D"center" valign=3D"top" style=3D"width: 320px;"> <table=
+ class=3D"expand" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"320" style=3D"width: 320px;" role=3D"presentation"> <tr> <td align=3D"cent=
+er" width=3D"" valign=3D"top" style=3D""> <img src=3D"https://img.carsdn.co=
+/image/upload/v1684849607/email/EM2-Img_budget-icon.png" width=3D"50" alt=
+=3D""> </td> </tr> <tr> <td align=3D"center" width=3D"" valign=3D"top" styl=
+e=3D"padding-top: 20px; text-align: center; font-size: 18px; line-height: 2=
+8px; color: #000000; font-family: Arial, sans-serif; font-weight: 700;"> Se=
+arch by your&nbsp;budget</td> </tr> <tr> <td class=3D"copym" align=3D"cente=
+r" width=3D"" valign=3D"top" style=3D"padding-top: 10px; text-align: center=
+; font-size: 16px; line-height: 26px; color: #000000; font-family: Arial, s=
+ans-serif;">Explore vehicles within your<br class=3D"hide"> personalized pr=
+ice range, based on<br class=3D"hide"> your ideal monthly&nbsp;payment.</td=
+> </tr> <!-- / BUTTON START --> <tr> <td align=3D"center" style=3D"padding-=
+top: 30px; padding-bottom: 60px;"> <table width=3D"220" border=3D"0" align=
+=3D"center" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"> <tr>=
+ <!-- BUTTON --> <td class=3D"inter h2m buttonsecondary" align=3D"center" s=
+tyle=3D"-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius:=
+ 5px; overflow: hidden; border: 2px solid #65299d; padding-left: 30px; padd=
+ing-right: 30px; padding-top: 17px; padding-bottom: 17px; background-color:=
+ #65299d; overflow: hidden; font-size: 15px; color: #ffffff; font-family: A=
+rial, sans-serif; text-align: center; font-weight: 700;"><a href=3D"http://=
+emlinks.cars.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b0=
+49c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9hglgV-QnHPUZse2=
+EpRsVNrsxxq0CGvu4UEuT-KAhJdo1IOZbYmQ_rJ05yoY_45mZIaherGqcQESA-HozwZqyASVAQ8=
+DLLoi_ijTdBxPL2TOTtpkxcRAHwztjws1zOQH4T_BwQBU6i1jhSqdP0p24EGF8543oqYfAlLUVh=
+-_N-725DgdfzniNnsXTiJpkUhjQ7P8TwJdae7z5JOZFxQ0ebBet1ct1dGn7fmRp2wVmgmMwHDxC=
+mi_W0wvU-6SRQvglw%3D%3D" style=3D"color: #ffffff; text-decoration: none;"><=
+span style=3D"display: block; width: 100%;">Explore your range</span></a></=
+td> </tr> </table> </td> </tr> <!-- BUTTON END / --> </table> </td> <td cla=
+ss=3D"expand2" width=3D"10" style=3D"display: none; font-size:1px; line-hei=
+ght:1px;">&nbsp; </td> <td class=3D"expand" width=3D"320" align=3D"center" =
+valign=3D"top" style=3D"width: 320px;"> <table class=3D"expand" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" width=3D"320" style=3D"width: 320px;"=
+ role=3D"presentation"> <tr> <td align=3D"center" width=3D"" valign=3D"top"=
+ style=3D""> <img src=3D"https://img.carsdn.co/image/upload/v1684849630/ema=
+il/EM2-Img_deals-icon.png" width=3D"50" alt=3D""> </td> </tr> <tr> <td alig=
+n=3D"center" width=3D"" valign=3D"top" style=3D"padding-top: 20px; text-ali=
+gn: center; font-size: 18px; line-height: 28px; color: #000000; font-family=
+: Arial, sans-serif; font-weight: 700;"> Search by great&nbsp;deals</td> </=
+tr> <tr> <td class=3D"copym" align=3D"center" width=3D"" valign=3D"top" sty=
+le=3D"padding-top: 10px; text-align: center; font-size: 16px; line-height: =
+26px; color: #000000; font-family: Arial, sans-serif;">Filter by vehicles o=
+ur supercomputer<br class=3D"hide"> says are great deals, based on<br class=
+=3D"hide"> real=E2=80=91time market&nbsp;pricing.</td> </tr> <!-- / BUTTON =
+START --> <tr> <td align=3D"center" style=3D"padding-top: 30px; padding-bot=
+tom: 60px;"> <table width=3D"220" border=3D"0" align=3D"center" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation"> <tr> <!-- BUTTON --> <td cl=
+ass=3D"inter h2m buttonsecondary" align=3D"center" style=3D"-webkit-border-=
+radius: 5px; -moz-border-radius: 5px; border-radius: 5px; overflow: hidden;=
+ border: 2px solid #65299d; padding-left: 30px; padding-right: 30px; paddin=
+g-top: 17px; padding-bottom: 17px; background-color: #65299d; overflow: hid=
+den; font-size: 15px; color: #ffffff; font-family: Arial, sans-serif; text-=
+align: center; font-weight: 700;"><a href=3D"http://emlinks.cars.com/u/clic=
+k?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245ba=
+b9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9lcZZ4cWZlijMZZsM9whAx9Wccu6SYrCdunExS0=
+Bz7_neTYVqFqkL4rBA_emi1LqJLuf8P9reb6a5N2L44HTXMTwwzBhpB9DezHSJXzrvcxmI4r0wG=
+AJyql_1gS998mjqaMLjIbYljLYf0O3N5jOVyzd-6lPtvtXrLrVej46IrtMEL8IjcnGg7MllRJiH=
+R7OMO5yHkb33j0O5xNZt5ZkRXOS89rc0ke1a6HlGaUNRukl6uS59RXFUPnOVAoOw7ogIC589RTc=
+L1VtZWEXhIJ4g7aLk8NbScDhWV30vw4wHJZyitWCuy7WVdqwtrp7Qbj5IgFx1NeDccA_IjWmy35=
+mskOIKi3l8yBLk9pCILajMv9QF0TghVFnygfg22xzL4ZZGph7S_Oc8NvhWJ1W6etnLNuzEXQmRO=
+BpdwveyAdXJ-0-aSkTz_h3Hj7qf0AEzvNev_YohOI46C7dr7QN58MsCBLfpcBPNjcDHaYrgx0Ya=
+dyOFIOGBr7JEdWceaEko8LzmNQ30zPuhnQn1vVBDOPqXQE%3D" style=3D"color: #ffffff;=
+ text-decoration: none;"><span style=3D"display: block; width: 100%;">Shop =
+great deals</span></a></td> </tr> </table> </td> </tr> <!-- BUTTON END / --=
+> </table> </td> </tr> </table> </td> </tr> <!-- / SEARCH BY END --> <!-- M=
+ORE GOODS STUFF START --> <tr> <td class=3D"padLR10" style=3D"padding: 50px=
+ 50px 40px 50px;"> <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+width=3D"100%" style=3D"" role=3D"presentation"> <tr> <td class=3D"sharp" s=
+tyle=3D"text-align: center; font-size: 18px; line-height: 36px; color: #000=
+000; font-family: Arial, sans-serif; "> <span style=3D"color: #000000; font=
+-weight: 700;font-size: 24px; line-height: 36px;">Become a car shopping&nbs=
+p;expert</span><br class=3D"hide"> </td> </tr> <tr> <td class=3D"sharp" sty=
+le=3D"padding-top: 10px;text-align: center; font-size: 18px; line-height: 2=
+8px; color: #000000; font-family: Arial, sans-serif; "> Our expert team=E2=
+=80=99s reviews and advice are here to help you get the right&nbsp;deal.</t=
+d> </tr> </table> </td> </tr> <!-- MORE GOODS STUFF END --> <!-- SHOPPING E=
+XPERT START --> <tr> <td align=3D"center"> <table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" align=3D"center" width=3D"90%" style=3D"" role=3D"=
+presentation"> <tr> <td class=3D"expand" width=3D"320" align=3D"center" val=
+ign=3D"top" style=3D""> <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%" style=3D"" role=3D"presentation"> <tr> <td align=3D"c=
+enter" width=3D"" valign=3D"top" style=3D""> <img class=3D"w90" src=3D"http=
+s://img.carsdn.co/image/upload/v1684849225/email/EM1-Img_buying-guide-thumb=
+.png" width=3D"250" alt=3D""> </td> </tr> <tr> <td align=3D"center" width=
+=3D"" valign=3D"top" style=3D"padding-top: 20px; text-align: center; font-s=
+ize: 18px; line-height: 28px; color: #000000; font-family: Arial, sans-seri=
+f; font-weight: 700;"> The Cars.com Buying Guide </td> </tr> <!-- / BUTTON =
+START --> <tr> <td align=3D"center" style=3D"padding-top: 25px; padding-bot=
+tom: 25px;"> <table border=3D"0" align=3D"center" cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation"> <tr> <!-- BUTTON --> <td class=3D"inter h=
+2m buttonsecondary" align=3D"center" style=3D"-webkit-border-radius: 5px; -=
+moz-border-radius: 5px; border-radius: 5px; overflow: hidden; border: 2px s=
+olid #65299d; padding-left: 60px; padding-right: 60px; padding-top: 17px; p=
+adding-bottom: 17px; background-color: #65299d; overflow: hidden; font-size=
+: 15px; color: #ffffff; font-family: Arial, sans-serif; text-align: center;=
+ font-weight: 700;"><a href=3D"http://emlinks.cars.com/u/click?_t=3D47f16e3=
+7803d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=
+=3DXtNif7xpuqGQE4M1Ef7A9hEYIsv5327eTTPhy4O-r0PVE0RaDsy2c7wZ4ktfVcf89KDKq3Da=
+hXCSAD5sVarhqVx88uLS5VtyYmGv6jwZiaaIuA4YIaFMhcMoOcbGwQPTf0TYx6TWKrSNxl2jjCo=
+oWZTzze3opR6yn0bWhPRrZqtBGQbhKkpjET0Xc_U6qLE_Bm_VK7yz585E_yG9QxFVlSLCeJG143=
+V1zjbfmPeqFA4IzeL-tUt544Ju4SfuMw0J8oIL5ZSitx2-dNUSHyPPE8bevEzVtiy41nQWwdSOy=
+jqACS8J0QM9dOE3ryfQAPt9" style=3D"color: #ffffff; text-decoration: none;"><=
+span style=3D"display: block; width: 100%;">View Guide</span></a></td> </tr=
+> </table> </td> </tr> <!-- BUTTON END / --> </table> </td> <td class=3D"ex=
+pand" width=3D"320" align=3D"center" valign=3D"top" style=3D""> <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"" style=3D"" role=3D"=
+presentation"> <tr> <td align=3D"center" width=3D"" valign=3D"top" style=3D=
+""> <img class=3D"w90" src=3D"https://img.carsdn.co/image/upload/v168484885=
+6/email/EM1-Img_first-buyer-thumb.png" width=3D"250" alt=3D""> </td> </tr> =
+<tr> <td align=3D"center" width=3D"" valign=3D"top" style=3D"padding-top: 2=
+0px; text-align: center; font-size: 18px; line-height: 28px; color: #000000=
+; font-family: Arial, sans-serif; font-weight: 700;"> First Time Buyer Tips=
+ </td> </tr> <!-- / BUTTON START --> <tr> <td align=3D"center" style=3D"pad=
+ding-top: 25px; padding-bottom: 25px;"> <table border=3D"0" align=3D"center=
+" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"> <tr> <!-- BUTT=
+ON --> <td class=3D"inter h2m buttonsecondary" align=3D"center" style=3D"-w=
+ebkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; over=
+flow: hidden; border: 2px solid #65299d; padding-left: 60px; padding-right:=
+ 60px; padding-top: 17px; padding-bottom: 17px; background-color: #65299d; =
+overflow: hidden; font-size: 15px; color: #ffffff; font-family: Arial, sans=
+-serif; text-align: center; font-weight: 700;"><a href=3D"http://emlinks.ca=
+rs.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4=
+cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9toUAr7M7kgl81ufGoFnS6Cl7-=
+yBU8NUefITMQ4AmzUMDmtFHieydgkdzNd3qwLLHv5nuXtZ3EiF_C7prPZ2T792mRrQD2u7tKTPN=
+7bCQWSSEnVifoJ9nih-w3gOU17_C6Ok_XA205hM__yH6P_0I428tk1_O266NGQFer58hYEyrPlt=
+Y-lAYuarge5n92LzT8yBEmXDKi3ZKb7Jw9AEs2OY8bhdLIg1vQBDjb5eGmY_MXvsUpA84l4ZhpQ=
+DLxTZ8g%3D%3D" style=3D"color: #ffffff; text-decoration: none;"><span style=
+=3D"display: block; width: 100%;">View Guide</span></a></td> </tr> </table>=
+ </td> </tr> <!-- BUTTON END / --> </table> </td> </tr> <tr> <td class=3D"e=
+xpand" width=3D"320" align=3D"center" valign=3D"top" style=3D"padding-top: =
+30px; padding-bottom: 30px;"> <table border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" width=3D"100%" style=3D"" role=3D"presentation"> <tr> <td align=
+=3D"center" width=3D"" valign=3D"top" style=3D""> <img class=3D"w90" src=3D=
+"https://img.carsdn.co/image/upload/v1684848922/email/EM1-Img_new-used-thum=
+b.png" width=3D"250" alt=3D""> </td> </tr> <tr> <td align=3D"center" width=
+=3D"" valign=3D"top" style=3D"padding-top: 20px; text-align: center; font-s=
+ize: 18px; line-height: 28px; color: #000000; font-family: Arial, sans-seri=
+f; font-weight: 700;"> To Buy New Or Used? </td> </tr> <!-- / BUTTON START =
+--> <tr> <td align=3D"center" style=3D"padding-top: 25px; padding-bottom: 2=
+5px;"> <table border=3D"0" align=3D"center" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation"> <tr> <!-- BUTTON --> <td class=3D"inter h2m b=
+uttonsecondary" align=3D"center" style=3D"-webkit-border-radius: 5px; -moz-=
+border-radius: 5px; border-radius: 5px; overflow: hidden; border: 2px solid=
+ #65299d; padding-left: 60px; padding-right: 60px; padding-top: 17px; paddi=
+ng-bottom: 17px; background-color: #65299d; overflow: hidden; font-size: 15=
+px; color: #ffffff; font-family: Arial, sans-serif; text-align: center; fon=
+t-weight: 700;"><a href=3D"http://emlinks.cars.com/u/click?_t=3D47f16e37803=
+d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXt=
+Nif7xpuqGQE4M1Ef7A9hEYIsv5327eTTPhy4O-r0OThOzuYA629FFRqPiB5jXae-HQM25V0XG-o=
+6vTo8Y9_eBCIf-J8hmhVBjGbtkiulxbsd-sQiSNAGjrKDqr2mzRz1PrxH5Wc-aMemzF2qe6_tSj=
+g0q04lRfEi_ZQS-LuB8j5KDK0si4t_E1c89mVB_ZM74uDV5AW0cigsZNidmR3hFn0xoL56atDqL=
+AWuVL6HLemprRPZ4HTBGYeFm_8t7H6K23W2DS-4BRnf49O3ylQ5YMI9fV7QUN-_C1paBNw4Lfpe=
+BucECn0wD3bdsIlwUGGWGa_gh83-1P-7D3NR7ihg%3D%3D" style=3D"color: #ffffff; te=
+xt-decoration: none;"><span style=3D"display: block; width: 100%;">View Gui=
+de</span></a></td> </tr> </table> </td> </tr> <!-- BUTTON END / --> </table=
+> </td> <td class=3D"expand padt0m" width=3D"320" align=3D"center" valign=
+=3D"top" style=3D"padding-top: 30px; padding-bottom: 30px;"> <table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"" style=3D"" role=3D"pr=
+esentation"> <tr> <td align=3D"center" width=3D"" valign=3D"top" style=3D""=
+> <img class=3D"w90" src=3D"https://img.carsdn.co/image/upload/v1684848884/=
+email/EM1-Img_good-rate-thumb.png" width=3D"250" alt=3D""> </td> </tr> <tr>=
+ <td align=3D"center" width=3D"" valign=3D"top" style=3D"padding-top: 20px;=
+ text-align: center; font-size: 18px; line-height: 28px; color: #000000; fo=
+nt-family: Arial, sans-serif; font-weight: 700;"> What=E2=80=99s A Good Rat=
+e? </td> </tr> <!-- / BUTTON START --> <tr> <td align=3D"center" style=3D"p=
+adding-top: 25px; padding-bottom: 25px;"> <table border=3D"0" align=3D"cent=
+er" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"> <tr> <!-- BU=
+TTON --> <td class=3D"inter h2m buttonsecondary" align=3D"center" style=3D"=
+-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; ov=
+erflow: hidden; border: 2px solid #65299d; padding-left: 60px; padding-righ=
+t: 60px; padding-top: 17px; padding-bottom: 17px; background-color: #65299d=
+; overflow: hidden; font-size: 15px; color: #ffffff; font-family: Arial, sa=
+ns-serif; text-align: center; font-weight: 700;"><a href=3D"http://emlinks.=
+cars.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4=
+a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9hEYIsv5327eTTPhy4O-r0Pj=
+mTkNFPXnQvfYKEcbxO8AyUSgWwTyhiMi5HHATZpp3Qli_oqz4ZIiQQjx3DaybxJK4bcXbtZmcDD=
+h9_IoRiI2Nrnvd_xYEgA-eS6BRhbHARa-RtqoVzmivvTuwgoqtXW6WsZ3X8diYEQXpVtEt0Eg5D=
+2CtWUn1DrUvQjnjGVeKwqWZNAmwewAquY5jJ7Wb6-HIt6ZUH9PqDUCxNLkXBeco4LeYjqsWCBMg=
+bB7QUdcLzFJadxNDhjHxQa-q9Z6xkaIUF7shJ5O9FLxrd2XG_TJABl8dDMOYn8T91qAwviBKQ%3=
+D%3D" style=3D"color: #ffffff; text-decoration: none;"><span style=3D"displ=
+ay: block; width: 100%;">View Guide</span></a></td> </tr> </table> </td> </=
+tr> <!-- BUTTON END / --> </table> </td> </tr> </table> </td> </tr> <!-- SH=
+OPPING EXPERT START --> <!-- MODULE INSERT END --> <!-- Footer Start --> <t=
+r> <td style=3D"padding: 20px 0px;"> <table border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" width=3D"100%" style=3D"" role=3D"presentation"> <tbody> =
+<tr> <td width=3D"" valign=3D"top">&nbsp; </td> </tr> </tbody> </table> </t=
+d> </tr> <tr> <td align=3D"center" style=3D"background-color: #ece9f0; padd=
+ing: 20px 0px;"> <table class=3D"w100m" bgcolor=3D"#ece9f0" align=3D"center=
+" role=3D"presentation" width=3D"580" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0"> <tr> <td width=3D"33%" style=3D"" align=3D"center"> <a href=3D=
+"http://emlinks.cars.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;=
+_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9lcZZ4cW=
+ZlijMZZsM9whAx9QRPQXRLHEfTZrFnyq_FRLSEHpWponOMaqOTBdSn-MQRJPK8DnFgtOiWY-pmX=
+_pTGGpDU4ePrj-Yt05WSlAsTAGVjK1L1-49c0YblCaT-AvfPpO3eVbrWMGxhYdfL0m_37-Z5j5w=
+cPPqExpbcugCTvAJ0iozkXSiOlmGc1tncf0b4JDmoYls0JVyWNhzMrF2ur1yqQgEILYDexn5YSc=
+IdCmjYhUgg131-vRkf2qt5cT0O2zzfc-CSMYIZ_UqXIecwXv5jvVruppb1-OOEYx8jiPZrJk4Tq=
+MVaDW0IgX-JCJejvBKl44KNLns_32PTyuhY%3D" target=3D"_blank" style=3D"color: #=
+612282; text-decoration: none;"> <table align=3D"center" border=3D"0" cellp=
+adding=3D"0" cellspacing=3D"0" width=3D"100%" style=3D"" role=3D"presentati=
+on"> <tbody> <tr> <td align=3D"center" width=3D"" valign=3D"top" style=3D""=
+> <img src=3D"https://img.carsdn.co/image/upload/c_scale,w_60/v1689092000/_=
+NewCar-icon_copy.png" width=3D"30" alt=3D""> </td> </tr> <tr> <td style=3D"=
+font-size: 15px; line-height: 1.5em; color: #a74dce; font-family: Arial, sa=
+ns-serif; font-weight:700;" align=3D"center"> New Cars </td> </tr> </tbody>=
+ </table> </a> </td> <td width=3D"33%" style=3D"border-left: solid 2px #612=
+282;border-right: solid 2px #612282;" align=3D"center"> <a href=3D"http://e=
+mlinks.cars.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b04=
+9c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9lcZZ4cWZlijMZZsM=
+9whAx9QRPQXRLHEfTZrFnyq_FRL_FjouFnRb2llzD04AsQZ4PrhwOLHKavgnZZVC9FeuVWj0pmM=
+kfp0pLPbvHClhVmAAZLN46qrLFvlkJgNGl3IRjc7Qkb6KP7KzJHKsCjpnwFDQvlQdxqmQSnCkT8=
+bWzfojUW6K-n4YSJqhqkDQGEHwlkq5VrO7kciIPfeL7UVzPXf1UCPFGfuqtvUdFQRXF_WWuio8z=
+L-8-lW8oUL-lJ817FycWwEtpRQSBDaVczW0fbCif74ef7yC6NCQeKtwzeg9Il2T0nuHCMSl6H8-=
+V-9mca9zAr88NHlATkGLIF_zODDPu78Ae1LxwzGEXfc8eC1" target=3D"_blank" style=3D=
+"color: #612282; text-decoration: none;"> <table align=3D"center" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" style=3D"" role=3D"p=
+resentation"> <tbody> <tr> <td align=3D"center" width=3D"" valign=3D"top" s=
+tyle=3D""> <img src=3D"https://img.carsdn.co/image/upload/c_scale,w_72/v168=
+9091999/_UsedCar-icon_copy.png" width=3D"36" alt=3D""> </td> </tr> <tr> <td=
+ style=3D"font-size: 15px; line-height: 1.5em; color: #a74dce; font-family:=
+ Arial, sans-serif; font-weight:700;" align=3D"center"> Used Cars </td> </t=
+r> </tbody> </table> </a> </td> <td style=3D"" width=3D"33%" align=3D"cente=
+r"> <a href=3D"http://emlinks.cars.com/u/click?_t=3D47f16e37803d44c8a302ee7=
+782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4=
+M1Ef7A9nTzRzyunZqwz6D1T2fqU1WBUSBR0epmYEwAO68H2V1nsI-vv8o8rftQKJ24S-pzU-JVC=
+pjB-VdE2KVS0Jh3TMAL_OIyHlC02ibj6J0yn2Xpt7pY0b4Ddg7KTmFix7TiksUl20vVUDu8c_lW=
+m4gKhiSCmTwJXU-9ih4sAeSYAn_XdolsgQ6A_H9vQ2qadlJegAkfV1cmCb6aq-ORU9jv7fxFVuY=
+GjaG19P_tZL3fGIhD" target=3D"_blank" style=3D"color: #612282; text-decorati=
+on: none;"> <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" width=3D"100%" style=3D"" role=3D"presentation"> <tbody> <tr> <td=
+ align=3D"center" width=3D"" valign=3D"top" style=3D""> <img src=3D"https:/=
+/img.carsdn.co/image/upload/c_scale,w_60/v1689091999/_SellCar-icon_copy.png=
+" width=3D"30" alt=3D""> </td> </tr> <tr> <td style=3D"font-size: 15px; lin=
+e-height: 1.5em; color: #a74dce; font-family: Arial, sans-serif; font-weigh=
+t:700;" align=3D"center"> Sell Your Car </td> </tr> </tbody> </table> </a> =
+</td> </tr> </table> </td> </tr> <!-- WhereToNext Start --> <tr> <td align=
+=3D"center" style=3D"padding-top: 40px;"> <table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" width=3D"290" style=3D"" role=3D"presentation"> <t=
+body> <tr> <td align=3D"center" width=3D"" valign=3D"middle" style=3D""> <a=
+ href=3D"http://emlinks.cars.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80=
+abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A=
+9mngViOHQYrQHED07e4Vtv10zTiDpFqCjpLCdZo2FrxxzojaEMvB4q5wK93vN5bNElwX30DFMW0=
+zkJMHQBwKD_6-1kOmMul-etmP3ap40601PqCCQpN0ehmbrof7OdktjQIGdzkErur0C14SQCp5Av=
+NfJcYXrb0d3XnXsg0ExypFplR2xqb8SYMQgiLCpbnLazaWe_MNjnnmtsHrRk938Cclf8ONSkmQI=
+D1ousXXrFz0" target=3D"_blank" style=3D"color: #612282; text-decoration: un=
+derline;"><img src=3D"https://img.carsdn.co/image/upload/v1689091999/_Foote=
+r-logo.png" width=3D"290" alt=3D"Cars.com | Where to Next?"></a> </td> </tr=
+> </tbody> </table> </td> </tr> <!-- WhereToNext End --> <!-- Download Star=
+t --> <tr> <td align=3D"center" width=3D"" valign=3D"middle" style=3D"paddi=
+ng-top: 25px; font-size: 15px; line-height: 19px; color: #000000; font-fami=
+ly: Arial, sans-serif; font-weight:700;"> Download our app experience </td>=
+ </tr> <tr> <td align=3D"center" style=3D"padding-top: 20px;"> <table borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"340" style=3D"" role=
+=3D"presentation"> <tbody> <tr> <td class=3D"expandm" align=3D"center" widt=
+h=3D"" valign=3D"middle" style=3D"font-size: 15px; line-height: 19px; color=
+: #612282; font-family: Arial, sans-serif; font-weight:700;"> <a href=3D"ht=
+tp://emlinks.cars.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=
+=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9pX_NIQNuN=
+Ir1V24ylWL3YUtuiztdLKZb73BuPtRmeyWJiz1JKjNMapgyiAGDZY8qJAILzzAvADVHBECgDNDU=
+zEtZvNbguhjZafpvA1O27sWFAv9f6YBexAC-0O1D2_FQJ3AV1AmaKidYORlVgd9nWTUWY0pb5Fl=
+zRrZZNMqShcQbi82xQsC7169jYpkQrRDorD-uIeG5DyeOqoiqSsh5if2ee2m27T_hxpdTnZXg2a=
+6Y76UKZEILSzLaeQ28rmIZQ%3D%3D" target=3D"_blank" style=3D"color: #612282; t=
+ext-decoration: underline;"><img src=3D"https://img.carsdn.co/image/upload/=
+c_scale,w_290/v1689091999/_AppStore-Color.png" width=3D"145" alt=3D"App Sto=
+re"></a> </td> <td class=3D"expandm padt10m" align=3D"center" width=3D"" va=
+lign=3D"middle" style=3D""> <a href=3D"http://emlinks.cars.com/u/click?_t=
+=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3=
+f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9pX_NIQNuNIr1V24ylWL3YUtuiztdLKZb73BuPtRmey=
+WJiz1JKjNMapgyiAGDZY8qJAILzzAvADVHBECgDNDUzEx3G65HBXd4i_pzM2SeWN1fpzjau0yIo=
+RjbWkQ4hqsJzcnwA4jLuQS9ob0MO16FwxxvJLZlbPoGjOFtD117ZvY8A2Bhuqh-eZ7jQOJhMGYc=
+6uD3LVrtUPKJHStr_Sv-Gjh0pj5yp75FgWWF4PJum8Zg7ozLP3N3QsSPFl2ZI5TuQ%3D%3D" ta=
+rget=3D"_blank" style=3D"color: #612282; text-decoration: underline;"><img =
+src=3D"https://img.carsdn.co/image/upload/c_scale,w_320/v1689091999/_Google=
+Play-Color.png" width=3D"160" alt=3D"Google Play"></a> </td> </tr> </tbody>=
+ </table> </td> </tr> <!-- Download End --> <!-- SocialMedia Start --> <tr>=
+ <td align=3D"center" width=3D"" valign=3D"middle" style=3D"padding-top: 27=
+px; font-size: 15px; line-height: 19px; color: #000000; font-family: Arial,=
+ sans-serif; font-weight:700;"> Follow for news, reviews, and tips </td> </=
+tr> <tr> <td align=3D"center" style=3D"padding-top: 15px;"> <table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"280" style=3D"" role=3D=
+"presentation"> <tbody> <tr> <td align=3D"center" width=3D"" valign=3D"midd=
+le" style=3D""> <a href=3D"http://emlinks.cars.com/u/click?_t=3D47f16e37803=
+d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXt=
+Nif7xpuqGQE4M1Ef7A9oUbj69P7zFe3H7pAV6PQR_McM-a0oDUWDrExRU-Qu0R6b5ODM8Od7WHl=
+wARwpvAMUOaWOQppCAPK-qG1TaGbeeEHZN0ISilLGIE4J_Tuqyc11BN5TCAVxgOzfzP6FzY5FqG=
+aw3o_3e7MPgHlINmLQNwGvx3BXHX_1M8d1_vIC4lEbr_waHOm8af_YG83-9sRcmX6384JAZDhOq=
+xC8upnF4%3D" target=3D"_blank" style=3D"color: #612282; text-decoration: un=
+derline;"><img src=3D"https://img.carsdn.co/image/upload/c_scale,w_100/v168=
+9091999/_youtube-icon-2x.png" width=3D"50" alt=3D"YouTube"></a> </td> <td a=
+lign=3D"center" width=3D"" valign=3D"middle" style=3D"font-size: 15px; line=
+-height: 19px; color: #612282; font-family: Arial, sans-serif; font-weight:=
+700;"> <a href=3D"http://emlinks.cars.com/u/click?_t=3D47f16e37803d44c8a302=
+ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqG=
+QE4M1Ef7A9rcF1zTQ7ZdiG2SfyiVwnmbxR1hz5O-RlYuy0ZRSfnJriwIGb3He7NhvtPfdn5EWM6=
+i6lalFDjAuLXXYNOvVRFZM_ergIXZF4V7DB60uzX9pURNzfmfpRY0RKQSZQi6wI1MbkvFeLP0oh=
+2Ku_AA1tme7LmDZ5sl8LhCYC5M7osws4I4zK6cyCe6MgQU2nd6oVydDi6w9ZqJvEdxnEPbDNsI%=
+3D" target=3D"_blank" style=3D"color: #612282; text-decoration: underline;"=
+><img src=3D"https://img.carsdn.co/image/upload/c_scale,w_100/v1689092000/_=
+tiktok-icon-2x.png" width=3D"50" alt=3D"TikTok"></a> </td> <td align=3D"cen=
+ter" width=3D"" valign=3D"middle" style=3D""> <a href=3D"http://emlinks.car=
+s.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4c=
+bd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9osrBsbLG-VTR_uC_KuDx2ZK-X7=
+JfhXI2Hj_X9NxgNq6H3qEdnpwiRB-c4S3bI0UKAHifjSNEebma4clc7KEJNXqPzImGXoYQnJ1_E=
+InURVzz7SETZYmGX1-gk6uKF4Pktb5kX4WP2mvETZEHtt1N0XqZuWorR-fi99ADsyTZHAwvZAJ0=
+iBVCYhET9iLcowQuY4usn-IZDtSBmgKgzwp9Xw%3D" target=3D"_blank" style=3D"color=
+: #612282; text-decoration: underline;"><img src=3D"https://img.carsdn.co/i=
+mage/upload/c_scale,w_100/v1689092000/_facebook-icon-2x.png" width=3D"50" a=
+lt=3D"Facebook"></a> </td> <td align=3D"center" width=3D"" valign=3D"middle=
+" style=3D""> <a href=3D"http://emlinks.cars.com/u/click?_t=3D47f16e37803d4=
+4c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNi=
+f7xpuqGQE4M1Ef7A9m69HDVFAvSO4fe-iqwq-95uIVj3LfjWgHLZCJ1h7NDtdPHH0_miZunU8C4=
+kT8rGFEFRlE5Zq9CNeAf4LvCD5GJuMpKQd1AMnyRazTEF3VDOxkXGliYCcQDd1mmVQ8vO26k21f=
+G6GZSYEkTYJZtzW7R-ExWWpE_cd2SEw3bX9wFnfMxmy1-qYCDTv2QoAuR86x0qbjOVAH6ODx-hU=
+Pwiv_Y%3D" target=3D"_blank" style=3D"color: #612282; text-decoration: unde=
+rline;"><img src=3D"https://img.carsdn.co/image/upload/c_scale,w_100/v16890=
+92000/_instagram-icon-2x.png" width=3D"50" alt=3D"Instagram"></a> </td> <td=
+ align=3D"center" width=3D"" valign=3D"middle" style=3D"font-size: 15px; li=
+ne-height: 19px; color: #612282; font-family: Arial, sans-serif; font-weigh=
+t:700;"> <a href=3D"http://emlinks.cars.com/u/click?_t=3D47f16e37803d44c8a3=
+02ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpu=
+qGQE4M1Ef7A9hCOWf2wqAMun9y9WmM67DSnJIg5lzIBbSpERkTxTBQRh7bonjEXVe568CC68-PA=
+u1hFODSiiD7FJbTUutyjQpYBCtiDlbmdgmcFDKsCCSdFRcaDYX6W6ONHdAmnMtpAHaD9-Dz0LuX=
+V7OAq27qIpyO1eEgxBPJBDA5CDj9dVaCItXPMRHQ6pCPDqdLMOcxI5gV-Zu_XX2lE7CaGE4CgNC=
+Y%3D" target=3D"_blank" style=3D"color: #612282; text-decoration: underline=
+;"><img src=3D"https://img.carsdn.co/image/upload/c_scale,w_100/v1689092000=
+/_pinterest-icon-2x.png" width=3D"50" alt=3D"Pintrest"></a> </td> </tr> </t=
+body> </table> </td> </tr> <!-- SocialMedia End --> <tr> <td style=3D"paddi=
+ng: 25px 0px;"> <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"100%" style=3D"" role=3D"presentation"> <tbody> <tr> <td width=3D"" v=
+align=3D"top" style=3D"border-top: 1px solid #c4c4c4;">&nbsp; </td> </tr> <=
+/tbody> </table> </td> </tr> <!-- Legal Start --> <tr> <td align=3D"center"=
+ width=3D"" valign=3D"middle" style=3D"padding: 0px 20px 40px 20px;font-siz=
+e: 12px; line-height: 18px; color: #333333; font-family: Arial, sans-serif;=
+"> <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"550" cl=
+ass=3D"w100m" style=3D"" role=3D"presentation"> <tbody> <tr> <td width=3D""=
+ valign=3D"top" style=3D"text-align: center;"> This email was sent to <br c=
+lass=3D""> =C2=AE&nbsp;2023 Cars.com All rights reserved.<br class=3D""> Ca=
+rs.com 300 S Riverside Plaza, Suite 1000, Chicago IL 60606<br class=3D""> W=
+e value your privacy, Cars.com <a href=3D"http://emlinks.cars.com/u/click?_=
+t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b049c865c4a4cbd9d38d245bab9d=
+3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9hqiPMEWBudzeXsrSN9gol4gM6hi8ECPCIZu3CTIpm=
+z6LB1IGPksBf_16il05zwhnH0tu1jRgIUpdzzadyoqmFahmPscwLBfgYvFw-z_5JWRBEtfDsq-H=
+bDUCVAnQMwP6Bp3xYw3afIhi2BvTmO39lwKJeessZPuq0Q7hXSrilR2eJTNOUgBi3FdWIjpaFE2=
+GtsqFKp76cs6KBtc5bwlgOFxQXKyeZ1msQgdnxHs4Jcx" style=3D"text-decoration: und=
+erline; color: #333333;">Privacy Statement</a>.<br class=3D""> <a href=3D"h=
+ttp://emlinks.cars.com/e/eh?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D=
+2b049c865c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9iGosouquEjzS=
+f0iKdUb87ttHgxnqhJc3lEDfgAS_foNHwRIWb56I9vQkcSfQNbr7XimdHUX2GI01OTC64nrlRC3=
+bwOC6YW-gJL1JSgFFsVeCwwTDBZupn7g7CJufR8p-fsEtChssxIYvDE2wXvOI-knn2n_ecFlh5U=
+htPjRIpkPzopcw_c7RFI6TBPgWpeA_AhHxjbRnP7fj17-Ya8UE5yACGxBDwP4TvUX9GLXMVVDbS=
+hI55FVGNbRtf2ImpKis_GBfd6HsWDbmkXlGEAZctqF1LRFR_RORV1DLimX0xzxItbNerd9dwp0e=
+qCD16e2uk4TcDpIV6G_BEog4XINBV0%3D" target=3D"_blank" style=3D"color: #61228=
+2; text-decoration: underline;">Unsubscribe</a>&nbsp;<a href=3D"http://emli=
+nks.cars.com/u/click?_t=3D47f16e37803d44c8a302ee7782c80abb&amp;_m=3D2b049c8=
+65c4a4cbd9d38d245bab9d3f5&amp;_e=3DXtNif7xpuqGQE4M1Ef7A9iGosouquEjzSf0iKdUb=
+87ttHgxnqhJc3lEDfgAS_foNQL3KXwdJoIUE-dpSGdInm-7lWORSZQSv_seNGfGBH05esm4WgXA=
+XgF5C_z8UXgoWJf8vuMdjQK_1BTjSdqryr6Ig2gbMyJlOJEEjrXPm98OyXc3Klo9WLx5dm3ZuBC=
+LerCFhasO3PGiTF4JQVpW3OZsTkSUWJmKABEDdf97bBG97seNNEuc4z7exCTiCCQwa4OV56lMQ8=
+5-h8a3VvPnD9g%3D%3D" target=3D"_blank" style=3D"color: #612282; text-decora=
+tion: underline;">Manage Preferences</a> </td> </tr> </tbody> </table> </td=
+> </tr> <!-- Legal End --> <!-- Footer End --> <!-- MODULE INSERT END /// -=
+-> </table> </td> </tr> </table> </td> </tr> </table>=20
+<img border=3D"0" width=3D"1" height=3D"1" alt=3D"" src=3D"http://post.spma=
+iltechnolo.com/q/015YLOA84JHYQzYeEn6E2Q~~/AAOb_wA~/RgRmwmRcPlcDc3BjQgpk21zf=
+32SnOiWEUhx0b2JpbnNpbHZlc3RyZTAyN0Bzb29uZXJzLnVzWAQAAAAA">
+</body> </html>=
+
+--_----Y+Yc1zvAL3idQ9IWd6oCpA===_91/48-13701-C5FDFD46--

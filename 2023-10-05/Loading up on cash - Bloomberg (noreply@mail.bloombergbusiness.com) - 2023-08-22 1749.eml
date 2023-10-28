@@ -1,0 +1,1355 @@
+Received: from PH8PR20MB5437.namprd20.prod.outlook.com (2603:10b6:510:22a::11)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Tue, 22 Aug 2023
+ 22:49:12 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=ACI19UH9s/f8W8RbRNiYxxZv6A+3SIFneAtnxVmvou0zoQvLwDuKUAHKUZEGnPdHHwDTE4ebtbhP424PYmyntiIHrM+2ntwsClM4NagRIU3950mkyWQcQjm/tAUqImwMXTWuG4zvTso7VyMfkDWsGNb0VlBF4/sj0g5NjT3Zjpsyg+BCMXeMvjNWCfdDcEJ5ii4PA8HbHFd/IDW84karpdhFjbCHMPayMu/9+EYnMoazGcvT0jlJ/Pvr/C7O4yjv2r/bxHxCRAFzsoHHaY9L492rpyrpmZdDY9fPZWmQXYGRE/bO+Je1oLoTPVWxK9FcTu6oKXsXNQMGeXeND5qqVA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f9ux6pwFjXG26POqj83N1jcMZiEZuXUI71N4hukG1Ew=;
+ b=BjnXLyj0JGqJ+NHm5KGJZgYMVRWzSShzWFnRXu+klQKfxsb4mFmGALwEC+3+VN2zByBBeJaCheeyycC+vefbiKqggGIa0M1e46yZ6mbe92oBQz8UVQbozduLR+K5hcMYVOJYD8DQkYICIpQzkAa7Ir6r7OeKQFBQRkx238JeZhq9bbMQ1F8EiDjv2jtO70HbYrXFC+gjd0Nre6/3G/pJ0fi6KpFbN2R6Cm88vTMh+zVT2LKiQFKyy030s0jm9NeLm1i0kp0XjXCWeJ2gI9mvGQJVbOuap4mhv31PdupivYlYxUC2fV5nx5Y6n6sPhUO3/s5MjhtrGvgeNlIjO02lYg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.161.46) smtp.rcpttodomain=outlook.com smtp.mailfrom=mx.sailthru.com;
+ dmarc=pass (p=reject sp=reject pct=5) action=none
+ header.from=mail.bloombergbusiness.com; dkim=pass (signature was verified)
+ header.d=mail.bloombergbusiness.com; arc=pass (0 oda=1 ltdi=1
+ dkim=[1,1,header.i=@mail.bloombergbusiness.com]
+ dmarc=[1,1,header.from=mail.bloombergbusiness.com])
+Received: from SA9PR11CA0017.namprd11.prod.outlook.com (2603:10b6:806:6e::22)
+ by PH8PR20MB5437.namprd20.prod.outlook.com (2603:10b6:510:22a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.24; Tue, 22 Aug
+ 2023 22:49:08 +0000
+Received: from SN1NAM02FT0020.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:6e:cafe::6a) by SA9PR11CA0017.outlook.office365.com
+ (2603:10b6:806:6e::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.24 via Frontend
+ Transport; Tue, 22 Aug 2023 22:49:08 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.161.46)
+ smtp.mailfrom=mx.sailthru.com; dkim=pass (signature was verified)
+ header.d=mail.bloombergbusiness.com;dmarc=pass action=none
+ header.from=mail.bloombergbusiness.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of mx.sailthru.com does not
+ designate 209.85.161.46 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.161.46; helo=mail-oo1-f46.google.com;
+Received: from mail-oo1-f46.google.com (209.85.161.46) by
+ SN1NAM02FT0020.mail.protection.outlook.com (10.97.5.96) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6723.15 via Frontend Transport; Tue, 22 Aug 2023 22:49:08 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:B41435E157F44B85704581B229C31BA8328F19CFE0B012A627BCC12CD783F78C;UpperCasedChecksum:1B1192F7BC6082E0C6D7CCE100E73A6750ABBF48CA50D9AC2204084E0CB70276;SizeAsReceived:5959;Count:35
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-56e0d6651fbso3111349eaf.1
+        for <tobinsilvestre@outlook.com>; Tue, 22 Aug 2023 15:49:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692744548; x=1693349348;
+        h=x-forwarded-for:list-unsubscribe:precedence:mime-version:subject
+         :message-id:to:from:date:dkim-signature:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=f9ux6pwFjXG26POqj83N1jcMZiEZuXUI71N4hukG1Ew=;
+        b=QaL4M+vx8LrB6m31NoymkyeTSI23ltgX80+HfauyH1r39H/5V7Ee6Ch8dwec0NC1Cf
+         W4Y1ugrwGZFSCNJHHp9n+I1uiZFYyqy75/EjpWiH4ETiBzm7kuml+ilKmCy0qC2YWpbn
+         B1I6FDirHUAaqFyge7xpUq6xBP3vLTJehQ6M3OHOrpijUIlwde9Ap8RpD0B2WKjVNDyj
+         9Sz9JHEkIetR8x4KujzcUOlvzAuY5hgy56WZBP6+RC4I3MeXmB3V3H0qY++kCVVBwzOZ
+         30Fs1l5BUk58BRI8m7+C6VDSE2ert/sx929FgJWsspnCb+8uN+z11vUgnN6YcDEFAOag
+         WuyA==
+X-Gm-Message-State: AOJu0Yw+e1liX1H618Ku23Q1HZg8lqR9UpgtVh/r/yEvrAxXodimZDG/
+	czgJhulSC7ZddoDmENqMk/kqf9v9WUUHszX+eQ==
+X-Google-Smtp-Source: AGHT+IHCsM6uzdOLNL/4jMp62bcWxi59x3GDxwPvl7m9pyS1Y4NkMdEm0SJKLge/Vb+eNWVYbeRNH7NycmjP7oKEmbU/mhby0fg=
+X-Received: by 2002:a05:6808:1527:b0:3a4:225d:8293 with SMTP id u39-20020a056808152700b003a4225d8293mr7306264oiw.0.1692744548273;
+        Tue, 22 Aug 2023 15:49:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692744548; cv=none;
+        d=google.com; s=arc-20160816;
+        b=CznJLvHsRZCtHCmdocadXQE1Bk7YUVhY2IlSBCod3KhLMeTgZR1uXmfg7AGwbV+nRP
+         y6EQZdBHEgLqYufiyfd5GWm5nImA+e3821kEmkEmOxKMddlQWas9qu40k13fHunl3z0M
+         UhawZBjEISntpYLS6Gwq1XwJ3E03orx+f9SRmve8XTVg2Oyca+Ad7Aa3xBNPM67K19kz
+         uQ6WB2hS7TqtgMHkDPiJ446K5ITQxxXxTWdicB6MipyPcGz+rAACKgc8mD7d49jXfzyF
+         o+l2jpBJnmcWsUVx42IQOGGzqh+y+QETMOaVKufVrWkuPcVpU159QhfJ3/zVgOIOtEJm
+         SnxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-unsubscribe:precedence:mime-version:subject:message-id:to:from
+         :date:dkim-signature;
+        bh=f9ux6pwFjXG26POqj83N1jcMZiEZuXUI71N4hukG1Ew=;
+        fh=DB4QWT17YAGlcVNwrsZR/tVXYUO5jU/s3NWzPQh7RTA=;
+        b=FYKJ0XYL3mT9UfRlt2cEKD7TdKwt+gnir74KZmOreHeZadOg/nDa8rZs6dHmgSumQn
+         yz2DFXIXEVWieitOQsTg+zkZsLeS2TPyIOFsiKoBWnlxAKwKE5RSf31VboeUUHVSCrOz
+         Sx1DByzdHeYNL2+PnG6n6g3p4XZaYAXUFgzAaTS2mX+23xLR0HxfrlxsuLUwXBKFXMPw
+         63qfYezfiQW8wYnFSUp+IncKfAv1X2J3grnKimUnR6tALpZq62QPVxiGonuXF6it/iiO
+         N5Lt9W3J1uhVaz6OfdE55Eyd+NeXB6HOoizpF7Jgs2sSVMtClG2XGoVBNfhPNEbHxuAr
+         uAjg==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@mail.bloombergbusiness.com header.s=sailthru header.b=lfdL+qji;
+       spf=pass (google.com: domain of delivery_20230822184907.32480565.1131508@mx.sailthru.com designates 192.64.236.13 as permitted sender) smtp.mailfrom=delivery_20230822184907.32480565.1131508@mx.sailthru.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=mail.bloombergbusiness.com
+Return-Path: delivery_20230822184907.32480565.1131508@mx.sailthru.com
+Received: from bloomberg-b.sailthru.com (bloomberg-b.sailthru.com. [192.64.236.13])
+        by gmr-mx.google.com with ESMTPS id eq16-20020a056808449000b003a86ac9c6a8si140332oib.3.2023.08.22.15.49.08
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Aug 2023 15:49:08 -0700 (PDT)
+Received-SPF: pass (google.com: domain of delivery_20230822184907.32480565.1131508@mx.sailthru.com designates 192.64.236.13 as permitted sender) client-ip=192.64.236.13;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@mail.bloombergbusiness.com header.s=sailthru header.b=lfdL+qji;
+       spf=pass (google.com: domain of
+ delivery_20230822184907.32480565.1131508@mx.sailthru.com designates
+ 192.64.236.13 as permitted sender)
+ smtp.mailfrom=delivery_20230822184907.32480565.1131508@mx.sailthru.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE)
+ header.from=mail.bloombergbusiness.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; s=sailthru; d=mail.bloombergbusiness.com;
+ h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:List-Unsubscribe;
+ i=noreply@mail.bloombergbusiness.com;
+ bh=qZjcuMyk877L+Qz+PTHxj7WXNPrw7lUrGn14BIlzS58=;
+ b=lfdL+qjiAtPMytCfLxTA2DkYEJcHQ3b1PVM3i4zDGhyWZi9Wv9QLQYNRN5xkjBJv9Bz4Nc5z6zwV
+   dQK87147+4T/XvOc/s37fajABrxLrSL0L3q7SZHzIbSwQQ6w4VXDq5Dg9/W9pW871h/D2VtOc3wv
+   rlLGVrk5Ygt+ZM9w6oo=
+Received: from ip-10-55-67-109.ec2.internal (10.55.67.109) by aws1-mta-relay12.sailthru.cloud id hsktm61qqbs2 for <tobinsilvestre031@sooners.us>; Tue, 22 Aug 2023 17:49:07 -0500 (envelope-from <delivery_20230822184907.32480565.1131508@mx.sailthru.com>)
+Date: Tue, 22 Aug 2023 18:49:07 -0400 (EDT)
+From: Bloomberg <noreply@mail.bloombergbusiness.com>
+To: tobinsilvestre031@sooners.us
+Message-ID: <20230822184907.32480565.1131508@sailthru.com>
+Subject: Loading up on cash
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_11607858_616309513.1692744547246"
+Precedence: bulk
+x-job: 6358-32480565-20230822
+X-Feedback-ID: 6358:32480565:campaign:sailthru
+X-TM-ID: 20230822184907.32480565.1131508
+X-Info: Message sent by sailthru.com customer Bloomberg Business
+X-Info: We do not permit unsolicited commercial email
+X-Info: Please report abuse by forwarding complete headers to
+X-Info: abuse@sailthru.com
+X-Mailer: sailthru.com
+X-JMailer: ip-10-55-67-109.ec2.internal
+X-Unsubscribe-Web: https://link.mail.bloombergbusiness.com/oc/64dd5763c1fde85e8602683ejc65x.o92s/85c72f3a
+List-Unsubscribe: <https://link.mail.bloombergbusiness.com/oc/64dd5763c1fde85e8602683ejc65x.o92s/85c72f3a>, <mailto:unsubscribe_20230822184907.32480565.1131508@mx.sailthru.com>
+X-rpcampaign: stjko32480565
+X-Forwarded-For: tobinsilvestre031@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 35
+X-MS-Exchange-Organization-ExpirationStartTime: 22 Aug 2023 22:49:08.5793
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ a479156a-c4f4-4a12-30ca-08dba361fed8
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ SN1NAM02FT0020:EE_|PH8PR20MB5437:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ SN1NAM02FT0020.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 8/22/2023 10:41:17 AM
+X-MS-Office365-Filtering-Correlation-Id: a479156a-c4f4-4a12-30ca-08dba361fed8
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.161.46
+X-SID-PRA: NOREPLY@MAIL.BLOOMBERGBUSINESS.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2023 22:49:08.5481
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a479156a-c4f4-4a12-30ca-08dba361fed8
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ SN1NAM02FT0020.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR20MB5437
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:04.0805556
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6699.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:0;pcwl:0;kl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(8820095)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPllx0VLOvcPaWWYy+oQmxqqzrDLtcVXdZD90WHL9NqzdEJjeVlF+HE/4QNL5MWUIY+/5q6YxslvNkHisvi5oscqJrtxb/jmTHdlRwfNJ/INB9OV/mTdpp4rBOFxmSGu4ORTmPuC4UIxDNVZ1CBfUMR+UDlcygV3TtVQOR6t8S53H7SNksjMWFHow12QI31pmeo=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?L1FNa2RxS2VmVWN1d1JRWmt4TmYrRzludXFLZk9RSUFOM2dqVDJVeis5RE1y?=
+ =?utf-8?B?c0dhWlZZNDhVY0RCR2R3c0RmRmZ3aWtZS2pIN2xZZitrWVV3QkVZTDBDOGVx?=
+ =?utf-8?B?Nk9HTXNHL1VudUJ6QkFZK2lVNTRLMmw5ZEFlbUJiQnl4ZlVLeEdDYlYwNDlP?=
+ =?utf-8?B?UW05NkRXbnVzVVJnb205Z1ZQZGZheWNGK0xvZUlROTZrSnVmYTBGTTJOM2ZT?=
+ =?utf-8?B?SUt2R2xyeFFYT0RVOVYxKzVmSmFjME1mT01ROGdvQzFTUTlxeDRDclYxbG9n?=
+ =?utf-8?B?RjRiZXEyTG42VWRXUFFpVXNBTFpBaTVQMTZQMUJZMVZPTGlZMnA2OWFuWURt?=
+ =?utf-8?B?K0M0bVZXNFlVUm14TnowanFLL3d0SFlBQWxINmFFVXJqd3VrbWhtekQvMVNT?=
+ =?utf-8?B?YkJaMWx6R1VLaTh1Y05vNDd2T08yZlRYRk9zb212QlcyMlI2WlJZc0RGencv?=
+ =?utf-8?B?d044YWtMWFkrUEIzNEVuTDdCQ3JsUWZPdEM2Mk5sR3JwOGF5UENibTZrVzgr?=
+ =?utf-8?B?dzd5SUtlYldnRVNuWTRyMWNaSmI5bmtQQ042Q0JJOE9ZeUd3ZTNjWmszQXVG?=
+ =?utf-8?B?S0dpaEtzZ0JhWDN5S1pidEVTQlB0Tmw5K0xEa3NWNlJaMjRGdkxkUVQ1dTNy?=
+ =?utf-8?B?L1d5RVR4SDhLeXUzY1k0Zi8wRnFFK2hFZXNwSm5Kd3lyQTJMcTRwc1F0bkt0?=
+ =?utf-8?B?NVZIUFFSbGFuaTQ3MXVUUXcwTUpZanYwNXl3T0lERzBWaVpYU1M4SEVQV21q?=
+ =?utf-8?B?di9nRGJUTmVPYXBNMm9zVkIvL0MxQVdNd2dxNDFDRTd4NThiY3czaGJRQUQ5?=
+ =?utf-8?B?QUl1V25kTE5COVVldUtLREhseHFPdmVDNlVlRUEyL0hDSGo0WWZxelUybllq?=
+ =?utf-8?B?RllqTVo2TnVTcUNheFFNQUl3RVlZVENrQmdQVHFTZTJaaVVoaHBtQmhYOXpq?=
+ =?utf-8?B?RVQ3aERNMEZNYWNySU16aVhkd0owTElqQ0dOVU42T1p0UElJY2loWlYrcVVh?=
+ =?utf-8?B?MW1WV202NlByVVBOdXExTUZKRlM0UnBOVnlNMU53OS9IeXVkOVFpeU1EWnRJ?=
+ =?utf-8?B?NWorZnZXMkJZcEI3bkxOREY5dDFBdHVxK1ZJNDF5bjlidVFLWUltQjN0dk9C?=
+ =?utf-8?B?cHhnUzhZZ3FENElnWDRTK3dXWEFXVVl6TDRkcVZuRzVEZEpPbXRvYUJEZ24v?=
+ =?utf-8?B?SlVpdlE3bGVocHlXSXVQdEZXV2g3S1VEWkhWbGJEQzB0bnp6SnhFVkJqRXNW?=
+ =?utf-8?B?UWhiT0t2bVNndzVtMUFsNVM1ajZhYnBLSlRZUnErUHFJNGFHTERWWDYxU0tL?=
+ =?utf-8?B?Q0h3aWQrK2ZTSWJCc1hwaEVUWU5VSmtYQ3I0M3l1cjRXNzJsUG5HeHVSWU1r?=
+ =?utf-8?B?bVA2VUk3bnh2dVd6ZXFLdDJkdXVNdnJKZVhyS25jekVGUDZ0QkQzM1oraW9L?=
+ =?utf-8?B?OVB2QlNvanFmVm1WMmF1NHAvSVhJZUViRll5RmJUNnB2NmZPa0dJWXAvZFZ6?=
+ =?utf-8?B?YWtkRkpBV3RCeFlyb1kzQVR6ZlBIY1pwWjdBUkdPc2ZpdkphNmhwL0VreWw1?=
+ =?utf-8?B?SmlGTUZuTU9UT28xVCtKUmJFeWlkb3JVQmhGQ2FqNUhlMzVPVTU2WUFVSGwr?=
+ =?utf-8?B?ZlIraDNQRG5VcHEyb3g2R0pmeUpMZnQ3Smt0SmMwODdNNWwxdG1HUHgxRFdj?=
+ =?utf-8?B?Zmt2azdENGRnMmtYMmUwaDQ0WDJBRzhONXF5Wjg2QWw2K0dMc05WdUN2V01V?=
+ =?utf-8?B?OXFJNnU4eXJGdXdmWFllQ2NDbHBKaGt6SGQ4WThlQXVHVTdib3dYdDFFallV?=
+ =?utf-8?B?OG9icDRVN2RDRUtPZVlmdEdaZjloVUgwc05BVzZrS1FzTEpLY0thNVo0VE1u?=
+ =?utf-8?B?UUZ3cW84U0NKbjVzOXlib3pGZXJXbUQwL3pXS2V5VStIUjlhQjc4cURQL2N2?=
+ =?utf-8?B?eSs3eXhRVEQvT3E0YkVHVnFobkZ5VlNzM1l2Tjd0SXFRMFVhWHZETUNFcHJt?=
+ =?utf-8?B?L0QrTGppRW5xenFsbHNlclBxT0hNU2Q4QTNienF5ZklJMFRIWEpCbjd5ZnF5?=
+ =?utf-8?B?cEdUUEJVa2VrN21xWkN6TWJvN1daTHJ6a2RESlowY0YyT0MwOFRTYTNlVW9Y?=
+ =?utf-8?Q?3MnA=3D?=
+MIME-Version: 1.0
+
+------=_Part_11607858_616309513.1692744547246
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+
+
+ =20
+ =20
+   =20
+     =20
+       =20
+     =20
+   =20
+ =20
+ =20
+   =20
+     =20
+        Bloomberg Evening Briefing
+     =20
+   =20
+ =20
+ =20
+   =20
+     =20
+       =20
+         =20
+            View in browser
+         =20
+       =20
+       =20
+         =20
+           =20
+             =20
+           =20
+         =20
+       =20
+     =20
+ =20
+   =20
+     =20
+       =20
+     =20
+   =20
+ =20
+
+
+   =20
+ =20
+ =20
+ =20
+   =20
+     =20
+       =20
+          Financial companies around the globe=C2=A0sold $2 trillion of bon=
+ds in record time this year as European lenders raised money to repay cheap=
+ central bank loans and Chinese companies bolstered balance sheets against =
+mounting economic stress. The collapse of several US regional banks, China=
+=E2=80=99s real estate woes and central bank rate hikes weren=E2=80=99t eno=
+ugh to slow the surge.=C2=A0Issuance by financial firms (excluding real est=
+ate companies) has climbed about 6% this year, according to data compiled b=
+y Bloomberg, the fastest pace to $2 trillion in the almost quarter century =
+we=E2=80=99ve tracked the data. But the party=C2=A0may not last: Hurdles ar=
+e getting higher as Treasury yields spike and investors reassess the threat=
+ slowing growth may pose=C2=A0for borrowers.
+   =20
+
+
+Speaking of regional banks=E2=80=94we=E2=80=99re five months past the first=
+ implosions and the fallout hasn=E2=80=99t subsided.=C2=A0Late Monday,=C2=
+=A0S&P followed Moody=E2=80=99s lead and=C2=A0downgraded some banks while l=
+owering its outlook for others in the aftermath of that=C2=A0spring bloodle=
+tting. S&P slapped down KeyCorp, Comerica, Valley National Bancorp,=C2=A0UM=
+B Financial and=C2=A0Associated Banc-Corp. The ratings agency also lowered =
+its outlook for River City Bank and S&T Bank to negative. S&P wrote in its =
+note that=C2=A0many depositors have =E2=80=9Cshifted their funds into highe=
+r-interest-bearing accounts, increasing banks=E2=80=99 funding costs=E2=80=
+=9D and that=C2=A0=E2=80=9Cthe decline in deposits has squeezed liquidity f=
+or many banks while the value of their securities=E2=80=94which make up a l=
+arge part of their liquidity=E2=80=94has fallen.=E2=80=9D=C2=A0Pauline Chry=
+stal, a fund manager at Kapstream Capital, says=C2=A0the regional banks =E2=
+=80=9Chave a lot of exposure to commercial real estate,=E2=80=9D and that=
+=C2=A0=E2=80=9Cit=E2=80=99s really hard to justify buying them after what h=
+appened to SVB.=E2=80=9D=C2=A0=E2=80=94David E. Rovella
+ =20
+   =20
+      Here are today=E2=80=99s top stories
+   =20
+ =20
+Charles Schwab said Monday that it plans to terminate an unspecified number=
+ of its employees and close down or shrink its offices. On Tuesday,=C2=A0 t=
+he financial services firm says it=C2=A0wants more money: Schwab announced =
+it=E2=80=99s looking to raise fresh debt in the US investment-grade bond ma=
+rket.JPMorgan=E2=80=99s former chief gold trader, Gregg Smith, was ordered =
+to serve=C2=A0  two years in prison for spoofing, fraud and attempted marke=
+t manipulation, the stiffest sentence handed down yet in a recent governmen=
+t crackdown on questionable trading practices.
+   =20
+
+
+    Gregg Smith Photographer: Cheney Orr/Bloomberg
+Chinese leader Xi Jinping=C2=A0and Brazil=E2=80=99s=C2=A0Luiz In=C3=A1cio L=
+ula da Silva both proclaimed=C2=A0before a summit with other BRICS leaders =
+that the =E2=80=9CGlobal South=E2=80=9D should wield more influence. Speaki=
+ng separately, their comments emphasized points of unity among Brazil, Russ=
+ia, India, China and South Africa ahead of a gathering in which they will d=
+ebate topics on which they don=E2=80=99t agree=E2=80=94including how member=
+ship of the bloc should be expanded.=C2=A0President=C2=A0Joe Biden=E2=80=99=
+s=C2=A0security deal with Japan and South Korea=E2=80=94bringing together t=
+wo US allies with a long and bitter history=E2=80=94seems to have suddenly =
+bolstered=C2=A0US military power in Asia. The US=C2=A0pivot to Asia, a phra=
+se popularized during the Obama administration, has suddenly begun to take =
+shape. In the process, it=E2=80=99s made an economically wavering China loo=
+k increasingly isolated=C2=A0in its own geopolitical backyard. With those n=
+ew military agreements has come White House pressure on both Japan and Sout=
+h Korea to support its tech curbs on China. Meanwhile, Beijing=E2=80=99s ow=
+n attempts at regional diplomatic outreach (or to throw its weight around) =
+has had limited success, and in some cases triggered blowback.
+   =20
+
+
+    US President Joe Biden, center, with South Korea President Yoon Suk Yeo=
+l, left, and Japanese Prime Minister Fumio Kishida, right, at Camp David in=
+ Maryland on Aug. 18. Photographer: Chip Somodevilla/Getty Images
+The future is here.=C2=A0Computer-generated=C2=A0children=E2=80=99s voices =
+so realistic they fool their own parents. Masks created with photos from so=
+cial media that can hoodwink facial recognition. Far from sci-fi, these tec=
+hniques are already available to criminals preying on everyday consumers. A=
+rtificial intelligence in particular is being used to =E2=80=9Cturbocharge=
+=E2=80=9D fraud, US Federal Trade Commission Chair=C2=A0Lina Khan=C2=A0warn=
+ed=C2=A0in June, calling for increased vigilance from law enforcement.The b=
+iggest social media platforms all have their niches. Instagram is for showi=
+ng off the best of your 500 selfies. Facebook is for learning too much abou=
+t an acquaintance from college. And LinkedIn=C2=A0is for updating the oblig=
+atory professional profile when you=E2=80=99re looking for a job, then rece=
+iving constant emails prompting you to congratulate someone on their =E2=80=
+=9Cwork anniversary.=E2=80=9D Or at least that=E2=80=99s how it used to be.=
+ As other networks stagnate, shift their algorithms or in one particular ca=
+se burn themselves to the ground, LinkedIn is becoming a site where regular=
+ people actually want to hang out and post their thoughts. It might even be=
+ cool.Pharmacy benefit managers arose in the 1960s to help health insurance=
+ plans control spending on prescription drugs. They were lauded early on as=
+ a counterweight to Big Pharma, able to bundle the purchasing power of thou=
+sands of employers and insurers to negotiate lower prices. Well these days,=
+ they=E2=80=99re being accused of helping cause the higher drug prices they=
+ were supposed to ameliorate.=C2=A0Side deals made by these negotiators=C2=
+=A0with drug companies are allowing them to snatch up=C2=A0extra cash for t=
+hemselves from their supposed adversaries.
+   =20
+
+
+
+ =20
+    =20
+      =20
+        =20
+      =20
+   =20
+ =20
+ =20
+   =20
+     =20
+     =20
+       =20
+         =20
+            =20
+              =20
+                =20
+              =20
+           =20
+         =20
+       =20
+     =20
+     =20
+   =20
+ =20
+
+
+ =20
+   =20
+      What you=E2=80=99ll need to know tomorrow
+   =20
+ =20
+=09Ethiopia investigates report of   mass killings by Saudi border guards.=
+=09A Colombian warlord is helping save the Amazon   from deforestation.=09B=
+loomberg Opinion:=C2=A0US export of=C2=A0gun violence is a=C2=A0bipartisan =
+outrage.=09Bloomberg Opinion: Goodbye, bull market   for US Treasury bonds.=
+=09Nike stock is headed for a   record dive thanks to a weakening China.=09=
+Zara billionaire Ortega buys Chicago apartment tower for   $232 million.=09=
+Which of these=C2=A0GOP candidates for US president can raise more cash?
+ =20
+   =20
+     =20
+  Heat Wave Settles In Over Europe=E2=80=99s=C2=A0Glaciers
+
+   =20
+ =20
+The Alps are under a heat wave that=E2=80=99s pushing temperatures above fr=
+eezing at altitudes higher than the tops of the mountain range=E2=80=99s gl=
+aciers. Large swaths of normally balmy Switzerland have seen near-tropical =
+evening temperatures in recent days. Searing heat has recently raised the f=
+reezing point above 5,000 meters (16,400 feet). Glacial peaks in the Alps a=
+re lower than that.=C2=A0
+   =20
+
+
+    Visitors hike on a trail=C2=A0in the Aiguilles Rouges nature reserve in=
+=C2=A0Chamonix, Haute-Savoie. Photographer: Emmanuel Dunand/AFP/Getty Image=
+s
+Get the Bloomberg Evening Briefing: If you were forwarded this newsletter, =
+sign up here to receive Bloomberg=E2=80=99s flagship briefing=C2=A0in your =
+mailbox daily=E2=80=94along with our Weekend Reading edition on Saturdays.S=
+ustainable Business Summit New York: Join us Oct. 5 as we bring together bu=
+siness leaders and investors for a day of solutions-driven discussions and =
+community building that will drive innovation and scale best practices in s=
+ustainable business and finance. Register here.
+       =20
+     =20
+   =20
+ =20
+
+
+ =20
+   =20
+     =20
+       =20
+          Follow Us
+       =20
+     =20
+     =20
+       =20
+         =20
+           =20
+             =20
+               =20
+                 =20
+               =20
+             =20
+             =20
+               =20
+                 =20
+               =20
+             =20
+             =20
+               =20
+                 =20
+               =20
+             =20
+             =20
+               =20
+                 =20
+               =20
+             =20
+           =20
+         =20
+       =20
+     =20
+   =20
+ =20
+
+
+ =20
+   =20
+     =20
+     =20
+
+
+ =20
+   =20
+     =20
+       =20
+         =20
+           =20
+           =20
+Like getting this newsletter?  Subscribe to Bloomberg.com for unlimited acc=
+ess to trusted, data-driven journalism and subscriber-only insights.
+
+
+
+Before it=E2=80=99s here, it=E2=80=99s on the=C2=A0Bloomberg=C2=A0Terminal.=
+=C2=A0Find out more about how the Terminal delivers information and analysi=
+s that financial professionals can=E2=80=99t find anywhere else.=C2=A0Learn=
+ more.
+
+
+
+Want to sponsor this newsletter?  Get in touch here.
+
+         =20
+       =20
+     =20
+   =20
+ =20
+
+
+
+       =20
+         =20
+           =20
+             =20
+               =20
+                  You received this message because you are subscribed to B=
+loomberg's Evening Briefing newsletter. If a friend forwarded you this mess=
+age, sign up here to get it in your inbox.
+               =20
+             =20
+           =20
+           =20
+             =20
+               =20
+                  Unsubscribe
+                 =20
+                  Bloomberg.com
+                 =20
+                  Contact Us
+               =20
+               =20
+                  Bloomberg L.P.731 Lexington Avenue,New York, NY 10022
+               =20
+             =20
+           =20
+           =20
+             =20
+               =20
+                 =20
+                   =20
+                     =20
+                       =20
+                         =20
+                       =20
+                     =20
+                     =20
+                       =20
+                         =20
+                         =20
+                       =20
+                     =20
+                     =20
+                       =20
+                         =20
+                       =20
+                     =20
+                   =20
+                 =20
+               =20
+             =20
+           =20
+       =20
+     =20
+     =20
+   =20
+ =20
+   =20
+
+
+<a href=3D""><img src=3D"https://link.mail.bloombergbusiness.com/img/64dd57=
+63c1fde85e8602683ejc65x.o92s/05865d3c.gif" alt=3D"" border=3D"0" /></a>
+
+------=_Part_11607858_616309513.1692744547246
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns=3D"http://www.w3.org/1999/xht=
+ml" xmlns=3D"http://www.w3.org/1999/xhtml" class=3D"newsletter-campaign__te=
+mplate" style=3D"width: 100%;"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+<meta name=3D"viewport" content=3D"initial-scale=3D1">
+<title>Evening Briefing</title>
+<style>body {
+width: 100%; -webkit-font-smoothing: antialiased; font-family: Georgia, ser=
+if; font-size: 16px; line-height: 24px; margin: 0; padding: 0;
+}
+img {
+max-width: 550px;
+}
+@media only screen and (max-width: 480px) {       =20
+.lihide {           =20
+display: none !important;       =20
+}       =20
+.lishow {           =20
+display: block !important;           =20
+width: auto !important;           =20
+overflow: visible !important;           =20
+float: none !important;           =20
+max-height: inherit !important;           =20
+line-height: inherit !important;       =20
+}   =20
+}
+@media screen and (max-width: 525px) {
+.editorial-tout__inner{
+font-size: 15px !important;
+line-height: 23px !important;
+padding: 15px 0px !important;
+}
+}
+</style></head>
+<body style=3D"width: 100%; -webkit-font-smoothing: antialiased; font-famil=
+y: Georgia, serif; font-size: 16px; line-height: 24px; margin: 0; padding: =
+0;">
+<table id=3D"wrapper" class=3D"wrapper" width=3D"100%" align=3D"center" bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"-webkit-font-smoothi=
+ng: antialiased; font-family: Georgia, serif; font-size: 16px; max-width: 5=
+50px; width: 100% !important;">
+<!--[if mso]>
+<center>
+<tr><td>
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"550">
+<![endif]-->
+<tr>
+<td class=3D"sailthru-variables" style=3D"border-collapse: collapse; mso-ta=
+ble-lspace: 0pt; mso-table-rspace: 0pt;">
+<div style=3D"display: none; max-height: 0px; overflow: hidden;">
+</div>
+</td>
+</tr>
+<tr>
+<td class=3D"preview-text" style=3D"border-collapse: collapse; mso-table-ls=
+pace: 0pt; mso-table-rspace: 0pt;">
+<div style=3D"display: none; max-height: 0px; overflow: hidden;">
+Bloomberg Evening Briefing
+</div>
+</td>
+</tr>
+<tr>
+<td class=3D"logo-wrapper" style=3D"border-collapse: collapse; mso-table-ls=
+pace: 0pt; mso-table-rspace: 0pt; padding-bottom: 15px;">
+<table class=3D"logo" width=3D"100%" border=3D"0" cellspacing=3D"0" cellpad=
+ding=3D"0">
+<tr>
+<td align=3D"center" class=3D"view-in-browser" style=3D"border-collapse: co=
+llapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding: 20px 0px 10p=
+x;">
+<a class=3D"view-in-browser__url" href=3D"https://link.mail.bloombergbusine=
+ss.com/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL25ld=
+3NsZXR0ZXJzLzIwMjMtMDgtMjIvYmxvb21iZXJnLWV2ZW5pbmctYnJpZWZpbmctZmlybXMtc2Vs=
+bC0yLXRyaWxsaW9uLXdvcnRoLW9mLWJvbmRzLWluLXJlY29yZC10aW1lP2NtcGlkPUJCRDA4MjI=
+yM19CSVomdXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPW5ld3NsZXR0ZXImdXRtX3Rlcm09Mj=
+MwODIyJnV0bV9jYW1wYWlnbj1ibG9vbWJlcmdkYWlseQ/64dd5763c1fde85e8602683eB6e477=
+f3f" style=3D"font-family: Helvetica, Arial, sans-serif; text-decoration: u=
+nderline; font-size: 14px; color: #767676 !important;">View in browser</a>
+</td>
+</tr>
+<tr>
+<td align=3D"center" class=3D"logo-container" style=3D"border-collapse: col=
+lapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding-bottom: 5px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS8/64dd5763c1fde85e8602683eB323e1dea">
+<!--[if mso]>
+<table width=3D"550"><tr><td><img alt=3D"Bloomberg" src=3D"https://assets.b=
+wbx.io/images/users/iqjWHBFdfxIU/iCa8r7WLDY_c/v0/-1x-1.png" width=3D"550" /=
+></td></tr></table>
+<div style=3D"display:none">
+<![endif]--><img class=3D"logo-image" src=3D"https://assets.bwbx.io/images/=
+users/iqjWHBFdfxIU/iCa8r7WLDY_c/v0/-1x-1.png" border=3D"0" alt=3D"Bloomberg=
+" style=3D"max-width: 550px; width: 100%; display: block;"><!--[if mso]>
+</div>
+<![endif]-->
+</a>
+</td>
+</tr>
+</table><table class=3D"liveintent-sponsored-logo" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" align=3D"center">
+<tr>
+<td colspan=3D"2">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly9zbGkuYmxvb21iZXJnLmNvbS9jbGljaz9zPTgyNTg0OSZsaT0zMjQ4MDU2NSZtPWVk=
+YWRhYjhiODRlYWQyMzg5YmE4NTI2NjhkZWRhNmIxJnA9MzM2MTIwNzMmc3RwZT1kZWZhdWx0Jg/=
+64dd5763c1fde85e8602683eBc4e1796b" rel=3D"nofollow">
+<img src=3D"https://sli.bloomberg.com/imp?s=3D825849&amp;li=3D32480565&amp;=
+m=3Dedadab8b84ead2389ba852668deda6b1&amp;p=3D33612073&amp;stpe=3Ddefault&am=
+p;" border=3D"0" width=3D"108" style=3D"width: 108px !important; display:bl=
+ock">
+</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style=3D"border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rs=
+pace: 0pt;">
+<table class=3D"body-component" width=3D"100%" border=3D"0" cellspacing=3D"=
+0" cellpadding=3D"0" style=3D"font-size: 16px; line-height: 24px;">
+<tr>
+<td class=3D"body-component__content" style=3D"border-collapse: collapse; m=
+so-table-lspace: 0pt; mso-table-rspace: 0pt; padding: 0px 10px;">
+<p style=3D"font-family: Georgia, serif; margin: 16px 0;">Financial compani=
+es around the globe&nbsp;<a href=3D"https://link.mail.bloombergbusiness.com=
+/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGV=
+zLzIwMjMtMDgtMjIvYmFua3MtbG9hZGluZy11cC1vbi1jYXNoLWZ1ZWwtYS1yZWNvcmQtMi10cm=
+lsbGlvbi1ib25kLXNwcmVlP2NtcGlkPUJCRDA4MjIyM19CSVomdXRtX21lZGl1bT1lbWFpbCZ1d=
+G1fc291cmNlPW5ld3NsZXR0ZXImdXRtX3Rlcm09MjMwODIyJnV0bV9jYW1wYWlnbj1ibG9vbWJl=
+cmdkYWlseQ/64dd5763c1fde85e8602683eB0a9862ec" itemprop=3D"StoryLink" itemsc=
+ope=3D"itemscope" target=3D"_blank">sold $2 trillion of bonds</a> in record=
+ time this year as European lenders raised money to repay cheap central ban=
+k loans and Chinese companies bolstered balance sheets against <a href=3D"h=
+ttps://link.mail.bloombergbusiness.com/click/32480565.1131508/aHR0cHM6Ly93d=
+3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMTgvY2hpbmEtcy1oaWRkZW4t=
+ZmluYW5jaWFsLWRhbmdlcnMtZXJ1cHQtd2l0aC1zaGFkb3ctYmFuay1jcmlzaXM_Y21waWQ9QkJ=
+EMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9bmV3c2xldHRlciZ1dG1fdG=
+VybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/64dd5763c1fde85e8602683e=
+B078b2286" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_blank"=
+>mounting economic stress</a>. The collapse of several US regional banks, C=
+hina=E2=80=99s real estate woes and central bank rate hikes weren=E2=80=99t=
+ enough to slow the surge.&nbsp;Issuance by financial firms (excluding real=
+ estate companies) has climbed about 6% this year, according to data compil=
+ed by Bloomberg, the fastest pace to $2 trillion in the almost quarter cent=
+ury we=E2=80=99ve tracked the data. But the party&nbsp;may not last: Hurdle=
+s are getting higher as Treasury yields spike and investors reassess the th=
+reat slowing growth may pose&nbsp;for borrowers.</p><div class=3D"body-imag=
+e" style=3D"margin: 20px 0px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvYmFua3Mt=
+bG9hZGluZy11cC1vbi1jYXNoLWZ1ZWwtYS1yZWNvcmQtMi10cmlsbGlvbi1ib25kLXNwcmVlP2N=
+tcGlkPUJCRDA4MjIyM19CSVomdXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPW5ld3NsZXR0ZX=
+ImdXRtX3Rlcm09MjMwODIyJnV0bV9jYW1wYWlnbj1ibG9vbWJlcmdkYWlseQ/64dd5763c1fde8=
+5e8602683eC0a9862ec" target=3D"_blank"><!--[if mso]>
+<table width=3D"550"><tr><td><img alt=3D"" src=3D"https://assets.bwbx.io/im=
+ages/users/iqjWHBFdfxIU/iQ1CoH.2Hu6c/v0/pidjEfPlU1QWZop3vfGKsrX.ke8XuWirGYh=
+1PKgEw44kE/-1x-1.png" width=3D"550" /></td></tr></table>
+<div style=3D"display:none">
+<![endif]--><img alt=3D"" src=3D"https://assets.bwbx.io/images/users/iqjWHB=
+FdfxIU/iQ1CoH.2Hu6c/v0/pidjEfPlU1QWZop3vfGKsrX.ke8XuWirGYh1PKgEw44kE/-1x-1.=
+png" style=3D"max-width: 550px; display: block; width: 100%; margin: auto;"=
+><!--[if mso]>
+</div>
+<![endif]--></a>
+</div><p style=3D"font-family: Georgia, serif; margin: 16px 0;">Speaking of=
+ regional banks=E2=80=94we=E2=80=99re five months past the first implosions=
+ and the fallout hasn=E2=80=99t subsided.&nbsp;Late Monday,&nbsp;S&amp;P fo=
+llowed Moody=E2=80=99s lead and&nbsp;<a href=3D"https://link.mail.bloomberg=
+business.com/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXd=
+zL2FydGljbGVzLzIwMjMtMDgtMjEva2V5Y29ycC1jb21lcmljYS1hbW9uZy01LWJhbmtzLWN1dC=
+1ieS1zLXAtaW4td2lkZW5pbmctcmV2aWV3P2NtcGlkPUJCRDA4MjIyM19CSVomdXRtX21lZGl1b=
+T1lbWFpbCZ1dG1fc291cmNlPW5ld3NsZXR0ZXImdXRtX3Rlcm09MjMwODIyJnV0bV9jYW1wYWln=
+bj1ibG9vbWJlcmdkYWlseQ/64dd5763c1fde85e8602683eB9ccdd6f4" itemprop=3D"Story=
+Link" itemscope=3D"itemscope" target=3D"_blank">downgraded some banks</a> w=
+hile lowering its outlook for others in the aftermath of that&nbsp;spring b=
+loodletting. S&amp;P slapped down KeyCorp, Comerica, Valley National Bancor=
+p,&nbsp;UMB Financial and&nbsp;Associated Banc-Corp. The ratings agency als=
+o lowered its outlook for River City Bank and S&amp;T Bank to negative. S&a=
+mp;P wrote in its note that&nbsp;many depositors have =E2=80=9Cshifted thei=
+r funds into higher-interest-bearing accounts, increasing banks=E2=80=99 fu=
+nding costs=E2=80=9D and that&nbsp;=E2=80=9Cthe decline in deposits has squ=
+eezed liquidity for many banks while the value of their securities=E2=80=94=
+which make up a large part of their liquidity=E2=80=94has fallen.=E2=80=9D&=
+nbsp;Pauline Chrystal, a fund manager at Kapstream Capital, says&nbsp;the r=
+egional banks =E2=80=9Chave a lot of exposure to commercial real estate,=E2=
+=80=9D and that&nbsp;=E2=80=9Cit=E2=80=99s really hard to justify buying th=
+em after what happened to SVB.=E2=80=9D&nbsp;<em><span class=3D"newsletter-=
+only-content">=E2=80=94<a href=3D"https://link.mail.bloombergbusiness.com/c=
+lick/32480565.1131508/aHR0cHM6Ly90d2l0dGVyLmNvbS9EYXZpZFJvdmVsbGE/64dd5763c=
+1fde85e8602683eB988d03df" itemprop=3D"StoryLink" itemscope=3D"itemscope" ta=
+rget=3D"_blank">David E. Rovella</a></span></em></p><table class=3D"header"=
+ width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tr>
+<td class=3D"body-header-container" style=3D"border-collapse: collapse; mso=
+-table-lspace: 0pt; mso-table-rspace: 0pt;">
+<h2 style=3D"font-family: Helvetica, Arial, sans-serif; letter-spacing: -1p=
+x; font-size: 26px; line-height: 28px; font-weight: normal; border-top-widt=
+h: 1px; border-top-style: solid; padding-top: 12px; margin: 20px 0px 0px;">=
+Here are today=E2=80=99s top stories</h2>
+</td>
+</tr>
+</table><p style=3D"font-family: Georgia, serif; margin: 16px 0;"><strong s=
+tyle=3D"font-family: Helvetica, Arial, sans-serif;">Charles Schwab </strong=
+>said Monday that it plans to terminate an unspecified number of its employ=
+ees and close down or shrink its offices. On Tuesday,&nbsp; the financial s=
+ervices firm says it&nbsp;<a href=3D"https://link.mail.bloombergbusiness.co=
+m/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbG=
+VzLzIwMjMtMDgtMjIvY2hhcmxlcy1zY2h3YWItcmFpc2luZy1kZWJ0LWFmdGVyLW5ld3Mtb2Yta=
+m9iLXJlYWwtZXN0YXRlLWN1dHM_Y21waWQ9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWls=
+JnV0bV9zb3VyY2U9bmV3c2xldHRlciZ1dG1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29=
+tYmVyZ2RhaWx5/64dd5763c1fde85e8602683eB3090f0b0" itemprop=3D"StoryLink" ite=
+mscope=3D"itemscope" target=3D"_blank">wants more money</a>: Schwab announc=
+ed it=E2=80=99s looking to raise fresh debt in the US investment-grade bond=
+ market.</p><p style=3D"font-family: Georgia, serif; margin: 16px 0;"><stro=
+ng style=3D"font-family: Helvetica, Arial, sans-serif;">JPMorgan=E2=80=99s =
+former </strong>chief gold trader, Gregg Smith, was ordered to serve&nbsp;<=
+a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/aH=
+R0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvanBtb3JnY=
+W4tcy1tb3N0LXByb2xpZmljLXNwb29mZXItZ2V0cy10d28teWVhcnMtaW4tcHJpc29uP2NtcGlk=
+PUJCRDA4MjIyM19CSVomdXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPW5ld3NsZXR0ZXImdXR=
+tX3Rlcm09MjMwODIyJnV0bV9jYW1wYWlnbj1ibG9vbWJlcmdkYWlseQ/64dd5763c1fde85e860=
+2683eBed8c3584" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_b=
+lank">  two years in prison</a> for spoofing, fraud and attempted market ma=
+nipulation, the stiffest sentence handed down yet in a recent government cr=
+ackdown on questionable trading practices.</p><div class=3D"body-image" sty=
+le=3D"margin: 20px 0px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvanBtb3Jn=
+YW4tcy1tb3N0LXByb2xpZmljLXNwb29mZXItZ2V0cy10d28teWVhcnMtaW4tcHJpc29uP2NtcGl=
+kPUJCRDA4MjIyM19CSVomdXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPW5ld3NsZXR0ZXImdX=
+RtX3Rlcm09MjMwODIyJnV0bV9jYW1wYWlnbj1ibG9vbWJlcmdkYWlseQ/64dd5763c1fde85e86=
+02683eCed8c3584" target=3D"_blank"><!--[if mso]>
+<table width=3D"550"><tr><td><img alt=3D"" src=3D"https://assets.bwbx.io/im=
+ages/users/iqjWHBFdfxIU/iU5WWL23SWiE/v0/-1x-1.jpg" width=3D"550" /></td></t=
+r></table>
+<div style=3D"display:none">
+<![endif]--><img alt=3D"" src=3D"https://assets.bwbx.io/images/users/iqjWHB=
+FdfxIU/iU5WWL23SWiE/v0/-1x-1.jpg" style=3D"max-width: 550px; display: block=
+; width: 100%; margin: auto;"><!--[if mso]>
+</div>
+<![endif]--></a>
+<div class=3D"body-image__attributes" style=3D"font-size: 14px; line-height=
+: 130%; margin-top: 8px;">Gregg Smith <i>Photographer: Cheney Orr/Bloomberg=
+</i></div>
+</div><p style=3D"font-family: Georgia, serif; margin: 16px 0;"><strong sty=
+le=3D"font-family: Helvetica, Arial, sans-serif;">Chinese leader Xi Jinping=
+&nbsp;</strong>and Brazil=E2=80=99s&nbsp;Luiz In=C3=A1cio Lula da Silva bot=
+h proclaimed&nbsp;before a summit with other BRICS leaders that the =E2=80=
+=9CGlobal South=E2=80=9D should <a href=3D"https://link.mail.bloombergbusin=
+ess.com/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2Fy=
+dGljbGVzLzIwMjMtMDgtMjIvYnJpY3MtbGF0ZXN0LXJlZHVjaW5nLWRvbGxhci1yZWxpYW5jZS1=
+0b3BzLXN1bW1pdC1hZ2VuZGE_Y21waWQ9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJn=
+V0bV9zb3VyY2U9bmV3c2xldHRlciZ1dG1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tY=
+mVyZ2RhaWx5/64dd5763c1fde85e8602683eBbbfb1c92" itemprop=3D"StoryLink" items=
+cope=3D"itemscope" target=3D"_blank">wield more influence</a>. Speaking sep=
+arately, their comments emphasized points of unity among Brazil, Russia, In=
+dia, China and South Africa ahead of a gathering in which they will debate =
+topics on which they don=E2=80=99t agree=E2=80=94including how membership o=
+f the bloc should be expanded.&nbsp;</p><p style=3D"font-family: Georgia, s=
+erif; margin: 16px 0;"><strong style=3D"font-family: Helvetica, Arial, sans=
+-serif;">President&nbsp;Joe Biden=E2=80=99s</strong>&nbsp;security deal wit=
+h Japan and South Korea=E2=80=94bringing together two US allies with a long=
+ and bitter history=E2=80=94seems to have suddenly bolstered&nbsp;<a href=
+=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/aHR0cHM6=
+Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvYmlkZW4tcy1sYW5=
+kbWFyay1zdW1taXQtd2l0aC1hc2lhbi1hbGxpZXMtZnVydGhlci1pc29sYXRlcy1jaGluYT9jbX=
+BpZD1CQkQwODIyMjNfQklaJnV0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1uZXdzbGV0dGVyJ=
+nV0bV90ZXJtPTIzMDgyMiZ1dG1fY2FtcGFpZ249Ymxvb21iZXJnZGFpbHk/64dd5763c1fde85e=
+8602683eB8a4ddabe" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D=
+"_blank">US military power in Asia</a>. The US&nbsp;pivot to Asia, a phrase=
+ popularized during the Obama administration, has suddenly begun to take sh=
+ape. In the process, it=E2=80=99s made an economically wavering China look =
+increasingly isolated&nbsp;in its own geopolitical backyard. With those new=
+ military agreements has come White House pressure on both Japan and South =
+Korea to support its tech curbs on China. Meanwhile, Beijing=E2=80=99s own =
+attempts at regional diplomatic outreach (or to throw its weight around) ha=
+s had <a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.113=
+1508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9vcGluaW9uL2FydGljbGVzLzIwMjMtMDgtMj=
+EvY2hpbmEtcy1lY29ub21pYy1zbG93ZG93bi1pcy1sb3NpbmctaXQtaW5mbHVlbmNlLWluLWFza=
+WE_Y21waWQ9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9bmV3c2xl=
+dHRlciZ1dG1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/64dd5763c1=
+fde85e8602683eB668de12f" itemprop=3D"StoryLink" itemscope=3D"itemscope" tar=
+get=3D"_blank">limited success</a>, and in some cases <a href=3D"https://li=
+nk.mail.bloombergbusiness.com/click/32480565.1131508/aHR0cHM6Ly93d3cud2FzaG=
+luZ3RvbnBvc3QuY29tL3dvcmxkL2ludGVyYWN0aXZlLzIwMjMvY2hpbmEtZmlqaS1wb2xpY2Utb=
+W91LXBhY2lmaWMtaXNsYW5kcy8/64dd5763c1fde85e8602683eBf7ec92a5" itemprop=3D"S=
+toryLink" itemscope=3D"itemscope" target=3D"_blank">triggered blowback</a>.=
+</p><div class=3D"body-image" style=3D"margin: 20px 0px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvYmlkZW4t=
+cy1sYW5kbWFyay1zdW1taXQtd2l0aC1hc2lhbi1hbGxpZXMtZnVydGhlci1pc29sYXRlcy1jaGl=
+uYT9jbXBpZD1CQkQwODIyMjNfQklaJnV0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1uZXdzbG=
+V0dGVyJnV0bV90ZXJtPTIzMDgyMiZ1dG1fY2FtcGFpZ249Ymxvb21iZXJnZGFpbHk/64dd5763c=
+1fde85e8602683eC8a4ddabe" target=3D"_blank"><!--[if mso]>
+<table width=3D"550"><tr><td><img alt=3D"" src=3D"https://assets.bwbx.io/im=
+ages/users/iqjWHBFdfxIU/ijUKNlPKcu0w/v0/-1x-1.jpg" width=3D"550" /></td></t=
+r></table>
+<div style=3D"display:none">
+<![endif]--><img alt=3D"" src=3D"https://assets.bwbx.io/images/users/iqjWHB=
+FdfxIU/ijUKNlPKcu0w/v0/-1x-1.jpg" style=3D"max-width: 550px; display: block=
+; width: 100%; margin: auto;"><!--[if mso]>
+</div>
+<![endif]--></a>
+<div class=3D"body-image__attributes" style=3D"font-size: 14px; line-height=
+: 130%; margin-top: 8px;">US President Joe Biden, center, with South Korea =
+President Yoon Suk Yeol, left, and Japanese Prime Minister Fumio Kishida, r=
+ight, at Camp David in Maryland on Aug. 18. <i>Photographer: Chip Somodevil=
+la/Getty Images</i></div>
+</div><p style=3D"font-family: Georgia, serif; margin: 16px 0;"><strong sty=
+le=3D"font-family: Helvetica, Arial, sans-serif;">The future is here.&nbsp;=
+</strong>Computer-generated&nbsp;children=E2=80=99s voices so realistic the=
+y fool their own parents. Masks created with photos from social media that =
+can hoodwink facial recognition. Far from sci-fi, these techniques are alre=
+ady available to criminals preying on everyday consumers. Artificial intell=
+igence in particular is being used to =E2=80=9C<a href=3D"https://link.mail=
+.bloombergbusiness.com/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnL=
+mNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjEvbW9uZXktc2NhbXMtZGVlcGZha2VzLWFpLXdp=
+bGwtZHJpdmUtMTAtdHJpbGxpb24taW4tZmluYW5jaWFsLWZyYXVkLWFuZC1jcmltZT9jbXBpZD1=
+CQkQwODIyMjNfQklaJnV0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1uZXdzbGV0dGVyJnV0bV=
+90ZXJtPTIzMDgyMiZ1dG1fY2FtcGFpZ249Ymxvb21iZXJnZGFpbHk/64dd5763c1fde85e86026=
+83eB051e07bd" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_bla=
+nk">turbocharge</a>=E2=80=9D fraud, US Federal Trade Commission Chair&nbsp;=
+Lina Khan&nbsp;<a href=3D"https://link.mail.bloombergbusiness.com/click/324=
+80565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtM=
+DYtMDIvZnRjLXMta2hhbi1zYXlzLWVuZm9yY2Vycy1uZWVkLXRvLWJlLXZpZ2lsYW50LWVhcmx5=
+LXdpdGgtYWk_Y21waWQ9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U=
+9bmV3c2xldHRlciZ1dG1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/6=
+4dd5763c1fde85e8602683eB0e573fd1" itemprop=3D"StoryLink" itemscope=3D"items=
+cope" target=3D"_blank">warned</a>&nbsp;in June, calling for increased vigi=
+lance from law enforcement.</p><p style=3D"font-family: Georgia, serif; mar=
+gin: 16px 0;"><strong style=3D"font-family: Helvetica, Arial, sans-serif;">=
+The biggest social media platforms </strong>all have their niches. Instagra=
+m is for showing off the best of your 500 selfies. Facebook is for learning=
+ too much about an acquaintance from college. And LinkedIn&nbsp;is for upda=
+ting the obligatory professional profile when you=E2=80=99re looking for a =
+job, then receiving constant emails prompting you to congratulate someone o=
+n their =E2=80=9Cwork anniversary.=E2=80=9D Or at least that=E2=80=99s how =
+it used to be. As other networks stagnate, shift their algorithms or in one=
+ particular case burn themselves to the ground, LinkedIn is becoming a site=
+ where regular people actually want to hang out and post their thoughts. It=
+ <a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/=
+aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvaW5zdGF=
+ncmFtLXR3aXR0ZXItYW5kLXRpa3Rvay11cGhlYXZhbHMtYXJlLWhlbHBpbmctbGlua2VkaW4_Y2=
+1waWQ9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9bmV3c2xldHRlc=
+iZ1dG1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/64dd5763c1fde85=
+e8602683eBf38975f2" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=
+=3D"_blank">might even be cool</a>.</p><p style=3D"font-family: Georgia, se=
+rif; margin: 16px 0;"><strong style=3D"font-family: Helvetica, Arial, sans-=
+serif;">Pharmacy benefit managers</strong> arose in the 1960s to help healt=
+h insurance plans control spending on prescription drugs. They were lauded =
+early on as a counterweight to Big Pharma, able to bundle the purchasing po=
+wer of thousands of employers and insurers to negotiate lower prices. Well =
+these days, they=E2=80=99re being accused of helping cause the higher drug =
+prices they were supposed to ameliorate.&nbsp;Side deals made by these nego=
+tiators&nbsp;with drug companies are allowing them to <a href=3D"https://li=
+nk.mail.bloombergbusiness.com/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb2=
+1iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvZHJ1Zy1wcmljZS1uZWdvdGlhdGlvb=
+nMtZW5yaWNoLXBoYXJtYWN5LWJlbmVmaXQtbWFuYWdlcnM_Y21waWQ9QkJEMDgyMjIzX0JJWiZ1=
+dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9bmV3c2xldHRlciZ1dG1fdGVybT0yMzA4MjImdXR=
+tX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/64dd5763c1fde85e8602683eB2d82c61b" itempr=
+op=3D"StoryLink" itemscope=3D"itemscope" target=3D"_blank">snatch up&nbsp;e=
+xtra cash</a> for themselves from their supposed adversaries.</p><div class=
+=3D"body-image" style=3D"margin: 20px 0px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvZHJ1Zy1w=
+cmljZS1uZWdvdGlhdGlvbnMtZW5yaWNoLXBoYXJtYWN5LWJlbmVmaXQtbWFuYWdlcnM_Y21waWQ=
+9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9bmV3c2xldHRlciZ1dG=
+1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/64dd5763c1fde85e8602=
+683eC2d82c61b" target=3D"_blank"><!--[if mso]>
+<table width=3D"550"><tr><td><img alt=3D"" src=3D"https://assets.bwbx.io/im=
+ages/users/iqjWHBFdfxIU/iDnLtlWemI.A/v0/pidjEfPlU1QWZop3vfGKsrX.ke8XuWirGYh=
+1PKgEw44kE/-1x-1.png" width=3D"550" /></td></tr></table>
+<div style=3D"display:none">
+<![endif]--><img alt=3D"" src=3D"https://assets.bwbx.io/images/users/iqjWHB=
+FdfxIU/iDnLtlWemI.A/v0/pidjEfPlU1QWZop3vfGKsrX.ke8XuWirGYh1PKgEw44kE/-1x-1.=
+png" style=3D"max-width: 550px; display: block; width: 100%; margin: auto;"=
+><!--[if mso]>
+</div>
+<![endif]--></a>
+</div><table class=3D"liveintent-sponsored-content" width=3D"auto" cellpadd=
+ing=3D"0" cellspacing=3D"0">
+<tr>
+<td colspan=3D"2" align=3D"left" valign=3D"top" style=3D"padding:0 0px">=20
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly9zbGkuYmxvb21iZXJnLmNvbS9jbGljaz9zPTg2ODQyMiZsaT0zMjQ4MDU2NSZtPWVk=
+YWRhYjhiODRlYWQyMzg5YmE4NTI2NjhkZWRhNmIxJnA9MzM2MTIwNzMmc3RwZT1kZWZhdWx0Jg/=
+64dd5763c1fde85e8602683eCdfbe0bec" target=3D"_blank">=20
+<img src=3D"https://sli.bloomberg.com/imp?s=3D868422&amp;li=3D32480565&amp;=
+m=3Dedadab8b84ead2389ba852668deda6b1&amp;p=3D33612073&amp;stpe=3Ddefault&am=
+p;li_coord=3Ddesktop&amp;collapse_width=3D550&amp;" width=3D"550" border=3D=
+"0" style=3D"display:block;height:auto;width:100%;max-width:550px;" alt=3D"=
+" class=3D"lihide">=20
+</a>=20
+</td>
+</tr>
+<tr>
+<td colspan=3D"2" align=3D"left" valign=3D"top">
+<!--[if !mso]><!-->
+<div style=3D"display:none; float:left; overflow:hidden; width:0; max-heigh=
+t:0; line-height:0;" class=3D"lishow">
+<table width=3D"auto" cellpadding=3D"0" cellspacing=3D"0">
+<tr>
+<td align=3D"left" valign=3D"top" style=3D"padding:0 0px">=20
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly9zbGkuYmxvb21iZXJnLmNvbS9jbGljaz9zPTg2ODQyMiZsaT0zMjQ4MDU2NSZtPWVk=
+YWRhYjhiODRlYWQyMzg5YmE4NTI2NjhkZWRhNmIxJnA9MzM2MTIwNzMmc3RwZT1kZWZhdWx0Jg/=
+64dd5763c1fde85e8602683eDdfbe0bec" target=3D"_blank">=20
+<img src=3D"https://sli.bloomberg.com/imp?s=3D868422&amp;li=3D32480565&amp;=
+m=3Dedadab8b84ead2389ba852668deda6b1&amp;p=3D33612073&amp;stpe=3Ddefault&am=
+p;li_coord=3Dmobile&amp;collapse_width=3D550&amp;" width=3D"100%" border=3D=
+"0" style=3D"display:block;height:auto;" alt=3D"">=20
+</a>=20
+</td>
+</tr>
+</table>
+</div>
+<!--<![endif]-->
+</td>
+</tr>
+</table>
+<table class=3D"header" width=3D"100%" border=3D"0" cellspacing=3D"0" cellp=
+adding=3D"0">
+<tr>
+<td class=3D"body-header-container" style=3D"border-collapse: collapse; mso=
+-table-lspace: 0pt; mso-table-rspace: 0pt;">
+<h2 style=3D"font-family: Helvetica, Arial, sans-serif; letter-spacing: -1p=
+x; font-size: 26px; line-height: 28px; font-weight: normal; border-top-widt=
+h: 1px; border-top-style: solid; padding-top: 12px; margin: 20px 0px 0px;">=
+What you=E2=80=99ll need to know tomorrow</h2>
+</td>
+</tr>
+</table><ul style=3D"list-style-type: disc; padding-left: 10px; margin: 16p=
+x 0;">	<li style=3D"font-family: Georgia, serif;">Ethiopia investigates rep=
+ort of <a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.11=
+31508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvZ=
+XRoaW9waWEtaW52ZXN0aWdhdGVzLXJlcG9ydC1vZi1raWxsaW5ncy1ieS1zYXVkaS1ib3JkZXIt=
+Z3VhcmRzP2NtcGlkPUJCRDA4MjIyM19CSVomdXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPW5=
+ld3NsZXR0ZXImdXRtX3Rlcm09MjMwODIyJnV0bV9jYW1wYWlnbj1ibG9vbWJlcmdkYWlseQ/64d=
+d5763c1fde85e8602683eBa08dd98a" itemprop=3D"StoryLink" itemscope=3D"itemsco=
+pe" target=3D"_blank">  mass killings by Saudi border guards</a>.</li>	<li =
+style=3D"font-family: Georgia, serif;">A Colombian warlord is helping save =
+the Amazon <a href=3D"https://link.mail.bloombergbusiness.com/click/3248056=
+5.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9mZWF0dXJlcy8yMDIzLWNvbG9tYmlhL=
+WFtYXpvbi1tb3JkaXNjby8_Y21waWQ9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0=
+bV9zb3VyY2U9bmV3c2xldHRlciZ1dG1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmV=
+yZ2RhaWx5/64dd5763c1fde85e8602683eB5edbf60a" itemprop=3D"StoryLink" itemsco=
+pe=3D"itemscope" target=3D"_blank">  from deforestation</a>.</li>	<li style=
+=3D"font-family: Georgia, serif;"><em>Bloomberg Opinion</em>:&nbsp;US expor=
+t of&nbsp;gun violence is a&nbsp;<a href=3D"https://link.mail.bloombergbusi=
+ness.com/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9vcGluaW9=
+uL2FydGljbGVzLzIwMjMtMDgtMjIvbWljaGFlbC1yLWJsb29tYmVyZy1hbWVyaWNhLXMtZXhwb3=
+J0LW9mLWd1bi12aW9sZW5jZS1pcy1hLWJpcGFydGlzYW4tb3V0cmFnZT9jbXBpZD1CQkQwODIyM=
+jNfQklaJnV0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1uZXdzbGV0dGVyJnV0bV90ZXJtPTIz=
+MDgyMiZ1dG1fY2FtcGFpZ249Ymxvb21iZXJnZGFpbHk/64dd5763c1fde85e8602683eB169486=
+81" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_blank">bipart=
+isan outrage</a>.</li>	<li style=3D"font-family: Georgia, serif;"><em>Bloom=
+berg Opinion</em>: Goodbye, bull market <a href=3D"https://link.mail.bloomb=
+ergbusiness.com/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9v=
+cGluaW9uL2FydGljbGVzLzIwMjMtMDgtMjIvZ29vZGJ5ZS10by10aGUtYnVsbC1tYXJrZXQtZm9=
+yLXVzLXRyZWFzdXJ5LWJvbmRzP2NtcGlkPUJCRDA4MjIyM19CSVomdXRtX21lZGl1bT1lbWFpbC=
+Z1dG1fc291cmNlPW5ld3NsZXR0ZXImdXRtX3Rlcm09MjMwODIyJnV0bV9jYW1wYWlnbj1ibG9vb=
+WJlcmdkYWlseQ/64dd5763c1fde85e8602683eB52ad261c" itemprop=3D"StoryLink" ite=
+mscope=3D"itemscope" target=3D"_blank">  for US Treasury bonds</a>.</li>	<l=
+i style=3D"font-family: Georgia, serif;">Nike stock is headed for a <a href=
+=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/aHR0cHM6=
+Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvbmlrZS1leWVzLXJ=
+lY29yZC1sb3Npbmctc3RyZWFrLW9uLWNoaW5hLWNvbmNlcm4taW52ZW50b3J5LXdvZXM_Y21waW=
+Q9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9bmV3c2xldHRlciZ1d=
+G1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/64dd5763c1fde85e860=
+2683eBe7f0837b" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_b=
+lank">  record dive</a> thanks to a weakening China.</li>	<li style=3D"font=
+-family: Georgia, serif;">Zara billionaire Ortega buys Chicago apartment to=
+wer for <a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1=
+131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIv=
+emFyYS1iaWxsaW9uYWlyZS1idXlzLWNoaWNhZ28tYXBhcnRtZW50LXRvd2VyLWZvci0yMzItbWl=
+sbGlvbj9jbXBpZD1CQkQwODIyMjNfQklaJnV0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1uZX=
+dzbGV0dGVyJnV0bV90ZXJtPTIzMDgyMiZ1dG1fY2FtcGFpZ249Ymxvb21iZXJnZGFpbHk/64dd5=
+763c1fde85e8602683eB1439f5a3" itemprop=3D"StoryLink" itemscope=3D"itemscope=
+" target=3D"_blank">  $232 million</a>.</li>	<li style=3D"font-family: Geor=
+gia, serif;">Which of these&nbsp;<a href=3D"https://link.mail.bloombergbusi=
+ness.com/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9ncmFwaGl=
+jcy8yMDIzLXJlcHVibGljYW4tcHJlc2lkZW50aWFsLXJhY2UtZnVuZHJhaXNpbmcvP2NtcGlkPU=
+JCRDA4MjIyM19CSVomdXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPW5ld3NsZXR0ZXImdXRtX=
+3Rlcm09MjMwODIyJnV0bV9jYW1wYWlnbj1ibG9vbWJlcmdkYWlseQ/64dd5763c1fde85e86026=
+83eBe34db21b" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_bla=
+nk">GOP candidates</a> for US president can raise more cash?</li></ul><tabl=
+e class=3D"header" width=3D"100%" border=3D"0" cellspacing=3D"0" cellpaddin=
+g=3D"0">
+<tr>
+<td class=3D"body-header-container" style=3D"border-collapse: collapse; mso=
+-table-lspace: 0pt; mso-table-rspace: 0pt;">
+<h2 style=3D"font-family: Helvetica, Arial, sans-serif; letter-spacing: -1p=
+x; font-size: 26px; line-height: 28px; font-weight: normal; border-top-widt=
+h: 1px; border-top-style: solid; padding-top: 12px; margin: 20px 0px 0px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvYWxwaW5l=
+LWhlYXQtd2F2ZS1wdXNoZXMtZnJlZXppbmctbGV2ZWwtYWJvdmUtZXVyb3BlLXMtZ2xhY2llcnM=
+_Y21waWQ9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9bmV3c2xldH=
+RlciZ1dG1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/64dd5763c1fd=
+e85e8602683eBca6ba45d" itemprop=3D"StoryLink" itemscope=3D"itemscope" targe=
+t=3D"_blank" style=3D"text-decoration: none;">Heat Wave Settles In Over Eur=
+ope=E2=80=99s&nbsp;Glaciers</a>
+</h2>
+</td>
+</tr>
+</table><p style=3D"font-family: Georgia, serif; margin: 16px 0;">The Alps =
+are under a heat wave that=E2=80=99s pushing temperatures above freezing at=
+ altitudes higher than the tops of the mountain range=E2=80=99s glaciers. L=
+arge swaths of normally balmy Switzerland have seen near-tropical evening t=
+emperatures in recent days. Searing heat has recently raised the freezing p=
+oint above 5,000 meters (16,400 feet). Glacial peaks in the Alps <a href=3D=
+"https://link.mail.bloombergbusiness.com/click/32480565.1131508/aHR0cHM6Ly9=
+3d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvYWxwaW5lLWhlYXQtd2=
+F2ZS1wdXNoZXMtZnJlZXppbmctbGV2ZWwtYWJvdmUtZXVyb3BlLXMtZ2xhY2llcnM_Y21waWQ9Q=
+kJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9bmV3c2xldHRlciZ1dG1f=
+dGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/64dd5763c1fde85e860268=
+3eCca6ba45d" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_blan=
+k">are lower than that</a>.&nbsp;</p><div class=3D"body-image" style=3D"mar=
+gin: 20px 0px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9uZXdzL2FydGljbGVzLzIwMjMtMDgtMjIvYWxwaW5l=
+LWhlYXQtd2F2ZS1wdXNoZXMtZnJlZXppbmctbGV2ZWwtYWJvdmUtZXVyb3BlLXMtZ2xhY2llcnM=
+_Y21waWQ9QkJEMDgyMjIzX0JJWiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9bmV3c2xldH=
+RlciZ1dG1fdGVybT0yMzA4MjImdXRtX2NhbXBhaWduPWJsb29tYmVyZ2RhaWx5/64dd5763c1fd=
+e85e8602683eDca6ba45d" target=3D"_blank"><!--[if mso]>
+<table width=3D"550"><tr><td><img alt=3D"" src=3D"https://assets.bwbx.io/im=
+ages/users/iqjWHBFdfxIU/i.kvXYCmLZCc/v0/-1x-1.jpg" width=3D"550" /></td></t=
+r></table>
+<div style=3D"display:none">
+<![endif]--><img alt=3D"" src=3D"https://assets.bwbx.io/images/users/iqjWHB=
+FdfxIU/i.kvXYCmLZCc/v0/-1x-1.jpg" style=3D"max-width: 550px; display: block=
+; width: 100%; margin: auto;"><!--[if mso]>
+</div>
+<![endif]--></a>
+<div class=3D"body-image__attributes" style=3D"font-size: 14px; line-height=
+: 130%; margin-top: 8px;">Visitors hike on a trail&nbsp;in the Aiguilles Ro=
+uges nature reserve in&nbsp;Chamonix, Haute-Savoie. <i>Photographer: Emmanu=
+el Dunand/AFP/Getty Images</i></div>
+</div><p style=3D"font-family: Georgia, serif; margin: 16px 0;"><span class=
+=3D"newsletter-only-content"><strong style=3D"font-family: Helvetica, Arial=
+, sans-serif;">Get the Bloomberg Evening Briefing: </strong><em>If you were=
+ forwarded this newsletter, <a href=3D"https://link.mail.bloombergbusiness.=
+com/click/32480565.1131508/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9hY2NvdW50L25l=
+d3NsZXR0ZXJzL2V2ZW5pbmctYnJpZWZpbmc/64dd5763c1fde85e8602683eB983a3f57" item=
+prop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_blank">sign up here</=
+a> to receive Bloomberg=E2=80=99s flagship briefing&nbsp;in your mailbox da=
+ily=E2=80=94along with our Weekend Reading edition on Saturdays.</em></span=
+></p><p style=3D"font-family: Georgia, serif; margin: 16px 0;"><span class=
+=3D"newsletter-only-content"><strong style=3D"font-family: Helvetica, Arial=
+, sans-serif;">Sustainable Business Summit New York</strong>: <em>Join us O=
+ct. 5 as we bring together business leaders and investors for a day of solu=
+tions-driven discussions and community building that will drive innovation =
+and scale best practices in sustainable business and finance. Register <a h=
+ref=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/aHR0c=
+HM6Ly9ldmVudHMuYmxvb21iZXJnbGl2ZS5jb20vc3VzdGFpbmFibGUtYnVzaW5lc3Mtc3VtbWl0=
+LW5ldy15b3JrLTIwMjM_cHJvbW89TmV3c2xldHRlciZ0cj10cnVl/64dd5763c1fde85e860268=
+3eBcd713c7f" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_blan=
+k">here</a>.</em></span></p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class=3D"component-wrapper" style=3D"border-collapse: collapse; mso-tab=
+le-lspace: 0pt; mso-table-rspace: 0pt; padding: 20px 10px;">
+<table class=3D"social-component" width=3D"100%" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0">
+<tr>
+<td class=3D"social-component__text" align=3D"center" style=3D"border-colla=
+pse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding-bottom=
+: 10px;">
+<strong style=3D"font-family: Helvetica, Arial, sans-serif;">Follow Us</str=
+ong>
+</td>
+</tr>
+<tr>
+<td class=3D"social-component__icons" align=3D"center" style=3D"border-coll=
+apse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tr>
+<td style=3D"border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rs=
+pace: 0pt; padding: 0px 10px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cuZmFjZWJvb2suY29tL2Jsb29tYmVyZ2J1c2luZXNzLw/64dd5763c1fde85e8=
+602683eB6907a2e9">
+<img src=3D"https://assets.bwbx.io/images/users/iqjWHBFdfxIU/i74qcvoJlmqM/v=
+0/-1x-1.png" width=3D"39" height=3D"39" style=3D"max-width: 550px; vertical=
+-align: middle; width: 39px !important; height: 39px !important;">
+</a>
+</td>
+<td style=3D"border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rs=
+pace: 0pt; padding: 0px 10px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly9pbnN0YWdyYW0uY29tL2Jsb29tYmVyZ2J1c2luZXNz/64dd5763c1fde85e8602683=
+eB8f28ca8e">
+<img src=3D"https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iJGFAUI9aUUg/v=
+0/-1x-1.png" width=3D"39" height=3D"39" style=3D"max-width: 550px; vertical=
+-align: middle; width: 39px !important; height: 39px !important;">
+</a>
+</td>
+<td style=3D"border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rs=
+pace: 0pt; padding: 0px 10px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly90d2l0dGVyLmNvbS9idXNpbmVzcw/64dd5763c1fde85e8602683eBb0daffa7">
+<img src=3D"https://assets.bwbx.io/images/users/iqjWHBFdfxIU/ijPrci.tuuHU/v=
+0/-1x-1.png" width=3D"39" height=3D"39" style=3D"max-width: 550px; vertical=
+-align: middle; width: 39px !important; height: 39px !important;">
+</a>
+</td>
+<td style=3D"border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rs=
+pace: 0pt; padding: 0px 10px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cubGlua2VkaW4uY29tL2NvbXBhbnkvYmxvb21iZXJnLW5ld3MvcG9zdHMvP2Zl=
+ZWRWaWV3PWFsbA/64dd5763c1fde85e8602683eB02ba6e5a">
+<img src=3D"https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iSmM0dmg0BSE/v=
+0/-1x-1.png" width=3D"39" height=3D"39" style=3D"max-width: 550px; vertical=
+-align: middle; width: 39px !important; height: 39px !important;">
+</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class=3D"footer-wrapper" style=3D"border-collapse: collapse; mso-table-=
+lspace: 0pt; mso-table-rspace: 0pt; padding: 0px 10px;">
+<table class=3D"editorial-tout" align=3D"center" width=3D"100%" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0">
+<tr>
+<td class=3D"editorial-tout__outer" style=3D"padding-top: 20px; padding-bot=
+tom: 20px;">
+<table align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0">
+<tr>
+<td class=3D"editorial-tout__inner" style=3D"font-family: Helvetica, Arial,=
+ sans-serif; font-size: 16px; line-height: 24px; text-align: center; border=
+-top-width: 1px; border-top-style: solid; border-bottom-width: 1px; border-=
+bottom-style: solid; padding: 16px 0px;">
+<div class=3D"editorial-tout__label" style=3D"font-weight: bold;"></div>
+<div class=3D"editorial-tout__text">
+<p style=3D"margin: 0px;"><em><strong>Like getting this newsletter? </stron=
+g><a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508=
+/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9zdWJzY3JpcHRpb25zP3V0bV9tZWRpdW09ZW1haW=
+wmdXRtX3NvdXJjZT1uZXdzbGV0dGVyJnV0bV9jYW1wYWlnbj1ibG9vbWJlcmdkYWlseSZ1dG1fY=
+29udGVudD10b3V0LWV2ZW5pbmctYnJpZWZpbmcmdXRtX3Rlcm09/64dd5763c1fde85e8602683=
+eB2fa14e90" itemprop=3D"StoryLink" itemscope=3D"itemscope" target=3D"_blank=
+"> Subscribe to Bloomberg.com</a> for unlimited access to trusted, data-dri=
+ven journalism and subscriber-only insights.</em></p>
+<p style=3D"margin: 0px;"><em><strong>Before it=E2=80=99s here, it=E2=80=99=
+s on the&nbsp;Bloomberg&nbsp;Terminal.</strong>&nbsp;Find out more about ho=
+w the Terminal delivers information and analysis that financial professiona=
+ls can=E2=80=99t find anywhere else.&nbsp;<a href=3D"https://link.mail.bloo=
+mbergbusiness.com/click/15638356.78421/aHR0cHM6Ly93d3cuYmxvb21iZXJnLmNvbS9w=
+cm9mZXNzaW9uYWwvc29sdXRpb24vYmxvb21iZXJnLXRlcm1pbmFsLw/55088ec43b35d034698d=
+38aeBe3d4e6ab">Learn more</a>.</em></p>
+<p style=3D"margin: 0px;"><em><strong>Want to sponsor this newsletter?</str=
+ong> <a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131=
+508/aHR0cHM6Ly93d3cuYmxvb21iZXJnbWVkaWEuY29tL2NvbnRhY3QvP3V0bV9tZWRpdW09ZW1=
+haWwmdXRtX3NvdXJjZT1uZXdzbGV0dGVyJnV0bV9jYW1wYWlnbj1ibG9vbWJlcmdkYWlseQ/64d=
+d5763c1fde85e8602683eBe67d9d69" itemprop=3D"StoryLink" itemscope=3D"itemsco=
+pe" target=3D"_blank"> Get in touch here</a>.</em></p>
+</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table class=3D"footer" width=3D"100%" align=3D"center" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0">
+<tr>
+<td class=3D"footer-container" style=3D"border-collapse: collapse; mso-tabl=
+e-lspace: 0pt; mso-table-rspace: 0pt; padding: 20px 0px;">
+<table class=3D"footer-message" width=3D"100%" align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" style=3D"font-family: Helvetica, Aria=
+l, sans-serif; font-size: 14px; line-height: 150%;">
+<tr>
+<td class=3D"footer-message-container" style=3D"border-collapse: collapse; =
+mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding-bottom: 10px;">
+You received this message because you are subscribed to Bloomberg's Evening=
+ Briefing newsletter. If a friend forwarded you this message, <a href=3D"ht=
+tps://link.mail.bloombergbusiness.com/click/32480565.1131508/aHR0cHM6Ly93d3=
+cuYmxvb21iZXJnLmNvbS9hY2NvdW50L25ld3NsZXR0ZXJzL2V2ZW5pbmctYnJpZWZpbmc_c291c=
+mNlPU5Mc2hhcmU/64dd5763c1fde85e8602683eC76ef44ab">sign up here</a> to get i=
+t in your inbox.
+</td>
+</tr>
+</table>
+<table class=3D"footer-info" width=3D"100%" align=3D"center" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0" style=3D"font-family: Helvetica, Arial, =
+sans-serif; font-size: 14px; line-height: 150%;">
+<tr>
+<td class=3D"footer-info-container" style=3D"border-collapse: collapse; mso=
+-table-lspace: 0pt; mso-table-rspace: 0pt; padding-bottom: 10px;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly9sb2dpbi5ibG9vbWJlcmcuY29tL25ld3NsZXR0ZXJzP3NvdXJjZT1uZXdzbGV0dGVy=
+X3Vuc3ViJmVtYWlsPXRvYmluc2lsdmVzdHJlMDMxJTQwc29vbmVycy51cyZoYXNoPWY3OTMzNWU=
+5MTMxMjFjYjhiMjZiZjg3ZGExNTQ4YzQ3/64dd5763c1fde85e8602683eB728ae4fd" alias=
+=3D"Unsubscribe" style=3D"text-decoration: none !important;">Unsubscribe</a=
+>
+<br>
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cDovL2Jsb29tYmVyZy5jb20/64dd5763c1fde85e8602683eBe5001b86" target=3D"_bl=
+ank" style=3D"text-decoration: none !important;">Bloomberg.com</a>
+<br>
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cDovL3d3dy5ibG9vbWJlcmcuY29tL2ZlZWRiYWNrP2FsY21waWQ9bW9zdHBvcA/64dd5763c=
+1fde85e8602683eB8b51be62" target=3D"_blank" style=3D"text-decoration: none =
+!important;">Contact Us</a>
+</td>
+<td style=3D"border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rs=
+pace: 0pt;">
+Bloomberg L.P.<br>731 Lexington Avenue,<br>New York, NY 10022
+</td>
+</tr>
+</table>
+<table class=3D"footer-liveintent" width=3D"100%" align=3D"center" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0">
+<tr>
+<td align=3D"left" style=3D"border-collapse: collapse; mso-table-lspace: 0p=
+t; mso-table-rspace: 0pt;">
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"liveintent=
+-logos">
+<tr>
+<td style=3D"border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rs=
+pace: 0pt;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cubGl2ZWludGVudC5jb20vcG93ZXJlZC1ieQ/64dd5763c1fde85e8602683eB=
+de9d7dbc" target=3D"_blank">
+<img class=3D"li-powered-by-logo outlook-format-exclude" height=3D"18" src=
+=3D"https://assets.bwbx.io/images/users/iqjWHBFdfxIU/i7ESRvr8wb2g/v0/-1x-1.=
+png" border=3D"0" alt=3D"Ads Powered By Liveintent" style=3D"max-width: 550=
+px; height: 18px !important;">
+</a>
+</td>
+<td style=3D"border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rs=
+pace: 0pt;">
+<a>
+<img class=3D"footer-liveintent__delimiter outlook-format-exclude" height=
+=3D"18" src=3D"https://assets.bwbx.io/images/users/iqjWHBFdfxIU/i84ASdYMF2X=
+k/v0/-1x-1.png" border=3D"0" style=3D"max-width: 550px; font-family: Helvet=
+ica, Arial, sans-serif; font-size: 14px; line-height: 150%; height: 18px !i=
+mportant;">
+</a>
+</td>
+<td class=3D"footer-liveintent__ad-choices" style=3D"border-collapse: colla=
+pse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+<a href=3D"https://link.mail.bloombergbusiness.com/click/32480565.1131508/a=
+HR0cHM6Ly93d3cubGl2ZWludGVudC5jb20vYWQtY2hvaWNlcw/64dd5763c1fde85e8602683eB=
+38b4298c" target=3D"_blank">
+<img class=3D"li-ad-choices-logo outlook-format-exclude" height=3D"18" src=
+=3D"https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iHu0LhjyABMM/v0/-1x-1.=
+png" border=3D"0" alt=3D"Ad Choices" style=3D"max-width: 550px; height: 18p=
+x !important;">
+</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<!--[if mso]>
+</td></tr>
+</table>
+</center>
+<![endif]-->
+</table>
+<custom name=3D"opencounter" type=3D"tracking"></custom>
+<a href=3D""><img src=3D"https://link.mail.bloombergbusiness.com/img/64dd57=
+63c1fde85e8602683ejc65x.o92s/05865d3c.gif" alt=3D"" border=3D"0"></a>
+</body>
+</html>
+
+------=_Part_11607858_616309513.1692744547246--

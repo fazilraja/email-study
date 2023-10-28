@@ -1,0 +1,573 @@
+Received: from CYYPR20MB6738.namprd20.prod.outlook.com (2603:10b6:930:c9::17)
+ by PH8PR20MB5368.namprd20.prod.outlook.com with HTTPS; Wed, 13 Sep 2023
+ 00:21:33 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=S5MnczUwDYgbrpCKh3QbRcyv+8F+GeX6QTCWboNyJkCHMUgFFKI5eIKzFzDsCKrTEg7bZR2u3vMBGq4oMerOXOCPOdsNmMPj9smATofVK4fziooKyvX1GZq1ZZAVKNCG8/j9lh6pdlKbARr9Zmq+mXYQBfeEjc/Fh+EesPckFEP35MWJH69FoQp2n5Rw91uF/sFMdz6r3JSp8oHqZSB21TrZah1Hfb7zrRUmwHJhIp6I+GMg96xiTEMTPobGBs0z7EtuQ/cpkvWIQkijpcnRC4UCVoXu45/M6ARiqKz7LiRVjluTK/+iUj5qrq7cG2z0Mtvpu9Bu0dKIr4Ta3S6iGA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=poERsxp98aSiFP3zz257CyrASivIBOGeXuhU6nmbHn8=;
+ b=GmOckcJ/M63Bob3eed2/OWpQMKRUiuYuxmRSm+Kok/cPwRgs5B3jH0yNwje33/4Ibf5hRj3b/eudeAVYYHeoK0pWOKO+wfoGFHN4Lecl3qwxdT6pfxyb+o46ZcLJzg6x2qpwTY8etlm3JHvQvquL9vm4qZCTpvtXjAMduzVD0GsybvxOedj0tBixHp4ydmQsKweOOXzOyP9Wd9RLxmgpE37L6Us0abAQ7YRBxsSAINl2TRMOZdTAHfpvmfh6A1YcJNjVpAbL5gYdV3NsNmBYy7rlQd0JW3ZJY+jLotN+NlCDTI4IllR2XBG9sXCqNRyMYGsHXnQ1ma2Aau9TO1L+RA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.166.41) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.reuters.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=reuters.com; dkim=pass (signature was verified)
+ header.d=reuters.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=delivery_20230913002131.6501008bf54672aa980f6e73@bounce.reuters.com]
+ dkim=[1,1,header.i=@reuters.com] dmarc=[1,1,header.from=reuters.com])
+Received: from AM7PR04CA0013.eurprd04.prod.outlook.com (2603:10a6:20b:110::23)
+ by CYYPR20MB6738.namprd20.prod.outlook.com (2603:10b6:930:c9::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.37; Wed, 13 Sep
+ 2023 00:21:32 +0000
+Received: from AMS0EPF0000019B.eurprd05.prod.outlook.com
+ (2603:10a6:20b:110:cafe::77) by AM7PR04CA0013.outlook.office365.com
+ (2603:10a6:20b:110::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.37 via Frontend
+ Transport; Wed, 13 Sep 2023 00:21:32 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.166.41)
+ smtp.mailfrom=bounce.reuters.com; dkim=pass (signature was verified)
+ header.d=reuters.com;dmarc=pass action=none
+ header.from=reuters.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ bounce.reuters.com discourages use of 209.85.166.41 as permitted sender)
+Received: from mail-io1-f41.google.com (209.85.166.41) by
+ AMS0EPF0000019B.mail.protection.outlook.com (10.167.16.247) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.19 via Frontend Transport; Wed, 13 Sep 2023 00:21:31 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:63948345A6ECDB69184F893EDDE1C6B20AF1740803FDA64E7089C252D01AA7BF;UpperCasedChecksum:5491E8E932F7C9ADE1A8807DBBC9AFA70AE819978B8417AA8F543274C98C3980;SizeAsReceived:5927;Count:34
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-792707f78b5so212003439f.1
+        for <tobinsilvestre@outlook.com>; Tue, 12 Sep 2023 17:21:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694564491; x=1695169291;
+        h=x-forwarded-for:list-unsubscribe:mime-version:subject:message-id:to
+         :from:date:dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=poERsxp98aSiFP3zz257CyrASivIBOGeXuhU6nmbHn8=;
+        b=eIy1JrYj7nBg/Xp60gJiElK8e2NeyiVY6Cz4emT4MfTd+Gn1iSJNGMrrwx/RClFaGM
+         yCiAFbBsXazc0EQtak8o89pYYvMEkeEJN5tRTYoklsqDYAEktyN6/Bqm+UKJ/l0uhHpJ
+         q9I4WHmPQUHKh4TgpfsNg/7bGT847gpZtoby0m6j+mVVaS3d/gg+ixEUPCwCZLwzVRUv
+         OCcqwMbQufeyp0NSI4dibBrMTnLfKRj5phgHbmY//eZGolafYLpDwQnISy7Oy3LD57nU
+         nWkVbNn/c79CmVdlWsNX2EUO+fhmgyHs9A5cQk9TxWrfqYrSV4aeV2ShSmkUWkwrNEIv
+         ca7g==
+X-Gm-Message-State: AOJu0Yz2V4JUQ5cjMMvoURxAaBQdWPeYqKt8IRznIeXjD2yi6zKypQDP
+	EA0vB71Hm2BYfg7Yl5g5HfgF11eAOK9PzLn7fQ==
+X-Google-Smtp-Source: AGHT+IENB423BDDgoI8SRcJSgR+eD1YOeFOqvTyqFD09v4ZRrffEIhPVOFy4p7WQPg+Qpb8zaBDufC0E+q1DPIjBglR6rpZRMZM=
+X-Received: by 2002:a5e:aa0b:0:b0:783:6272:afbb with SMTP id s11-20020a5eaa0b000000b007836272afbbmr1448068ioe.9.1694564491678;
+        Tue, 12 Sep 2023 17:21:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694564491; cv=none;
+        d=google.com; s=arc-20160816;
+        b=kT9l8rILH54z6YqotgLmtaCDXjwFz/q4oC6bTkV9EYXo9TQEh61/1lwQyQ3qndhiEK
+         J8lvL7Y1oRnNDKvxpgmWyuhJgDnOk/lKbye9jRGN+kCL/ipNvpBIcA5sbDAUc3zryvYg
+         IH5tY3TiPZRdZYLHetiI1MCrg4coxcgxAS6ReX5930Hx5T0Q/aXJulC2xMQuatt5JHI0
+         NiLWKHcbmNmoh21qyQCExwMqFigfKYVuiWOOwnuesHswUuIgupYvriBPm3m7SzqT0et7
+         XzEO55PPakFl2vIEpdEzQg3kzjLbB3RwC7WbuNaMIfjqMeB6E+w2S2l741uyp10w7M0t
+         C5wA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-unsubscribe:mime-version:subject:message-id:to:from:date
+         :dkim-signature;
+        bh=poERsxp98aSiFP3zz257CyrASivIBOGeXuhU6nmbHn8=;
+        fh=/ZdUwnO8nCx001m6yo25kRMuN9rtAC9ni8MuVSQlNnQ=;
+        b=YuVGdRqnbMAvdzItIqpqRuUh8TIukEzPaWJ1gqc7zaX76DFIWUAYEEZtw+O5AtVfyh
+         ufZbN7tAHelwD8RfhZpM8dZwjzA4gNGIY6+OMjXd6/gWKVfkQNj0DjT8Ieh3ijwvOtpW
+         7VSjxcol16NDJ9nJ92ul1x+2HduNLNYjeTkN73L7pPox+ONms/pQFBEQZq9bLHZU8Ar5
+         xNSM2QtWJ87XVZW/3HrPX59AjzWHgzvhaW4HDEpnC4QrMOITG1OBDHN7GwyzYejr8T7n
+         1ucHMzYbfS7yQI42CBaSzHMfY+rP7lJ21Ado4k2WVGgEmXNDN6SKVFfJYOJ3QLsiQWHM
+         zGgQ==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@reuters.com header.s=sailthru header.b=HoIeE17s;
+       spf=pass (google.com: domain of delivery_20230913002131.6501008bf54672aa980f6e73@bounce.reuters.com designates 192.64.237.244 as permitted sender) smtp.mailfrom=delivery_20230913002131.6501008bf54672aa980f6e73@bounce.reuters.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=reuters.com
+Return-Path:
+ delivery_20230913002131.6501008bf54672aa980f6e73@bounce.reuters.com
+Received: from pmta6.sailthru.com (pmta6.sailthru.com. [192.64.237.244])
+        by gmr-mx.google.com with ESMTPS id ck12-20020a0566383f0c00b00429649d963fsi1128058jab.6.2023.09.12.17.21.31
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Sep 2023 17:21:31 -0700 (PDT)
+Received-SPF: pass (google.com: domain of delivery_20230913002131.6501008bf54672aa980f6e73@bounce.reuters.com designates 192.64.237.244 as permitted sender) client-ip=192.64.237.244;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@reuters.com header.s=sailthru header.b=HoIeE17s;       spf=pass
+ (google.com: domain of
+ delivery_20230913002131.6501008bf54672aa980f6e73@bounce.reuters.com
+ designates 192.64.237.244 as permitted sender)
+ smtp.mailfrom=delivery_20230913002131.6501008bf54672aa980f6e73@bounce.reuters.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=reuters.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; s=sailthru; d=reuters.com;
+ h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:List-Unsubscribe;
+ i=account@reuters.com;
+ bh=OIFnpT8rQCJCFmv2sgpkOjsoPL0A2odLFf3G3ScAP7Y=;
+ b=HoIeE17sHgrNNhxP5OuZ7EiG0dv2+0baKNdBpb5+5t5yO5cVAts+Wq7Rd+mCm0Mt86ZjuBFU3zJM
+   wmEowSbikHHB1DyUVu9DvUDOsB7GrS6OR10kKrdukOoE9tzyvSPr9L5UXwY9TW/8mMMeXFhxB2Qf
+   wtiO9jVcUyObcWKCIlo=
+Received: from ip-10-55-86-233.ec2.internal (10.55.86.233) by aws1-mta-relay4.sailthru.cloud id h0408m1qqbst for <tobinsilvestre083@sooners.us>; Tue, 12 Sep 2023 19:21:31 -0500 (envelope-from <delivery_20230913002131.6501008bf54672aa980f6e73@bounce.reuters.com>)
+Date: Wed, 13 Sep 2023 00:21:31 +0000 (UTC)
+From: Reuters <account@reuters.com>
+To: tobinsilvestre083@sooners.us
+Message-ID: <20230913002131.6501008bf54672aa980f6e73@sailthru.com>
+Subject: Your account is now confirmed
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_58099015_1652346301.1694564491192"
+x-job: 3606-transactional-20230912
+X-Feedback-ID: 3606:transactional:sailthru
+X-TM-ID: 20230913002131.6501008bf54672aa980f6e73
+X-Sail-Id: 3606.5511700.49504649
+X-Info: Message sent by sailthru.com customer Thomson Reuters US
+X-Info: We do not permit unsolicited commercial email
+X-Info: Please report abuse by forwarding complete headers to
+X-Info: abuse@sailthru.com
+X-Mailer: sailthru.com
+X-JMailer: ip-10-55-86-233.ec2.internal
+X-Unsubscribe-Web: https://newslink.reuters.com/oc/65010050d6d417cab50afd986501008bf54672aa980f6e73/25122dad
+List-Unsubscribe: <https://newslink.reuters.com/oc/65010050d6d417cab50afd986501008bf54672aa980f6e73/25122dad>, <mailto:unsubscribe_20230913002131.6501008bf54672aa980f6e73@mx.sailthru.com>
+X-Forwarded-For: tobinsilvestre083@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 34
+X-MS-Exchange-Organization-ExpirationStartTime: 13 Sep 2023 00:21:32.0643
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 69af880c-5e34-4551-9dea-08dbb3ef61b1
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ AMS0EPF0000019B:EE_|CYYPR20MB6738:EE_|PH8PR20MB5368:EE_
+X-MS-Exchange-Organization-AuthSource:
+ AMS0EPF0000019B.eurprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/13/2023 12:19:13 AM
+X-MS-Office365-Filtering-Correlation-Id: 69af880c-5e34-4551-9dea-08dbb3ef61b1
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.166.41
+X-SID-PRA: ACCOUNT@REUTERS.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:4;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 00:21:31.9392
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69af880c-5e34-4551-9dea-08dbb3ef61b1
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ AMS0EPF0000019B.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR20MB6738
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.0574837
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6768.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(2008001134)(2008120430)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPlmXBBdVvhWqkwOVaHdNI0san93aDx1a96m5WXPqTri0ck/5jy/sGfnS3TkIEgsS8EjxKz+EKowHcwpk6ESjy/HM8FnMP1v37bjwmtxEgchYzPOox2GKjhJ34R0fRJUH7E4mwEdmCpdQVkqfiPQIA2EYrMDAw/uKXNF5r9PHR0j5GfR7CG0PwDoommREEYtlKiR8tKYsK8AAA==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TTUxbkM1YXhJY243NU8yZmhhdU5pYTFyWlBQaWdLT1dRam02YkY3Rk44Z21O?=
+ =?utf-8?B?TkJBYTE4TU04RCtRemlWMmJ4cnVObFZsb0xkMjdXT0NFMWFxNFk3TktPZFhp?=
+ =?utf-8?B?SzlvTkxWK3BQZW5jSTFObkVORHRVN3N3N0VCd0dnT1VXcURTMFVFc0VYZk5C?=
+ =?utf-8?B?Z0lOT0kweGc1Si9wTkx6SkF1UWRMeSt4Z0o2M0hncjlrY0YwZFMvNlRKeHRs?=
+ =?utf-8?B?UWtkU0F0bmpFSHBnK1ZyaE4xNG9nRWk2ZGtTUUJxTWtWMDJRcWFSdERYMmd5?=
+ =?utf-8?B?V2EzS1NmczNoM1dybTFZQ0VCQ0dNTVdYNXBOMVV6cVVzOGNDSHpnQ0FNajlX?=
+ =?utf-8?B?Mk1SR2Q0Q04xb2R6ZjV2K0JERmVuUVZaY25IU0syNFpIR0d0NU5tMk1xa0xC?=
+ =?utf-8?B?RTRVelRYWGJZWFJVa0dLT2c1TExVWlhzclhRaVk0bWRZdjc1Y25xbG9FZFh1?=
+ =?utf-8?B?M1FBWVpFNHE0SjgwMFQrbEVtUDBFN0t4U3NiQnlEWXRqL1ZnSlNGTlZ3c1pO?=
+ =?utf-8?B?L3NZdDdIMmxsc1lsUDF4YWU0MGhaVU5hZGoxR1Mra3FhOXdkOCtsVkpUYVdr?=
+ =?utf-8?B?eUQzd3ltelpwM3lrVzJUSE16L1BtSzZPZCtocUV0VnluUGozSkpVcnRIbkJn?=
+ =?utf-8?B?N1QwUHBPOHh4WUROWTlYSVpSL3ZydXRhWHZxVjZaWllrSFM3VFU3UVJGSXhr?=
+ =?utf-8?B?dVBIbnZjWXNSSlJlK3hRRjVaN0NSZkJzVVhBNkczTlZhdVoyKzRDZ0daV1NV?=
+ =?utf-8?B?M0VmWEZGSGpKL0syYzlLeHJPQkdDMFJoTFJOMkZZTlh3UEpUaTBRNmg1eW91?=
+ =?utf-8?B?ZlN2Rk9LV29oRm1ZQmphQjl0a3NZUEl4cFJEaEJHZXgxdldQQnJZM1c4U243?=
+ =?utf-8?B?aDdTNk1BbDhtMUdOS3ZCV1pScC9MajViUWhsbHZYOHdLU1NPWDlCRTlTcHpl?=
+ =?utf-8?B?MFBLUVptTlRCa3oyM1JXV1k5ZEZKaWREenFmRndVdGhjT0VzbTk4dm5GbFdj?=
+ =?utf-8?B?WjhqRWFsTFM4dEpVSytlNnVyZjFDQWlJdit4NzFoUVZRend2SmNEMHRWWXBL?=
+ =?utf-8?B?VFdDUitzTWVRd3JBa3ZsTFF4ZHN5eDRyUUFqUUIvbXFna1dxZjEreGx6VkFi?=
+ =?utf-8?B?dEhBTDZyOGpDR3hrS1NFSWpOdExPSjNFdVppTnY5dWUrNytzZDl5Rm9FVGw1?=
+ =?utf-8?B?OXN5bzREQTRBekZNMC84eHFCYVJWREVmWHNTU0hPQS9PeVNEMUZBUEE3UmpX?=
+ =?utf-8?B?cW42SnNRcWlDSDlmdWFBWFJzM29HRXBKbVkxNWY5S3JoQVpvb0I2cVBnOEJM?=
+ =?utf-8?B?ZkZzcjY2OGtWbmtKc2tUcXd1VngxMGVIRDQ4ZEVTcDBTNVRTV0VLbklseWhi?=
+ =?utf-8?B?ckpiNGhSZUJ0Q2k0aEowZWkvSzBFd3BUbm9HdXJjQkttd0djbWpDU1pvd3FJ?=
+ =?utf-8?B?MFB1b0Nhdy9OWjcrUHJsNzRQaE1oYjhqUElSYnJNM01YMHlCWjg3NHkyTTh6?=
+ =?utf-8?B?MlljbkZuRnBLWUhmNW9nRisxeVFYTENlMmh2aVFiU29HU0NuNG5sWUF4Skhk?=
+ =?utf-8?B?MUVsVjBja1pRTzcxVXlJV3dQdnRYeFFYbTJ0UGNacE9lby9QQlNlNkNJMVhD?=
+ =?utf-8?B?N054d1R3eFZkRW1HMFNEQ2JHZ1cwVDVrL1dxN2hFUEQ0Y2I5d2dLMWRVek16?=
+ =?utf-8?B?VmVGOXNicTVGL0pOYjZXenBvQlBmcDlqUDhMcHo1dXNqMHdBQTBDUCtEZ0Jv?=
+ =?utf-8?B?ZnJkR1d6dTJiRGRtT0FNa2lVdHNFUTN2ellzYmlZL2J2UDJlaEJDQ0orU2ow?=
+ =?utf-8?B?ck8xKzRkeC9rdU5aSDFpTktZN0dHVWEyTnJnWG1mcFBrSmQ4NXhwK3pkYmYy?=
+ =?utf-8?B?SGVudEJjUVRMekVBNTFNamtTck91QlgwU00vV2dkNjVLWUhmYnBXTGIvYnNo?=
+ =?utf-8?B?SjhxUEYxZk01L1J6NGNMRnluWW1LMmhBUnZKd2lWYnE1VE5QQk1SWnJ2UHhS?=
+ =?utf-8?B?NUJ3TlVMbjQycEVQRXNyTWNPSW5TZlpubHlUeEk4VVVidVRLYVQvLzVuVzZC?=
+ =?utf-8?B?S1pFRGZ5Ni9YK1BXUEFOYzRwdys0WnRxL0FHNExZT2ZpaStvdzgwaDhObzhX?=
+ =?utf-8?B?amJPMGhwQ3k2RldVcjh4U0ZMaFFCYWQzbHMrMTcrRGJSSFZ6emJVVmd3Rkgx?=
+ =?utf-8?B?MUIxTDBtRUdsWDhZbmtKZEVvZ1d5K3JDQlB3THZKdEJ6cXh5WEtPK1hhOUYv?=
+ =?utf-8?B?emdOaENwVnU4a0lSbnUwbkxoeXBnPT0=?=
+MIME-Version: 1.0
+
+------=_Part_58099015_1652346301.1694564491192
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Reuters
+
+You=E2=80=99re all set! Your account is now confirmed. Thank you for stayin=
+g informed with Reuters.
+
+Facebook <https://newslink.reuters.com/click/6501008bf54672aa980f6e73/aHR0c=
+HM6Ly93d3cuZmFjZWJvb2suY29tL1JldXRlcnM/65010050d6d417cab50afd98C0e3d7c0e>
+Twitter <https://newslink.reuters.com/click/6501008bf54672aa980f6e73/aHR0cH=
+M6Ly90d2l0dGVyLmNvbS9SZXV0ZXJz/65010050d6d417cab50afd98C02679ea2>
+Instagram<https://newslink.reuters.com/click/6501008bf54672aa980f6e73/aHR0c=
+HM6Ly93d3cuaW5zdGFncmFtLmNvbS9yZXV0ZXJzLw/65010050d6d417cab50afd98Cae68be91=
+>
+
+Terms, conditions, and privacy statement <https://newslink.reuters.com/clic=
+k/6501008bf54672aa980f6e73/aHR0cHM6Ly93d3cudGhvbXNvbnJldXRlcnMuY29tL2VuL3By=
+aXZhY3ktc3RhdGVtZW50Lmh0bWw/65010050d6d417cab50afd98C3778cf13>
+=C2=A9 2020 Thomson Reuters. All rights reserved.
+3 Times Square, New York, NY 10036
+
+If you believe this has been sent to you in error, please click <https://ne=
+wslink.reuters.com/oc/65010050d6d417cab50afd986501008bf54672aa980f6e73/2512=
+2dad> to safely unsubscribe.
+------=_Part_58099015_1652346301.1694564491192
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns=3D"http://www.w3.org/1999/xht=
+ml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><m=
+eta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1.0"=
+>
+<title>New Reuters</title>
+<style type=3D"text/css">
+@font-face {
+font-family: 'knowledge';
+src: url('https://mailcdn.reuters.com/breaking%20news%20email/fonts/knowled=
+ge-light.eot');
+src: url('https://mailcdn.reuters.com/breaking%20news%20email/fonts/knowled=
+ge-light.eot?#iefix') format('embedded-opentype'), url('https://mailcdn.reu=
+ters.com/breaking%20news%20email/fonts/knowledge-light.woff') format('woff'=
+), url('https://mailcdn.reuters.com/breaking%20news%20email/fonts/knowledge=
+-light.ttf') format('truetype');
+font-weight: 400;
+font-style: normal;
+}
+@font-face {
+font-family: 'knowledge';
+src: url('https://mailcdn.reuters.com/breaking%20news%20email/fonts/knowled=
+ge-medium.eot');
+src: url('https://mailcdn.reuters.com/breaking%20news%20email/fonts/knowled=
+ge-medium.eot?#iefix') format('embedded-opentype'), url('https://mailcdn.re=
+uters.com/breaking%20news%20email/fonts/knowledge-medium.woff') format('wof=
+f'), url('https://mailcdn.reuters.com/breaking%20news%20email/fonts/knowled=
+ge-medium.ttf') format('truetype');
+font-weight: 700;
+font-style: normal;
+}
+/* @-webkit-viewport{width:device-width}
+@-moz-viewport{width:device-width}
+@-ms-viewport{width:device-width}
+@-o-viewport{width:device-width}
+@viewport{width:device-width} */
+/* Based on The MailChimp Reset INLINE: Yes. */
+/* Client-specific Styles */
+#outlook a {padding:0;} /* Force Outlook to provide a "view in browser" men=
+u link. */
+body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-ad=
+just:100%; margin:0; padding:0;}
+/* Prevent Webkit and Windows Mobile platforms from changing default font s=
+izes.*/
+.ExternalClass {width:100%;} /* Force Hotmail to display emails at full wid=
+th */
+.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font,=
+ .ExternalClass td, .ExternalClass div {line-height: 100%;}
+/* Forces Hotmail to display normal line spacing.  More on that: http://www=
+.emailonacid.com/forum/viewthread/43/ */
+#backgroundTable {margin:0; padding:0; width:100% !important; line-height: =
+133% !important;}
+/* End reset */
+/* Some sensible defaults for images
+Bring inline: Yes. */
+img {outline:none; text-decoration:none; -ms-interpolation-mode: bicubic;}
+a img {border:none;}
+.image_fix {display:block;}
+/* Yahoo paragraph fix
+Bring inline: Yes. */
+p {margin: 1em 0;}
+/* Hotmail header color reset
+Bring inline: Yes. */
+h1, h2, h3, h4, h5, h6 {color: #404040 !important; font-weight: 400;}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: #404040 !important;}
+/* Outlook 07, 10 Padding issue fix
+Bring inline: No.*/
+table td {border-collapse: collapse;}
+/* Remove spacing around Outlook 07, 10 tables
+Bring inline: Yes */
+table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0p=
+t; }
+a {color: #404040;}
+a:hover {
+text-decoration: underline !important;
+}
+body {
+font-family: arial;
+color: #404040;
+}
+.body{
+margin: 0 !important;
+padding: 0 !important;
+}
+/* Mobile */
+@media only screen and (max-device-width: 480px) {
+a[href^=3D"tel"], a[href^=3D"sms"] {
+text-decoration: none;
+color: #404040; /* or whatever your want */
+pointer-events: none;
+cursor: default;
+}
+.mobile_link a[href^=3D"tel"], .mobile_link a[href^=3D"sms"] {
+text-decoration: default;
+color: #404040 !important;
+pointer-events: auto;
+cursor: default;
+}
+}
+@media (min-width: 601px) {
+#wrapTable {
+max-width: 600px !important;
+}
+#topLogo {
+text-align: center !important;
+}
+.logo-image {
+width: 340px !important;
+height: 160px !important;
+}
+.main-image {
+border-radius: 16px 16px 0 0 !important;
+}
+.body-content {
+padding: 32px 0px !important;
+}
+.content-text {
+font-size: 16px !important;
+line-height: 24px !important;
+}
+.social-icon {
+padding:24px 24px 32px 0 !important;
+}
+.social-icon-last {
+padding:24px 0 32px 0 !important;
+}
+}
+@media (max-width: 600px) {
+.body{
+min-width:100vw;
+}
+#bgCell {
+padding: 0 !important;
+min-width: 0 !important;
+}
+#wrapTable {
+width: 100% !important;
+}
+.sideSpacer {
+width: 0 !important;
+display: none !important;
+}
+.body-content {
+padding: 32px 16px !important;
+}
+.spacer-one {
+height: 0 !important;
+display: none !important;
+}
+.hide {
+display: none;
+}
+/* Responsive images */
+.responsive {
+width: 100% !important;
+}
+}
+@media only screen and (min-width: 10px) {
+body {
+font-family: 'knowledge', Helvetica, arial;
+}
+h1, h2, h3, h4, h5, h6 {
+font-weight: bold;
+font-family: 'knowledge', Helvetica, arial;
+}
+}
+</style>
+</head>
+<body class=3D"body">
+<table bgcolor=3D"#FFFFFF" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ id=3D"backgroundTable" style=3D"color:#404040;width:100%;" width=3D"100%">
+<tbody>
+<tr>
+<td bgcolor=3D"#FFFFFF" class=3D"sideSpacer"> </td>
+<td align=3D"center" bgcolor=3D"#FFFFFF" id=3D"bgCell" valign=3D"top"><!--[=
+if mso]>
+<table id=3D"msTable" cellpadding=3D"0" cellspacing=3D"0" border=3D"0" alig=
+n=3D"center" width=3D"500">
+<tr>
+<td width=3D"100%">
+<![endif]--><!--[if (IE)]>
+<table id=3D"msTable" cellpadding=3D"0" cellspacing=3D"0" border=3D"0" alig=
+n=3D"center" width=3D"500">
+<tr>
+<td width=3D"100%">
+<![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" id=
+=3D"wrapTable" style=3D"max-width: 600px;">
+<tbody>
+<tr>
+<td width=3D"100%">
+<table align=3D"center" bgcolor=3D"#FFFFFF" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td width=3D"100%">
+<table align=3D"center" border=3D"0" cellpadding=3D"," cellspacing=3D"0" id=
+=3D"header" width=3D"100%">
+<tbody>
+<tr>
+<td width=3D"100%"><!-- logo -->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" id=
+=3D"topLogo" style=3D"text-align: left;" width=3D"100%">
+<tbody>
+<tr>
+<td><img class=3D"logo-image" width=3D"250" height=3D"118" style=3D"width:2=
+50px;height:118px;" alt=3D"Reuters" id=3D"logo" src=3D"https://sailthru-med=
+ia.s3.amazonaws.com/composer/images/sailthru-prod-2s6/Reuters%2B%282020%29%=
+2Bhorizontal%2Bfull%2Bcolor%2B%28preferred%29.png"></td>
+</tr>
+</tbody>
+</table>
+<!-- /logo --></td>
+</tr>
+</tbody>
+</table>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" id=
+=3D"heroImage" width=3D"100%">
+<tbody>
+<tr>
+<td><!-- Hero image -->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%">
+<tbody>
+<tr>
+<td width=3D"100%"><img alt=3D"Reuters News app" class=3D"responsive main-i=
+mage" src=3D"https://sailthru-media.s3.amazonaws.com/composer/images/sailth=
+ru-prod-2s6/traffic.jpeg" width=3D"600" border=3D"0">														</tr>
+</tbody>
+</table>
+<!-- /Hero image --></td>
+</tr>
+</tbody>
+</table>
+<table align=3D"center" border=3D"0" cellpadding=3D"30" cellspacing=3D"0" i=
+d=3D"bodyContent" width=3D"100%">
+<tbody>
+<tr>
+<td class=3D"body-content" style=3D"text-align:left;">
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%">
+<tbody>
+<tr>
+<td>
+<h1 style=3D"margin:0 0 32px;font-size:48px;color:#404040;line-height:54px;=
+text-align:left;letter-spacing:0.01em;word-break:break-word;"><b id=3D"docs=
+-internal-guid-eed0b716-10fa-9cae-0582-0ed1642fb545"> You=E2=80=99re all se=
+t! <br></b></h1>
+<p class=3D"content-text" style=3D"margin: 24px 0 390px; font-size:18px;col=
+or:#404040;line-height:32px;text-align:left;letter-spacing:0.01em;">Your ac=
+count is now confirmed. Thank you for staying informed with Reuters.</p>
+<table cellspacing=3D"0" cellpadding=3D"0" border=3D"0" width=3D"100%" styl=
+e=3D"width:100% !important;">
+<tr>
+<td align=3D"left" valign=3D"top" width=3D"100%" height=3D"1" style=3D"back=
+ground-color:#d0d0d0;border-collapse:collapse;mso-table-lspace:0pt;mso-tabl=
+e-rspace:0pt;mso-line-height-rule:exactly;line-height:1px;"><!--[if gte mso=
+ 15]>&nbsp;<![endif]--></td>
+</tr>
+</table>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0">
+<tr>
+<td class=3D"social-icon" style=3D"padding:40px 24px 16px 0;">
+<a href=3D"https://newslink.reuters.com/click/6501008bf54672aa980f6e73/aHR0=
+cHM6Ly93d3cuZmFjZWJvb2suY29tL1JldXRlcnM/65010050d6d417cab50afd98B0e3d7c0e" =
+style=3D"outline: none; text-decoration: none; color: #68888B; vertical-ali=
+gn: -15%;"><img alt=3D"facebook" src=3D"https://sailthru-media.s3.amazonaws=
+.com/composer/images/sailthru-prod-2s6/Facebook.png" style=3D"border: 0;"><=
+/a>
+</td>
+<td class=3D"social-icon" style=3D"padding:40px 24px 16px 0;">
+<a href=3D"https://newslink.reuters.com/click/6501008bf54672aa980f6e73/aHR0=
+cHM6Ly90d2l0dGVyLmNvbS9SZXV0ZXJz/65010050d6d417cab50afd98B02679ea2" style=
+=3D"outline: none; text-decoration: none; color: #68888B;"><img alt=3D"twit=
+ter" src=3D"https://sailthru-media.s3.amazonaws.com/composer/images/sailthr=
+u-prod-2s6/Twitter.png" style=3D"border: 0;"></a>
+</td>
+<td class=3D"social-icon-last" style=3D"padding:40px 0 16px;">
+<a href=3D"https://newslink.reuters.com/click/6501008bf54672aa980f6e73/aHR0=
+cHM6Ly93d3cuaW5zdGFncmFtLmNvbS9yZXV0ZXJzLw/65010050d6d417cab50afd98Bae68be9=
+1" style=3D"outline: none; text-decoration: none; color: #68888B;"><img alt=
+=3D"instagram" src=3D"https://sailthru-media.s3.amazonaws.com/composer/imag=
+es/sailthru-prod-2s6/Instagram.png" style=3D"border: 0;"></a>
+</td>
+</tr>
+</table>
+<a href=3D"https://newslink.reuters.com/click/6501008bf54672aa980f6e73/aHR0=
+cHM6Ly93d3cudGhvbXNvbnJldXRlcnMuY29tL2VuL3ByaXZhY3ktc3RhdGVtZW50Lmh0bWw/650=
+10050d6d417cab50afd98B3778cf13" style=3D"color:#404040;font-weight:bold;fon=
+t-size:16px;line-height:24px;text-decoration:underline;">
+<u><b>Terms, conditions, and privacy statement</b></u>
+</a>
+<p style=3D"font-size: 16px; line-height: 24px; color: #404040; margin: 16p=
+x 0; word-break:break-word;"><span style=3D"white-space: nowrap;">=C2=A9 <c=
+ontent replace=3D"{{ 'now' | date: '%Y' }}">2020</content> Thomson Reuters.=
+ All rights reserved.</span><br>
+<span class=3D"address-link" style=3D"white-space: nowrap;">3 Times Square,=
+ New York, NY 10036</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (IE)]>
+</td>
+</tr>
+</table>
+<![endif]--><!--[if mso]>
+</td>
+</tr>
+</table>
+<![endif]--></td>
+<td bgcolor=3D"#FFFFFF" class=3D"sideSpacer"> </td>
+<td style=3D"display:none"><a href=3D"https://newslink.reuters.com/oc/65010=
+050d6d417cab50afd986501008bf54672aa980f6e73/25122dad"></a></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
+
+------=_Part_58099015_1652346301.1694564491192--

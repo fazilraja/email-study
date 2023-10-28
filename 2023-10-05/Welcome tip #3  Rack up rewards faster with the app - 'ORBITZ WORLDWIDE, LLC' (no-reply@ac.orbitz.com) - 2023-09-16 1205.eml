@@ -1,0 +1,1388 @@
+Received: from SA1PR20MB5199.namprd20.prod.outlook.com (2603:10b6:806:25a::13)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Sat, 16 Sep 2023
+ 17:05:58 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=li0dbDau52CulEzWvJ45fzouNfV4BAyX6NOC9MupIj85IAZkJKR10datRyOpH9ethPfZIwEU95d4jdshOLFgAuB/jtYGawJOXAuqtRvqWUNq+TjJJeJghSIr+qsfE/UUB4fqKujwtBJ1vnefypGTesmptC2b5nP/mzhHuV0rErJyaHSFO66cXal6+L30Pz8qiWUM0HBZPtqH82wiqOrec3UN+vy9zC5n9DtSAi4OI1jUwqxBt8cm8TAE5w1fWOXn3Uh1aRqxve//go0sAYxwFsmPRg7uwVmu0Gb3Vy7u2PYNPzo+NBq8GgMw2uILvV/5gELsPBrc9WQNAjLqVeDysg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WWMNdmCeMtXe/H1H1Rgd/wsvqzBCnRGrw0S1Lpzeao8=;
+ b=IMN+jo6K81T27vzQOaHo+GnNUiUM7L8StfjaFyMsYQQ/N/k7YZ8Z+J61NSjFXFVMusIIxzsTnUY/IiehJM00Kpemf/2qyEKfU0jcCSZyqw+y2OZGPXp+2u7TLkUW2VCoUjIpmUxkiac6AClaLChOgmsxSGDLtLkhDqVeqYPfOUdhOGfEZwPEy8vP6zsVs7Tttaqu9Yn/JnZ8pkGmmkHMIqYtAld0YebO7sP33cII+ENScelH2fgCxnkcUeRCtBbVzY/JlDf1w5Y5FLpGhJEpC8vWOVX/+HsNBCT2KXzuD/j0xbBsaJP56OlnThiUcqmei4QlePHNXtisoiDVUaeKEg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.167.173) smtp.rcpttodomain=outlook.com smtp.mailfrom=ac.orbitz.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=ac.orbitz.com; dkim=pass (signature was verified)
+ header.d=ac.orbitz.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounce@ac.orbitz.com]
+ dkim=[1,1,header.i=@ac.orbitz.com] dmarc=[1,1,header.from=orbitz.com])
+Received: from DS7P222CA0027.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::35) by
+ SA1PR20MB5199.namprd20.prod.outlook.com (2603:10b6:806:25a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.24; Sat, 16 Sep
+ 2023 17:05:55 +0000
+Received: from CY4PEPF0000EE3B.namprd03.prod.outlook.com
+ (2603:10b6:8:2e:cafe::2b) by DS7P222CA0027.outlook.office365.com
+ (2603:10b6:8:2e::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.24 via Frontend
+ Transport; Sat, 16 Sep 2023 17:05:54 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.167.173)
+ smtp.mailfrom=ac.orbitz.com; dkim=pass (signature was verified)
+ header.d=ac.orbitz.com;dmarc=pass action=none
+ header.from=ac.orbitz.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ ac.orbitz.com discourages use of 209.85.167.173 as permitted sender)
+Received: from mail-oi1-f173.google.com (209.85.167.173) by
+ CY4PEPF0000EE3B.mail.protection.outlook.com (10.167.242.15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Sat, 16 Sep 2023 17:05:54 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:695CBA7E9E245D5AF852689430D4555A6642C5341152210B9DD457DD6A739DC6;UpperCasedChecksum:D510A254A63C5B838D7EC1A34BED38DABD53288A4E8D744E43CA7A84D625369D;SizeAsReceived:6029;Count:29
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3adc9770737so82362b6e.3
+        for <tobinsilvestre@outlook.com>; Sat, 16 Sep 2023 10:05:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694883954; x=1695488754;
+        h=x-forwarded-for:content-transfer-encoding:feedback-id
+         :list-unsubscribe:message-id:mime-version:reply-to:to:date:subject
+         :from:dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WWMNdmCeMtXe/H1H1Rgd/wsvqzBCnRGrw0S1Lpzeao8=;
+        b=PEVSp67o/1Xas+nngx4Ty7BsMOAQGqcmN51Soie3v5/GJ+aDYJWqO26e4xasS0uIHI
+         CHuoMURe4GBuNA5u6DSmskybbk563NTMNZNvo+vjGspoch4Eqf0pMzHBduLEywcO5soO
+         SIUYfkbhR6yxK3gOU+Y2ExplFhGg9dMi4LD4adgNtttGdP4qYYnBz2QbXNd0iuQ4pRYR
+         +5LNPKjcUVOC45GyuXrDM/GN2iCPI8/dd1hBK3lMGVzhDv3ofd+Zmjb3Pl2W2FXUh9xo
+         e7gTZCO1T/O27qr+KiEwc1mV64MnNfvPszTWzdYEkhvmf13IfsK5qzi3pdcJg4wC/LYk
+         JwgA==
+X-Gm-Message-State: AOJu0YyLT3h19cmTsSoObYz56lw5JGgZIrNxa6kKrBxLVjytTbQereob
+	QD/6MIzuXOOrcNxdFg4VmNz3dTPbIqucw+6SqQ==
+X-Google-Smtp-Source: AGHT+IGDnn/yMq/790EfO/lVjkcopOpZA1aTv87SWmZ9aqjylhvkMuSCJ8vVg0ehgQwj97VtFWpQ5zPGw8E36SGL2WO+Negw+mc=
+X-Received: by 2002:a05:6808:909:b0:3a7:470e:5209 with SMTP id w9-20020a056808090900b003a7470e5209mr5517827oih.15.1694883954297;
+        Sat, 16 Sep 2023 10:05:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694883954; cv=none;
+        d=google.com; s=arc-20160816;
+        b=GSegS0kjdnV6gm6WKPoBtLeViYepRnWAXZ6kGPAa/9zZzZB7Itm8drkdXtPHz58Bnr
+         wp7gmwhUo416TMXbhphikYlaTnYn4lDBgDrR/1CTpR4fhcy7YCoZDqHH4KMnmssWiKgZ
+         3LxFSKQGKxIwmlliXQbNhmd8NAa9SiKGQ2JRcwJXPCcLUDB14i9ZO76QKvz7WQLP0i8j
+         mgSi8x/4aKh+koFD+YbWDIGBNzVTE1VDqaKnrjKDEv3RZgRkXgrtw90M1wvnsAtngvSG
+         n4Xk9ndkkESSurnHYee3wF+rNwFTBzSCBVwSWxcWHAoOVzItoH2ikLawfprutJkbgjb0
+         /fBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=content-transfer-encoding:feedback-id:list-unsubscribe:message-id
+         :mime-version:reply-to:to:date:subject:from:dkim-signature;
+        bh=WWMNdmCeMtXe/H1H1Rgd/wsvqzBCnRGrw0S1Lpzeao8=;
+        fh=STCR05JH0KOEIg1D1Xu/I8PwEv+8s9bxuBbsMIvorMI=;
+        b=AXHiG3ACEKjDmTjUcofUS1m0Sm090iN3fZPj30XRON+8tixsTj1jPhNCUngQA14ENO
+         Q483pZ63XYIQYlEs7qpRpGzIhv6c53wyYc4M2UThaPy45qFsaLroFYoN1ZW8ZQ7erc+d
+         h1732rYDFQFr6TTrWjrbgqzvEMz1nq71tDm5DBtJg70P1MwrbDqMzp/wcrj2J3sUt97o
+         +NnsOKIj7ClfgTb1EeRiaSH2U6zvQR7MHDVYxswJO5sjqSzKlAmOiV/hxCWunQIcvLDM
+         fK/abtN67fhLtmG4MH8icClQIZNBw9XGBMBN/wk8NoSy+lT0rlYLbDJdIyqGcjD2qtbC
+         mUVQ==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@ac.orbitz.com header.s=orbitzworldwidellc header.b=oDEIEuEv;
+       spf=pass (google.com: domain of bounce@ac.orbitz.com designates 172.82.223.217 as permitted sender) smtp.mailfrom=bounce@ac.orbitz.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=orbitz.com
+Received: from r217.ac.orbitz.com (r217.ac.orbitz.com. [172.82.223.217])
+        by gmr-mx.google.com with ESMTPS id n5-20020a632705000000b00542924cbf7esi842552pgn.5.2023.09.16.10.05.53
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 16 Sep 2023 10:05:54 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce@ac.orbitz.com designates 172.82.223.217 as permitted sender) client-ip=172.82.223.217;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@ac.orbitz.com header.s=orbitzworldwidellc header.b=oDEIEuEv;
+       spf=pass (google.com: domain of bounce@ac.orbitz.com designates
+ 172.82.223.217 as permitted sender) smtp.mailfrom=bounce@ac.orbitz.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=orbitz.com
+Return-Path: <bounce@ac.orbitz.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ac.orbitz.com;
+	s=orbitzworldwidellc; t=1694883953;
+	bh=WWMNdmCeMtXe/H1H1Rgd/wsvqzBCnRGrw0S1Lpzeao8=;
+	h=From:Subject:Date:To:MIME-Version:Message-ID:List-Unsubscribe:
+	 Content-Type;
+	b=oDEIEuEvE6GW908Z3sKKKJElBUiSux0hmsUdO/tVeR+MnZ/dNQRus9UVOQxpg525c
+	 J89SNFddiph+6wwSu4l5ps+cmd8tFuVsDP799udPJhTFbkyxTbiNxU1dV4RASCkgYR
+	 TxQsqrAF9wGpupL/YGaTXcqriEIHRjZwQUGxYlmffCkN4N+cj77N/gnifLOxri2Mws
+	 +2HVtWz7qODw8dN4TXz5PrqTFCC6OW4iWXUKiWtlMv9pmQWsmd5WdWmdGDrgObRplH
+	 KfMCdnf49u9FHtczB7qddme50KkvCL1wQHx9IlOVBJK00fptcitPWb0tcyufwwMPCP
+	 phcjgJm41G5AQ==
+X-MSFBL: HjNCkDN6EUBbT6nmEzRNmky2teWpTaZfG5KXsqCSnF4=|eyJyY3B0X21ldGEiOns
+	gImluIjogIm9yYml0endfbWlkX3Byb2QzIiwgInIiOiAidG9iaW5zaWx2ZXN0cmU
+	wNzFAc29vbmVycy51cyIsICJtIjogIjk5Njg3ODY2MSIsICJkIjogIjI3MzQ1NDQ
+	5IiwgImkiOiAiIiB9LCJnIjoicHJvZC5vcmJpdHpfMjA4OWI0ZTctYTJmMC00ZTE
+	1LWE3MzktMzcyYzA3OGEyNDMyIiwiYiI6ImF3c19vcmJpdHp3b3JsZHdpZGVsbGN
+	fcHJvZDNfcHJvZC5vcmJpdHpfbW9tZW50dW0yNF9tdGEwMDFfMTcyLjgyLjIyMy4
+	yMTciLCJyIjoidG9iaW5zaWx2ZXN0cmUwNzFAc29vbmVycy51cyJ9
+Received: from [10.139.37.129] ([10.139.37.129:48034] helo=r216.ac.orbitz.com)
+	by momentum24.or1.cpt.adobe.net (envelope-from <bounce@ac.orbitz.com>)
+	(ecelerity 4.2.38.999 r(:)) with ESMTP
+	id 8C/14-04493-170E5056; Sat, 16 Sep 2023 10:05:53 -0700
+From: "ORBITZ WORLDWIDE, LLC" <no-reply@ac.orbitz.com>
+Subject: Welcome tip #3: Rack up rewards faster with the app
+Date: Sat, 16 Sep 2023 11:05:51 -0600
+To: <tobinsilvestre071@sooners.us>
+Reply-To: "ORBITZ WORLDWIDE, LLC" <no-reply@ac.orbitz.com>
+X-mailer: nlserver, Build 6.7.0
+Message-ID: <NM699466BDA01A14229orbitzw_mid_prod3@ac.orbitz.com>
+List-Unsubscribe: <mailto:bounce@ac.orbitz.com?subject=unsubscribe%3CNM699466BDA01A14229orbitzw_mid_prod3@ac.orbitz.com%3E>
+Feedback-ID: ORB_WELCOME_NC_D5:54144613:MR:orbitz
+Content-Type: text/html;
+	charset="windows-1252"
+Content-Transfer-Encoding: quoted-printable
+X-Forwarded-For: tobinsilvestre071@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 29
+X-MS-Exchange-Organization-ExpirationStartTime: 16 Sep 2023 17:05:54.7046
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ f7ea7946-f96a-44c4-0a06-08dbb6d73044
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000EE3B:EE_|SA1PR20MB5199:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000EE3B.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/16/2023 2:16:17 PM
+X-MS-Office365-Filtering-Correlation-Id: f7ea7946-f96a-44c4-0a06-08dbb6d73044
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.167.173
+X-SID-PRA: NO-REPLY@AC.ORBITZ.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:5;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2023 17:05:54.6890
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7ea7946-f96a-44c4-0a06-08dbb6d73044
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000EE3B.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR20MB5199
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.8679974
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(2008001134)(2008121020)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPm4ppmjtlmvTGG/RsCXwTXurdOf9A8DkDM+BN/ZDLntRqXlIqDMLq8GXlu/gZ31r1b35GRZNSNeh/+3gx1Nu184zO3/xb/3my+UUmQ9fuHbhaIgCipFZLfawshADNQGye8AOmftmXGwJOmBHjsiG5Ua64RwQy+J8sVQRzQCnqhXZeqP8ByOkyBRy0bhuPspfyPkxShV06rRUg==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0wO0Q9MTtHRD0yO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?windows-1256?Q?AMpRi6LMxIhEVJAogFgaaauUqQIrsVHa3xikilXOwKfiZRiJIGl1a6KC?=
+ =?windows-1256?Q?fVchZjkKIcRkq3i0xW4C9ymwOF8nnyTm1NscO3j/wz54GPd3Rsh6FGFx?=
+ =?windows-1256?Q?LGtD/0P0kk8PgU69eoq5pEZ+9LqNhWwqGeAtKUiuL5uJ3zGenUG3vZNt?=
+ =?windows-1256?Q?L8RZAvs2N0NXd/Hg7qOpKyOhtExcyfsOOntwOb9+YZfKJ4ZOy5nBFOqu?=
+ =?windows-1256?Q?wjKGGH8xuS9Bio4saMKb3HcE7/BcuSdYTE2WsrDWIkIdvUK8bqZUen0P?=
+ =?windows-1256?Q?pdWjD3Zk0lXbN+QCxXZ257r7ShOOF8onYFJ/IpHHahGK5LgX9FNNmSXw?=
+ =?windows-1256?Q?bG51t95GXx505A4lWYooBDAAlcOOh0/uK0ujXDerjynYQJpuKU6gvlre?=
+ =?windows-1256?Q?QkZSH7GeC501UZxkY6SRtZx+1QeBia73AYy1dTu9FEKFuqjvC6wTD6ET?=
+ =?windows-1256?Q?JTWGbwKMITlpdkNK+I+PWp3h5Rb+tpm+EkjuQ4OgxR9x8NtUW7nBpBlU?=
+ =?windows-1256?Q?Aq1VHctFEwx8VA7CmGUIgE0XF5z/9yJygKEuH0goa1Vrq3p7rOffFOIb?=
+ =?windows-1256?Q?KUQI0GLInS+haUq/2glZXYxi+ospkh5PGMPqUA+Q6GTvJz5Gf125xKLN?=
+ =?windows-1256?Q?e2aViLtrvpkm4yAmGoRdP5gJo6U9xUjACZ4B6pqcaHuLspQOXn6teIXx?=
+ =?windows-1256?Q?fdOlwAUtz+3WnnPkcmM7yGLYoRZ//WOjn5xfdgRGK/x104kSDIrsavbL?=
+ =?windows-1256?Q?zCijDSwe3zyNqF4ikB9d7kg0vo/aJtGq7vKXQ4ia3wGEpWfv+vbVzWdx?=
+ =?windows-1256?Q?/ho4H+ibN6M7bPq+ADJL6MUCC+wOqXkZHa7FL1tp0eOmhPEQD7+4q2y2?=
+ =?windows-1256?Q?AKENILkd7xrkaNA3gKK5TV+5PCKNP22rBdnSRtzlsoGrLBiqSiBP3AQ6?=
+ =?windows-1256?Q?tlYv1lF/Iwa+4nVQjGRPKBB2zyZw2O6jcz/YcxRKaBTXSdyUT0NPRhzg?=
+ =?windows-1256?Q?xMr1tb7sA9xaERhXkrCDYyZNTHi7GdZqeEqra/Rqa4BDY+ihQ9QOr6la?=
+ =?windows-1256?Q?AY693RtzH9sQ+MaO6WKzrdcesB6cSdR8CZdwpTtipAC0PLREnHn2YvTN?=
+ =?windows-1256?Q?JQ1ruNWAWDgRoQWxZ6j9cdUbjSp/sR2Sosnk8KR1qAtuyZgbeRFsT4G+?=
+ =?windows-1256?Q?eZvHJz9H+8rwwfLaLNfgRRI1yqrv1vkkGBRIfG+5aOxmx9Vhy6bzU45n?=
+ =?windows-1256?Q?miieysf/nNXvGoFQx7JTAHcxYr0pqPc7A8Dn+EyOKGUXObARJmSOtRt0?=
+ =?windows-1256?Q?IeE9o8hKnpa+/rEckxXJ4bKy5kJ6Sz9HXrRsE8yCLQ9FWgA1lMJE2UuY?=
+ =?windows-1256?Q?e/rZbtfGR3BbPHQppZ1ae4OBMtPARbTg9/y+Wd0d/IL7qkJohlwcM8D+?=
+ =?windows-1256?Q?BmftkV9vfoADFpl6G/MdrJjlEcy3T/yHvM2ejtG8hvLHovQobZJolRMy?=
+ =?windows-1256?Q?1A4otif744vSSJpTbXKlc+87iJ9PItYPcNywiOUMxM+c3rJW1TNAmJjx?=
+ =?windows-1256?Q?zW9+LunQBEOvcX0i2ThOZI1awxm4/Y6gWTTDAf8W/o/TMqG7ep4HnXmE?=
+ =?windows-1256?Q?nucxCpF0sj/iqbFOaeXZkAAkgNZU4KkamVBioEFzH1KO22skVlfR9F6k?=
+ =?windows-1256?Q?EuPaXLL46i0iC02J2cqOa3iIylzOd/G9lnzMrPv9hjXtkrX1LrZtsp4j?=
+ =?windows-1256?Q?wqU7norS/wLX1CRZtdWCG97ZTaf9puwe+I/GKv3+gzu+/7fVRvwS6bYi?=
+ =?windows-1256?Q?Vi8QFE7FcXHU0sjVvij6Bnzco54=3D?=
+MIME-Version: 1.0
+
+<!doctype html><html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DWindows-1=
+252"><title></title>
+ =20
+  <style type=3D"text/css">
+  body {
+        -webkit-text-size-adjust: none;
+    }
+=20
+    .ReadMsgBody {
+        width: 100%;
+    }
+=20
+    .ExternalClass {
+        width: 100%;
+    }
+    .btn a {
+      color: #ffffff !important;
+    }
+    .hide {
+        display: none !important;
+        font-size: 0;
+        max-height: 0;
+        max-width: 0;
+        line-height: 0;
+        padding: 0;
+        mso-hide: all;
+        /* hide elements in Outlook 2007-2013 */
+        overflow: hidden;
+    }
+=20
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+=20
+    .img {
+        display: block;
+        border: 0;
+    }
+=20
+=20
+    div[class].elli {
+        width: 260px !important;
+    }
+=20
+    .elliFix {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box inline-block !important;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        max-width: 260px;
+    }
+=20
+    .appleLinksPrice a {
+        color: #c4204b;
+        text-decoration: none !important;
+    }
+=20
+    .appleLinksDate a {
+        color: #000000;
+        text-decoration: none !important;
+    }
+=20
+    .appleLinksCust a {
+        color: #00253C;
+        text-decoration: none !important;
+    }
+=20
+    table th {
+        margin: 0 !important;
+        padding: 0 !important;
+        vertical-align: top;
+        font-weight: normal;
+    }
+=20
+=20
+    @media screen and (max-device-width: 420px),
+    screen and (max-width: 420px) {
+     .align-center{text-align:center; padding-left:0 !important;padding-rig=
+ht:0 !important;}
+        .yahoo_fix {
+            display: block;
+        }
+        .fl {
+            float: left !important;
+        }
+        .bl {
+            display: block !important;
+        }
+        .h {
+            display: none !important;
+        }
+        .w320 {
+            width: 320px !important;
+        }
+        .w300 {
+            width: 300px !important;
+        }
+        .w280 {
+            width: 280px !important;
+        }
+        .h55 {
+            height: 55px !important;
+        }
+        .h45 {
+            height: 45px !important;
+        }
+        .w15 {
+            width: 15px !important;
+        }
+        .pb0 {
+            padding-bottom:0px !important;
+        }
+        .pl0{
+            padding-left:0px !important;
+        }
+        .pr0{
+            padding-right:0px !important;
+        }
+        .pt0{
+            padding:0px !important;
+        }
+        .p0{
+            padding:0px!important;
+        }
+        .pt20{
+            padding-top:20px !important;
+        }
+        .pb5{
+            padding-bottom:5px !important;
+        }
+        .fontSize9 {
+            font-size: 9px !important;
+            font-weight: bold !important;
+        }
+        .fontSize15 {
+            font-size: 15px !important;
+            line-height: 20px !important;
+            vertical-align: middle;
+        }
+        .fontSize17 {
+            font-size: 17px !important;
+        }
+        .bold {
+            font-weight: bold !important;
+        }
+        .m {
+            display: block !important;
+            max-height: none !important;
+        }
+        .loybar {
+            line-height: 18px !important;
+            padding: 4px !important;
+        }
+        .Split2ColNL {
+            float: left !important;
+            width: 100% !important;
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+         .Split2ColNLWBorders {
+            float: left !important;
+            width: 100% !important;
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+            border-top:1px solid #e9e9e9;=20
+            border-bottom:1px solid #e9e9e9;=20
+        }
+        .FlexWidth100 {
+                width: 100% !important;
+                height: auto !important;
+                line-height: normal !important;
+            }
+=20
+        .FlexWidth100HERO {
+            width: 100% !important;
+            min-width: 100% !important;
+            height: auto !important;
+            line-height: normal !important;
+        }
+
+    }
+
+  @media screen and (max-device-width:480px), screen and (max-width:480px) =
+{
+    .nomob {display: none!important;}
+    .show {display: block!important; width:100%;}
+    .show-inline {display: inline-block!important;}
+    .align-center{text-align: center !important;}
+  }
+
+
+  </style>
+ =20
+ =20
+ =20
+ =20
+<script type=3D"application/ld+json">
+  [{
+   "@context": "http://schema.org/",
+   "@type": "Organization",
+   "name": "Orbitz",
+ =20
+   // If showing a logo, we recommend using an https URL.
+   // It's not a requirement today, but may be in the future.
+   "logo": "https://res.ac.orbitz.com/res/orbitzw_mid_prod3/Orbitz-Icon_new=
+.png"
+           =20
+  },{
+   "@context": "http://schema.org/",
+   "@type": "DiscountOffer",
+ =20
+   // Describe your discount, this will be shown as a badge (eg "25% off" o=
+r "free shipping")
+   "description": "Rewards are waiting for you in the Orbitz app.",
+ =20
+   "discountCode": "",
+   "availabilityStarts": "",
+   "availabilityEnds": ""
+  },{
+   // Promotion card with single image.
+   // We recommend using an https URL.  It's not a requirement today, but m=
+ay be in the future.
+   // Any image size will work and will just be cropped automatically.
+   // GIF & WEBP images are not supported and will be filtered out.
+   // Sample image is 538x138, 3.9 aspect ratio
+   "@context": "http://schema.org/",
+   "@type": "PromotionCard",
+   "image": "https://res.ac.orbitz.com/res/orbitzw_mid_prod3/ORB_Rewards_We=
+lcome_lpheroFC_1116x223_20210305.jpg"
+  }]
+</script>
+ =20
+</head>
+
+<body bgcolor=3D"#FFFFFF" style=3D"font-family: 'Arial', sans-serif; width:=
+ 100%; min-width: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjus=
+t: 100%; margin: 0; padding: 0;">
+ =20
+ =20
+<!-- start HIDDEN_PREVIEW_TEXT -->
+<!--[if !mso]><! --><div style=3D"display:none !important; display:none; ov=
+erflow:hidden; float:left; width:0px; max-height:0px; max-width:0px; line-h=
+eight:0px; visibility:hidden;">
+Rewards are waiting for you in the Orbitz app. &#8204;&nbsp;&#8204;&nbsp;&#=
+8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp=
+;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&n=
+bsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204=
+;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8=
+204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;=
+&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nb=
+sp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;=
+&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#82=
+04;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&=
+#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbs=
+p;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&=
+nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#820=
+4;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#=
+8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp=
+;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&n=
+bsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204=
+;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8=
+204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;=
+&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nb=
+sp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;=
+&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#82=
+04;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&=
+#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbs=
+p;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&=
+nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#820=
+4;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#=
+8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;
+</div><!--<![endif]-->
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"600" align=
+=3D"center" class=3D"FlexWidth100">
+    <tr>
+    <td align=3D"center" class=3D"w300 fl"><!-- VISIBLE PREHEADER -->
+      <table style=3D"width: 100%;" border=3D"0" cellspacing=3D"0" cellpadd=
+ing=3D"0">
+          <tr>
+          <td width=3D"318" height=3D"30" align=3D"left" valign=3D"middle" =
+class=3D"h"><a style=3D"font-size: 10px; line-height: 13px; font-family: Ar=
+ial, Helvetica, sans-serif; text-decoration: underline; font-weight: normal=
+; color: #807f7f;" href=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c516a=
+4,2ba603e&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVgwNEVPZk5kZ291S=
+kdXUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdlEwUUZJTWZWSU1n=
+S3BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJ=
+TSVgwNEVPZk5kZ291SkdXUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YU=
+RLdlEwUUZJTWZWSU1nS3BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3L2FwcD9FTUxDSUQ9T=
+1JCSVRaLVVTLkxDLkVWRU5UVFJJR0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMm=
+RU1MRFRMPURBVEUyMDIzMDkxNi5TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ=
+1NzQ5MjUxMi5MQU5HRU5fVVMuTUNJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0=
+Q1Lk1PRFN-UFJFSERSX0NUQT9FTUxDSUQ9T1JCSVRaLVVTLkxDLkVWRU5UVFJJR0dFUkVETUFJT=
+ElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1MRFRMPURBVEUyMDIzMDkxNi5TSUQyNzM0NTQ0=
+OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ5MjUxMi5MQU5HRU5fVVMuTUNJRE0uVEVTVFg=
+uVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk1PRFN-TUFJTl9QUkVIRFI&amp;s=3DRvrjTa=
+uwdE0RK9H8crPwjCwmW5hMMuzRekd8mNc3Bxc">Rewards are waiting for you in the O=
+rbitz app.</a></td>
+          <td width=3D"282" class=3D"h" align=3D"right" valign=3D"middle" s=
+tyle=3D"font-size: 1px;" height=3D"15"></td>
+          </tr>
+      </table>
+    </tr>
+</table>
+ =20
+ =20
+  <!-- NAVIGATION-->
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"600" align=
+=3D"center" class=3D"FlexWidth100">
+    <tr>
+        <td class=3D"w320">
+            <table align=3D"center" width=3D"600" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0" bgcolor=3D"#00253c" class=3D"FlexWidth100">
+                <tr>
+                    <!-- COLUMN 1 - ORB LOGO -->
+                    <td width=3D"260" class=3D"bl fl FlexWidth100 pb0" styl=
+e=3D"padding-top:14px;padding-bottom:14px;">
+                        <table width=3D"260" border=3D"0" cellspacing=3D"0"=
+ cellpadding=3D"0" align=3D"center">
+                            <tr>
+                                <td align=3D"center">
+                                    <a href=3D"https://t.ac.orbitz.com/r/?i=
+d=3Dh3b6b2945,7c516a4,2ba603f&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlW=
+lJTSVgwNEVPZk5kZ291SkdXUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1=
+YURLdlEwUUZJTWZWSU1nS3BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ=
+9T1JCSVRaLVVTLkxDLkVWRU5UVFJJR0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSU=
+MmRU1MRFRMPURBVEUyMDIzMDkxNi5TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBS=
+UQ1NzQ5MjUxMi5MQU5HRU5fVVMuTUNJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRUxDT01FX05D=
+X0Q1Lk1PRFN-TkFWX0hPVA&amp;s=3Dxsz8N5HxO3340B7duarVQnyTTl_LFqJg5gxhDe6HcLg"=
+ target=3D"_blank"><img src=3D"https://a.travel-assets.com/oww/gw/nav_ORB_l=
+ogo.png" width=3D"174" alt=3D"Orbitz" style=3D"display:block;" border=3D"0"=
+></a>
+                                </td>
+                                <td align=3D"center" style=3D"width:50px;" =
+class=3D"h">&nbsp;</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <!-- /COLUMN 1 - ORB LOGO -->
+                    <!-- COLUMN 2 - NAV LINKS -->
+                    <td width=3D"340" class=3D"bl fl FlexWidth100">
+                        <table width=3D"100%" border=3D"0" cellspacing=3D"0=
+" cellpadding=3D"0" align=3D"center" style=3D"max-width:340px;">
+                            <tr>
+                                <td align=3D"center" class=3D"h" style=3D"f=
+ont-size: 1; width:20px;">&nbsp;</td>
+                                <td align=3D"center" class=3D"h45" style=3D=
+"font-family: Helvetica, Arial, sans-serif; font-size:15px; color:#00B1FF; =
+line-height:15px; -webkit-text-size-adjust: none; padding-left:4px;"> <a hr=
+ef=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c516a4,2ba6040&amp;e=3DcDE=
+9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVgwNEVPZk5kZ291SkdXUWhnN2hFd1JLT1NBOX=
+hZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdlEwUUZJTWZWSU1nS3BNMldIUmdxYVVkalpqW=
+lp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ9T1JCSVRaLVVTLkxDLkVWRU5UVFJJR0dFUkVETUFJ=
+TElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1MRFRMPURBVEUyMDIzMDkxNi5TSUQyNzM0NTQ=
+0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ5MjUxMi5MQU5HRU5fVVMuTUNJRE0uVEVTVF=
+guVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk1PRFN-TkFWX0hPVA&amp;s=3Dur8xSdVn3I=
+UJmxRdaZrneXFJ99lZTjMH-GWk_qMJb2g" style=3D"color: #00B1FF; text-decoration=
+: none;">Hotels</a></td>
+                                <td align=3D"center" class=3D"h45" style=3D=
+"font-family: Helvetica, Arial, sans-serif; font-size:15px; color:#00B1FF; =
+line-height:15px; -webkit-text-size-adjust: none; padding-left:4px;"> <a hr=
+ef=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c516a4,2ba6041&amp;e=3DcDE=
+9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVgwNEVPZk5kZ291SkdXUWhnN2hFd1JLT1NBOX=
+hZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdlEwUUZJTWZWSU1nS3BNMldIUmdxYVVkalpqW=
+lp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ9T1JCSVRaLVVTLkxDLkVWRU5UVFJJR0dFUkVETUFJ=
+TElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1MRFRMPURBVEUyMDIzMDkxNi5TSUQyNzM0NTQ=
+0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ5MjUxMi5MQU5HRU5fVVMuTUNJRE0uVEVTVF=
+guVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk1PRFN-TkFWX0FJUg&amp;s=3DhwMO12pVhj=
+c3JeakLoYIpGl-d8pGPcciqTZlTsTW6Pk" style=3D"color: #00B1FF; text-decoration=
+: none;">Flights</a></td>
+                                <td align=3D"center" class=3D"h45" style=3D=
+"font-family: Helvetica, Arial, sans-serif; font-size:15px; color:#00B1FF; =
+line-height:15px; -webkit-text-size-adjust: none; padding-left:4px;"> <a hr=
+ef=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c516a4,2ba6042&amp;e=3DcDE=
+9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVgwNEVPZk5kZ291SkdXUWhnN2hFd1JLT1NBOX=
+hZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdlEwUUZJTWZWSU1nS3BNMldIUmdxYVVkalpqW=
+lp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ9T1JCSVRaLVVTLkxDLkVWRU5UVFJJR0dFUkVETUFJ=
+TElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1MRFRMPURBVEUyMDIzMDkxNi5TSUQyNzM0NTQ=
+0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ5MjUxMi5MQU5HRU5fVVMuTUNJRE0uVEVTVF=
+guVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk1PRFN-TkFWX1BLRw&amp;s=3D3MXy0pVQbV=
+NbDKZ_NfHDfJFfCc3yPE2zEyGxXWwaq6Q" style=3D"color:#00B1FF; text-decoration:=
+ none;">Packages</a></td>
+                                <td align=3D"center" class=3D"h45" style=3D=
+"font-family: Helvetica, Arial, sans-serif; font-size:15px; color:#00B1FF; =
+line-height:15px; -webkit-text-size-adjust: none; padding-left:4px; padding=
+-right:4px;"> <a href=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c516a4,=
+2ba6043&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVgwNEVPZk5kZ291Skd=
+XUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdlEwUUZJTWZWSU1nS3=
+BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ9T1JCSVRaLVVTLkxDLkVWR=
+U5UVFJJR0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1MRFRMPURBVEUyMDIz=
+MDkxNi5TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ5MjUxMi5MQU5HRU5=
+fVVMuTUNJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk1PRFN-TkFWX0NBUg=
+&amp;s=3DoHetMc5e-DB5bi28R1WGRy_Yw2IJn3WwCzMjzs4JBC8" style=3D"color:#00B1F=
+F; text-decoration: none;">Cars</a></td>
+                                <td align=3D"center" class=3D"h" style=3D"f=
+ont-size: 1; width:16px;">&nbsp;</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <!-- /COLUMN 2 - NAV LINKS -->
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<!-- / NAVIGATION -->
+ =20
+  <!-- Body Content Goes Here -->
+  <table width=3D"600" align=3D"center" border=3D"0" cellspacing=3D"0" cell=
+padding=3D"0" class=3D"FlexWidth100">
+    <!-- ....... START SINGLE COL WRAPPER ....... -->
+    <!-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D HERO =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D -->
+    <tr>
+      <td bgcolor=3D"#ffffff" align=3D"center" valign=3D"" style=3D"padding=
+: 0px 0px 10px 0px; border-left:2px solid #00253c;border-right:2px solid #0=
+0253c;border-bottom:2px solid #00253c;" class=3D"" border=3D"0">
+        <table width=3D"596" align=3D"center" border=3D"0" cellspacing=3D"0=
+" cellpadding=3D"0" class=3D"FlexWidth100">
+          <!-- ....... START SINGLE COL WRAPPER ....... -->
+          <!-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D HERO =3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D -->
+          <tr>
+            <td bgcolor=3D"#ffffff" align=3D"center" valign=3D"" style=3D"p=
+adding: 0px 0px 10px 0px;" class=3D"" border=3D"0">
+              <a alias=3D"Hero" href=3D"https://orbz.app.link/?~agency_id=
+=3D1034&amp;~customer_campaign=3DBRAND&amp;~customer_sub_site_name=3DGENERI=
+C&amp;$3p=3Da_custom_229689&amp;~customer_secondary_publisher=3DORBITZ-US&a=
+mp;~customer_ad_set_name=3DBRAND:DISPLAY.OOD&amp;~customer_ad_name=3DEML.OR=
+BITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC&amp;~customer_placem=
+ent=3DEML-WELCOMED5-ORB_WELCOMED5-GENERIC&amp;~feature=3Dpaid%20advertising=
+&amp;$canonical_url=3Dhttps%3A%2F%2Fwww.orbitz.com%2Frewards%3FEMLCID%3DORB=
+ITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE202309=
+16.SID27345449.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX=
+.MIDSORB_WELCOME_NC_D5.MODS~HERO_WELCOMED5%23how-much-earn&amp;$desktop_url=
+=3Dhttps%3A%2F%2Fwww.orbitz.com%2Femailclick%2FbiMnDuax_25eZRSIX04EOfNdgouJ=
+GWQhg7hEwRKOSA9xYf-Ac-LLy65EaJT_CpDMHVg95aDKvQ0QFIMfVIMgKpM2WHRgqaUdjZjZZzu=
+QMy46V5q2dw%2Fapp%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOME=
+D5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY2734544957492512.PAID5749=
+2512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~HERO_WELCOMED5"=
+ target=3D"_blank" nowrap=3D"">
+                <img width=3D"596" height=3D"auto" class=3D"nomob" style=3D=
+"display: block;" alt=3D"What can the Orbitz app do for you? See details" s=
+rc=3D"https://res.ac.orbitz.com/res/orbitzw_mid_prod3/ORB_Rewards_WelcomeDa=
+y5_emhero_1200x600_20210423.gif" border=3D"0"></a>
+              <!-- mobile version -->
+              <span style=3D"mso-element:field-begin;"></span>
+              <div style=3D"display:none;" class=3D"show"><a href=3D"https:=
+//orbz.app.link/?~agency_id=3D1034&amp;~customer_campaign=3DBRAND&amp;~cust=
+omer_sub_site_name=3DGENERIC&amp;$3p=3Da_custom_229689&amp;~customer_second=
+ary_publisher=3DORBITZ-US&amp;~customer_ad_set_name=3DBRAND:DISPLAY.OOD&amp=
+;~customer_ad_name=3DEML.ORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.G=
+ENERIC&amp;~customer_placement=3DEML-WELCOMED5-ORB_WELCOMED5-GENERIC&amp;~f=
+eature=3Dpaid%20advertising&amp;$canonical_url=3Dhttps%3A%2F%2Fwww.orbitz.c=
+om%2Frewards%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GE=
+NERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY2734544957492512.PAID57492512.=
+LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~HERO_WELCOMED5%23how=
+-much-earn&amp;$desktop_url=3Dhttps%3A%2F%2Fwww.orbitz.com%2Femailclick%2Fb=
+iMnDuax_25eZRSIX04EOfNdgouJGWQhg7hEwRKOSA9xYf-Ac-LLy65EaJT_CpDMHVg95aDKvQ0Q=
+FIMfVIMgKpM2WHRgqaUdjZjZZzuQMy46V5q2dw%2Fapp%3FEMLCID%3DORBITZ-US.LC.EVENTT=
+RIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449.K=
+EY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME=
+_NC_D5.MODS~HERO_WELCOMED5" _tagid=3D"ad260367"><img src=3D"https://res.ac.=
+orbitz.com/res/orbitzw_mid_prod3/ORB_Rewards_WelcomeDay5_emhero_600x700_202=
+10423.gif" alt=3D"What can the Orbitz app do for you? See details" width=3D=
+"300" style=3D"display: none;" class=3D"show"></a></div>
+              <span style=3D"mso-element:field-end;"></span>
+              <!-- end mobile version -->
+            </td>
+          </tr>
+          <!-- ........ END SINGLE COL WRAPPER ........ -->
+          <!-- *=3D*=3D*=3D* START CB: Text (unlinked) *=3D*=3D*=3D* -->
+          <tr>
+            <td bgcolor=3D"#FFFFFF" align=3D"center" valign=3D"top" style=
+=3D"padding:10px 19px 10px 19px; font-family:Arial, Helvetica, sans-serif; =
+color:#00335f; font-size:18px; line-height:28px; font-weight:normal;" class=
+=3D"FlexWidth100">
+              <!-- body copy -->
+              Don=92t miss out on all the app has to offer! Download now an=
+d book in-app to enjoy benefits like these:
+            </td>
+          </tr>
+          <!-- *=3D*=3D*=3D* END CB: Text (unlinked) *=3D*=3D*=3D* -->
+          <!--- PUT ICON CONTENT HERE --->
+         =20
+          <!-- ....... START SINGLE COL WRAPPER ....... -->
+          <tr>
+            <td bgcolor=3D"#FFFFFF" align=3D"center" valign=3D"" style=3D"p=
+adding:25px 10px 0px 10px; border-right: none; border-left: none; border-to=
+p: none; border-bottom: none; border-radius:0px 0px 0px 0px; -webkit-border=
+-radius:0px 0px 0px 0px;-moz-border-radius:0px 0px 0px 0px;" class=3D"">
+              <table bgcolor=3D"#ffffff" width=3D"100%" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0">
+                <!-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D START 1 Col Content =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D -->
+                <!-- ....... START DOUBLE COL WRAPPER ....... -->
+                <tr>
+                  <td bgcolor=3D"#FFFFFF" align=3D"center" valign=3D"middle=
+" style=3D"padding:0px 0px 25px 0px; border-right: none; border-left: none;=
+ border-top: none; border-bottom: 2px solid #ededed;">
+                    <table bgcolor=3D"#ffffff" width=3D"100%" border=3D"0" =
+cellpadding=3D"0" align=3D"center" class=3D"" cellspacing=3D"0">
+                      <tr>
+                        <!-- =3D=3D=3D=3D=3D START Left Content =3D=3D=3D=
+=3D=3D -->
+                        <td bgcolor=3D"#FFFFFF" class=3D"Split2ColNL" style=
+=3D"padding:0px 0px 0px 0px;" align=3D"center" valign=3D"top" width=3D"25%"=
+>
+                          <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%">
+                            <!-- INSERT LEFT CONTENT HERE -->
+                            <!-- *=3D*=3D*=3D* START CB: Image *=3D*=3D*=3D=
+* -->
+                            <tr>
+                              <td bgcolor=3D"#FFFFFF" align=3D"center" vali=
+gn=3D"top" style=3D"padding:0px 0px 0px 0px;"><a alias=3D"Image" href=3D"ht=
+tps://orbz.app.link/?~agency_id=3D1034&amp;~customer_campaign=3DBRAND&amp;~=
+customer_sub_site_name=3DGENERIC&amp;$3p=3Da_custom_229689&amp;~customer_se=
+condary_publisher=3DORBITZ-US&amp;~customer_ad_set_name=3DBRAND:DISPLAY.OOD=
+&amp;~customer_ad_name=3DEML.ORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOME=
+D5.GENERIC&amp;~customer_placement=3DEML-WELCOMED5-ORB_WELCOMED5-GENERIC&am=
+p;~feature=3Dpaid%20advertising&amp;$canonical_url=3Dhttps%3A%2F%2Fwww.orbi=
+tz.com%2Frewards%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED=
+5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY2734544957492512.PAID57492=
+512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~P1_WELCOMED5%23h=
+ow-much-earn&amp;$desktop_url=3Dhttps%3A%2F%2Fwww.orbitz.com%2Femailclick%2=
+FbiMnDuax_25eZRSIX04EOfNdgouJGWQhg7hEwRKOSA9xYf-Ac-LLy65EaJT_CpDMHVg95aDKvQ=
+0QFIMfVIMgKpM2WHRgqaUdjZjZZzuQMy46V5q2dw%2Fapp%3FEMLCID%3DORBITZ-US.LC.EVEN=
+TTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449=
+.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCO=
+ME_NC_D5.MODS~P1_WELCOMED5" target=3D"_blank"><img src=3D"https://res.ac.or=
+bitz.com/res/orbitzw_mid_prod3/ORB_AppDownload_MoreOrbucks_Icon_emimg_168x1=
+68_20210305.png" alt=3D"More Orbucks" style=3D"display:block;" width=3D"120=
+" height=3D"auto" border=3D"0" class=3D"w150"></a></td>
+                            </tr><!-- *=3D*=3D*=3D* END CB: Image *=3D*=3D*=
+=3D* -->
+                          </table>
+                        </td><!-- =3D=3D=3D=3D=3D=3D END Left Content =3D=
+=3D=3D=3D=3D=3D -->
+                        <!-- =3D=3D=3D=3D=3D START Right Content =3D=3D=3D=
+=3D=3D -->
+                        <td bgcolor=3D"#FFFFFF" class=3D"Split2ColNL" style=
+=3D"padding:0px 0px 0px 0px;" align=3D"" valign=3D"middle">
+                          <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%">
+                            <!-- INSERT RIGHT CONTENT HERE -->
+                            <!-- *=3D*=3D*=3D* START CB: Text (unlinked) *=
+=3D*=3D*=3D* -->
+                            <tr>
+                              <td bgcolor=3D"#FFFFFF" align=3D"center" vali=
+gn=3D"top" style=3D"padding:5px 19px 5px 19px;" class=3D""><a alias=3D"Head=
+er" href=3D"https://orbz.app.link/?~agency_id=3D1034&amp;~customer_campaign=
+=3DBRAND&amp;~customer_sub_site_name=3DGENERIC&amp;$3p=3Da_custom_229689&am=
+p;~customer_secondary_publisher=3DORBITZ-US&amp;~customer_ad_set_name=3DBRA=
+ND:DISPLAY.OOD&amp;~customer_ad_name=3DEML.ORBITZ-US.LC.EVENTTRIGGEREDMAILI=
+NG.ORB_WELCOMED5.GENERIC&amp;~customer_placement=3DEML-WELCOMED5-ORB_WELCOM=
+ED5-GENERIC&amp;~feature=3Dpaid%20advertising&amp;$canonical_url=3Dhttps%3A=
+%2F%2Fwww.orbitz.com%2Frewards%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILIN=
+G.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY273454495749=
+2512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~P1=
+_WELCOMED5%23how-much-earn&amp;$desktop_url=3Dhttps%3A%2F%2Fwww.orbitz.com%=
+2Femailclick%2FbiMnDuax_25eZRSIX04EOfNdgouJGWQhg7hEwRKOSA9xYf-Ac-LLy65EaJT_=
+CpDMHVg95aDKvQ0QFIMfVIMgKpM2WHRgqaUdjZjZZzuQMy46V5q2dw%2Fapp%3FEMLCID%3DORB=
+ITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE202309=
+16.SID27345449.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX=
+.MIDSORB_WELCOME_NC_D5.MODS~P1_WELCOMED5" style=3D"font-family: Arial, Helv=
+etica, sans-serif; color:#00335f; font-size:24px; line-height:28px; font-we=
+ight:bold; text-decoration:none;" target=3D"_blank" nowrap=3D""><b>More Rew=
+ards</span></b><br></a></td></tr><!-- *=3D*=3D*=3D* END CB: Text (unlinked)=
+ *=3D*=3D*=3D* -->
+                            <!-- *=3D*=3D*=3D* START CB: Text (unlinked) *=
+=3D*=3D*=3D* -->
+                            <tr>
+                              <td bgcolor=3D"#FFFFFF" align=3D"center" vali=
+gn=3D"top" style=3D"padding:0px 19px 0px 19px; font-family:Arial, Helvetica=
+, sans-serif; color:#00335f; font-size:18px; line-height:28px; font-weight:=
+normal;" class=3D"w300">Earn extra <span style=3D"color:#8E0099;"><b>Orbuck=
+s </b></span>when you book your trip on the app*</td>
+                            </tr><!-- *=3D*=3D*=3D* END CB: Text (unlinked)=
+ *=3D*=3D*=3D* -->
+                          </table>
+                        </td><!-- =3D=3D=3D=3D=3D=3D END Right Content =3D=
+=3D=3D=3D=3D=3D -->
+                      </tr>
+                    </table>
+                  </td>
+                </tr><!-- ........ END DOUBLE COL WRAPPER ........ -->
+                <!-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D END 1 Col Content =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D -->
+              </table>
+            </td>
+          </tr><!-- ........ END SINGLE COL WRAPPER ........ -->
+          <!-- ....... START SINGLE COL WRAPPER ....... -->
+          <tr>
+            <td bgcolor=3D"#FFFFFF" align=3D"center" valign=3D"" style=3D"p=
+adding:25px 10px 0px 10px; border-right: none; border-left: none; border-to=
+p: none; border-bottom: none; border-radius:0px 0px 0px 0px; -webkit-border=
+-radius:0px 0px 0px 0px;-moz-border-radius:0px 0px 0px 0px;" class=3D"">
+              <table bgcolor=3D"#ffffff" width=3D"100%" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0">
+                <!-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D START 1 Col Content =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D -->
+                <!-- ....... START DOUBLE COL WRAPPER ....... -->
+                <tr>
+                  <td bgcolor=3D"#FFFFFF" align=3D"center" valign=3D"middle=
+" style=3D"padding:0px 0px 25px 0px; border-right: none; border-left: none;=
+ border-top: none; border-bottom: 2px solid #ededed;">
+                    <table bgcolor=3D"#ffffff" width=3D"100%" border=3D"0" =
+cellpadding=3D"0" align=3D"center" class=3D"" cellspacing=3D"0">
+                      <tr>
+                        <!-- =3D=3D=3D=3D=3D START Left Content =3D=3D=3D=
+=3D=3D -->
+                        <td bgcolor=3D"#FFFFFF" class=3D"Split2ColNL" style=
+=3D"padding:0px 0px 0px 0px;" align=3D"center" valign=3D"top" width=3D"25%"=
+>
+                          <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%">
+                            <!-- INSERT LEFT CONTENT HERE -->
+                            <!-- *=3D*=3D*=3D* START CB: Image *=3D*=3D*=3D=
+* -->
+                            <tr>
+                              <td bgcolor=3D"#FFFFFF" align=3D"center" vali=
+gn=3D"top" style=3D"padding:0px 0px 0px 0px;"><a alias=3D"Image" href=3D"ht=
+tps://orbz.app.link/?~agency_id=3D1034&amp;~customer_campaign=3DBRAND&amp;~=
+customer_sub_site_name=3DGENERIC&amp;$3p=3Da_custom_229689&amp;~customer_se=
+condary_publisher=3DORBITZ-US&amp;~customer_ad_set_name=3DBRAND:DISPLAY.OOD=
+&amp;~customer_ad_name=3DEML.ORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOME=
+D5.GENERIC&amp;~customer_placement=3DEML-WELCOMED5-ORB_WELCOMED5-GENERIC&am=
+p;~feature=3Dpaid%20advertising&amp;$canonical_url=3Dhttps%3A%2F%2Fwww.orbi=
+tz.com%2Frewards%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED=
+5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY2734544957492512.PAID57492=
+512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~P2_WELCOMED5%23h=
+ow-much-earn&amp;$desktop_url=3Dhttps%3A%2F%2Fwww.orbitz.com%2Femailclick%2=
+FbiMnDuax_25eZRSIX04EOfNdgouJGWQhg7hEwRKOSA9xYf-Ac-LLy65EaJT_CpDMHVg95aDKvQ=
+0QFIMfVIMgKpM2WHRgqaUdjZjZZzuQMy46V5q2dw%2Fapp%3FEMLCID%3DORBITZ-US.LC.EVEN=
+TTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449=
+.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCO=
+ME_NC_D5.MODS~P2_WELCOMED5" target=3D"_blank"><img src=3D"https://res.ac.or=
+bitz.com/res/orbitzw_mid_prod3/ORB_AppDownload_AppExclusiveDeals_Icon_emimg=
+_168x168_20210305.png" alt=3D"Mobile-exclusive deals" style=3D"display:bloc=
+k;" width=3D"120" height=3D"auto" border=3D"0" class=3D"w150"></a></td>
+                            </tr><!-- *=3D*=3D*=3D* END CB: Image *=3D*=3D*=
+=3D* -->
+                          </table>
+                        </td><!-- =3D=3D=3D=3D=3D=3D END Left Content =3D=
+=3D=3D=3D=3D=3D -->
+                        <!-- =3D=3D=3D=3D=3D START Right Content =3D=3D=3D=
+=3D=3D -->
+                        <td bgcolor=3D"#FFFFFF" class=3D"Split2ColNL" style=
+=3D"padding:0px 0px 0px 0px;" align=3D"" valign=3D"middle">
+                          <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%">
+                            <!-- INSERT RIGHT CONTENT HERE -->
+                            <!-- *=3D*=3D*=3D* START CB: Text (unlinked) *=
+=3D*=3D*=3D* -->
+                            <tr>
+                              <td bgcolor=3D"#FFFFFF" align=3D"center" vali=
+gn=3D"top" style=3D"padding:5px 19px 5px 19px;" class=3D""><a alias=3D"Head=
+er" href=3D"https://orbz.app.link/?~agency_id=3D1034&amp;~customer_campaign=
+=3DBRAND&amp;~customer_sub_site_name=3DGENERIC&amp;$3p=3Da_custom_229689&am=
+p;~customer_secondary_publisher=3DORBITZ-US&amp;~customer_ad_set_name=3DBRA=
+ND:DISPLAY.OOD&amp;~customer_ad_name=3DEML.ORBITZ-US.LC.EVENTTRIGGEREDMAILI=
+NG.ORB_WELCOMED5.GENERIC&amp;~customer_placement=3DEML-WELCOMED5-ORB_WELCOM=
+ED5-GENERIC&amp;~feature=3Dpaid%20advertising&amp;$canonical_url=3Dhttps%3A=
+%2F%2Fwww.orbitz.com%2Frewards%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILIN=
+G.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY273454495749=
+2512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~P2=
+_WELCOMED5%23how-much-earn&amp;$desktop_url=3Dhttps%3A%2F%2Fwww.orbitz.com%=
+2Femailclick%2FbiMnDuax_25eZRSIX04EOfNdgouJGWQhg7hEwRKOSA9xYf-Ac-LLy65EaJT_=
+CpDMHVg95aDKvQ0QFIMfVIMgKpM2WHRgqaUdjZjZZzuQMy46V5q2dw%2Fapp%3FEMLCID%3DORB=
+ITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE202309=
+16.SID27345449.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX=
+.MIDSORB_WELCOME_NC_D5.MODS~P2_WELCOMED5" style=3D"font-family: Arial, Helv=
+etica, sans-serif; color:#00335f; font-size:24px; line-height:28px; font-we=
+ight:normal; text-decoration:none;" target=3D"_blank" nowrap=3D""><b>Mobile=
+-exclusive deals</b><br></a></td></tr><!-- *=3D*=3D*=3D* END CB: Text (unli=
+nked) *=3D*=3D*=3D* -->
+                            <!-- *=3D*=3D*=3D* START CB: Text (unlinked) *=
+=3D*=3D*=3D* -->
+                            <tr>
+                              <td bgcolor=3D"#FFFFFF" align=3D"center" vali=
+gn=3D"top" style=3D"padding:0px 19px 0px 19px; font-family:Arial, Helvetica=
+, sans-serif; color:#00335f; font-size:18px; line-height:28px; font-weight:=
+normal;" class=3D"w300">Get more with mobile and save up to 30% on select h=
+otels</td>
+                            </tr><!-- *=3D*=3D*=3D* END CB: Text (unlinked)=
+ *=3D*=3D*=3D* -->
+                          </table>
+                        </td><!-- =3D=3D=3D=3D=3D=3D END Right Content =3D=
+=3D=3D=3D=3D=3D -->
+                      </tr>
+                    </table>
+                  </td>
+                </tr><!-- ........ END DOUBLE COL WRAPPER ........ -->
+                <!-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D END 1 Col Content =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D -->
+              </table>
+            </td>
+          </tr><!-- ........ END SINGLE COL WRAPPER ........ -->
+          <!-- ....... START SINGLE COL WRAPPER ....... -->
+          <tr>
+            <td bgcolor=3D"#FFFFFF" align=3D"center" valign=3D"" style=3D"p=
+adding:25px 10px 0px 10px; border-right: none; border-left: none; border-to=
+p: none; border-bottom: none; border-radius:0px 0px 0px 0px; -webkit-border=
+-radius:0px 0px 0px 0px;-moz-border-radius:0px 0px 0px 0px;" class=3D"">
+              <table bgcolor=3D"#ffffff" width=3D"100%" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0">
+                <!-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D START 1 Col Content =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D -->
+                <!-- ....... START DOUBLE COL WRAPPER ....... -->
+                <tr>
+                  <td bgcolor=3D"#FFFFFF" align=3D"center" valign=3D"middle=
+" style=3D"padding:0px 0px 25px 0px; border-right: none; border-left: none;=
+ border-top: none; border-bottom: 2px solid #ededed;">
+                    <table bgcolor=3D"#ffffff" width=3D"100%" border=3D"0" =
+cellpadding=3D"0" align=3D"center" class=3D"" cellspacing=3D"0">
+                      <tr>
+                        <!-- =3D=3D=3D=3D=3D START Left Content =3D=3D=3D=
+=3D=3D -->
+                        <td bgcolor=3D"#FFFFFF" class=3D"Split2ColNL" style=
+=3D"padding:0px 0px 0px 0px;" align=3D"center" valign=3D"middle" width=3D"2=
+5%">
+                          <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%">
+                            <!-- INSERT LEFT CONTENT HERE -->
+                            <!-- *=3D*=3D*=3D* START CB: Image *=3D*=3D*=3D=
+* -->
+                            <tr>
+                              <td bgcolor=3D"#FFFFFF" align=3D"center" vali=
+gn=3D"top" style=3D"padding:0px 0px 0px 0px;"><a alias=3D"Image" href=3D"ht=
+tps://orbz.app.link/?~agency_id=3D1034&amp;~customer_campaign=3DBRAND&amp;~=
+customer_sub_site_name=3DGENERIC&amp;$3p=3Da_custom_229689&amp;~customer_se=
+condary_publisher=3DORBITZ-US&amp;~customer_ad_set_name=3DBRAND:DISPLAY.OOD=
+&amp;~customer_ad_name=3DEML.ORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOME=
+D5.GENERIC&amp;~customer_placement=3DEML-WELCOMED5-ORB_WELCOMED5-GENERIC&am=
+p;~feature=3Dpaid%20advertising&amp;$canonical_url=3Dhttps%3A%2F%2Fwww.orbi=
+tz.com%2Frewards%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED=
+5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY2734544957492512.PAID57492=
+512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~P3_WELCOMED5%23h=
+ow-much-earn&amp;$desktop_url=3Dhttps%3A%2F%2Fwww.orbitz.com%2Femailclick%2=
+FbiMnDuax_25eZRSIX04EOfNdgouJGWQhg7hEwRKOSA9xYf-Ac-LLy65EaJT_CpDMHVg95aDKvQ=
+0QFIMfVIMgKpM2WHRgqaUdjZjZZzuQMy46V5q2dw%2Fapp%3FEMLCID%3DORBITZ-US.LC.EVEN=
+TTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449=
+.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCO=
+ME_NC_D5.MODS~P3_WELCOMED5" target=3D"_blank"><img src=3D"https://res.ac.or=
+bitz.com/res/orbitzw_mid_prod3/ORB_AppDownload_RealTimeAlerts_Icon_emimg_16=
+8x168_20210305.png" alt=3D"Real-time trip updates" style=3D"display:block;"=
+ width=3D"120" height=3D"auto" border=3D"0" class=3D"w150"></a></td>
+                            </tr><!-- *=3D*=3D*=3D* END CB: Image *=3D*=3D*=
+=3D* -->
+                          </table>
+                        </td><!-- =3D=3D=3D=3D=3D=3D END Left Content =3D=
+=3D=3D=3D=3D=3D -->
+                        <!-- =3D=3D=3D=3D=3D START Right Content =3D=3D=3D=
+=3D=3D -->
+                        <td bgcolor=3D"#FFFFFF" class=3D"Split2ColNL" style=
+=3D"padding:0px 0px 0px 0px;" align=3D"left" valign=3D"middle">
+                          <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%">
+                            <!-- INSERT RIGHT CONTENT HERE -->
+                            <!-- *=3D*=3D*=3D* START CB: Text (unlinked) *=
+=3D*=3D*=3D* -->
+                            <tr>
+                              <td bgcolor=3D"#FFFFFF" align=3D"center" vali=
+gn=3D"top" style=3D"padding:5px 19px 5px 19px;" class=3D""><a alias=3D"Head=
+er" href=3D"https://orbz.app.link/?~agency_id=3D1034&amp;~customer_campaign=
+=3DBRAND&amp;~customer_sub_site_name=3DGENERIC&amp;$3p=3Da_custom_229689&am=
+p;~customer_secondary_publisher=3DORBITZ-US&amp;~customer_ad_set_name=3DBRA=
+ND:DISPLAY.OOD&amp;~customer_ad_name=3DEML.ORBITZ-US.LC.EVENTTRIGGEREDMAILI=
+NG.ORB_WELCOMED5.GENERIC&amp;~customer_placement=3DEML-WELCOMED5-ORB_WELCOM=
+ED5-GENERIC&amp;~feature=3Dpaid%20advertising&amp;$canonical_url=3Dhttps%3A=
+%2F%2Fwww.orbitz.com%2Frewards%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILIN=
+G.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY273454495749=
+2512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~P3=
+_WELCOMED5%23how-much-earn&amp;$desktop_url=3Dhttps%3A%2F%2Fwww.orbitz.com%=
+2Femailclick%2FbiMnDuax_25eZRSIX04EOfNdgouJGWQhg7hEwRKOSA9xYf-Ac-LLy65EaJT_=
+CpDMHVg95aDKvQ0QFIMfVIMgKpM2WHRgqaUdjZjZZzuQMy46V5q2dw%2Fapp%3FEMLCID%3DORB=
+ITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE202309=
+16.SID27345449.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX=
+.MIDSORB_WELCOME_NC_D5.MODS~P3_WELCOMED5" style=3D"font-family: Arial, Helv=
+etica, sans-serif; color:#00335f; font-size:24px; line-height:28px; font-we=
+ight:normal; text-decoration:none;" target=3D"_blank" nowrap=3D""><b>Real-t=
+ime updates</b><br></a></td></tr><!-- *=3D*=3D*=3D* END CB: Text (unlinked)=
+ *=3D*=3D*=3D* -->
+                            <!-- *=3D*=3D*=3D* START CB: Text (unlinked) *=
+=3D*=3D*=3D* -->
+                            <tr>
+                              <td bgcolor=3D"#FFFFFF" align=3D"center" vali=
+gn=3D"top" style=3D"padding:0px 19px 0px 19px; font-family:Arial, Helvetica=
+, sans-serif; color:#00335f; font-size:18px; line-height:28px; font-weight:=
+normal;" class=3D"w300">Get immediate trip alerts, from gate numbers to fli=
+ght status</td>
+                            </tr><!-- *=3D*=3D*=3D* END CB: Text (unlinked)=
+ *=3D*=3D*=3D* -->
+                          </table>
+                        </td><!-- =3D=3D=3D=3D=3D=3D END Right Content =3D=
+=3D=3D=3D=3D=3D -->
+                      </tr>
+                    </table>
+                  </td>
+                </tr><!-- ........ END DOUBLE COL WRAPPER ........ -->
+                <!-- *=3D*=3D*=3D* START CB: Button *=3D*=3D*=3D* -->
+                <tr>
+                  <td align=3D"center" valign=3D"top" bgcolor=3D"#FFFFFF" s=
+tyle=3D"padding: 45px 0px 30px 0px;">
+                    <table style=3D"border-collapse: separate;width:270px;"=
+ align=3D"center" valign=3D"" class=3D"" cellpadding=3D"15" cellspacing=3D"=
+0">
+                      <tr>
+                        <td bgcolor=3D"#c4204b" align=3D"center" style=3D"p=
+adding: 15px 15px 15px 15px; border-radius:3px; -moz-border-radius:3px; -we=
+bkit-border-radius:3px;border-top:1px solid #c4204b;; border-bottom:1px sol=
+id #c4204b;; border-right:1px solid #c4204b;; border-left:1px solid #c4204b=
+;;"><a alias=3D"Button" href=3D"https://orbz.app.link/?~agency_id=3D1034&am=
+p;~customer_campaign=3DBRAND&amp;~customer_sub_site_name=3DGENERIC&amp;$3p=
+=3Da_custom_229689&amp;~customer_secondary_publisher=3DORBITZ-US&amp;~custo=
+mer_ad_set_name=3DBRAND:DISPLAY.OOD&amp;~customer_ad_name=3DEML.ORBITZ-US.L=
+C.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC&amp;~customer_placement=3DEML=
+-WELCOMED5-ORB_WELCOMED5-GENERIC&amp;~feature=3Dpaid%20advertising&amp;$can=
+onical_url=3Dhttps%3A%2F%2Fwww.orbitz.com%2Frewards%3FEMLCID%3DORBITZ-US.LC=
+.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230916.SID273=
+45449.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_=
+WELCOME_NC_D5.MODS~CTA_WELCOMED5%23how-much-earn&amp;$desktop_url=3Dhttps%3=
+A%2F%2Fwww.orbitz.com%2Femailclick%2FbiMnDuax_25eZRSIX04EOfNdgouJGWQhg7hEwR=
+KOSA9xYf-Ac-LLy65EaJT_CpDMHVg95aDKvQ0QFIMfVIMgKpM2WHRgqaUdjZjZZzuQMy46V5q2d=
+w%2Fapp%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC=
+%26EMLDTL%3DDATE20230916.SID27345449.KEY2734544957492512.PAID57492512.LANGE=
+N_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~CTA_WELCOMED5" style=3D"f=
+ont-family: Arial, Helvetica, sans-serif; color:#FFFFFF; font-size:18px; fo=
+nt-weight:bold; display:block; text-decoration:none;" target=3D"_blank">
+                            Get the app</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <!-- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D END 1 Col Content =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D -->
+              </table>
+            </td>
+          </tr><!-- ........ END SINGLE COL WRAPPER ........ -->
+        </table>
+      </td>
+    </tr>
+  </table>
+ =20
+  =20
+<table align=3D"center" width=3D"600" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0" class=3D"w320">
+  <tr>
+    <td height=3D"1" style=3D"height:1px; line-height:1px; padding-top:20px=
+; font-family:Arial, Helvetica, 'Helvetica Neue '; font-size:1px;">&nbsp;</=
+td>
+  </tr>
+  <tr>
+    <td height=3D"1" style=3D"height:1px; line-height:1px; background-color=
+:#e9e9e9; font-family:Arial, Helvetica, 'Helvetica Neue '; font-size:1px;">=
+&nbsp;</td>
+  </tr>
+</table>
+
+<table align=3D"center" width=3D"560" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0" class=3D"w300">
+=20
+  <tr>
+    <td style=3D" font-family:Arial, Helvetica, 'Helvetica Neue ';  font-si=
+ze:14px; color:#828282; padding:20px 0;"><span style=3D"font-size:16px; fon=
+t-weight:bold;">Special notice:</span><br><br>
+Due to coronavirus (COVID-19) travel advisories, some destinations may be u=
+navailable for certain dates. <a href=3D"https://t.ac.orbitz.com/r/?id=3Dh3=
+b6b2945,7c516a4,2ba6044&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVg=
+wNEVPZk5kZ291SkdXUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdl=
+EwUUZJTWZWSU1nS3BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ9T1JCS=
+VRaLVVTLkxDLkVWRU5UVFJJR0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1M=
+RFRMPURBVEUyMDIzMDkxNi5TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ=
+5MjUxMi5MQU5HRU5fVVMuTUNJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk=
+1PRFN-Q1ZEX0xOSzE&amp;s=3DXD8i6TdWCDe0V1Go-76m50-6JLdpFttTipC9BfKdL6g" styl=
+e=3D"font-family:Helvetica, Arial, sans-serif; font-size:14px; color: #116F=
+AA; line-height:normal; white-space: nowrap; overflow:none; text-decoration=
+: none;">Find out more</a>.<br><br> We recommend booking a flexible rate wi=
+th free cancellation options, in case your travel plans are affected. If yo=
+ur travel plans have been impacted by COVID-19, or you=92re looking for ref=
+und timelines or other help, please visit our <a href=3D"https://t.ac.orbit=
+z.com/r/?id=3Dh3b6b2945,7c516a4,2ba6045&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR=
+1YXhfMjVlWlJTSVgwNEVPZk5kZ291SkdXUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3=
+BETUhWZzk1YURLdlEwUUZJTWZWSU1nS3BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3JnAyP=
+T9FTUxDSUQ9T1JCSVRaLVVTLkxDLkVWRU5UVFJJR0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1=
+LkdFTkVSSUMmRU1MRFRMPURBVEUyMDIzMDkxNi5TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDk=
+yNTEyLlBBSUQ1NzQ5MjUxMi5MQU5HRU5fVVMuTUNJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRU=
+xDT01FX05DX0Q1Lk1PRFN-Q1ZEX0xOSzI&amp;s=3D7oY39vCtFJG_B5M-KfNFV9my8Ws0mzFNr=
+brcTp0dJsw" style=3D"font-family:Helvetica, Arial, sans-serif; font-size:14=
+px; color: #116FAA; line-height:normal; white-space: nowrap; overflow:none;=
+ text-decoration: none;">customer service portal</a>.</td>
+  </tr>
+</table>
+
+
+<table align=3D"center" width=3D"600" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0" class=3D"w320">
+  <tr>
+    <td height=3D"1" style=3D"height:1px; line-height:1px; background-color=
+:#e9e9e9; font-family:Arial, Helvetica, 'Helvetica Neue '; font-size:1px;">=
+&nbsp;</td>
+  </tr>
+</table>
+
+<!-- FOOTER ACCOUNT & SOCIAL-->
+<!-- SOCIAL & MOBILE MODULE -->
+<table align=3D"center" width=3D"600" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0" class=3D"w320">
+  <tr>
+    <td bgcolor=3D"#FFFFFF" align=3D"center" valign=3D"top" style=3D"paddin=
+g:0px 0px 0px 0px; border-right: none; border-left: none; border-top: none;=
+ border-bottom: none;">
+      <table align=3D"center" width=3D"600" border=3D"0" cellspacing=3D"0" =
+cellpadding=3D"0" class=3D"w320">
+        <tr>
+          <!-- =3D=3D=3D=3D=3D START Left Content =3D=3D=3D=3D=3D -->
+          <td bgcolor=3D"#FFFFFF" class=3D"Split2ColNLWBorders" style=3D"pa=
+dding:20px 0px 20px 0px;" align=3D"center" valign=3D"top" width=3D"50%">
+            <table align=3D"center" width=3D"300" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0" align=3D"center">
+              <tr>
+                <td bgcolor=3D"#FFFFFF" valign=3D"top" style=3D"padding:0px=
+ 0px 10px 0px; font-family: Arial, Helvetica, sans-serif; color:#8a8a8a; fo=
+nt-size:14px; display:block; text-decoration:none;" align=3D"center">Connec=
+t with us!
+                </td>
+              </tr>
+              <tr>
+                <td bgcolor=3D"#FFFFFF" valign=3D"top" style=3D"padding:0px=
+ 0px 0px 0px; border: none;" align=3D"center">
+                  <table bgcolor=3D"#ffffff" width=3D"200" border=3D"0" cel=
+lpadding=3D"0" align=3D"center" cellspacing=3D"0">
+                    <tr>
+                      <td align=3D"center"><a href=3D"https://t.ac.orbitz.c=
+om/r/?id=3Dh3b6b2945,7c516a4,2ba6046" target=3D"_blank"><img style=3D"displ=
+ay:block" src=3D"https://res.ac.orbitz.com/res/orbitzw_mid_prod3/footer_fb.=
+png" width=3D"34" border=3D"0" alt=3D"Facebook"></a></td>
+                      <td align=3D"center"><a href=3D"https://t.ac.orbitz.c=
+om/r/?id=3Dh3b6b2945,7c516a4,2ba6047" target=3D"_blank"><img style=3D"displ=
+ay:block" src=3D"https://res.ac.orbitz.com/res/orbitzw_mid_prod3/footer_tw.=
+png" width=3D"42" border=3D"0" alt=3D"Twitter"></a></td>
+                      <td align=3D"center"><a href=3D"https://t.ac.orbitz.c=
+om/r/?id=3Dh3b6b2945,7c516a4,2ba6048" target=3D"_blank"><img style=3D"displ=
+ay:block" src=3D"https://res.ac.orbitz.com/res/orbitzw_mid_prod3/footer_ig.=
+png" width=3D"34" border=3D"0" alt=3D"Instagram"></a></td>
+                      <td align=3D"center"><a href=3D"https://t.ac.orbitz.c=
+om/r/?id=3Dh3b6b2945,7c516a4,2ba6049&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR1YX=
+hfMjVlWlJTSVgwNEVPZk5kZ291SkdXUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BET=
+UhWZzk1YURLdlEwUUZJTWZWSU1nS3BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3JnAyPT9F=
+TUxDSUQ9T1JCSVRaLVVTLkxDLkVWRU5UVFJJR0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1Lkd=
+FTkVSSUMmRU1MRFRMPURBVEUyMDIzMDkxNi5TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDkyNT=
+EyLlBBSUQ1NzQ5MjUxMi5MQU5HRU5fVVMuTUNJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRUxDT=
+01FX05DX0Q1Lk1PRFN-TkFWX0JMT0c&amp;s=3DN3g8rKTQn7Cxj0cvC70l1u2VVPG7X5sszlcs=
+hPseHLs" target=3D"_blank"><img style=3D"display:block" src=3D"https://res.=
+ac.orbitz.com/res/orbitzw_mid_prod3/footer_blog.png" width=3D"34" border=3D=
+"0" alt=3D"Blog"></a></td>
+                      <!-- =3D=3D=3D=3D=3D=3D END Right Content =3D=3D=3D=
+=3D=3D=3D -->
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <!-- =3D=3D=3D=3D=3D START Right Content =3D=3D=3D=3D=3D -->
+          <td bgcolor=3D"#FFFFFF" class=3D"Split2ColNL" style=3D"padding:20=
+px 0px 20px 0px;" align=3D"center" valign=3D"top">
+            <table align=3D"center" width=3D"300" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0">
+              <tr>
+                <td bgcolor=3D"#FFFFFF" valign=3D"top" style=3D"padding:0px=
+ 0px 10px 0px; font-family: Arial, Helvetica, sans-serif; color:#8a8a8a; fo=
+nt-size:14px; display:block; text-decoration:none;" align=3D"center">Downlo=
+ad the FREE app!
+                </td>
+              </tr>
+              <tr>
+                <td bgcolor=3D"#FFFFFF" valign=3D"top" style=3D"padding:0px=
+ 0px 0px 0px; border: none;" align=3D"center">
+                  <table bgcolor=3D"#ffffff" width=3D"220" border=3D"0" cel=
+lpadding=3D"0" align=3D"center" class=3D"" cellspacing=3D"0">
+                    <tr>
+                      <!-- =3D=3D=3D=3D=3D START Left Content =3D=3D=3D=3D=
+=3D -->
+                      <td bgcolor=3D"#FFFFFF" style=3D"padding:0px 5px 0px =
+0px;" align=3D"" valign=3D"top">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%"><a alias=3D"Apple App" href=3D"https://orbz.app.link/=
+?~agency_id=3D1034&amp;~customer_campaign=3DBRAND&amp;~customer_sub_site_na=
+me=3DGENERIC&amp;$3p=3Da_custom_229689&amp;~customer_secondary_publisher=3D=
+ORBITZ-US&amp;~customer_ad_set_name=3DBRAND:DISPLAY.OOD&amp;~customer_ad_na=
+me=3DEML.ORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC&amp;~cust=
+omer_placement=3DEML-FOOTER-ORB_WELCOMED5-GENERIC&amp;~feature=3Dpaid%20adv=
+ertising&amp;$canonical_url=3Dhttps%3A%2F%2Fwww.orbitz.com%3FEMLCID%3DORBIT=
+Z-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230916=
+.SID27345449.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERSX.M=
+IDSORB_WELCOME_NC_D5.MODS~FTR_APP&amp;$desktop_url=3Dhttps%3A%2F%2Fwww.orbi=
+tz.com%2Fapp%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GE=
+NERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY2734544957492512.PAID57492512.=
+LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~FTR_APP" target=3D"_=
+blank"><img src=3D"https://res.ac.orbitz.com/res/orbitzw_mid_prod3/footer_a=
+ppleapp.png" alt=3D"Download Apple App" style=3D"display:block;" width=3D"1=
+10" height=3D"auto" border=3D"0"></a>
+                          <!-- INSERT LEFT CONTENT HERE -->
+                        </table>
+                      </td>
+                      <!-- =3D=3D=3D=3D=3D=3D END Left Content =3D=3D=3D=3D=
+=3D=3D -->
+                      <!-- =3D=3D=3D=3D=3D START Right Content =3D=3D=3D=3D=
+=3D -->
+                      <td bgcolor=3D"#FFFFFF" style=3D"padding:0px 0px 0px =
+5px;" align=3D"" valign=3D"top">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%"><a alias=3D"Android App" href=3D"https://orbz.app.lin=
+k/?~agency_id=3D1034&amp;~customer_campaign=3DBRAND&amp;~customer_sub_site_=
+name=3DGENERIC&amp;$3p=3Da_custom_229689&amp;~customer_secondary_publisher=
+=3DORBITZ-US&amp;~customer_ad_set_name=3DBRAND:DISPLAY.OOD&amp;~customer_ad=
+_name=3DEML.ORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC&amp;~c=
+ustomer_placement=3DEML-FOOTER-ORB_WELCOMED5-GENERIC&amp;~feature=3Dpaid%20=
+advertising&amp;$canonical_url=3Dhttps%3A%2F%2Fwww.orbitz.com%3FEMLCID%3DOR=
+BITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5.GENERIC%26EMLDTL%3DDATE20230=
+916.SID27345449.KEY2734544957492512.PAID57492512.LANGEN_US.MCIDM.TESTX.VERS=
+X.MIDSORB_WELCOME_NC_D5.MODS~FTR_APP&amp;$desktop_url=3Dhttps%3A%2F%2Fwww.o=
+rbitz.com%2Fapp%3FEMLCID%3DORBITZ-US.LC.EVENTTRIGGEREDMAILING.ORB_WELCOMED5=
+.GENERIC%26EMLDTL%3DDATE20230916.SID27345449.KEY2734544957492512.PAID574925=
+12.LANGEN_US.MCIDM.TESTX.VERSX.MIDSORB_WELCOME_NC_D5.MODS~FTR_APP" target=
+=3D"_blank"><img src=3D"https://res.ac.orbitz.com/res/orbitzw_mid_prod3/foo=
+ter_googleapp.png" alt=3D"Download Android App" style=3D"display:block;" wi=
+dth=3D"110" height=3D"auto" border=3D"0"></a>
+                          <!-- INSERT RIGHT CONTENT HERE -->
+                        </table>
+                      </td>
+                      <!-- =3D=3D=3D=3D=3D=3D END Right Content =3D=3D=3D=
+=3D=3D=3D -->
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <!-- =3D=3D=3D=3D=3D=3D END Right Content =3D=3D=3D=3D=3D=3D -->
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- /SOCIAL & MOBILE MODULE -->
+<!-- SEPARATOR MODULE -->
+<table align=3D"center" width=3D"600" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0" class=3D"w320">
+  <tr>
+    <td height=3D"1" style=3D"height:1px; line-height:1px; background-color=
+:#e9e9e9; font-family:Arial, Helvetica, 'Helvetica Neue '; font-size:1px;">=
+&nbsp;</td>
+  </tr>
+</table>
+<!-- / SEPARATOR MODULE -->
+<!--ACCOUNT MODULE -->
+<table align=3D"center" width=3D"600" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0" class=3D"w300">
+  <tr>
+    <td align=3D"center">
+      <table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"600"=
+ align=3D"center" class=3D"w300">
+        <tr>
+          <td align=3D"center" valign=3D"top" style=3D"padding-bottom: 15px=
+;padding-top: 15px;">
+            <table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=
+=3D"100%" align=3D"center" class=3D"w300">
+              <tr>
+                <td align=3D"center" class=3D"h" style=3D"font-size: 1; wid=
+th:20px;">&nbsp;</td>
+                <td align=3D"left">
+                  <a href=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c51=
+6a4,2ba604a&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVgwNEVPZk5kZ29=
+1SkdXUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdlEwUUZJTWZWSU=
+1nS3BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ9T1JCSVRaLVVTLkxDL=
+kVWRU5UVFJJR0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1MRFRMPURBVEUy=
+MDIzMDkxNi5TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ5MjUxMi5MQU5=
+HRU5fVVMuTUNJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk1PRFN-TkFWX0=
+FDVA&amp;s=3DtAdsiBEQ7J_njAs85pnqjAkrTii3Ck5PHRUgTDTnc_Y" target=3D"_blank"=
+ style=3D"font-family:Helvetica, Arial, sans-serif; font-size:14px; color:#=
+828282; line-height:normal; white-space: nowrap; overflow:none; text-decora=
+tion: none;" class=3D"fontSize9">Manage Your Account</a>
+                </td>
+                <td align=3D"left">
+                  <a href=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c51=
+6a4,2ba604b&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVgwNEVPZk5kZ29=
+1SkdXUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdlEwUUZJTWZWSU=
+1nS3BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ9T1JCSVRaLVVTLkxDL=
+kVWRU5UVFJJR0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1MRFRMPURBVEUy=
+MDIzMDkxNi5TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ5MjUxMi5MQU5=
+HRU5fVVMuTUNJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk1PRFN-TkFWX0=
+NVU1Q&amp;s=3DWn-PuBbrOuQi-AEx2jOT_n0ZwIkv1V81bnaZXwbzbBc" target=3D"_blank=
+" style=3D"font-family:Helvetica, Arial, sans-serif; font-size:14px; color:=
+#828282; line-height:normal; white-space: nowrap; overflow:none; text-decor=
+ation: none;" class=3D"fontSize9">Customer Care</a>
+                </td>
+                <td align=3D"left">
+                  <a href=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c51=
+6a4,2ba604c&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVgwNEVPZk5kZ29=
+1SkdXUWhnN2hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdlEwUUZJTWZWSU=
+1nS3BNMldIUmdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ9T1JCSVRaLVVTLkxDL=
+kVWRU5UVFJJR0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1MRFRMPURBVEUy=
+MDIzMDkxNi5TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ5MjUxMi5MQU5=
+HRU5fVVMuTUNJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk1PRFN-TkFWX1=
+BSSVZBQ1k&amp;s=3DNgtPzSrDGNqTgFoFzzTp8SiHmDf5eUz-8REnwygAbww" target=3D"_b=
+lank" style=3D"font-family:Helvetica, Arial, sans-serif; font-size:14px; co=
+lor:#828282; line-height:normal; white-space: nowrap; overflow:none; text-d=
+ecoration: none;" class=3D"fontSize9">Privacy Policy</a>
+                </td>
+                <td align=3D"left">
+                  <a href=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c51=
+6a4,2ba604d&amp;e=3DcDE9L3Vuc3Vic2NyaWJlP2xvY2FsZT1lbl9VUyZlYXBpZD0wJnRwaWQ=
+9NzAyMDEmaXNNZXI9JmNoZWNrPXVuZGVmaW5lZCZwYWlkPTU3NDkyNTEyJkVNTENJRD1PUkJJVF=
+otVVMuTEMuRVZFTlRUUklHR0VSRURNQUlMSU5HLk9SQl9XRUxDT01FRDUuR0VORVJJQyZFTUxEV=
+Ew9REFURTIwMjMwOTE2LlNJRDI3MzQ1NDQ5LktFWTI3MzQ1NDQ5NTc0OTI1MTIuUEFJRDU3NDky=
+NTEyLkxBTkdFTl9VUy5NQ0lETS5URVNUWC5WRVJTWC5NSURTT1JCX1dFTENPTUVfTkNfRDUuTU9=
+EU35GVFJfVU5TVUI&amp;s=3DA3arOdSGYBMnSoFpDOXbCMsarh5MvpiGQnL7GFgdFls" style=
+=3D"font-family:Helvetica, Arial, sans-serif; font-size:14px; color:#828282=
+; line-height:normal; white-space: nowrap; overflow:none; text-decoration: =
+none;" class=3D"fontSize9">Unsubscribe</a>
+                </td>
+              </tr>
+            </table>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- /ACCOUNT MODULE -->
+<!--/FOOTER ACCOUNT & SOCIAL -->
+ =20
+ =20
+ =20
+  <!-- Welcome Day 5 TandC's -->
+<table align=3D"center" width=3D"560" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0" class=3D"w300 bl">
+  <tr>
+    <td align=3D"left" style=3D"padding-top:5px; font-family:Arial, Helveti=
+ca, sans-serif; font-size:9px; color:#999999;  line-height:15px; text-align=
+:left !important;">
+       <a href=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c516a4,2ba604f=
+&amp;e=3DcDE9L2VtYWlsY2xpY2svYmlNbkR1YXhfMjVlWlJTSVgwNEVPZk5kZ291SkdXUWhnN2=
+hFd1JLT1NBOXhZZi1BYy1MTHk2NUVhSlRfQ3BETUhWZzk1YURLdlEwUUZJTWZWSU1nS3BNMldIU=
+mdxYVVkalpqWlp6dVFNeTQ2VjVxMmR3JnAyPT9FTUxDSUQ9T1JCSVRaLVVTLkxDLkVWRU5UVFJJ=
+R0dFUkVETUFJTElORy5PUkJfV0VMQ09NRUQ1LkdFTkVSSUMmRU1MRFRMPURBVEUyMDIzMDkxNi5=
+TSUQyNzM0NTQ0OS5LRVkyNzM0NTQ0OTU3NDkyNTEyLlBBSUQ1NzQ5MjUxMi5MQU5HRU5fVVMuTU=
+NJRE0uVEVTVFguVkVSU1guTUlEU09SQl9XRUxDT01FX05DX0Q1Lk1PRFN-T3JiaXR6UmV3YXJkc=
+1RD&amp;s=3DH6a_HpVNQGPzyBkR_FQzy9QmiMfp7Jm5zo9U0XB_pRA" style=3D"text-deco=
+ration:none;"><u>* Orbitz Rewards Terms &amp; Conditions</u></a>
+   <br>
+   <br>
+     Orbitz Customer Relations, 500 West Madison Street, Suite 700, Chicago=
+, IL 60661<br>
+      Make sure Orbitz e-mails are delivered: Add <a href=3D"#">orbitz@ac.o=
+rbitz.com</a> to your address book or safe-sender list.<br><br>
+      Travel Registration Numbers: California CST 2063530-50 (Registration =
+as a seller of travel does not constitute approval by the state of
+      California)<br>
+      Copyright =A9
+      2023, Orbitz, LLC. All rights reserved.<br>
+      <a href=3D"https://t.ac.orbitz.com/r/?id=3Dh3b6b2945,7c516a4,2ba6050&=
+amp;e=3DcDE9JTQweVJtbUQya2NJd09DcU9UcVQ3cjhyN3MlMkJsM1E2Q3NSVkdjZ0U0NFlCSFo=
+0JTNE&amp;s=3DNoL4OlsH0CwWNJU2eXJfQ5TNSHoAkip8nIUlhBIU3Js">View Email Onlin=
+e</a>
+      <br><br>
+    </td>
+  </tr>
+</table>
+<!-- /Welcome Day 5 TandC's -->
+ =20
+<img height=3D"0" width=3D"0" alt=3D"" src=3D"https://t.ac.orbitz.com/r/?id=
+=3Dh3b6b2945,7c516a4,1"></body>
+
+</html>
+

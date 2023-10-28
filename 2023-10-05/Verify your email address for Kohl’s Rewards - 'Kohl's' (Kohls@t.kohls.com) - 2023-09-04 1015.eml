@@ -1,0 +1,642 @@
+Received: from DS0PR20MB4958.namprd20.prod.outlook.com (2603:10b6:8:ca::22) by
+ MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Mon, 4 Sep 2023 15:16:04
+ +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=MCvaKGucQQhENBmc53Yyqm6TGyTO/Oi5ByPZlTWMzDNHghUSwjGm4elJb0VlVc/kyk4XYFheu9cN2sBuaARPdAXcAOHykpepxu8xOwg/93aVN6cg+IQmTc2hKKwajqWD/JplKzNU1npFglfpWfjF20HlchNjMRE+VqsFjoCE70x1j2IFdmRJUzMHdqUsH3mkX79HOFh338kGJcQzoIgl7q/uSMOziSe+8QwUdsL5SobuuxH3LJmM8dfADu7C4aHLy/gQtQo7j82wzDMaRZxFydSyzoivHPiXPErXfhcalyLu5u4gfJqetLrdaAXQEyPRpc76nkDv8m7ZNyct7dU4TQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HwrXgD3oTJKoJ6hozVOye5pW5wac2d1IzzLipb0+AKc=;
+ b=UYO9P0VhqcTMGOP/BjPavG83oJDiAufZ3OhNn1tfu0kCDMr4r+loXp0R1GZ/RytDHhOk/TfZ5bXNUunTm1mZCNO9zOvNj7+aKx9SC+CZvfZChMTQ2yPwX2Qrz5hvdTeIjHRIa7Js8wZYttIkEAg/t+8erKuqs4SOmpDDO1JNHtdEMODhPBHJPyqLG9bt5wz8L3ChqwP3lfNO6snNIIdxsuGHfdBkHmkWqcboHBA6cOpSHsb28/aIqvLWZ1eu15AMuDfuZ5om7KvwRyOXMoGTmnScx76TsdgbgedW3O91kF/vZfX9p+6KtTNw14i9V5QQ0czLemRKSY7hfPz9kMba9w==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.215.173) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.t.kohls.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=t.kohls.com; dkim=pass (signature was verified)
+ header.d=t.kohls.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounce-19_html-555468654-859426-6249493-1017384@bounce.t.kohls.com]
+ dkim=[1,1,header.i=@t.kohls.com] dmarc=[1,1,header.from=kohls.com])
+Received: from AS9PR06CA0111.eurprd06.prod.outlook.com (2603:10a6:20b:465::17)
+ by DS0PR20MB4958.namprd20.prod.outlook.com (2603:10b6:8:ca::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.30; Mon, 4 Sep
+ 2023 15:16:01 +0000
+Received: from AM7EUR03FT064.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:20b:465:cafe::1) by AS9PR06CA0111.outlook.office365.com
+ (2603:10a6:20b:465::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.32 via Frontend
+ Transport; Mon, 4 Sep 2023 15:16:01 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.215.173)
+ smtp.mailfrom=bounce.t.kohls.com; dkim=pass (signature was verified)
+ header.d=t.kohls.com;dmarc=pass action=none
+ header.from=t.kohls.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of bounce.t.kohls.com does
+ not designate 209.85.215.173 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.215.173;
+ helo=mail-pg1-f173.google.com;
+Received: from mail-pg1-f173.google.com (209.85.215.173) by
+ AM7EUR03FT064.mail.protection.outlook.com (100.127.140.127) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.23 via Frontend Transport; Mon, 4 Sep 2023 15:16:01 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:3953411176F3525D0149E387518B1A8AFF084F6F4F1E8B4E5DCD2B97ECF7F7B1;UpperCasedChecksum:E48048CFBDACF2A82B64ECA78C83D0CFDC02519D239100A69062AF1EDA401DC3;SizeAsReceived:5787;Count:30
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-565403bda57so599846a12.3
+        for <tobinsilvestre@outlook.com>; Mon, 04 Sep 2023 08:16:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693840560; x=1694445360;
+        h=x-forwarded-for:content-transfer-encoding:message-id:list-id
+         :reply-to:mime-version:list-help:date:subject:to:from:dkim-signature
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HwrXgD3oTJKoJ6hozVOye5pW5wac2d1IzzLipb0+AKc=;
+        b=VUROrZgNQ2B1YdyiIi2dbx5PuoPaBep0YiShkvcH4I++Q7gpOYlM5XHks7eQ/mVUcG
+         30h+LOoENjU5z8VLsexB8jJSgQazFxKySSuhijZFK0nq48bGqW8bh9zS13ESIY0TQ/y7
+         ISpKrPWVGY7iIRRaQc7fCLHeWqANyPCwKgVfiKeIsYFC7DlTfxsAUcS6E/e+JaLnutDJ
+         v3UHM+h5l4dtURr7G8iR3fi8/pMciUf/+PjoYNbdxAsv7hBz06v45HG81UnfkCdiH35K
+         DcMBv45g6mfIb6tszjYR2yJnL4UTPKoXHUBpMtgseQHtTcps/Eat/lJHoGeKNIgUBP2M
+         XHGA==
+X-Gm-Message-State: AOJu0YxRd3F0qbRkFJkxWSX3/fPrj4HCV3JmydgslS/vixzEyvNjuTSJ
+	Kkm1TxP0w2VNC3sYbVisMIZ/E+ZR66hlq3BJOg==
+X-Google-Smtp-Source: AGHT+IEPpPNSLeGQwK+24azY3Mdu3IpwsKxsnw7tqUlyV9q3RFOtw1GfYoraMTEBphx3mBxrmYZKGOWeIccq4pnBXDYeEL9StnA=
+X-Received: by 2002:a05:6a21:33a7:b0:14d:fd0b:5ad1 with SMTP id yy39-20020a056a2133a700b0014dfd0b5ad1mr9794446pzb.24.1693840560759;
+        Mon, 04 Sep 2023 08:16:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1693840560; cv=none;
+        d=google.com; s=arc-20160816;
+        b=aDemg/YXI+jkcm/5E8WGKG1yr8xACP87sK9y4qyCaNDPxie7RneTDRXHe9RlD9Rw5u
+         Yy2UON/9SFuCH3ABhXofheo32R6Sz40dv4mMNEQ+9iteZG5CZRDaEjsZCE0P0oOt+ODJ
+         RuGC7ZW4cvFNn7+TGtTm4mVW+c9TNXdcnUmFydAZoijalOP/QUpqm3HLB1oxAOXi5XAa
+         W67fgGn+RkzEhxCJAUetcD40oqBJCPoxnfLmuqwOUOIAdSRzZOxb6SSefg53q/Qy19Fe
+         cBfrO+k5meknpycWD/rWj0KUXrw7p6B1WedvoU9riTT3txpuEjqvQmnleg/fnmVx+FQA
+         0kCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=content-transfer-encoding:message-id:list-id:reply-to:mime-version
+         :list-help:date:subject:to:from:dkim-signature;
+        bh=HwrXgD3oTJKoJ6hozVOye5pW5wac2d1IzzLipb0+AKc=;
+        fh=+F6wUBkr/gQIefBGgscKJMm1PN2pw/6gRSkSMNrZuso=;
+        b=uo6t8R/puBBD4K4MKAgVBP3rFewIjkUeBPxOE+z7Xz4u1oY4uS9++QBZAMOSs9ZoSB
+         3vu0A7wpyw7Ztpl0veh+iILVHR6MsYL1BgXcJereghueJLwlUgDUV35ECqN6muUQNoTD
+         xaeWlUnTXTZlYd2jlIgjcL9EDGLyba1QxwCQKo7FWJ9YmMLWYGOl7MUVjcqWYqACSuJb
+         fPtk0Ae1IPkhO7ZDOzi2sfMcQxrCtsmxBLqkNcHctl/sQMGi4JZvvREb6kCdglW5lqPj
+         3e0fV/22hz12M+f1oDIfqmIuPfW1gow3XVoE4UvzOvywGDRNhxYhvJwG1JAMlF53evvc
+         Ej5Q==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@t.kohls.com header.s=200608 header.b=cnaueQ2B;
+       spf=pass (google.com: domain of bounce-19_html-555468654-859426-6249493-1017384@bounce.t.kohls.com designates 198.245.93.224 as permitted sender) smtp.mailfrom=bounce-19_HTML-555468654-859426-6249493-1017384@bounce.t.kohls.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=kohls.com
+Return-Path:
+ bounce-19_HTML-555468654-859426-6249493-1017384@bounce.t.kohls.com
+Received: from mta3.t.kohls.com (mta3.t.kohls.com. [198.245.93.224])
+        by gmr-mx.google.com with ESMTPS id eb25-20020a056a004c9900b0068703c4dd37si1344371pfb.5.2023.09.04.08.16.00
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 04 Sep 2023 08:16:00 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-19_html-555468654-859426-6249493-1017384@bounce.t.kohls.com designates 198.245.93.224 as permitted sender) client-ip=198.245.93.224;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@t.kohls.com header.s=200608 header.b=cnaueQ2B;       spf=pass
+ (google.com: domain of
+ bounce-19_html-555468654-859426-6249493-1017384@bounce.t.kohls.com designates
+ 198.245.93.224 as permitted sender)
+ smtp.mailfrom=bounce-19_HTML-555468654-859426-6249493-1017384@bounce.t.kohls.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=kohls.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=200608; d=t.kohls.com;
+ h=From:To:Subject:Date:List-Help:MIME-Version:Reply-To:List-ID:
+ X-CSA-Complaints:Message-ID:Content-Type:Content-Transfer-Encoding;
+ i=Kohls@t.kohls.com;
+ bh=HwrXgD3oTJKoJ6hozVOye5pW5wac2d1IzzLipb0+AKc=;
+ b=cnaueQ2BzB0PABNPT7OUqpSNYbs4qsEo0fHol2ATbslZcxUFI6TM4rD7rEvBkDoT9Xdy66pYPiTr
+   GpGheOlSjylBVEEQUHUDFG2eTZ6vvf/BsVlqhg5r4gGG/hzU4kPjjYoie6YkzVoS+f8Yo9VfjSz0
+   5EWfpRpG/qWTB26CodI=
+Received: by mta3.t.kohls.com id hunqb02fmd4r for <tobinsilvestre034@sooners.us>; Mon, 4 Sep 2023 15:15:59 +0000 (envelope-from <bounce-19_HTML-555468654-859426-6249493-1017384@bounce.t.kohls.com>)
+From: "Kohl's" <Kohls@t.kohls.com>
+To: <tobinsilvestre034@sooners.us>
+Subject: =?UTF-8?B?VmVyaWZ5IHlvdXIgZW1haWwgYWRkcmVzcyBmb3IgS29obOKAmXMg?=
+ =?UTF-8?B?UmV3YXJkcw==?=
+Date: Mon, 04 Sep 2023 09:15:59 -0600
+List-Help: <http://click.t.kohls.com/subscription_center.aspx?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWQiOiI2MjQ5NDkzIiwicyI6IjU1NTQ2ODY1NCIsImxpZCI6IjE5IiwiaiI6Ijg1OTQyNiIsImpiIjoiMTAxNzM4NCIsImQiOiI2MDIyMyJ9.hL5-2GJsPiYrmZPiTXRp3OWtR1k24LS3CiR-8M7gdSc>
+x-CSA-Compliance-Source: SFMC
+Reply-To: "Kohl's" <reply-febd1c757c60067b-19_HTML-555468654-6249493-1017384@t.kohls.com>
+List-ID: <6241319.xt.local>
+X-CSA-Complaints: csa-complaints@eco.de
+X-SFMC-Stack: 6
+x-job: 6249493_859426
+Message-ID: <5e8abbd2-7edd-4a51-91aa-afaf4bb87aa8@ind1s06mta1958.xt.local>
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Forwarded-For: tobinsilvestre034@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 30
+X-MS-Exchange-Organization-ExpirationStartTime: 04 Sep 2023 15:16:01.1353
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 13667312-6b97-4b4f-3431-08dbad59d93c
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ AM7EUR03FT064:EE_|DS0PR20MB4958:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ AM7EUR03FT064.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/4/2023 9:39:53 AM
+X-MS-Office365-Filtering-Correlation-Id: 13667312-6b97-4b4f-3431-08dbad59d93c
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.215.173
+X-SID-PRA: KOHLS@T.KOHLS.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2023 15:16:01.1196
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13667312-6b97-4b4f-3431-08dbad59d93c
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ AM7EUR03FT064.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR20MB4958
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.7286963
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6745.019
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(90014020)(91030020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPl1B337QzXG5sja9WHPLOH312sEw7rEtsvrLaJeFbyWvzMBS082XRknVzbkWQgmeCX2aumlISQV73uycMMhd2TQ9W6OWhh7ozd1ibDY3NLvEnIhNSeMf+3kzvJSXuoY69Tof4JgIcJ8aJVDtVAa2NcOG9VI+kbR2HfU21rBe2xTO4ZSjTp6Se9QxwIV2MxYCBU=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SkxNME1RUFJJSzZnZk4xK2JCVU9ORExzVXlXWWhVemljN0d4YzRMWjBsOUUr?=
+ =?utf-8?B?aStleWI0SUZFS01ka1daVmFjcGVUd1lqY1U3Qk93MW5CUWJDTEFhTzhaZXFY?=
+ =?utf-8?B?R1AxWFVmZVM0ejRYQ29pNi9BS2tHbXFLQzF2Z3hMNmFOQzVKblh4eFBuNFls?=
+ =?utf-8?B?eTdlZUNpNjc1ZjVPZXhYc3c3K1dpeGRtVk9OZ29BTkFhTmhrZldzWEpkdVMz?=
+ =?utf-8?B?b0tUV1hiNHZFRUZYVStnOURTeWpKTFVJUktvRmI1UUNYS0g2cW5vTDhRZGF5?=
+ =?utf-8?B?UE5NWVplVHh4L2VJT2h6ZElqa21YTDJnL0ttZEZaMjhQMUp2cWVRRG9sM1pk?=
+ =?utf-8?B?ZUkwQW1wbS83cmxmSWhJTUtRU1dXbTRIT1ZsaUJSM01Dc2NZL1F6b2NyaG41?=
+ =?utf-8?B?U0tPeVd6aXdxQ1NzNkpEQTVpaEROcmlWSU82SW1SWnFZQXJBVXVGOWZkUVBW?=
+ =?utf-8?B?Y3dSZ1cxTkEyRTYvK2VSbVNlSHQ2TjBmT0xKQzJvQTdlZTRMazlJZC9vSTRU?=
+ =?utf-8?B?SzJzZHU5THdsWVVQN0wvK3hONTJCemlmRXhxQWd0bFRkQW9KbytWQ3psV2dv?=
+ =?utf-8?B?Y0pVVmhMYTE3YWJjNzAxaEo2d2VNMmM4c3Mxd29jdzJpMjZUSmEvNS9FcXk5?=
+ =?utf-8?B?c3k3ckQ3TWhZQzNaN2dPOC92bFRkQXF3SllHR0FjcXRsQmQ3YkVzSVZKUllR?=
+ =?utf-8?B?OTZIZkJuSWNwWUZvaDhQUzVFT05ubWppOTloWUR5VHp4N01XTUszVU5JeXJH?=
+ =?utf-8?B?VjJoNGZFa3loMDJESTJkeHYvSmdFN1JUSm9kUlhuN2IzTk5idDh4TE8xQmNS?=
+ =?utf-8?B?VTMzSVlycjBXZ0RSSEFZSkRmVTAvK0lTdTNxbEdFYWhDa21Za0NNZmMrTWlB?=
+ =?utf-8?B?Q0l1Wno4L3lGS2djcEludDJzM2VZbWs3eGlBZUFhTHkvYmJpK2hYQXpIcnp5?=
+ =?utf-8?B?cWRwTEVCSU9QNEpuL3g3RnNTOWU3WWI3aStnTjFodTNtcFFmc3RZTEZ5UDh1?=
+ =?utf-8?B?ZzZnTmFjNWpBYlBreEZkMGgwbmNOSE4zdnpGNGpGNXQrSVFXdzB3ZS95TDJB?=
+ =?utf-8?B?RUVpVWdjZ3JJc2o0RUppNXFzZUsvQ3pLcjg3bm56elRPYk5Mdm8yRDhxRUdi?=
+ =?utf-8?B?M0NOUlE5ak9FSnJnMnoraWQ0bG1xb0wzSUw4OXJCU3M3Tmo2RHRiT1F5c2VJ?=
+ =?utf-8?B?Q1c1MmpqWDhQT1N3UmlGaVkwTG1TQ0hyNm1kSjc4MkJ4cUdPeWZveUw1SmNK?=
+ =?utf-8?B?dkI2SE9sSWtldUxpMVp5WWswaDAxVk55cjNvbVhKZThNMWp2alc2VDVtUDRJ?=
+ =?utf-8?B?L3IrVDRzbkhzWXFCQ0pGN0l5YmEyS3BFRzI1amRiMEExNmlUdzVDQkVoemUr?=
+ =?utf-8?B?aTE4TllqNW9NUnRlNzNYczB4cWhTdnVLd0tCYnRuR3pmT2x3N0RmTUxtcHlj?=
+ =?utf-8?B?aURlSTdOVmt1QmZwZ2hnQ0d4dEl4cjgrREZ5c2JIeXY3NXhWTzJKZGV4VnZj?=
+ =?utf-8?B?YTdTMWhoRHhBYjg2VmdXdXR0TkVzMkJxeFpnaUFEenlaWm1FUjM1Ull6Rjdz?=
+ =?utf-8?B?TGtQaFR3OVJqOFRRTkpMbEpraFdtc2pXMWJOaytSdkZibkxvZUEyNHZLZjVN?=
+ =?utf-8?B?cFZ5SDhNZW94VE5hQmNSLzJuNXhHRlFwQmxMU2g0cVNiZzhIUFFPSTJWSytC?=
+ =?utf-8?B?c1kxczE5ZjBMUW8wMlk2U3d2UGtiYzgwNW4vNnk0cWZJclRWODM3Z1phTU5j?=
+ =?utf-8?B?UkJyWENONDBUOTA4TnE2RUNrcjFSRlBwNEhIaWpqR0NvNHBReGljbmUrcVhG?=
+ =?utf-8?B?MjBOSkY0S1JlZ1phcDRoVHJ5WlVvSXBieDlSMndwWDRKWHd3Z1VWRVBpbVZt?=
+ =?utf-8?B?RXpiTER3cktuZHRVblRPT3NoZXR1aG01V1YwKzlTMVpHSXlXT0FDdkJRNUtm?=
+ =?utf-8?B?THRnZUtLY3J5WWp2MFVQMlI2MjB6Sjc1SUhZTGx3U2xDczF3ZGhZc2c2S25Y?=
+ =?utf-8?B?SVQ0NlViSEUvV3RVTEE0ei83RTg3TEhJMExvWVRQM3FCV3E2OGpXQk14Sk9U?=
+ =?utf-8?B?VkRiM1dadjZBeFlLajAxbWZWRW9iTmR6bHA4amNhUU4xRHFvejFnZGZ5UjdQ?=
+ =?utf-8?Q?1Y9wTs+RjSETKxJl+pN38A2S+?=
+MIME-Version: 1.0
+
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Kohl's</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--[if (gte mso 9)|(IE)]><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
+
+    <!-- Make sure Arial is first in the font-family for Outlook & add Outlook-only classes -->
+    <!--[if mso]>        <style type="text/css">          body, table, td { font-family: Arial, Helvetica, sans-serif !important; }          .mso-no-border { border: none !important; }         .mso-border { border: 2px solid #003a5d !important; }       </style>      <![endif]-->
+
+    <style type="text/css">
+      #outlook a { padding: 0; }
+      .ReadMsgBody, .ExternalClass { width: 100%; }
+      .ExternalClass * { line-height: 100%; }
+      .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass p, .ExternalClass div { line-height: 100%; mso-line-height-rule: exactly; }
+      body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0 !important; }
+      table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { border: 0; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+      table { border-collapse: collapse !important; }
+      body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+      a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
+      @-ms-viewport { width: device-width; }
+      /* div, button { display:block !important; } */
+      #MessageViewBody a { color: inherit; text-decoration: none; font-size: inherit; font-family: inherit; font-weight: inherit; line-height: inherit; } /* Samsung link fix */
+      #MessageViewBody, #MessageWebViewDiv { width: 100% !important; } /* Samsung width fix - doesn't always work */
+      /* #MessageViewBody, #MessageWebViewDiv { min-width: 100vw; margin: 0 !important; zoom: 1 !important; } */ /* Samsung width fix - doesn't always work */
+    </style>
+
+    <style>
+   @media only screen and (max-device-width: 480px), screen and (max-width: 480px) {
+     .header-pad-16LR { padding-right: 16px !important; padding-left: 16px !important; }
+     .header-pad-8TB { padding-top: 8px !important; padding-bottom: 8px !important; }
+     .header-pad-16T { padding-top: 16px !important; }
+     .header-pad-16L { padding-left: 16px !important; }
+     .header-pad-16B {padding-bottom: 16px !important; }
+     .header-pad-32L { padding-left: 32px !important; }
+     .header-pad-0L { padding-left: 0 !important; }
+     .header-stack { display: block !important; width: 100% !important; }
+     .header-center-table table { margin-left: auto !important; margin-right: auto !important; }
+   }
+</style>
+    <style>
+   @media only screen and (max-device-width: 480px), screen and (max-width: 480px) {
+     .footer-stack { display: block !important; width: 100% !important; }
+     .footer-hide { display: none !important; }
+     .footer-pad-16LR { padding-right: 16px !important; padding-left: 16px !important; }
+     .footer-pad-16T { padding-top: 16px !important; }
+     .footer-width-full { width: 100% !important; height: auto !important; }
+     .footer-pad-0L { padding-left: 0 !important; }
+     .footer-add-break { display: block !important; width: 100% !important; height: 0 !important; font-size: 0 !important; line-height: 0 !important; }
+   }
+</style>
+
+    <style>
+      @media only screen and (max-device-width: 480px), screen and (max-width: 480px) {
+        .container { width: 100% !important; height: auto !important; }
+
+        .show { display: block !important; margin: 0 !important; padding: 0 !important; overflow: visible !important; width: auto !important; max-height: inherit !important; }
+        .hide { display: none !important; }
+
+        .stack { display: block !important; width: 100% !important; }
+        .stack-auto { display: block !important; width: auto !important; }
+        .stack-keepwidth { display: block !important; }
+        .display-header { display: table-header-group !important; }
+        .display-footer { display: table-footer-group !important; }
+
+        .center { margin-left: auto !important; margin-right: auto !important; }
+        .align-center { text-align: center !important; }
+        .align-left { text-align: left !important; }
+        .align-right { text-align: right !important; }
+        .center-img img { margin-left: auto !important; margin-right: auto !important; }
+        .center-table table { margin-left: auto !important; margin-right: auto !important; }
+        .left-table table { float: left !important; }
+        .right-table table { float: right !important; }
+        .valign-top { vertical-align: top !important; }
+
+        .add-break { display: block !important; width: 100% !important; height: 0 !important; font-size: 0 !important; line-height: 0 !important; }
+
+        .width-full { width: 100% !important; height: auto !important; }
+        .width-half { width: 50% !important; height: auto !important; }
+        .width-third { width: 33.33% !important; height: auto !important; }
+        .width-quarter { width: 25% !important; height: auto !important; }
+        .width-6p { width: 6% !important; height: auto !important; }   /* for 2-col scale padding */
+        .width-47p { width: 47% !important; height: auto !important; } /* for 2-col scale columns */
+        .width-2p { width: 2% !important; height: auto !important; }   /* alt1 for 2-col scale padding */
+        .width-49p { width: 49% !important; height: auto !important; } /* alt1 for 2-col scale columns */
+        .width-4p { width: 4% !important; height: auto !important; }   /* alt2 for 2-col/4col scale padding */
+        .width-48p { width: 48% !important; height: auto !important; } /* alt2 for 2-col scale columns */
+        .width-8p { width: 8% !important; height: auto !important; }   /* alt3 for 2-col/3-col scale padding */
+        .width-46p { width: 46% !important; height: auto !important; } /* alt3 for 2-col scale columns */
+        .width-5p { width: 5% !important; height: auto !important; }   /* for 3-col scale padding */
+        .width-30p { width: 30% !important; height: auto !important; } /* for 3-col scale columns */
+        .width-28p { width: 28% !important; height: auto !important; } /* alt for 3-col scale columns */
+        .width-22p { width: 22% !important; height: auto !important; } /* for 4-col scale columns */
+        .width-auto { width: auto !important; }
+        .height-auto { height: auto !important; }
+        .width-full-img img { width: 100% !important; height: auto !important; }
+        .width-max-full { max-width: 100% !important; }
+        .width-max-full-img img { max-width: 100% !important; }
+
+        .pad-0 { padding: 0 !important; }
+        .pad-0T { padding-top: 0 !important; }
+        .pad-0B { padding-bottom: 0 !important; }
+        .pad-0L { padding-left: 0 !important; }
+        .pad-0R { padding-right: 0 !important; }
+        .pad-0LR { padding-right: 0 !important; padding-left: 0 !important; }
+        .pad-4T { padding-top: 4px !important; }
+        .pad-4B { padding-bottom: 4px !important; }
+        .pad-4L { padding-left: 4px !important; }
+        .pad-4R { padding-right: 4px !important; }
+        .pad-4LR { padding-right: 4px !important; padding-left: 4px !important; }
+        .pad-8T { padding-top: 8px !important; }
+        .pad-8B { padding-bottom: 8px !important; }
+        .pad-8L { padding-left: 8px !important; }
+        .pad-8R { padding-right: 8px !important; }
+        .pad-8LR { padding-right: 8px !important; padding-left: 8px !important; }
+        .pad-12T { padding-top: 12px !important; }
+        .pad-12B { padding-bottom: 12px !important; }
+        .pad-12L { padding-left: 12px !important; }
+        .pad-12R { padding-right: 12px !important; }
+        .pad-12LR { padding-right: 12px !important; padding-left: 12px !important; }
+        .pad-16T { padding-top: 16px !important; }
+        .pad-16B { padding-bottom: 16px !important; }
+        .pad-16L { padding-left: 16px !important; }
+        .pad-16R { padding-right: 16px !important; }
+        .pad-16LR { padding-right: 16px !important; padding-left: 16px !important; }
+        .pad-20T { padding-top: 20px !important; }
+        .pad-20B { padding-bottom: 20px !important; }
+        .pad-20L { padding-left: 20px !important; }
+        .pad-20R { padding-right: 20px !important; }
+        .pad-20LR { padding-right: 20px !important; padding-left: 20px !important; }
+        .pad-24T { padding-top: 24px !important; }
+        .pad-24B { padding-bottom: 24px !important; }
+        .pad-24L { padding-left: 24px !important; }
+        .pad-24R { padding-right: 24px !important; }
+        .pad-24LR { padding-right: 24px !important; padding-left: 24px !important; }
+        .pad-32T { padding-top: 32px !important; }
+        .pad-32B { padding-bottom: 32px !important; }
+        .pad-32L { padding-left: 32px !important; }
+        .pad-32R { padding-right: 32px !important; }
+        .pad-32LR { padding-right: 32px !important; padding-left: 32px !important; }
+        .pad-40T { padding-top: 40px !important; }
+        .pad-40B { padding-bottom: 40px !important; }
+        .pad-40L { padding-left: 40px !important; }
+        .pad-40R { padding-right: 40px !important; }
+        .pad-40LR { padding-right: 40px !important; padding-left: 40px !important; }
+        .pad-48T { padding-top: 48px !important; }
+        .pad-48B { padding-bottom: 48px !important; }
+        .pad-48L { padding-left: 48px !important; }
+        .pad-48R { padding-right: 48px !important; }
+        .pad-48LR { padding-right: 48px !important; padding-left: 48px !important; }
+
+        .fnt-10 { font-size: 10px !important; line-height: 14px !important; }
+        .fnt-11 { font-size: 11px !important; line-height: 15px !important; }
+        .fnt-12 { font-size: 12px !important; line-height: 16px !important; }
+        .fnt-14 { font-size: 14px !important; line-height: 18px !important; }
+        .fnt-16 { font-size: 16px !important; line-height: 20px !important; }
+        .fnt-18 { font-size: 18px !important; line-height: 22px !important; }
+        .fnt-20 { font-size: 20px !important; line-height: 24px !important; }
+        .fnt-24 { font-size: 24px !important; line-height: 28px !important; }
+        .fnt-30 { font-size: 30px !important; line-height: 34px !important; }
+        .fnt-36 { font-size: 36px !important; line-height: 44px !important; }
+        .fnt-48 { font-size: 48px !important; line-height: 50px !important; }
+
+        .border-0 { border: 0 !important; }
+        .border-0T { border-top: 0 !important; }
+        .border-0B { border-bottom: 0 !important; }
+        .border-0L { border-left: 0 !important; }
+        .border-0R { border-right: 0 !important; }
+        .border-1T { border-top: 1px #e6e6e6 solid !important; }
+        .border-1B { border-bottom: 1px #e6e6e6 solid !important; }
+        .border-1L { border-left: 1px #e6e6e6 solid !important; }
+        .border-1R { border-right: 1px #e6e6e6 solid !important; }
+        .border-2T { border-top: 2px #e6e6e6 solid !important; }
+        .border-2B { border-bottom: 2px #e6e6e6 solid !important; }
+        .border-2L { border-left: 2px #e6e6e6 solid !important; }
+        .border-2R { border-right: 2px #e6e6e6 solid !important; }
+
+        .btn-mobile { padding: 16px 24px !important; }
+      }
+    </style>
+  </head>
+  <body style="margin: 0px; padding: 0px; -webkit-text-size-adjust: none; -ms-text-size-adjust: none;">
+    <div style="display: none; max-height: 0px; overflow: hidden;">Confirm email and create your account now</div>
+    
+<div style="display: none; max-height: 0px; overflow:
+ hidden;">&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;
+‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;</div>
+    <div style="font-size: 0; line-height: 0;"><img src="http://click.t.kohls.com/open.aspx?ffcb10-febd1c757c60067b-fe291d7177620279731070-fe8a1272716d007476-ff951579-fe1f117570600275731174-fe9715707463077571&amp;d=60223&amp;bmt=0" width="1" height="1" alt=""></div>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 0 auto !important;">
+      <tr>
+        <td bgcolor="#ffffff">
+          <div align="center">
+            <table border="0" cellpadding="0" cellspacing="0" width="640" bgcolor="#ffffff" class="container">
+              <tr>
+                <td align="center" valign="top">
+
+                  <!-- VAWP -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td class="header-pad-16LR" align="center" valign="top" style="padding: 8px 32px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td align="right" valign="top" width="200" style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #454545; mso-line-height-rule: exactly;"><a href="https://view.t.kohls.com/?qs=dd4bd3c24a7b16660b861d2398ea5927de0a5297ac009cbcc444865adf82d618c0c497df06cecdcc04ff0a39dd987b1716ec892dc14965b264ea583ad77818d19db8080f0ee9bd684f62c35ec0f91d3d" target="_blank" style="color: #000001; text-decoration: none;">View this email in a browser</a></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- /VAWP -->
+
+<!-- Header -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td align="center" valign="top" style="background: #353434; padding: 16px 0">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="header-pad-16LR" align="center" valign="top" style="padding: 0 8px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" valign="middle" width="150"><a href="http://click.t.kohls.com/?qs=94f37b3ae35215038a273a73e7887e718ac7e5a53158613c0ee97d40ebeeac1a122d6e6605b62e26a9791c10c2ab98c4001e56232bedd4ee" target="_blank"><img src="https://media.kohlsimg.com/is/image/kohlsprod/Kohls-Logo-new-header" width="150" alt="KOHL'S" style="display: block; border: none; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #ffffff; mso-line-height-rule: exactly;"></a></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" valign="top" style="padding: 8px 0">
+            <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" valign="middle" style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=0cafff09a9a96ee57ba8bfb6df2d2ca000f2129579695b9484c0ad4770c586c153751f249ea763c95d5581550573909616db8979ad83a9f2" target="_blank" style="color: #FFFFFF; text-decoration: none;">MY&nbsp;ACCOUNT</a></td>
+                <td align="center" valign="middle" style="padding-left: 32px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=66fc7cc9e6f19e80c1cbbe3b9cd3a494eeb36a0f1b624dd3a056a96a7eef75ec5875897e139d8e941a14a68133d34babd3538da36ece616a" target="_blank" style="color: #FFFFFF; text-decoration: none;">CUSTOMER&nbsp;SERVICE</a></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" valign="top" style="padding: 0;">
+            <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" valign="top" style="font-family: Helvetica, Arial, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #FFFFFF; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=168ae98c5f91cc278d3e3f3d467c39aaf0272e12889d83f6f27fee73015fe666e24444eca6aeccfc677f2ea994d9867affd9e19afce67275" target="_blank" style="color: #FFFFFF; text-decoration: none;">FOR&nbsp;THE&nbsp;HOME</a></td>
+                <td class="header-pad-16L" align="center" valign="top" style="padding-left: 48px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=048c09e9f6516e96a544af0b51dac348848d9ec6a8360c444a34f2f6674709e5aa1e16d356f57bc552642a56326b27c2fdb3a0f45ce7c966" target="_blank" style="color: #FFFFFF; text-decoration: none;">WOMEN</a></td>
+                <td class="header-pad-16L" align="center" valign="top" style="padding-left: 48px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=b3fa385e9037fe6abf0d6593bc04b450bcbcc1908ce3c7aa19bbda42d3e3527ffd3a1056285ad4e4f88919032c4ad3d7356dcb226e9542b5" target="_blank" style="color: #FFFFFF; text-decoration: none;">MEN</a></td>
+                <td class="header-pad-16L" align="center" valign="top" style="padding-left: 48px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=6b4db4ec7320d9f7a75100e36757966b5acfc00a8b955bfb1e46cd7dbea16df30fdba1e7f1fb20b59c29f25f36e6014276d226b3c9b9ec14" target="_blank" style="color: #FFFFFF; text-decoration: none;">KIDS</a></td>
+                <td class="header-pad-16L" align="center" valign="top" style="padding-left: 48px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #bd0f1b; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=a6d7d25608b741ed67e0e07926e33f6cbd7d799bade08e43b9892a580270167a7fe796a64b02d6bde54344d39e623e754b6f10108e7637aa" target="_blank" style="color: #FFFFFF; text-decoration: none;">CLEARANCE</a></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- /Nav Menu --> 
+
+                  
+                  <!-- BODY -->
+                  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td class="pad-16LR pad-16T" align="center" valign="top" style="padding: 32px;">
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                          
+                          <tr>
+                            <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 18px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;">
+                              You're almost done, Tobin!
+                            </td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="top" style="padding-top: 8px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;">
+                             Use the link below to verify your email address and create your online rewards&nbsp;account.
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="pad-8T" align="center" valign="top" style="padding-top: 12px;">
+                              <table cellspacing="0" cellpadding="0" border="0">
+                                <tr>
+                                  <td style="-webkit-border-radius: 100px; -moz-border-radius: 100px; border-radius: 100px;" bgcolor="#353434" align="center">
+                                    <a href="http://click.t.kohls.com/?qs=aab9fbe9f5370c1626e7f6752ad9ce7d4943db53371f275591e45a508bc2257638114a7ee961b3d6b06991dc60a30b1ac35b60b953edcad3e5fd15aa6c77ff88" target="_blank" class="btn-mobile fnt-11" style="font-family: Helvetica, Arial, sans-serif; font-weight: 700; font-size: 16px; line-height: 16px; color: #ffffff; text-transform: uppercase; text-decoration: none; padding: 24px 40px; border: 1px solid #353434; -webkit-border-radius: 100px; -moz-border-radius: 100px; border-radius: 100px; display: block;">
+                                      <!--[if mso]>&nbsp;&nbsp;&nbsp;<![endif]-->Verify email<!--[if mso]>&nbsp;&nbsp;&nbsp;<![endif]-->
+                                    </a>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="pad-8T" align="left" valign="top" style="padding-top: 12px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;">
+                              During sign-up, you may have opted in to receive periodic auto-dialed marketing text messages. See Kohls.com/SMS for program terms. Text STOP to 564-57 to end. Msg&amp;data rates may apply. 
+                              <br><br>
+                              <a href="http://click.t.kohls.com/?qs=fe979b8c30310f890c7c38877c8c8d121e93593a338821ec39b2664c02031156349cae0289000e670048f5c58276299e7c6d15f419a4e164" style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;text-decoration: underline;">Terms &amp; Conditions</a>
+                            </td>
+                          </tr>
+                          
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                  <!-- /BODY -->
+                  
+                  <!-- Footer -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center" valign="top" style="padding-top: 32px;">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td bgcolor="#f5f5f5" class="footer-pad-16LR" align="center" valign="top" style="padding: 32px 32px;">
+            <!-- Top Links -->
+            <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <th class="footer-stack" align="center" valign="middle">
+                  <table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td align="left" valign="middle" style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=69b6446f817bef93b764b9f17e5ab862d542300f79cef27585d8e0589c658da2bb9d6cd20e46114693999574ef704db07d38b1020af62351" target="_blank" style="color: #000001; text-decoration: none;">KOHL'S&nbsp;CARD</a></td>
+                      <td align="left" valign="middle" style="padding-left: 32px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=66fc7cc9e6f19e80c1cbbe3b9cd3a494eeb36a0f1b624dd3a056a96a7eef75ec5875897e139d8e941a14a68133d34babd3538da36ece616a" target="_blank" style="color: #000001; text-decoration: none;">CUSTOMER&nbsp;SERVICE</a></td>
+                    </tr>
+                  </table>
+                </th>
+                <th class="footer-stack footer-pad-16T" align="center" valign="middle">
+                  <table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td class="footer-pad-0L" align="left" valign="middle" style="padding-left: 32px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=dd3e70a209caf1d138fe95cf83b4d36bc4eef5dfcd3a412dad0273dbfe0373b6bbb835893256b496297cfdeaa6a692da27da8b72c4355b77" target="_blank" style="color: #000001; text-decoration: none;">FIND&nbsp;A&nbsp;STORE</a></td>
+                      <td align="left" valign="middle" style="padding-left: 32px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=08977df39ea9ed6b42cdcd30523bc11b83043ba803c3bc4e7aa07500d4cced4e4c61177a15c576f9895ddc87eaead35926df03958f6f0336" target="_blank" style="color: #000001; text-decoration: none;">KOHL'S&nbsp;COUPONS</a></td>
+                    </tr>
+                  </table>
+                </th>
+              </tr>
+            </table>
+            <!-- /Top Links -->
+            <!-- Social -->
+            <table class="footer-width-full" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" valign="middle" style="padding-top: 32px;">
+                  <table class="footer-width-full" width="450" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td align="center" valign="top">
+                        <a href="http://click.t.kohls.com/?qs=067e64a69c85629682f33394b23464f41a01376fd46319138332ef8053dc1374fda1e5bae515a0645747f6e00f5da8842c80df9d17d39eb1" target="_blank"><img alt="Fb" src="https://media.kohlsimg.com/is/image/kohls/Facebook" width="26" height="26" style="display: block; border: none; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;"></a>
+                      </td>
+                      <td align="center" valign="top">
+                        <a href="http://click.t.kohls.com/?qs=d58300976a0e3c18f75f59f781fea6d605ac0c4e6245764fe3f71bf4ab3b4dd7d9ed462aa046e9fa21ace7fb7badaca4f8e46fbd6c6e8714" target="_blank"><img alt="Tw" src="https://media.kohlsimg.com/is/image/kohls/Twitter" width="26" height="26" style="display: block; border: none; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;"></a>
+                      </td>
+                      <td align="center" valign="top">
+                        <a href="http://click.t.kohls.com/?qs=f7940a1eb510721553a894cc5148b058aebe59015259aeb1038f16b581475d7934627760c82a7dcbad9c9e3ee420bd5a330c7eb8f17c2f21" target="_blank"><img alt="Pi" src="https://media.kohlsimg.com/is/image/kohls/Pinterest" width="26" height="26" style="display: block; border: none; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;"></a>
+                      </td>
+                      <td align="center" valign="top">
+                        <a href="http://click.t.kohls.com/?qs=c83d77919aa94c41ca791da83f74e7a68c95b13d8d53816d5b4def3b669b0b0b8c73c2c57611835ca1f3a809e1b8b5c30d5f51f3efa6d9af" target="_blank"><img alt="In" src="https://media.kohlsimg.com/is/image/kohls/Instagram" width="26" height="26" style="display: block; border: none; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;"></a>
+                      </td>
+                      <td align="center" valign="top">
+                        <a href="http://click.t.kohls.com/?qs=9a8de7303ea8d98dad61cb504c3db0806e80e4aeddb60bb38438afba136a5c59eb122b3a5b31fe255034667f9765f9cd5b7a15444463e465" target="_blank"><img alt="Yt" src="https://media.kohlsimg.com/is/image/kohls/Youtube" width="26" height="26" style="display: block; border: none; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;"></a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+            <!-- /Social -->
+
+            <!-- App Stores -->
+            <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" valign="middle" style="padding-top: 32px;">
+                  <table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td align="right" valign="top">
+                        <a href="http://click.t.kohls.com/?qs=240878451907f13f262b72b8356abae73b5a167433df8061debe81fcd8b81cf02eb9dec77304268b6548cf7b94f5d932a319b09b056f83e2" target="_blank"><img alt="Download on the App Store" src="https://media.kohlsimg.com/is/image/kohls/AppleAppStore" width="120" height="35" style="display: block; border: none; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;"></a>
+                      </td>
+                      <td align="left" valign="top" style="padding-left: 16px;">
+                        <a href="http://click.t.kohls.com/?qs=2a7469489744d83c38fc06db8360e3c5d7028ddc0b9ba1357f4802097a07d71aa4ed54464a49efadcfcce30a0458e037544db87ef0ad9e98" target="_blank"><img alt="Get it on Google Play" src="https://media.kohlsimg.com/is/image/kohls/GooglePlayStore" width="114" height="35" style="display: block; border: none; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 16px; line-height: 20px; color: #000001; mso-line-height-rule: exactly;"></a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" valign="top" style="padding: 16px 16px 0; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;">
+                  Android, Google Play and the Google Play <span class="footer-add-break"></span>logo are trademarks of&nbsp;Google&nbsp;Inc.<br>App Store is a service mark of&nbsp;Apple&nbsp;Inc.
+                </td>
+              </tr>
+            </table>
+            <!-- /App Stores -->
+            <!-- Bottom Links -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" valign="middle" style="padding: 32px 16px 0;">
+                  <table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <th class="footer-stack" align="center" valign="middle" style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=2b125ba58d94361545a2fb4892ee61fcedd924122fd9436f6820ab9886fd5d0ed265dd25332b01136baf543e6840768acfed7214869e20c8" target="_blank" style="color: #000001; text-decoration: none;">SECURITY&nbsp;&amp; PRIVACY&nbsp;POLICY</a></th>
+                      <th class="footer-hide" align="center" valign="middle" style="padding: 0 32px; font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;">|</th>
+                      <th class="footer-stack footer-pad-16T" align="center" valign="middle" style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;"><a href="http://click.t.kohls.com/?qs=30db0320368a802d5fa33fe6d5d50396c1bd515c5f579bf7462ab68cf86723c126096f26bb2ae097b9a363692ec3d4cd940677a359003f75" target="_blank" style="color: #000001; text-decoration: none;">HASSLE-FREE RETURNS&nbsp;POLICY</a></th>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+            <!-- /Bottom Links -->
+          </td>
+        </tr>
+      </table>
+
+      <!-- Legal Disclosures -->
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="footer-pad-16LR" align="center" valign="top" style="padding: 32px 32px;">
+
+
+            <!-- Legal -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 12px; line-height: 16px; color: #000001; mso-line-height-rule: exactly;">
+                  This mailbox is unattended, so please do not reply to this message. For other inquiries, visit <a href="http://click.t.kohls.com/?qs=5ff34b02785c2f2cb1a7a9742f132397d4bf6c329be4c77e0019ca86eb697e9b356dbdbd699657e1f88882358b5fb333b587735c0cd74cb1" target="_blank" style="text-decoration: underline; color:#000001;">cs.kohls.com</a>, or write us at Kohl's, Attention: Customer Service, PO Box 3120, Milwaukee, WI 53201-3120.
+                  <br>
+                  <br><a href="http://click.t.kohls.com/?qs=71a84d0c32463a960f5e4131d3a2db37d97cc4db3c492de74b01acfa51673df53731e84333f75795840f0d500d51daefc0ba43872683c93f" target="_blank" style="color: #000001; text-decoration: underline;">Find a Kohl's</a> near you!
+                </td>
+              </tr>
+            </table>
+            <!-- /Legal -->
+          </td>
+        </tr>
+      </table>
+      <!-- /Legal Disclosures -->
+    </td>
+  </tr>
+</table>
+<!-- /Footer-->
+
+
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

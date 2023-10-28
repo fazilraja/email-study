@@ -1,0 +1,883 @@
+Received: from SA1PR20MB5248.namprd20.prod.outlook.com (2603:10b6:806:25f::11)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Wed, 30 Aug 2023
+ 23:01:39 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=O0U0nnWoyRUYrSbDbEldAongR3uUXfPbAlKEctvCy4OAjCAJD1fc+cOHO7lAGBlMt/XSWC42VnoyzaqLPK/ubFruaZYzHMMdcoAu6vLdZ/d0qa9ROXMT0lzbXBDks54KmAIQpX4RF6Dx1NVMXKF/0LM30jQnnDSdYIgZMCNrCaPmFgpCjWbvo2UTWEjW89t95nsuhchcvNaVnaQ/2TfEufnvn144ta1OJMVgEvSyqMcNv2zoUi/ySXNta2410Qw/wYXWyZTbBzWiheRMCN84u5bQu81Mn15y52nHpqu/GqcfZzXJ737+s7jW+9beZS7YcQ555XIbPbpcYAYFirQlJQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5Zh6NeVkkkjEzuU3eAXtM8RZpKxyAiTOOfsScIai19Q=;
+ b=AHtcqfyg1VVhgnRMbwLj9dMUSM3k9gN1yckCjYmj7L6d3PUkUy58RGBPqDV+1fnHoyDHLuJEwuall0dUWFD0vtG1ERIy1gwWVsS0idK2yje9+H4Ji2+sXcWj1IdxycPl/jrBhqT+u7GpYIg78t8ZL1xrueF3711o/aNmXOS36T15krmSbUfia8JYXv+BE+UDz3qGH89FSHviqx/2FeApe94McqOq5sGC877joi0r4+/1lg9hcaNCawbEVEVBKi7sW09YS6fBvODIgmAZBQlFKWshUZDYpa+xlipFBnietOX+QT8BaydcIlTF7ZzMixNA/cs2s5TDYWO7dNxy7E2v/Q==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.210.50) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=lifecycle.coursehero.com; dmarc=pass (p=reject sp=reject
+ pct=100) action=none header.from=lifecycle.coursehero.com; dkim=pass
+ (signature was verified) header.d=lifecycle.coursehero.com; arc=pass (0 oda=1
+ ltdi=1
+ spf=[1,1,smtp.mailfrom=msprvs1=19606rwx29goa=bounces-266693-427@lifecycle.coursehero.com]
+ dkim=[1,1,header.i=@lifecycle.coursehero.com]
+ dmarc=[1,1,header.from=lifecycle.coursehero.com])
+Received: from DBBPR09CA0026.eurprd09.prod.outlook.com (2603:10a6:10:d4::14)
+ by SA1PR20MB5248.namprd20.prod.outlook.com (2603:10b6:806:25f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.20; Wed, 30 Aug
+ 2023 23:01:36 +0000
+Received: from DB1PEPF00039233.eurprd03.prod.outlook.com
+ (2603:10a6:10:d4:cafe::10) by DBBPR09CA0026.outlook.office365.com
+ (2603:10a6:10:d4::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.20 via Frontend
+ Transport; Wed, 30 Aug 2023 23:01:36 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.210.50)
+ smtp.mailfrom=lifecycle.coursehero.com; dkim=pass (signature was verified)
+ header.d=lifecycle.coursehero.com;dmarc=pass action=none
+ header.from=lifecycle.coursehero.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ lifecycle.coursehero.com discourages use of 209.85.210.50 as permitted
+ sender)
+Received: from mail-ot1-f50.google.com (209.85.210.50) by
+ DB1PEPF00039233.mail.protection.outlook.com (10.167.8.106) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.16 via Frontend Transport; Wed, 30 Aug 2023 23:01:36 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:79CF44B86A9AA50BE57C88478F7B5F77E446411B5C2343A99F7074060EED2D32;UpperCasedChecksum:E581822081D2E34703EDD08F19A6DDF4C40D5FFA72E688B072A58833FE40844D;SizeAsReceived:5386;Count:23
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6bca3311b4fso275685a34.0
+        for <tobinsilvestre@outlook.com>; Wed, 30 Aug 2023 16:01:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693436496; x=1694041296;
+        h=x-forwarded-for:from:subject:reply-to:mime-version:date:message-id
+         :to:dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5Zh6NeVkkkjEzuU3eAXtM8RZpKxyAiTOOfsScIai19Q=;
+        b=i5Ay8k1ALWjXKpgWJ5qcTcKNYP3xle9QeA9v/bjSUjtEJgDVbsubsHbHLi+mNN808l
+         ZsuUWi3Q9xkBq8ze1uwx3/wCvyz5eZB+Xv0iq9eXufjdIElsMFgRnsTfsYYH8J+JW3c6
+         B8uIeyuudcuWFfjYOSgrpj4nVhIMm0+RppUudwGILAB5SW3lQ1EQT4Lhs+MyCHD5tbJl
+         3BI70AMTHnYQjN1AKvd29H6IyBK2S06ZsyJrYcJebcRoQOckpmEEpj7RUMFyNXjan9ap
+         BxCyUIZTwva2hmVRB7XiSB8TJCXR5WYDzY74hmZnXKjTQARxMi0eG+6mPzpjr5wXfbDW
+         sq2A==
+X-Gm-Message-State: AOJu0YyI+aJmU2tBpJjwKFZAS/aDpTh/Vr5h1NiHn9gFNmZqZK6Q7ZSh
+	vkONLJuXJF67RHa6HgSpWeZN8zVM2gFeBB5hbA==
+X-Google-Smtp-Source: AGHT+IEwpfUwqEfikbyBjvQiWz5iaiQJzNQ71HTnFGTUHqsUW2HQxg5pEFow7U/QqtdC2SB/Ie1Qw36TFSS3DCFMLcbLXqgvhiU=
+X-Received: by 2002:a05:6830:33d3:b0:6bd:b0c9:a8d with SMTP id q19-20020a05683033d300b006bdb0c90a8dmr3709349ott.25.1693436495980;
+        Wed, 30 Aug 2023 16:01:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1693436495; cv=none;
+        d=google.com; s=arc-20160816;
+        b=EzMD1IJb1z0914yURqGQ96s/IogSRMM1/0dDwZELlAVor/eDDlFSfH0zg79nogPeD1
+         AyH0rHNko1pAgi2Sf7ILy6zta4YkgUFBIEE8meX7Y3cX55lIHQB75JZPhHGmJv7+NY86
+         uByCSS+IfTppisSeTDE00Z8sFhIMoJ32T8Z7KzLZvYwzGvIYnXw8z8WiwMly1prGiW1T
+         X/o4t4EEK3LKPVcnz+FJjoQAZPMPTVZqYkR3SOJg8NT0RscXszv89f3azWKEv2iA4dIH
+         W7pVMiv6j5FV+P0q0YQ3QpWQXAQT5sug8pNBx2uw8uyjYDStk5kBjt7VG6wCdV1gVzJa
+         1jRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=from:subject:reply-to:mime-version:date:message-id:to
+         :dkim-signature;
+        bh=5Zh6NeVkkkjEzuU3eAXtM8RZpKxyAiTOOfsScIai19Q=;
+        fh=oekFi+QvldknOLpmj1NZqt3JN6lssh6lJ81+xuTk9fQ=;
+        b=iruAUdSH93o58yDGLo9KiJm1CfPLI/Z2H3FdykAWqO+ZYo77D/x59doOA90gmrmvtJ
+         dJql9DZ3TWyeq+VcE5Kmx17cl38eBTSCaAWBpxLUoqi8t2+FSBmiELePh8Buf11eP9jI
+         Ij/l9m4LluytguY4yzMhOLF+rI0RtZyxb7bTEPegpxKdZur0upXmoRLojluD3jl46i87
+         Vyfj2pzcfYuzOYsQJLQtVtSZERNqM0HFK98JOD6NkHUlNCTXb7o2IPJV56bJu2uNz2Sq
+         RD+sJJQ0GvBYtY9+Di52Nm420Okc7XfWLa5JfV0gm+Fur2ZrZZv2agdZV4LmlpLhjjBA
+         D1VQ==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@lifecycle.coursehero.com header.s=scph0122 header.b="joZD9W/Q";
+       spf=pass (google.com: domain of msprvs1=19606rwx29goa=bounces-266693-427@lifecycle.coursehero.com designates 223.165.123.205 as permitted sender) smtp.mailfrom="msprvs1=19606rwX29goA=bounces-266693-427@lifecycle.coursehero.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=lifecycle.coursehero.com
+Return-Path: msprvs1=19606rwX29goA=bounces-266693-427@lifecycle.coursehero.com
+Received: from qwyz.lifecycle.coursehero.com (qwyz.lifecycle.coursehero.com. [223.165.123.205])
+        by gmr-mx.google.com with ESMTPS id cf22-20020a05622a401600b004109531b7desi17129qtb.5.2023.08.30.16.01.35
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 30 Aug 2023 16:01:35 -0700 (PDT)
+Received-SPF: pass (google.com: domain of msprvs1=19606rwx29goa=bounces-266693-427@lifecycle.coursehero.com designates 223.165.123.205 as permitted sender) client-ip=223.165.123.205;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@lifecycle.coursehero.com header.s=scph0122 header.b="joZD9W/Q";
+       spf=pass (google.com: domain of
+ msprvs1=19606rwx29goa=bounces-266693-427@lifecycle.coursehero.com designates
+ 223.165.123.205 as permitted sender)
+ smtp.mailfrom="msprvs1=19606rwX29goA=bounces-266693-427@lifecycle.coursehero.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE)
+ header.from=lifecycle.coursehero.com
+X-MSFBL: QRgAOkxhEUdFfakgJwa9oo8CBWDPWY3cnqE25gDDZtA=|eyJyIjoidG9iaW5zaWx
+	2ZXN0cmUwMzVAc29vbmVycy51cyIsInRlbmFudF9pZCI6InNwYyIsInN1YmFjY29
+	1bnRfaWQiOiI0MjciLCJjdXN0b21lcl9pZCI6IjI2NjY5MyIsIm1lc3NhZ2VfaWQ
+	iOiI2NGU3NGRjYWVmNjRlODJkOTE2MyJ9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=lifecycle.coursehero.com; s=scph0122; t=1693436493;
+	i=@lifecycle.coursehero.com;
+	bh=5Zh6NeVkkkjEzuU3eAXtM8RZpKxyAiTOOfsScIai19Q=;
+	h=To:Message-ID:Date:Content-Type:Subject:From:From:To:Cc:Subject;
+	b=joZD9W/Q9xYBlDNgpnUqUk0n1anE0Q+HxWYM7s7HI3On+uK20h4kjnudp9VAkTzIN
+	 L3DhoGBITdJzVqE1uff52XV/6oVjQKeOisXERLwGCoXoXOhnMyy4C6A+UKlLo4PDGH
+	 P4vZq+PxhELzUwBhr7WZsc1i/OjUCd4V7vqhJlKo=
+To: tobinsilvestre035@sooners.us
+Message-ID: <19.36.13922.D4ACFE46@kg.mta1vrest.cc.prd.sparkpost>
+Date: Wed, 30 Aug 2023 23:01:33 +0000
+Content-Type: multipart/alternative; boundary="_----KpbActc1qmDxkA9vCRveOQ===_BC/26-13922-D4ACFE46"
+Reply-To: no-reply@coursehero.com
+Subject: =?utf-8?B?RG9uJ3QgdW5kZXJ0aGluayBpdDogb3BlbiB5b3VyIGZyZWUgc3R1?=
+	=?utf-8?B?ZHkgZG9jIPCfp6AgIA==?=
+From: "Course Hero" <coursehero@lifecycle.coursehero.com>
+X-Forwarded-For: tobinsilvestre035@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 23
+X-MS-Exchange-Organization-ExpirationStartTime: 30 Aug 2023 23:01:36.3604
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 271cb642-96f3-48af-8793-08dba9ad0fdc
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DB1PEPF00039233:EE_|SA1PR20MB5248:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DB1PEPF00039233.eurprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 8/30/2023 12:02:59 PM
+X-MS-Office365-Filtering-Correlation-Id: 271cb642-96f3-48af-8793-08dba9ad0fdc
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.210.50
+X-SID-PRA: COURSEHERO@LIFECYCLE.COURSEHERO.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:4;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2023 23:01:36.2666
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 271cb642-96f3-48af-8793-08dba9ad0fdc
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DB1PEPF00039233.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR20MB5248
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.2033329
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6745.019
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90012020)(91020020)(91040095)(9050020)(9100341)(944500132)(2008001134)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPk9f9FogtMQPXnOChGFW8e3Pr3yJEPbdQ4bYzo8YV4v7OtKnQFD0994iZs5vYgEjKTvGcKuY6tI1rXWhq0gCuxWMgMdyMHUxPa+hQIsixtjQhKficLlVv3mYUNBTUs1Uowihxc4MopMog+4exsJ/Vz1co6Icu4Q2s3WooClHlUC6D5gSRf1DmoGyjYB1Z6uhcU=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?STBrNCtxclZXL1lxZkRYcXMzRE1rUjFnVU9jVGJad3N6OTU2SitNY2hCTXNN?=
+ =?utf-8?B?cUUwb0lYaHJOSC8rMHN3UlVsWmVYdzlrU3hpRUR1QjZPWnh5U1VZTk82TURI?=
+ =?utf-8?B?M2RvL0doU09DZmJ2Yzg1amF6cjdNU1huSXJQWW1CNWVVN0trQkFLSkFUMFpj?=
+ =?utf-8?B?Y1Nlajg2T1AwdTZXcnlPUngvS1NGQjBRTXI3am1ma0ZvRkNvQmVaNVc4QWpv?=
+ =?utf-8?B?QzRzU05xTlVpTEQ3U1FQK0RzM1gveHZvMGhINjZMWVRvcG9Id0wrRTJYaktR?=
+ =?utf-8?B?U2V1NzFBTSt1SEp4QTlVbzFwb09PN2MzbzFkWVhhZkc0SGk1amo4eVNmblBM?=
+ =?utf-8?B?VGFIS0R4OVNKWlN3L1hXaFJaZWdoRS96UnN2bDhWV3dQcDlqWlRudUlBTmgr?=
+ =?utf-8?B?WHc0QXp3aG96RzlNODY3cTNMZGIwdUk3KzZCSjNqQkJLZEd3RE12N2ZtNmRv?=
+ =?utf-8?B?T1FnRTlSREZMRnJicU9PeUJBMzFWVFVSTDI0YXZxcHR4eVhLSENlcjR0czdq?=
+ =?utf-8?B?eEZVSTdESC9ZWlowa212RmZ4N0U1a09kYUpaUXlxOWVkc2RZdys0WjZQZndN?=
+ =?utf-8?B?UW1vWHJONlowTzYyUXJ1Tnh3L2xZbDRlWklITjBWckRyU2FaMjNTclRtQ21C?=
+ =?utf-8?B?VlF0V3dCcENnOTFjWDN0VmRrNlFoaEdIcHZNVVBTUFR5Yy9hZGI4b2d5bE5o?=
+ =?utf-8?B?cUd6eXUwSndjTEg0YnVQMjFyb2JsalNDZURzYkNJQThNY2g2Qk5MbVhaaXNJ?=
+ =?utf-8?B?SjNuN1ZnOXJpQkZYTFBmd3YxTTlWckNYc2VETlRyV0tCNitUV1IrcmxkZzB6?=
+ =?utf-8?B?bXo2VXpLOXkva0RsSGlxa3BsMjFnS1NkRzBHMTNKK1hrQXVEd1JFd2ZsTitM?=
+ =?utf-8?B?M1d3Y2sraW5jdjB1a0c5RCsvOGV1RTZ2aktqQ0cwTEpnTTVaYlRpMG53NlJk?=
+ =?utf-8?B?d3ZZekI4eDBNQ2h4UEM0c1Z3cGRnYUcvcWpycitGTEFQUXBPTm9IdmZLbWlF?=
+ =?utf-8?B?YlBHUkpmMC9PaTRGM1FXQmwyNmRtcC9sT3I0TVJUVjlYWWtnTTl5M0hrd2x2?=
+ =?utf-8?B?Qm0yVktQQ08rZVFTbW8wSFk1TkR5bXUxK1FHMXlEQUlja1RCVysrejZsYzlO?=
+ =?utf-8?B?a1dnSzludSszemhZWGRMRU1wMDdXL0RpbXpKOUN0RlppSXBEanRvTzBqQTVW?=
+ =?utf-8?B?Ylk2ckRHTTlVVWhQUXlScnBkMzhnR041Q3BPU2lOUXd5bTVSdUNHNDh3VGRh?=
+ =?utf-8?B?L3JuZmpsVEk3NDJKVldWajExaVpESVhKcU5pQkc1MkxiV2gvR1VLWEdoTWlr?=
+ =?utf-8?B?bzE5TVhxNHhYUWtzN0kzaEltYnp0R3p5b0VHWkprVGVCTEswUG9LbmRmd2py?=
+ =?utf-8?B?elA0VW56d1FXMU9zcVl4cmJkNjVDTDlQVEdUUU9HNmlDN2d4NERGaDFBRFNa?=
+ =?utf-8?B?WlN2WHpyQ24yMWZiU2l4bk8wQnRtenN3SFNEVHdOT3ZiczFjRmFYa2J3RHBS?=
+ =?utf-8?B?THJ4c1U5QzR2MHVqUzN6TGdJaGIzcit4dVNTMi9LRHhsaGlCLzBIVUdBVUV4?=
+ =?utf-8?B?aytld2Fhd2EwSU5DVkVSVHFud3h6alVvblhoM3ZoR2ZCWUdFU0VJTVdFS09D?=
+ =?utf-8?B?Z0h2ZDFXakcyckxHQ3ZxRDlyc0pzOVNrdXhGVlIweFM1UEtIMEhUN2RIWWk2?=
+ =?utf-8?B?WHgvR21VSjNFSXJkNWFySTFsYmJJWEh5VnBLSCtGNWYvSG9ubWhxQUVoUVdB?=
+ =?utf-8?B?THhsMUJsWXc1bExnRWpRSEptTjRaZ2lUZThnYzg2RHdOMDF6ZTVLbHRkbThy?=
+ =?utf-8?B?eFFzR1ZYcTJMTy9wM3daVEhZOERVaUg2SGtmZ2Y2ZXhtd1pIOG5IQ0JKM3JW?=
+ =?utf-8?B?U3YyMkpjUWN6aGI3MHVBVHV6bDZqNmo4T1VtU0NiR1A3dWQrdEp1ejlDRXVr?=
+ =?utf-8?B?ZmhFbC9OaFR4QXlMVC9ydUxDLzJQQUVCMlRINGtXM3g2YW9uTU16Q3VVMzRl?=
+ =?utf-8?B?VmdOMlBpYmNRZVZsc1J4bmdJTkI4amxid0x0dWRhWUNnOTJvZGNaVzJqVUZX?=
+ =?utf-8?B?d0x3MjNsc203WG93cGRIU2Z0U0xVOTcxdGZiZys0cHhSUHUyNHRKUnBoYS9H?=
+ =?utf-8?Q?t3XwfBsKluec5lxE2vLe+5IDl?=
+MIME-Version: 1.0
+
+--_----KpbActc1qmDxkA9vCRveOQ===_BC/26-13922-D4ACFE46
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+
+Open any document. No upload needed.    =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F=0A=CD=8F =CD=8F =CD=
+=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=
+=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=
+=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=
+=8F=0A=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =
+=CD=8F =CD=8F =CD=8F=CD=8F=0A=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=
+=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=
+=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F=0A=CD=8F =CD=8F =CD=
+=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=
+=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=0A =0A( h=
+ttps://ct.coursehero.com/f/a/jjgSHO0YLxnAnVR6dJP5Ww~~/AAQRxQA~/RgRm0k9NP0Sx=
+aHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vaG9tZS8_ZWR1Y2F0b3I9MS8mdXRtX21lZGl1bT1=
+lbWFpbCZ1dG1fc291cmNlPWJyYXplJnV0bV9jYW1wYWlnbj1TdHVfTGFwc2VkX0QxNEZyZWVVbm=
+xvY2tWM0JfTWt0Z19FbWFpbCZ1dG1fZGlzcGF0Y2g9NjRlZmNhMTkwMDNkYzE1ZDdkYWQxMmM2Y=
+2NmYzBiZWUvVwNzcGNCCmTnTcrvZOgtkWNSHHRvYmluc2lsdmVzdHJlMDM1QHNvb25lcnMudXNY=
+BAAAAas~ )=0ACourse Hero. =0A( https://ct.coursehero.com/f/a/YeQ8FN46xHndHK=
+vo0CWrAw~~/AAQRxQA~/RgRm0k9NP0SqaHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vaG9tZS8=
+_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPWJyYXplJnV0bV9jYW1wYWlnbj1TdHVfTGFwc2=
+VkX0QxNEZyZWVVbmxvY2tWM0JfTWt0Z19FbWFpbCZ1dG1fZGlzcGF0Y2g9NjRlZmNhMTkwMDNkY=
+zE1ZDdkYWQxMmM2Y2NmYzBiZWUjL2hvbWVXA3NwY0IKZOdNyu9k6C2RY1IcdG9iaW5zaWx2ZXN0=
+cmUwMzVAc29vbmVycy51c1gEAAABqw~~ )=0A      =0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=
+=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=
+=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=
+=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A=0A        Free up yo=
+ur evening=0Awith a free doc. ( https://ct.coursehero.com/f/a/7jtXCxFjb6ZQ5=
+tcvmV8doQ~~/AAQRxQA~/RgRm0k9NP0TFaHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vcC9OMk=
+5oWVRFMU9Ua3RNV1JsTkMwMFpqTTBMVGd3WVRBdFpUVTJNMkprTWprME4yUXlJekl3TWpNdE1EZ=
+3RNekFnTWpNNk1ERTZNekFqTVRNak0yUXhZbVZoTlRFNU5UVmxNbUV4WTJSbVlURXdOVFE1TjJV=
+d00yWXlZVEUyWXpZNE1ESmhNakptWkRoall6UmtaVEExTTJZd05qWTRPV1ZtTUdWaVlRLS1XA3N=
+wY0IKZOdNyu9k6C2RY1IcdG9iaW5zaWx2ZXN0cmUwMzVAc29vbmVycy51c1gEAAABqw~~ )    =
+Open=0Aany study resource in the Course Hero library free. This link=0Aself=
+-destructs in 48 hours, so jump to it.=0A=0ALet's go ( https://ct.courseher=
+o.com/f/a/7jtXCxFjb6ZQ5tcvmV8doQ~~/AAQRxQA~/RgRm0k9NP0TFaHR0cHM6Ly93d3cuY29=
+1cnNlaGVyby5jb20vcC9OMk5oWVRFMU9Ua3RNV1JsTkMwMFpqTTBMVGd3WVRBdFpUVTJNMkprTW=
+prME4yUXlJekl3TWpNdE1EZ3RNekFnTWpNNk1ERTZNekFqTVRNak0yUXhZbVZoTlRFNU5UVmxNb=
+UV4WTJSbVlURXdOVFE1TjJVd00yWXlZVEUyWXpZNE1ESmhNakptWkRoall6UmtaVEExTTJZd05q=
+WTRPV1ZtTUdWaVlRLS1XA3NwY0IKZOdNyu9k6C2RY1IcdG9iaW5zaWx2ZXN0cmUwMzVAc29vbmV=
+ycy51c1gEAAABqw~~ )   Students.=0A( https://ct.coursehero.com/f/a/7jtXCxFjb=
+6ZQ5tcvmV8doQ~~/AAQRxQA~/RgRm0k9NP0TFaHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vcC=
+9OMk5oWVRFMU9Ua3RNV1JsTkMwMFpqTTBMVGd3WVRBdFpUVTJNMkprTWprME4yUXlJekl3TWpNd=
+E1EZ3RNekFnTWpNNk1ERTZNekFqTVRNak0yUXhZbVZoTlRFNU5UVmxNbUV4WTJSbVlURXdOVFE1=
+TjJVd00yWXlZVEUyWXpZNE1ESmhNakptWkRoall6UmtaVEExTTJZd05qWTRPV1ZtTUdWaVlRLS1=
+XA3NwY0IKZOdNyu9k6C2RY1IcdG9iaW5zaWx2ZXN0cmUwMzVAc29vbmVycy51c1gEAAABqw~~ )=
+             Offer only=0Avalid for tobinsilvestre035@sooners.us and will e=
+xpire on=0ASeptember  1, 2023. Offer may only be redeemed=0Aonce. Offer is =
+not shareable, saleable, transferable and cannot=0Abe redeemed for cash. Co=
+urse Hero reserves the right to modify or=0Aterminate this Offer at any tim=
+e without notice. Other=0Arestrictions may apply. All rights reserved.=0A=
+=0AInstagram. ( https://ct.coursehero.com/f/a/A0bm1pXiQDhvysRrQsnaIw~~/AAQR=
+xQA~/RgRm0k9NP0QlaHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS9jb3Vyc2VoZXJvL1cDc3BjQg=
+pk503K72ToLZFjUhx0b2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr )  Facebook.=
+ ( https://ct.coursehero.com/f/a/IuFBhttNwrdFRHw6IuuNZA~~/AAQRxQA~/RgRm0k9N=
+P0QjaHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL2NvdXJzZWhlcm9XA3NwY0IKZOdNyu9k6C2RY1I=
+cdG9iaW5zaWx2ZXN0cmUwMzVAc29vbmVycy51c1gEAAABqw~~ ) Twitter. =0A( https://c=
+t.coursehero.com/f/a/BoDwm-wQsWqTzszL4pY-Dw~~/AAQRxQA~/RgRm0k9NP0QfaHR0cHM6=
+Ly90d2l0dGVyLmNvbS9Db3Vyc2VIZXJvL1cDc3BjQgpk503K72ToLZFjUhx0b2JpbnNpbHZlc3R=
+yZTAzNUBzb29uZXJzLnVzWAQAAAGr ) TikTok. =0A( https://ct.coursehero.com/f/a/=
+Sse5MkGV1CDw_RnYVdIlTw~~/AAQRxQA~/RgRm0k9NP0QiaHR0cHM6Ly93d3cudGlrdG9rLmNvb=
+S9AY291cnNlaGVyb1cDc3BjQgpk503K72ToLZFjUhx0b2JpbnNpbHZlc3RyZTAzNUBzb29uZXJz=
+LnVzWAQAAAGr )         Search for study=0Aresources =E2=86=92 ( https://ct.=
+coursehero.com/f/a/YoHgEdjjjQsX49vcHYZ8PA~~/AAQRxQA~/RgRm0k9NP0QraHR0cHM6Ly=
+93d3cuY291cnNlaGVyby5jb20vc3R1ZHktbWF0ZXJpYWxzL1cDc3BjQgpk503K72ToLZFjUhx0b=
+2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr )=0AUpload to study =E2=86=92 (=
+ https://ct.coursehero.com/f/a/WftkptXgE2KNvj6VgAfEnw~~/AAQRxQA~/RgRm0k9NP0=
+QiaHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vdXBsb2FkL1cDc3BjQgpk503K72ToLZFjUhx0b=
+2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr )=0AAsk an expert tutor =E2=86=
+=92 =0A( https://ct.coursehero.com/f/a/_JTbR0hmMI-o2Hc1c_bhqg~~/AAQRxQA~/Rg=
+Rm0k9NP0QwaHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vdHV0b3JzL2hvbWV3b3JrLWhlbHAvV=
+wNzcGNCCmTnTcrvZOgtkWNSHHRvYmluc2lsdmVzdHJlMDM1QHNvb25lcnMudXNYBAAAAas~ )=
+=0A=0A2000 Seaport Blvd., 3rd Floor Redwood City, CA 94063=0A=0AHelp center=
+ ( https://ct.coursehero.com/f/a/D2eLtDdvCu9Fy-i8-96yEw~~/AAQRxQA~/RgRm0k9N=
+P0QnaHR0cHM6Ly9zdXBwb3J0LmNvdXJzZWhlcm8uY29tL2hjL2VuLXVzVwNzcGNCCmTnTcrvZOg=
+tkWNSHHRvYmluc2lsdmVzdHJlMDM1QHNvb25lcnMudXNYBAAAAas~ ) =E2=88=99 Terms=0Ao=
+f use ( https://ct.coursehero.com/f/a/ON7QmZxI5_bYi8HxbHCOWg~~/AAQRxQA~/RgR=
+m0k9NP0QoaHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vdGVybXMtb2YtdXNlL1cDc3BjQgpk50=
+3K72ToLZFjUhx0b2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr ) =E2=88=99 Priv=
+acy=0Apolicy =0A( https://ct.coursehero.com/f/a/GnqjnqjOWXikii5LL_rzuw~~/AA=
+QRxQA~/RgRm0k9NP0S6aHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vY29weXJpZ2h0Lz91dG1f=
+bWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9YnJhemUmdXRtX2NhbXBhaWduPVN0dV9MYXBzZWRfRDE=
+0RnJlZVVubG9ja1YzQl9Na3RnX0VtYWlsJnV0bV9kaXNwYXRjaD02NGVmY2ExOTAwM2RjMTVkN2=
+RhZDEyYzZjY2ZjMGJlZSMvcHJpdmFjeS1wb2xpY3kvVwNzcGNCCmTnTcrvZOgtkWNSHHRvYmluc=
+2lsdmVzdHJlMDM1QHNvb25lcnMudXNYBAAAAas~ )=0A =E2=88=99 Unsubscribe =0A( htt=
+ps://ct.coursehero.com/f/a/BU6cvyk19keRukP_QTLQ7A~~/AAQRxQA~/RgRm0k9NP0RYaH=
+R0cHM6Ly93d3cuY291cnNlaGVyby5jb20vZW1haWwtcHJlZmVyZW5jZXMvP2V4dGlkPTdjYWExN=
+Tk5LTFkZTQtNGYzNC04MGEwLWU1NjNiZDI5NDdkMlcDc3BjQgpk503K72ToLZFjUhx0b2JpbnNp=
+bHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr )=0A=0A=0ADownload from The App Store.=
+ =0A( https://ct.coursehero.com/f/a/t0qO7tjL-skxxCvv7k8F3g~~/AAQRxQA~/RgRm0=
+k9NP0QuaHR0cHM6Ly9jb3Vyc2VoZXJvaW9zLm9uZWxpbmsubWUvVlYyOC9hMjlhZjAwM1cDc3Bj=
+Qgpk503K72ToLZFjUhx0b2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr ) Download=
+ from=0AGoogle Play. ( https://ct.coursehero.com/f/a/1JFRsVayIzMQTYCvVj19hQ=
+~~/AAQRxQA~/RgRm0k9NP0QxaHR0cHM6Ly9jb3Vyc2VoZXJvYW5kcm9pZC5vbmVsaW5rLm1lL0t=
+tUEUvZTY5YTExZVcDc3BjQgpk503K72ToLZFjUhx0b2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLn=
+VzWAQAAAGr )
+--_----KpbActc1qmDxkA9vCRveOQ===_BC/26-13922-D4ACFE46
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="UTF-8"
+
+<!DOCTYPE html><html lang=3D"en" dir=3D"ltr" xmlns:v=3D"urn:schemas-microso=
+ft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:office"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">=
+=0A=
+=0A=
+  <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">=0A=
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1, user-scalable=3Dyes">=0A=
+  <meta name=3D"format-detection" content=3D"telephone=3Dno, date=3Dno, add=
+ress=3Dno, email=3Dno, url=3Dno">=0A=
+  <meta name=3D"x-apple-disable-message-reformatting">=0A=
+  <title>CourseHero</title>=0A=
+=0A=
+=0A=
+=0A=
+<!--[if mso]><style type=3D"text/css">table {border-collapse:collapse;borde=
+r:0;border-spacing:0;margin:0;} div, td {padding:0;} div {margin:0 !importa=
+nt;} ul {margin: 0 !important;} li {margin-left: 20px !important;} li.first=
+ListItem {margin-top: 20px !important;} li.lastListItem {margin-bottom: 20p=
+x !important;}</style><![endif]-->=0A=
+<!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</=
+o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->=0A=
+<style>img {=0A=
+border: 0; height: auto; outline: none; text-decoration: none;=0A=
+}=0A=
+body {=0A=
+height: 100% !important; margin: 0 auto !important; padding: 0; width: 100%=
+ !important;=0A=
+}=0A=
+.btnSuper:hover {=0A=
+background: #002DE4 !important; transition: all 200ms;=0A=
+}=0A=
+a.btnSuper:visited {=0A=
+color: #F9F9F9;=0A=
+}=0A=
+a.btnSuper:active {=0A=
+color: #F9F9F9;=0A=
+}=0A=
+.btnPrim:hover {=0A=
+background: #000001 !important; transition: all 200ms;=0A=
+}=0A=
+a.btnPrim:visited {=0A=
+color: #F9F9F9;=0A=
+}=0A=
+a.btnPrim:active {=0A=
+color: #F9F9F9;=0A=
+}=0A=
+@font-face {=0A=
+font-family: 'STKBureau'; font-style: normal; font-weight: 400; src: local(=
+'STKBureau'),url('https://www.coursehero.com/assets/fonts/subset/STKBureau-=
+SerifBook-l.woff2?v=3D1') format("woff2"); mso-font-alt: 'Times New Roman';=
+=0A=
+}=0A=
+@font-face {=0A=
+font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 500; src: lo=
+cal('IBM Plex Mono'),url('https://fonts.gstatic.com/s/ibmplexmono/v15/-F6qf=
+jptAgt5VM-kVkqdyU8n3twJwlBFgsAXHNk.woff2') format("woff2"); mso-font-alt: '=
+Lucida Console';=0A=
+}=0A=
+@font-face {=0A=
+font-family: 'Inter'; font-style: normal; font-weight: 400; src: local('Int=
+er'),url('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp5=
+0KnMa1ZL7W0Q5nw.woff2') format("woff2"); mso-font-alt: 'Arial';=0A=
+}=0A=
+@font-face {=0A=
+font-family: 'Inter'; font-style: normal; font-weight: 600; src: local('Int=
+er'),url('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp5=
+0KnMa1ZL7W0Q5nw.woff2') format("woff2"); mso-font-alt: 'Arial';=0A=
+}=0A=
+@media screen and (max-width:799px) {=0A=
+  .mw100 {=0A=
+    max-width: 100% !important;=0A=
+  }=0A=
+  .w100 {=0A=
+    width: 100% !important; margin: 0 auto !important; float: none !importa=
+nt;=0A=
+  }=0A=
+  .w90 {=0A=
+    width: 90% !important;=0A=
+  }=0A=
+  .w85 {=0A=
+    width: 85% !important;=0A=
+  }=0A=
+  h1 {=0A=
+    font-size: 54px !important;=0A=
+  }=0A=
+  h2 {=0A=
+    font-size: 40px !important;=0A=
+  }=0A=
+  h3 {=0A=
+    font-size: 36px !important;=0A=
+  }=0A=
+  .t40 {=0A=
+    font-size: 36px !important;=0A=
+  }=0A=
+  .t32 {=0A=
+    font-size: 26px !important;=0A=
+  }=0A=
+  .t20 {=0A=
+    font-size: 18px !important;=0A=
+  }=0A=
+  .clrLR {=0A=
+    padding-left: 0px !important; padding-right: 0px !important;=0A=
+  }=0A=
+  .hide {=0A=
+    display: none !important; max-height: 0px !important; overflow: hidden =
+!important;=0A=
+  }=0A=
+  .show {=0A=
+    display: block !important; max-height: none !important; overflow: visib=
+le !important; visibility: visible !important;=0A=
+  }=0A=
+  div .imgCrop {=0A=
+    height: 164px !important; overflow: hidden !important;=0A=
+  }=0A=
+  u ~ div .full-wrap {=0A=
+    min-width: 100vw;=0A=
+  }=0A=
+  div > u ~ div .full-wrap {=0A=
+    min-width: 100%;=0A=
+  }=0A=
+}=0A=
+</style>=0A=
+</head>=0A=
+<body class=3D"ltblue body" style=3D"word-spacing: normal; height: 100% !im=
+portant; width: 100% !important; margin: 0 auto; padding: 0;" bgcolor=3D"#E=
+5F4FA">=0A=
+<div style=3D"display:none !important;visibility:hidden;mso-hide:all;font-s=
+ize:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:=
+0;overflow:hidden;">Open any document. No upload needed.</div>=0A=
+<div role=3D"article" aria-roledescription=3D"email" aria-label=3D"email-na=
+me" lang=3D"en" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adju=
+st: 100%; background-color: #E5F4FA;" align=3D"center" class=3D"ltblue full=
+-wrap">=0A=
+<!--[if mso]><table align=3D"center" cellpadding=3D"0" cellspacing=3D"0" bo=
+rder=3D"0" style=3D"width:800px;"><tr><td align=3D"center"><![endif]-->=0A=
+=0A=
+<!--hidden preheader -->=0A=
+<div style=3D"display: none;">=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=
+=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =
+=CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =
+=CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =
+=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=
+=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=
+ =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F=
+ =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F=
+ =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F=
+ =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F=
+ =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=
+=8F=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F</div>=0A=
+<!--/hidden preheader-->=0A=
+=0A=
+ <!-- White Wrap -->=0A=
+<table role=3D"presentation" align=3D"center" style=3D"width: 100%; border-=
+spacing: 0; max-width: 800px; border-collapse: collapse; mso-table-lspace: =
+0pt; mso-table-rspace: 0pt; mso-cellspacing: 0pt; padding: 0; border: 0;">=
+=0A=
+	<tr><td align=3D"center" style=3D"padding: 0;">=0A=
+<!-- START CONTENT -->=0A=
+=0A=
+<!--lt blue header Logo centered -->=0A=
+<table role=3D"presentation" align=3D"center" style=3D"width: 75%; border-s=
+pacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspa=
+ce: 0pt; mso-cellspacing: 0pt; padding: 0; border: 0;" class=3D"w90">=0A=
+	<tr>=0A=
+		<td align=3D"center" style=3D"padding: 40px 0px;"></a><a href=3D"https://=
+ct.coursehero.com/f/a/YeQ8FN46xHndHKvo0CWrAw~~/AAQRxQA~/RgRm0k9NP0SqaHR0cHM=
+6Ly93d3cuY291cnNlaGVyby5jb20vaG9tZS8_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPW=
+JyYXplJnV0bV9jYW1wYWlnbj1TdHVfTGFwc2VkX0QxNEZyZWVVbmxvY2tWM0JfTWt0Z19FbWFpb=
+CZ1dG1fZGlzcGF0Y2g9NjRlZmNhMTkwMDNkYzE1ZDdkYWQxMmM2Y2NmYzBiZWUjL2hvbWVXA3Nw=
+Y0IKZOdNyu9k6C2RY1IcdG9iaW5zaWx2ZXN0cmUwMzVAc29vbmVycy51c1gEAAABqw~~" targe=
+t=3D"_blank" style=3D"text-decoration: none; font-family: 'Inter', Helvetic=
+a, Arial, sans-serif;"><img src=3D"https://braze-images.com/appboy/communic=
+ation/assets/image_assets/images/640112a4c3a808004e74e261/original.png?1677=
+791908" alt=3D"Course Hero." width=3D"180" style=3D"display: block; outline=
+: 0; width: 180px; height: auto; text-decoration: none; padding: 0; border:=
+ 0;"></a>=0A=
+</td>=0A=
+	</tr>=0A=
+</table>=0A=
+<!-- /lt blue header Logo centered -->=0A=
+=0A=
+<!-- DISCOUNT CODES-->=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+<!-- // DISCOUNT CODES-->=0A=
+=0A=
+<!-- REWARDS INCENTIVES CODES-->=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+=0A=
+<!-- // REWARDS INCENTIVES CODES-->=0A=
+=0A=
+<!-- borderd hero -->=0A=
+<table role=3D"presentation" align=3D"center" style=3D"width: 75%; border-s=
+pacing: 0; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspa=
+ce: 0pt; mso-cellspacing: 0pt; padding: 0; border: 0;" class=3D"w90">=0A=
+	<tr>=0A=
+		<td style=3D"border-radius: 20px; padding: 0; border: 2px solid #0e0d0d;"=
+ bgcolor=3D"#F9F9F9">=0A=
+			<table role=3D"presentation" align=3D"center" style=3D"width: 90%; borde=
+r-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-r=
+space: 0pt; mso-cellspacing: 0pt; padding: 0; border: 0;">=0A=
+				<tr>=0A=
+					<td align=3D"center" style=3D"padding: 48px 0 0;"><a href=3D"https://c=
+t.coursehero.com/f/a/GSpqYrPsDVR6TuamEl0g5A~~/AAQRxQA~/RgRm0k9NP4RJAWh0dHBz=
+Oi8vd3d3LmNvdXJzZWhlcm8uY29tL3AvTjJOaFlURTFPVGt0TVdSbE5DMDBaak0wTFRnd1lUQXR=
+aVFUyTTJKa01qazBOMlF5SXpJd01qTXRNRGd0TXpBZ01qTTZNREU2TXpBak1UTWpNMlF4WW1WaE=
+5URTVOVFZsTW1FeFkyUm1ZVEV3TlRRNU4yVXdNMll5WVRFMll6WTRNREpoTWpKbVpEaGpZelJrW=
+lRBMU0yWXdOalk0T1dWbU1HVmlZUS0tP3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1icmF6=
+ZSZ1dG1fY2FtcGFpZ249U3R1X0xhcHNlZF9EMTRGcmVlVW5sb2NrVjNCX01rdGdfRW1haWwmdXR=
+tX2Rpc3BhdGNoPTY0ZWZjYTE5MDAzZGMxNWQ3ZGFkMTJjNmNjZmMwYmVlVwNzcGNCCmTnTcrvZO=
+gtkWNSHHRvYmluc2lsdmVzdHJlMDM1QHNvb25lcnMudXNYBAAAAas~" style=3D"text-decor=
+ation: none; font-family: 'Inter', Helvetica, Arial, sans-serif;"><img src=
+=3D"https://braze-images.com/appboy/communication/assets/image_assets/image=
+s/6466a99e3a35880050a23adb/original.png?1684449694" width=3D"544" alt=3D"Fr=
+ee up your evening with a free doc." style=3D"display: block; border-radius=
+: 8px; outline: 0; width: 100%; max-width: 544px; height: auto; text-decora=
+tion: none; padding: 0; border: 0;"></a></td>=0A=
+				</tr>=0A=
+				<tr>=0A=
+					<td align=3D"center" style=3D"padding: 32px 0 0;">=0A=
+					<p class=3D"t16" style=3D"font-family: 'Inter', Helvetica, Arial, sans=
+-serif; line-height: 120%; font-weight: 400; color: #0E0D0D; font-size: 16p=
+x; margin: 0; padding: 0;">Open any study resource in the Course Hero libra=
+ry free. This link self-destructs in 48 hours, so jump to it.</p>=0A=
+					</td>=0A=
+				</tr>=0A=
+				<tr>=0A=
+					<td align=3D"center" style=3D"padding: 32px 0 28px;"><a href=3D"https:=
+//ct.coursehero.com/f/a/GSpqYrPsDVR6TuamEl0g5A~~/AAQRxQA~/RgRm0k9NP4RJAWh0d=
+HBzOi8vd3d3LmNvdXJzZWhlcm8uY29tL3AvTjJOaFlURTFPVGt0TVdSbE5DMDBaak0wTFRnd1lU=
+QXRaVFUyTTJKa01qazBOMlF5SXpJd01qTXRNRGd0TXpBZ01qTTZNREU2TXpBak1UTWpNMlF4WW1=
+WaE5URTVOVFZsTW1FeFkyUm1ZVEV3TlRRNU4yVXdNMll5WVRFMll6WTRNREpoTWpKbVpEaGpZel=
+JrWlRBMU0yWXdOalk0T1dWbU1HVmlZUS0tP3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1ic=
+mF6ZSZ1dG1fY2FtcGFpZ249U3R1X0xhcHNlZF9EMTRGcmVlVW5sb2NrVjNCX01rdGdfRW1haWwm=
+dXRtX2Rpc3BhdGNoPTY0ZWZjYTE5MDAzZGMxNWQ3ZGFkMTJjNmNjZmMwYmVlVwNzcGNCCmTnTcr=
+vZOgtkWNSHHRvYmluc2lsdmVzdHJlMDM1QHNvb25lcnMudXNYBAAAAas~" style=3D"text-de=
+coration: none; border-radius: 6px; display: inline-block; mso-padding-alt:=
+ 0; color: #F9F9F9; font-family: 'Inter', Helvetica, Arial, sans-serif; fon=
+t-size: 16px; line-height: 22px; font-weight: 600; background-color: #002DE=
+4; text-align: center; padding: 12px 20px;" class=3D"btnSuper"><!--[if mso]=
+><i style=3D"letter-spacing:20px;mso-font-width:-100%;mso-text-raise:20pt;"=
+>&nbsp;</i><![endif]--><span style=3D"mso-text-raise: 10pt;">Let's go</span=
+><!--[if mso]><i style=3D"letter-spacing: 20px;mso-font-width:-100%">&nbsp;=
+</i><![endif]--></a></td>=0A=
+				</tr>=0A=
+			</table>=0A=
+			<a href=3D"https://ct.coursehero.com/f/a/GSpqYrPsDVR6TuamEl0g5A~~/AAQRxQ=
+A~/RgRm0k9NP4RJAWh0dHBzOi8vd3d3LmNvdXJzZWhlcm8uY29tL3AvTjJOaFlURTFPVGt0TVdS=
+bE5DMDBaak0wTFRnd1lUQXRaVFUyTTJKa01qazBOMlF5SXpJd01qTXRNRGd0TXpBZ01qTTZNREU=
+2TXpBak1UTWpNMlF4WW1WaE5URTVOVFZsTW1FeFkyUm1ZVEV3TlRRNU4yVXdNMll5WVRFMll6WT=
+RNREpoTWpKbVpEaGpZelJrWlRBMU0yWXdOalk0T1dWbU1HVmlZUS0tP3V0bV9tZWRpdW09ZW1ha=
+WwmdXRtX3NvdXJjZT1icmF6ZSZ1dG1fY2FtcGFpZ249U3R1X0xhcHNlZF9EMTRGcmVlVW5sb2Nr=
+VjNCX01rdGdfRW1haWwmdXRtX2Rpc3BhdGNoPTY0ZWZjYTE5MDAzZGMxNWQ3ZGFkMTJjNmNjZmM=
+wYmVlVwNzcGNCCmTnTcrvZOgtkWNSHHRvYmluc2lsdmVzdHJlMDM1QHNvb25lcnMudXNYBAAAAa=
+s~" style=3D"text-decoration: none; font-family: 'Inter', Helvetica, Arial,=
+ sans-serif;"><img src=3D"https://braze-images.com/appboy/communication/ass=
+ets/image_assets/images/6463eb4d7c2911004f94773f/original.png?1684269900" w=
+idth=3D"700" alt=3D"Students." style=3D"display: block; outline: 0; width: =
+100%; max-width: 700px; height: auto; border-radius: 0px 0px 18px 18px; tex=
+t-decoration: none; padding: 0; border: 0;"></a>=0A=
+		</td>=0A=
+	</tr>=0A=
+</table>=0A=
+<!-- /borderd hero -->=0A=
+=0A=
+<!-- 32px spacer -->=0A=
+<div style=3D"line-height: 32px; height: 32px;">=E2=80=8A</div>=0A=
+<!-- /spacer -->=0A=
+=0A=
+<!--disclaimer copy -->=0A=
+<table role=3D"presentation" align=3D"center" style=3D"width: 75%; border-s=
+pacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspa=
+ce: 0pt; mso-cellspacing: 0pt; padding: 0; border: 0;" class=3D"w90">=0A=
+	<tr>=0A=
+		<td style=3D"padding: 0;">=0A=
+			<p style=3D"font-family: 'Inter', Helvetica, Arial, sans-serif; line-hei=
+ght: 120%; font-weight: 400; color: #0E0D0D; font-size: 12px; margin: 0; pa=
+dding: 0;" class=3D"t12">Offer only valid for tobinsilvestre035@sooners.us =
+and will expire on September  1, 2023. Offer may only be redeemed once. Off=
+er is not shareable, saleable, transferable and cannot be redeemed for cash=
+. Course Hero reserves the right to modify or terminate this Offer at any t=
+ime without notice. Other restrictions may apply. All rights reserved.</p>=
+=0A=
+		</td>=0A=
+	</tr>=0A=
+</table>=0A=
+<!--/discaimer copy -->=0A=
+=0A=
+<!-- Lt Blue Footer w/links-->=0A=
+<table role=3D"presentation" align=3D"center" style=3D"width: 75%; border-s=
+pacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspa=
+ce: 0pt; mso-cellspacing: 0pt; padding: 0; border: 0;" class=3D"w90">=0A=
+		<!-- links / social -->=0A=
+	<tr>=0A=
+		<td style=3D"font-size: 0; direction: rtl; padding: 24px 0 0;">=0A=
+		<!--[if mso]><table align=3D"center" cellpadding=3D"0" cellspacing=3D"0" =
+border=3D"0" style=3D"width:100%;"><tr><td style=3D"width:170px;" valign=3D=
+"top" align=3D"center"><![endif]-->=0A=
+		<div style=3D"width: 100%; max-width: 170px; display: inline-block; verti=
+cal-align: top; direction: ltr;" class=3D"mw100">=0A=
+		<table role=3D"presentation" style=3D"border-spacing: 0; border-collapse:=
+ collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; mso-cellspacing: 0=
+pt; padding: 0; border: 0;">=0A=
+			<tr>=0A=
+				<td style=3D"padding: 40px 10px 0 0;"><a href=3D"https://ct.coursehero.=
+com/f/a/3al9zG9j4Xw_bFs3Wnx48Q~~/AAQRxQA~/RgRm0k9NP0SpaHR0cHM6Ly93d3cuaW5zd=
+GFncmFtLmNvbS9jb3Vyc2VoZXJvLz91dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9YnJhemUm=
+dXRtX2NhbXBhaWduPVN0dV9MYXBzZWRfRDE0RnJlZVVubG9ja1YzQl9Na3RnX0VtYWlsJnV0bV9=
+kaXNwYXRjaD02NGVmY2ExOTAwM2RjMTVkN2RhZDEyYzZjY2ZjMGJlZVcDc3BjQgpk503K72ToLZ=
+FjUhx0b2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr" style=3D"text-decoratio=
+n: none; font-family: 'Inter', Helvetica, Arial, sans-serif;"><img src=3D"h=
+ttps://braze-images.com/appboy/communication/assets/image_assets/images/640=
+112468b220c004f08f7c7/original.png?1677791814" alt=3D"Instagram." width=3D"=
+34" style=3D"display: block; outline: 0; width: 34px; height: auto; text-de=
+coration: none; padding: 0; border: 0;"></a></td>=0A=
+				<td style=3D"padding: 40px 10px 0 0;"><a href=3D"https://ct.coursehero.=
+com/f/a/IAkOirzOksrrMRmTW94L_Q~~/AAQRxQA~/RgRm0k9NP0SnaHR0cHM6Ly93d3cuZmFjZ=
+WJvb2suY29tL2NvdXJzZWhlcm8_dXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPWJyYXplJnV0=
+bV9jYW1wYWlnbj1TdHVfTGFwc2VkX0QxNEZyZWVVbmxvY2tWM0JfTWt0Z19FbWFpbCZ1dG1fZGl=
+zcGF0Y2g9NjRlZmNhMTkwMDNkYzE1ZDdkYWQxMmM2Y2NmYzBiZWVXA3NwY0IKZOdNyu9k6C2RY1=
+IcdG9iaW5zaWx2ZXN0cmUwMzVAc29vbmVycy51c1gEAAABqw~~" style=3D"text-decoratio=
+n: none; font-family: 'Inter', Helvetica, Arial, sans-serif;"><img src=3D"h=
+ttps://braze-images.com/appboy/communication/assets/image_assets/images/640=
+1125b03c1c7004f1ee5d7/original.png?1677791835" alt=3D"Facebook." width=3D"3=
+4" style=3D"display: block; outline: 0; width: 34px; height: auto; text-dec=
+oration: none; padding: 0; border: 0;"></a></td>=0A=
+				<td style=3D"padding: 40px 10px 0 0;"><a href=3D"https://ct.coursehero.=
+com/f/a/xh4ILj_cQ7XSs-JQS1cJMA~~/AAQRxQA~/RgRm0k9NP0SjaHR0cHM6Ly90d2l0dGVyL=
+mNvbS9Db3Vyc2VIZXJvLz91dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9YnJhemUmdXRtX2Nh=
+bXBhaWduPVN0dV9MYXBzZWRfRDE0RnJlZVVubG9ja1YzQl9Na3RnX0VtYWlsJnV0bV9kaXNwYXR=
+jaD02NGVmY2ExOTAwM2RjMTVkN2RhZDEyYzZjY2ZjMGJlZVcDc3BjQgpk503K72ToLZFjUhx0b2=
+JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr" style=3D"text-decoration: none;=
+ font-family: 'Inter', Helvetica, Arial, sans-serif;"><img src=3D"https://b=
+raze-images.com/appboy/communication/assets/image_assets/images/6401126d532=
+b9d004f5467df/original.png?1677791853" alt=3D"Twitter." width=3D"34" style=
+=3D"display: block; outline: 0; width: 34px; height: auto; text-decoration:=
+ none; padding: 0; border: 0;"></a></td>=0A=
+				<td style=3D"padding: 40px 0 0;"><a href=3D"https://ct.coursehero.com/f=
+/a/gDWy9l-1MD8__H3ws8eD7g~~/AAQRxQA~/RgRm0k9NP0SmaHR0cHM6Ly93d3cudGlrdG9rLm=
+NvbS9AY291cnNlaGVybz91dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9YnJhemUmdXRtX2Nhb=
+XBhaWduPVN0dV9MYXBzZWRfRDE0RnJlZVVubG9ja1YzQl9Na3RnX0VtYWlsJnV0bV9kaXNwYXRj=
+aD02NGVmY2ExOTAwM2RjMTVkN2RhZDEyYzZjY2ZjMGJlZVcDc3BjQgpk503K72ToLZFjUhx0b2J=
+pbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr" style=3D"text-decoration: none; =
+font-family: 'Inter', Helvetica, Arial, sans-serif;"><img src=3D"https://br=
+aze-images.com/appboy/communication/assets/image_assets/images/64011295767c=
+9a00510e7c95/original.png?1677791893" alt=3D"TikTok." width=3D"34" style=3D=
+"display: block; outline: 0; width: 34px; height: auto; text-decoration: no=
+ne; padding: 0; border: 0;"></a></td>=0A=
+			</tr>=0A=
+		</table>=0A=
+		</div>=0A=
+<!--[if mso]></td><td style=3D"width:430px;" valign=3D"top" align=3D"center=
+"><![endif]-->=0A=
+		<div style=3D"width: 100%; max-width: 430px; display: inline-block; verti=
+cal-align: top; direction: ltr;" class=3D"mw100">=0A=
+		<table role=3D"presentation" align=3D"left" style=3D"width: 95%; border-s=
+pacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspa=
+ce: 0pt; mso-cellspacing: 0pt; padding: 0; border: 0;" class=3D"w90">=0A=
+			<tr>=0A=
+				<td style=3D"padding: 40px 0 0;">=0A=
+					<p style=3D"font-size: 14px; line-height: 160%; font-weight: 600; font=
+-family: 'Inter', Helvetica, Arial, sans-serif; color: #0E0D0D; margin: 0; =
+padding: 0;"><a href=3D"https://ct.coursehero.com/f/a/iNc9Ly3dxwqmiXc2fQfHp=
+Q~~/AAQRxQA~/RgRm0k9NP0SvaHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vc3R1ZHktbWF0ZX=
+JpYWxzLz91dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9YnJhemUmdXRtX2NhbXBhaWduPVN0d=
+V9MYXBzZWRfRDE0RnJlZVVubG9ja1YzQl9Na3RnX0VtYWlsJnV0bV9kaXNwYXRjaD02NGVmY2Ex=
+OTAwM2RjMTVkN2RhZDEyYzZjY2ZjMGJlZVcDc3BjQgpk503K72ToLZFjUhx0b2JpbnNpbHZlc3R=
+yZTAzNUBzb29uZXJzLnVzWAQAAAGr" style=3D"color: #0E0D0D; text-decoration: no=
+ne; font-family: 'Inter', Helvetica, Arial, sans-serif;">Search for study r=
+esources =E2=86=92</a><br><a href=3D"https://ct.coursehero.com/f/a/uLeZfOmd=
+cAtldeGRaHrDPw~~/AAQRxQA~/RgRm0k9NP0SmaHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vd=
+XBsb2FkLz91dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9YnJhemUmdXRtX2NhbXBhaWduPVN0=
+dV9MYXBzZWRfRDE0RnJlZVVubG9ja1YzQl9Na3RnX0VtYWlsJnV0bV9kaXNwYXRjaD02NGVmY2E=
+xOTAwM2RjMTVkN2RhZDEyYzZjY2ZjMGJlZVcDc3BjQgpk503K72ToLZFjUhx0b2JpbnNpbHZlc3=
+RyZTAzNUBzb29uZXJzLnVzWAQAAAGr" style=3D"color: #0E0D0D; text-decoration: n=
+one; font-family: 'Inter', Helvetica, Arial, sans-serif;">Upload to study =
+=E2=86=92</a><br><a href=3D"https://ct.coursehero.com/f/a/rVxwak7uvHhGdfULN=
+-8Hog~~/AAQRxQA~/RgRm0k9NP0S0aHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vdHV0b3JzL2=
+hvbWV3b3JrLWhlbHAvP3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1icmF6ZSZ1dG1fY2Ftc=
+GFpZ249U3R1X0xhcHNlZF9EMTRGcmVlVW5sb2NrVjNCX01rdGdfRW1haWwmdXRtX2Rpc3BhdGNo=
+PTY0ZWZjYTE5MDAzZGMxNWQ3ZGFkMTJjNmNjZmMwYmVlVwNzcGNCCmTnTcrvZOgtkWNSHHRvYml=
+uc2lsdmVzdHJlMDM1QHNvb25lcnMudXNYBAAAAas~" style=3D"color: #0E0D0D; text-de=
+coration: none; font-family: 'Inter', Helvetica, Arial, sans-serif;">Ask an=
+ expert tutor =E2=86=92</a></p>=0A=
+</td>=0A=
+			</tr>=0A=
+		</table>=0A=
+		</div>=0A=
+<!--[if mso]></td></tr></table><![endif]-->=0A=
+		</td>=0A=
+	</tr>=0A=
+	<!-- legal-->=0A=
+	<tr>=0A=
+		<td style=3D"padding: 24px 0 0;">=0A=
+		<p style=3D"font-size: 12px; line-height: 160%; color: #767675; font-fami=
+ly: 'Inter', Helvetica, Arial, sans-serif; font-weight: 400; margin: 0; pad=
+ding: 0;">2000 Seaport Blvd., 3rd Floor Redwood City, CA 94063</p>=0A=
+		<p style=3D"font-size: 12px; line-height: 160%; color: #767675; font-fami=
+ly: 'Inter', Helvetica, Arial, sans-serif; font-weight: 400; margin: 0; pad=
+ding: 0;"><a href=3D"https://ct.coursehero.com/f/a/3aiP7fhsqgM2PecMt87vyQ~~=
+/AAQRxQA~/RgRm0k9NP0SraHR0cHM6Ly9zdXBwb3J0LmNvdXJzZWhlcm8uY29tL2hjL2VuLXVzP=
+3V0bV9tZWRpdW09ZW1haWwmdXRtX3NvdXJjZT1icmF6ZSZ1dG1fY2FtcGFpZ249U3R1X0xhcHNl=
+ZF9EMTRGcmVlVW5sb2NrVjNCX01rdGdfRW1haWwmdXRtX2Rpc3BhdGNoPTY0ZWZjYTE5MDAzZGM=
+xNWQ3ZGFkMTJjNmNjZmMwYmVlVwNzcGNCCmTnTcrvZOgtkWNSHHRvYmluc2lsdmVzdHJlMDM1QH=
+Nvb25lcnMudXNYBAAAAas~" style=3D"color: #767675; text-decoration: none; fon=
+t-family: 'Inter', Helvetica, Arial, sans-serif;">Help center</a>&nbsp;=E2=
+=88=99&nbsp;<a href=3D"https://ct.coursehero.com/f/a/YkdM1w9FLHDNmU2cLTq1bA=
+~~/AAQRxQA~/RgRm0k9NP0SsaHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vdGVybXMtb2YtdXN=
+lLz91dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9YnJhemUmdXRtX2NhbXBhaWduPVN0dV9MYX=
+BzZWRfRDE0RnJlZVVubG9ja1YzQl9Na3RnX0VtYWlsJnV0bV9kaXNwYXRjaD02NGVmY2ExOTAwM=
+2RjMTVkN2RhZDEyYzZjY2ZjMGJlZVcDc3BjQgpk503K72ToLZFjUhx0b2JpbnNpbHZlc3RyZTAz=
+NUBzb29uZXJzLnVzWAQAAAGr" style=3D"color: #767675; text-decoration: none; f=
+ont-family: 'Inter', Helvetica, Arial, sans-serif;">Terms of use</a>&nbsp;=
+=E2=88=99&nbsp;<a href=3D"https://ct.coursehero.com/f/a/GnqjnqjOWXikii5LL_r=
+zuw~~/AAQRxQA~/RgRm0k9NP0S6aHR0cHM6Ly93d3cuY291cnNlaGVyby5jb20vY29weXJpZ2h0=
+Lz91dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9YnJhemUmdXRtX2NhbXBhaWduPVN0dV9MYXB=
+zZWRfRDE0RnJlZVVubG9ja1YzQl9Na3RnX0VtYWlsJnV0bV9kaXNwYXRjaD02NGVmY2ExOTAwM2=
+RjMTVkN2RhZDEyYzZjY2ZjMGJlZSMvcHJpdmFjeS1wb2xpY3kvVwNzcGNCCmTnTcrvZOgtkWNSH=
+HRvYmluc2lsdmVzdHJlMDM1QHNvb25lcnMudXNYBAAAAas~" style=3D"color: #767675; t=
+ext-decoration: none; font-family: 'Inter', Helvetica, Arial, sans-serif;">=
+Privacy policy</a>&nbsp;=E2=88=99&nbsp;<a href=3D"https://ct.coursehero.com=
+/f/a/7Tl6hZeRExN22l83uPHk-Q~~/AAQRxQA~/RgRm0k9NP0TcaHR0cHM6Ly93d3cuY291cnNl=
+aGVyby5jb20vZW1haWwtcHJlZmVyZW5jZXMvP2V4dGlkPTdjYWExNTk5LTFkZTQtNGYzNC04MGE=
+wLWU1NjNiZDI5NDdkMiZ1dG1fbWVkaXVtPWVtYWlsJnV0bV9zb3VyY2U9YnJhemUmdXRtX2NhbX=
+BhaWduPVN0dV9MYXBzZWRfRDE0RnJlZVVubG9ja1YzQl9Na3RnX0VtYWlsJnV0bV9kaXNwYXRja=
+D02NGVmY2ExOTAwM2RjMTVkN2RhZDEyYzZjY2ZjMGJlZVcDc3BjQgpk503K72ToLZFjUhx0b2Jp=
+bnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr" style=3D"color: #767675; text-dec=
+oration: none; font-family: 'Inter', Helvetica, Arial, sans-serif;">Unsubsc=
+ribe</a></p>=0A=
+		</td>=0A=
+	</tr>=0A=
+	<tr>=0A=
+		<td style=3D"padding: 24px 0px 64px;">=0A=
+			<table role=3D"presentation" style=3D"border-spacing: 0; width: 285px; b=
+order-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; mso=
+-cellspacing: 0pt; padding: 0; border: 0;">=0A=
+				<tr>=0A=
+					<td style=3D"width: 50%; padding: 0 10px 0 0;"><a href=3D"https://ct.c=
+oursehero.com/f/a/S2PmIdFM2usF1N7dzZuSZg~~/AAQRxQA~/RgRm0k9NP0SyaHR0cHM6Ly9=
+jb3Vyc2VoZXJvaW9zLm9uZWxpbmsubWUvVlYyOC9hMjlhZjAwMz91dG1fbWVkaXVtPWVtYWlsJn=
+V0bV9zb3VyY2U9YnJhemUmdXRtX2NhbXBhaWduPVN0dV9MYXBzZWRfRDE0RnJlZVVubG9ja1YzQ=
+l9Na3RnX0VtYWlsJnV0bV9kaXNwYXRjaD02NGVmY2ExOTAwM2RjMTVkN2RhZDEyYzZjY2ZjMGJl=
+ZVcDc3BjQgpk503K72ToLZFjUhx0b2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr" s=
+tyle=3D"text-decoration: none; font-family: 'Inter', Helvetica, Arial, sans=
+-serif;"><img src=3D"https://braze-images.com/appboy/communication/assets/i=
+mage_assets/images/640112338b220c004f08f7c6/original.png?1677791795" alt=3D=
+"Download from The App Store." width=3D"122" style=3D"display: block; outli=
+ne: 0; width: 122px; height: auto; vertical-align: middle; text-decoration:=
+ none; padding: 0; border: 0;"></a></td>=0A=
+					<td style=3D"width: 50%; padding: 0 0 0 10px;"><a href=3D"https://ct.c=
+oursehero.com/f/a/OrUghEIoJez0Th9u7GSCmw~~/AAQRxQA~/RgRm0k9NP0S1aHR0cHM6Ly9=
+jb3Vyc2VoZXJvYW5kcm9pZC5vbmVsaW5rLm1lL0ttUEUvZTY5YTExZT91dG1fbWVkaXVtPWVtYW=
+lsJnV0bV9zb3VyY2U9YnJhemUmdXRtX2NhbXBhaWduPVN0dV9MYXBzZWRfRDE0RnJlZVVubG9ja=
+1YzQl9Na3RnX0VtYWlsJnV0bV9kaXNwYXRjaD02NGVmY2ExOTAwM2RjMTVkN2RhZDEyYzZjY2Zj=
+MGJlZVcDc3BjQgpk503K72ToLZFjUhx0b2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAG=
+r" style=3D"text-decoration: none; font-family: 'Inter', Helvetica, Arial, =
+sans-serif;"><img src=3D"https://braze-images.com/appboy/communication/asse=
+ts/image_assets/images/640111fe3b8d1f0050fa8912/original.png?1677791741" al=
+t=3D"Download from Google Play." width=3D"137" style=3D"display: block; out=
+line: 0; width: 137px; height: auto; vertical-align: middle; text-decoratio=
+n: none; padding: 0; border: 0;"></a></td>=0A=
+				</tr>=0A=
+			</table>=0A=
+		</td>=0A=
+	</tr>=0A=
+</table>=0A=
+<!-- Lt Blue Footer w/links -->=0A=
+=0A=
+<!-- END CONTENT -->=0A=
+</td></tr>=0A=
+</table>=0A=
+<!-- END WRAP -->=0A=
+<!--[if mso]></td></tr></table><![endif]-->=0A=
+</div>=0A=
+
+<img border=3D"0" width=3D"1" height=3D"1" alt=3D"" src=3D"https://ct.cours=
+ehero.com/q/MikmThT4dtRHEejPp4_Ezg~~/AAQRxQA~/RgRm0k9NPlcDc3BjQgpk503K72ToL=
+ZFjUhx0b2JpbnNpbHZlc3RyZTAzNUBzb29uZXJzLnVzWAQAAAGr">
+</body>=0A=
+</html>=
+
+--_----KpbActc1qmDxkA9vCRveOQ===_BC/26-13922-D4ACFE46--

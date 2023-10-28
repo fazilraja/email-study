@@ -1,0 +1,757 @@
+Received: from DS0PR20MB6232.namprd20.prod.outlook.com (2603:10b6:8:f1::19) by
+ MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Wed, 20 Sep 2023 23:59:52
+ +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=Ho+Z0vJ2/958rvM3AF+PbzPkXixUayojZRHnpCYeLFL7zpOmIf+vSOiFC3jryFI1lv8JYTNFc37P3z8xDA60Ydjx+cs1e+kJbxHIsGkyNse0mapp9etMOkSWB3mc5mLG9UezkHNjgr3iUUx9DPdnzGsmhpPxgRHyaDfxujTtw1BDYRjcg2uWbO2YHr1R0+sSWxcGvChR6FZUYLFCaBP7Feb7M0VHubRN4EuVhle7ut4024rxcXCOvwfdL4/qejI+18inePJKVR+FEcZgibkHQ+RoVKDpTlWpggvrymcSxXBEgXR+BED7jPKyRe6exE4qJCRqmRkg7FSb4tn78z0xLw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CAMmZDP5B90jvrgUPNqbkgDvKC8PYpcVgJ4gbf6wHcc=;
+ b=i2CeIgNkMzW5BQPNPovyIo3rWqAHxFXjZIQ4B90y2mQLnsZyV7wzzYonYQ15TY+TaiXJryrggH/cjDQopuBailCo9bhE1e+s0bzXieFlW8r9hyGxZJOjyhNk6+hlSRpqLRynvQw9FTb3NWC7NVjwLZnTCMoMLiWVsDXmZdD5Jf16EohW7xt45vgUEXALWrDYqHzznrHnH9I7YIkQAPMNekGexxYALBrnhL4fCjR7RDKSBt7AJN6J3BzqQ91JmtbUJlPwN5+p56vKYBaynesjtNiHSjDQSe9OQ+BNdP8OIpakXxVjCe5zxIto6/+hIZet+6hPIuQNQAvmNc+YSEywiw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.219.169) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=mandrillapp.com; dmarc=pass (p=none sp=none pct=100)
+ action=none header.from=planetfitness.com; dkim=pass (signature was verified)
+ header.d=planetfitness.com; dkim=pass (signature was verified)
+ header.d=mandrillapp.com; arc=pass (0 oda=1 ltdi=1
+ dkim=[1,1,header.i=@planetfitness.com]
+ dmarc=[1,1,header.from=planetfitness.com])
+Received: from MW4PR03CA0087.namprd03.prod.outlook.com (2603:10b6:303:b6::32)
+ by DS0PR20MB6232.namprd20.prod.outlook.com (2603:10b6:8:f1::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.28; Wed, 20 Sep
+ 2023 23:59:50 +0000
+Received: from MWH0EPF000971E2.namprd02.prod.outlook.com
+ (2603:10b6:303:b6:cafe::ba) by MW4PR03CA0087.outlook.office365.com
+ (2603:10b6:303:b6::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.30 via Frontend
+ Transport; Wed, 20 Sep 2023 23:59:50 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.219.169)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=planetfitness.com;dmarc=pass action=none
+ header.from=planetfitness.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ mandrillapp.com discourages use of 209.85.219.169 as permitted sender)
+Received: from mail-yb1-f169.google.com (209.85.219.169) by
+ MWH0EPF000971E2.mail.protection.outlook.com (10.167.243.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Wed, 20 Sep 2023 23:59:50 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:A290E406CB84511443256CBA72DAB498281B01D08E70B7C95EE2CC723D554954;UpperCasedChecksum:500BFF7AFEC5B03CD7FF3A5347AAF48C3B1FB583F270C83F9C2BB4A245C8D4E5;SizeAsReceived:6477;Count:28
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-d801c83325fso534215276.0
+        for <tobinsilvestre@outlook.com>; Wed, 20 Sep 2023 16:59:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695254390; x=1695859190;
+        h=x-forwarded-for:mime-version:date:feedback-id:to:message-id:subject
+         :from:dkim-signature:dkim-signature:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CAMmZDP5B90jvrgUPNqbkgDvKC8PYpcVgJ4gbf6wHcc=;
+        b=Bz7julgjL9OE91wWWGqIpGNo11RjUAAphku/1alP3VepVFw8GyiTbijzD3n+lY6Dkb
+         D/VOKP7J5gqgBtMQsEtjzNvD1qK8FVhkLwHxeQc9cApasjRPQ6WHND9HhMwA9KKlJ4oY
+         Upqgg3JlM7nwC4Fbz18d/b/8O5BIelU73wkQwdZBKEUi/bNqnae5qVoLz9Qda5Ibegoi
+         WMirCt7pQ7v7Id+JlGapjtECqVRu+GVCsfoYOS8YA8Haua879K760Fa+zDUGUpVVivmJ
+         T3xyzDuByhA1dQyKD4hSsSeWXqY6Tjq0p1OjN8nvt+CxPHg/oLKn3uS0xASlEbO9K0RT
+         9FXw==
+X-Gm-Message-State: AOJu0Yz/TuB73UDwEf3Neh0bF/AR7M/DhOzpRM9/uRluOkwBWrNa41vc
+	7iZp6eqq27JkRIzfQ6txk7bpImclXkKOsx0jWA==
+X-Google-Smtp-Source: AGHT+IFj4XJm1FTnYtofh51jkzWLYo02ITagHTohOX9WmEGCAwoclUCPv7fX00uYAdHUwDi9eT6bpvlhCnYC6W2MPWF3Cpkx5jo=
+X-Received: by 2002:a5b:d4f:0:b0:d85:c21a:22c9 with SMTP id f15-20020a5b0d4f000000b00d85c21a22c9mr2262628ybr.31.1695254389949;
+        Wed, 20 Sep 2023 16:59:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695254389; cv=none;
+        d=google.com; s=arc-20160816;
+        b=Nr90uosQCuRLGVhwlfgmtWw30lLDtvxOIFYX6tZNGmSy+bTw5xuVIEiHNQBVdV7FNK
+         /77ZwhJFcWQG7gXx4BrBx5Zpe8R5gLwHz9pL+wpmvWPqTEZqTBRFYcksmLgbnm3WPQmP
+         mmmZ9owxrzDTerSkod2HK1Lt+o8xZXHOkqEkRpwsTBMsGmc7ZYN8HfX+cSUsMev340z/
+         /4hAvS7ZK1FiqDVFRu/xo9+h1o2G06jTg3Lgc4bK4QgM09UAeiJxGhS4LJOGRAbfWrWY
+         vtQq1lM/hcQLkB6JDmGfeYen+6kW+ir4+SUHBOoo4c+MzdCW1R/9bHmJqS4WmmUh2I1t
+         AuqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=mime-version:date:feedback-id:to:message-id:subject:from
+         :dkim-signature:dkim-signature;
+        bh=CAMmZDP5B90jvrgUPNqbkgDvKC8PYpcVgJ4gbf6wHcc=;
+        fh=lBu9tgXQijAhMhwiY68O0ifC1QEv4rQwIbiDxKs/4EE=;
+        b=vW84HZ/7vVYTVmakrIpgwCttGhfRfKRtXGE3fWsf5eWekdPWCSOtNM59tKTKxiSzuK
+         3lA/lbm5poNgTRNqDtlhCEgx8F4Ya1iL4WOS1aQH0IdLOLxdNp8QdM9iEuHn78Dr9onc
+         quzhJIbkV/IM0r35wlEBkM4N3BBBOTKTP6XXDjSjmp0IAE3S835hKE+3sqJhLbEkotVT
+         efj5p+dz6IeQmULduKRI/b52byI3a34dQpqyt1aU4VdBYkVamK8TphpeZi6Hf5WE2wD2
+         YFrvJX+AwYCEqzDp1BJ8SpRtyaX+wDgrkUy/u1VxdRkuXR4c3pmOEoZ1D8qs9cb6xW2R
+         13SA==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@planetfitness.com header.s=mandrill header.b=UgfYE5Dq;
+       dkim=pass header.i=@mandrillapp.com header.s=mandrill header.b="h+Ofn/Kj";
+       spf=pass (google.com: domain of bounce-md_30738550.650b8775.v1-a7acc9891b064353a99238a6074892d0@mandrillapp.com designates 198.2.136.19 as permitted sender) smtp.mailfrom=bounce-md_30738550.650b8775.v1-a7acc9891b064353a99238a6074892d0@mandrillapp.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=planetfitness.com
+Return-Path:
+ bounce-md_30738550.650b8775.v1-a7acc9891b064353a99238a6074892d0@mandrillapp.com
+Received: from mail136-19.atl41.mandrillapp.com (mail136-19.atl41.mandrillapp.com. [198.2.136.19])
+        by gmr-mx.google.com with ESMTPS id b18-20020a5b0b52000000b00d7e3652d1besi4477ybr.4.2023.09.20.16.59.49
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Sep 2023 16:59:49 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-md_30738550.650b8775.v1-a7acc9891b064353a99238a6074892d0@mandrillapp.com designates 198.2.136.19 as permitted sender) client-ip=198.2.136.19;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@planetfitness.com header.s=mandrill header.b=UgfYE5Dq;
+       dkim=pass header.i=@mandrillapp.com header.s=mandrill
+ header.b="h+Ofn/Kj";       spf=pass (google.com: domain of
+ bounce-md_30738550.650b8775.v1-a7acc9891b064353a99238a6074892d0@mandrillapp.com
+ designates 198.2.136.19 as permitted sender)
+ smtp.mailfrom=bounce-md_30738550.650b8775.v1-a7acc9891b064353a99238a6074892d0@mandrillapp.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=planetfitness.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=planetfitness.com;
+	s=mandrill; t=1695254389; x=1695514889; i=Joins@planetfitness.com;
+	bh=CAMmZDP5B90jvrgUPNqbkgDvKC8PYpcVgJ4gbf6wHcc=;
+	h=From:Subject:Message-Id:To:Feedback-ID:Date:MIME-Version:
+	 Content-Type:CC:Date:Subject:From;
+	b=UgfYE5DqkTblTK8io7J+Es1Xf5c9x4wBzKUrJ7gjwLEyhbQNiOXnWe/zAuNeR9SQZ
+	 F4N/AMnVWqwEQSwawv7WyCt/sh6CxuXuWRgNSk5lVI3lMa99NWJJFZF99UT/Cl8bxk
+	 BlZLHoD/PHQJ5VVbgAQEu0lHG1HW3qDvKUw9eKEQ=
+Received: from pmta11.mandrill.prod.atl01.rsglab.com (localhost [127.0.0.1])
+	by mail136-19.atl41.mandrillapp.com (Mailchimp) with ESMTP id 4Rrb9x5XhGzRKLncj
+	for <tobinsilvestre111@sooners.us>; Wed, 20 Sep 2023 23:59:49 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandrillapp.com; 
+ i=@mandrillapp.com; q=dns/txt; s=mandrill; t=1695254389; h=From : 
+ Subject : Message-Id : To : Date : MIME-Version : Content-Type : From : 
+ Subject : Date : X-Mandrill-User : List-Unsubscribe; 
+ bh=CAMmZDP5B90jvrgUPNqbkgDvKC8PYpcVgJ4gbf6wHcc=; 
+ b=h+Ofn/KjO10XKeCmQEvFHmi3JrNjf8n7XaK/hF+YPyxueSK/h+TVKaqwEygbXvQsiMn3B8
+ gf6IuwFS/C4v1RuJzr4EITtk585Mx5+a+h5f81WsqyQRv8SSRFqNGpCuGNeKTGr7cpmyEmGT
+ FuVN1sENq05lOKTdzehCQzKuoAi0s=
+From: Joins@planetfitness.com
+Subject: =?utf-8?Q?Verify=20your=20email?=
+Received: from [35.167.74.121] by mandrillapp.com id a7acc9891b064353a99238a6074892d0; Wed, 20 Sep 2023 23:59:49 +0000
+Message-Id: <49db4d0a-1809-5b0f-8c94-cb7d047b952e@planetfitness.com>
+To: tobinsilvestre111@sooners.us
+X-Native-Encoded: 1
+X-Report-Abuse: =?UTF-8?Q?Please=20forward=20a=20copy=20of=20this=20message,=20including=20all=20headers,=20to=20abuse@mandrill.com.=20You=20can=20also=20report=20abuse=20here:=20https://mandrillapp.com/contact/abuse=3Fid=3D30738550.a7acc9891b064353a99238a6074892d0?=
+X-Mandrill-User: md_30738550
+Feedback-ID: 30738550:30738550.20230920:md
+Date: Wed, 20 Sep 2023 23:59:49 +0000
+Content-Type: multipart/alternative; boundary="_av-vpcex7xoxN9badBQgksLoA"
+X-Forwarded-For: tobinsilvestre111@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 28
+X-MS-Exchange-Organization-ExpirationStartTime: 20 Sep 2023 23:59:50.1854
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ e22f4c0e-6e61-488d-ac59-08dbba35ad04
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ MWH0EPF000971E2:EE_|DS0PR20MB6232:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ MWH0EPF000971E2.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/20/2023 11:56:06 PM
+X-MS-Office365-Filtering-Correlation-Id: e22f4c0e-6e61-488d-ac59-08dbba35ad04
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.219.169
+X-SID-PRA: JOINS@PLANETFITNESS.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:4;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2023 23:59:50.1542
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e22f4c0e-6e61-488d-ac59-08dbba35ad04
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ MWH0EPF000971E2.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR20MB6232
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.9006132
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(2008001134)(2008121020)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPnnjsbBf6asGzdk4EmIW8C6fJKtZ3ZieVSJM3xMgmz4aBx5W0iTg2eyx2tR7E7ynxq5LBC19OBzSPPLCOMfeqjzexxU9FB5o67AIT4U/PGCDyfZQAq8jcfRvL9vq10+FM9KXpSCbvUCNVsL9dtEDu4eXzmL0Cz7DIsP8YQHetQoGyezEn5U/hlfJYEo/rKTRFSX0JLtuBKeIA==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eFpZOE5FVW0xamhjdEJTbTc1M25JOStacVVtYmszbzNiTVM1cnZVRmwrcmJj?=
+ =?utf-8?B?ZitmMStpZzhtRW1hNlMrdmR0cFZZa1NqMjdQR1lPa0N1R0taYUFLKzRZZjg4?=
+ =?utf-8?B?NmU0b2Qya3NzT2xUeDNOTU9QTlo1OUI5dklMd2VQTjNSbUpwdDBBdDNuYWRx?=
+ =?utf-8?B?LzZTcjBidlRhSFo2SURZaUhQUzVxVlhuM3haUERZcE9iNGtiV2pra3VSRklB?=
+ =?utf-8?B?U2FqUmNKUWFXamsyck5kYlRWblZmYzZrZU9WenNISnk1NkdoTFhCUVZNRmFq?=
+ =?utf-8?B?UFFuVW9hYS9zdEl4QUQzdGZQNFJMOFdWbFJDa3ppaVZBWGlOU29xSVZzaDNQ?=
+ =?utf-8?B?ejM2ekgxMWN1dVdiV3RJSjJVaWhFQTg1U012Sk5yU0lQMmhtcXFpd1hhSGhq?=
+ =?utf-8?B?MW9zN1VHRE90bERiMnRicE5sNDgwdU0xdjFoa1k1aTZ3dVJZeUZ1WEhtSzdW?=
+ =?utf-8?B?eUxHZmlrT1FUOW95bk1sMXE0bEFxNEF6VkFWemZmOGdQM3UzekhqL09Oem8z?=
+ =?utf-8?B?YlZRcWlNSGlxaTczSkZ2a0NNSlBlVmFwZEI5dXdTRnRITjR3WFBBaWVQYkVN?=
+ =?utf-8?B?azBVY0Vhc3FpTHJkRStZdElQeG5LcENySlBpZzJrbjFJV3ZkK1Q1dGhkTUpT?=
+ =?utf-8?B?NEMwbUptdVk3bUI4VVRzL3FsTk9zYUxqZENVVXpycHpKbkludFpEKzlSMXJi?=
+ =?utf-8?B?dzdFaDZmRGY5enlXMmhnMTZZZkZiSU5rSXZvV2x2SlBVWEhCSEQ4OE56aVhi?=
+ =?utf-8?B?eTNIN05aY1F0a3dEY1Z1S1p4TVc2MDYrRzhVN0lJQi9sU3hsTW9TeXh6Mk5I?=
+ =?utf-8?B?MmRKTmNyMmVHbko2YkI2TndGNUhucFUwQVJXYlRJdXpqOXA1Nncyd0pCdURr?=
+ =?utf-8?B?cWVUbFF4RGtGK2Rqblo3QnhBeFVUTngwVGtWYWJMVFFhUHM3Yi9TYldvV25I?=
+ =?utf-8?B?QlpBNnY2S0FHSmdibG9LSHIwR0dROTR4Um45NmZlU3ZTQ3YzTHVxc1ZKclZ2?=
+ =?utf-8?B?RWprYTdpWUFnWkJobGN4bUxYc1RvRGs2bndMd3hHYjRFaWo0MlN1TFd6WVZK?=
+ =?utf-8?B?anQ1bmFhNWJDRHg5bGNucjBYOWd3Wk5qTkJCNEo4TjJIQzJNc0ZNVlVCQXor?=
+ =?utf-8?B?NnFlMHB0ZlpINnNqeXN1ckVORmJuaVNmWFI4TjZIWkQ5elpCUE95RHdrc3Q2?=
+ =?utf-8?B?Y1ZCZWRjVG5MZXdwVTVHcXRUOWZMZUJOZTM2cXZ0ZlpwTzluZGFCb2dYMlhz?=
+ =?utf-8?B?QUNUNVd3RjJ3MXhCZ3Y5bmtldHZWUm9xV05MS3VJU1F2UGt5azZvVmszL0Ju?=
+ =?utf-8?B?V1VEVEVrVGpvY2xpdWprY3FtS3BuelhxWnZZRmZabXd1cGdOeDVYRm05MTM4?=
+ =?utf-8?B?NUFPZG1pamd4RUdYNVpzeDhPc3htWDBpcUNENTFuSHdsVWJpQ0JnZDJLZVZx?=
+ =?utf-8?B?YUR6aFFZUEJmeFNoRFp4NlJWdmp5V21mZHZ4TDJ2K3REZHhVdGdqM1FPMWNO?=
+ =?utf-8?B?M1hIYTZ3M0d5RnZodmFyNjlHS01rMXY0bFFKT0xlY1lnZDZSRmRjRlV3emVR?=
+ =?utf-8?B?eHRzaDl2RWFoVmM5NkVUclNTaDg2VmFqR1Y2Nm5WV2FFSExFYUVYeTRNakhl?=
+ =?utf-8?B?aUJ4dTNndkFITVFJQlNmeWVBaUIzdUYwYmFZK0I1N283YU1nMGZxWTFoYUlJ?=
+ =?utf-8?B?Y3ZzaG5JaXl5ZE9adzdXYk9GUDk2ajg4aXA1UXBBdm53MTRSRWxFWU56NzhC?=
+ =?utf-8?B?WThHUGsrL2ZHZEFDNXF3dFlueWthQ2tDaXdqdHRWb0ZqWVI4cXhGVVU0K014?=
+ =?utf-8?B?MmQ3dThBaEt0YnhYMFRJM2xaZnc3QjBKUjZtcE9lSEY0TmFSamZYVndScnVH?=
+ =?utf-8?B?N3B2MUQxaVJXRS9WZmRDSDJPVmRUQjY5b3R0aUdhK25SRE12QXFPbkZtUEt4?=
+ =?utf-8?B?andDb044czB0MFdLRjU0cTV5YVk0ek9pU1BoVGYzcWtxd0hJVUFjRGJyak9G?=
+ =?utf-8?B?RUFJOXdJbkY5WDBXNC9oNVRIelBSWE1KWk5Mc1Y2ZUo3R09YREJXSzFpV2FE?=
+ =?utf-8?B?TktlYTZVZlJVN0dQODR6dU9DN3MxKzh6cSt4UWMwSUxHR3V5blEvWVJ2b1ND?=
+ =?utf-8?B?RWFyUEs0ODRqVmVGSnVLUlhuNUxURkJ3UXQwNjV2aXJFZXlIaUkrWjlaaDY5?=
+ =?utf-8?B?TnFkQ0NQM1VIVi9reGpLTmlvSVB0TmRTOHNBUGNiUDZBekFvbDMyKzZ4amVB?=
+ =?utf-8?Q?7qKptr0qGS2TdgBUGKeQuxHUgngJhXM4b6eg54BMVg=3D?=
+MIME-Version: 1.0
+
+--_av-vpcex7xoxN9badBQgksLoA
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+
+
+
+
+
+
+
+
+    
+        
+            
+            
+                
+                    
+                        
+                            
+                            
+                                
+                                    
+                                                
+                                             
+                                            
+                                            
+                                             ( https://www.planetfitness.com/ ) 
+                                
+                            
+
+                            
+                            
+                                
+                                    
+                                             
+                                      
+                                                                    
+                                     
+                                     
+                                
+                            
+
+                            
+                            
+                                
+                                    
+
+                                        
+                                            
+                                                    
+                                             
+                                            To complete your account setup, please verify your email address by clicking on the button below.
+                                            
+
+                                            
+                                
+                            
+                            
+                            
+                                
+                                    
+
+                                        
+                                            
+                                                
+
+                                                    
+                                                        
+                                                            
+                                                                    
+                                                             
+                                                            Verify your account
+                                                            
+                                                             ( https://planetfitness.auth0.com/u/email-verification?ticket=jgTls9I2UvjfdpnmstpLLDcRUUgMa6tY# ) 
+                                
+                            
+                            
+                            
+                                
+                                    
+
+                                        
+                                            
+                                                        
+                                                 
+                                                Having trouble? Please copy and paste this link into your web browser:
+                                                
+                                                
+                                                https://planetfitness.auth0.com/u/email-verification?ticket=jgTls9I2UvjfdpnmstpLLDcRUUgMa6tY# ( https://planetfitness.auth0.com/u/email-verification?ticket=jgTls9I2UvjfdpnmstpLLDcRUUgMa6tY# ) 
+                                
+                            
+
+                            
+                            
+                                
+                                    
+
+                                        
+                                            
+                                                
+
+                                                    
+                                                        
+                                                            
+
+                                                                
+                                                                    
+                                                                                
+                                                                         
+                                                                        
+                                                                        
+                                                                         ( https://www.planetfitness.com/ ) 
+                                                                
+                                                                    
+
+                                                                        
+                                                                            
+                                                                                 ( https://www.facebook.com/planetfitness ) 
+                                                                             ( https://www.instagram.com/planetfitness/ ) 
+                                                                             ( https://twitter.com/PlanetFitness ) 
+                                                                             ( https://www.youtube.com/user/planetfitnessnh ) 
+                                                                
+                                                                            
+                                                                     
+                                                                     
+                                                                     
+                                                                   planetfitness.com ( https://www.planetfitness.com/ ) 
+
+                        
+                    
+                
+            
+            
+        
+    
+
+
+
+
+
+--_av-vpcex7xoxN9badBQgksLoA
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html><html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- PREVENTS PAGE ZOOMING -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- ADDS SUPPORT FOR OLD VERSIONS OF INTERNET EXPLORER -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- APPEARS IN BROWSER TAB -->
+    <title>Planet Fitness</title>
+    <!-- FAVICON -->
+    <link rel="shortcut icon" href="http://www.planetfitness.com/sites/all/themes/planetfitness/favicon.ico" type="image/vnd.microsoft.icon">
+
+    <style>
+        /* PREVENTS BROWSER TEXT RESIZING */
+        *, body, div, p, a, li, table, td, table td {
+            -webkit-text-size-adjust: none !important;
+            -moz-text-size-adjust: none !important;
+            -o-text-size-adjust: none !important;
+            -ms-text-size-adjust: none !important;
+            color: #666666;
+        }
+        /* PREVENTS BLUE BORDER ON LINKED IMAGES, WRAPPED IN HTML COMMENT TO PREVENT LOTUS NOTES FROM NOT USING THIS STYLE*/
+        <!--img, img a {
+                border-style: none !important;
+                border: none !important;
+            } -->
+        /* GENERAL STYLING */
+        body, table, td, table td, li, a, img {
+            font-family: 'Archivo Narrow', Arial, Helvetica, sans-serif;
+            border: none;
+            margin: 0px;
+            padding: 0px;
+        }
+        /* YAHOO STRIPS THE INLINE STYLING OF THE BODY TAG, SO THIS IS A FALLBACK */
+        body {
+            background: #111111;
+        }
+        /*ALLOWS TEXT WRAPPING, CONTROLS LINE HEIGHT, AND PREVENTS ADDED BORDERS IN OUTLOOK */
+        body, table, td, table td {
+            mso-line-height-rule: exactly;
+            mso-table-lspace: 0;
+            mso-table-rspace: 0;
+            border-collapse: collapse;
+        }
+        /* OUTLOOK.COM FIXES. OUTLOOK.COM AUTOMATICALLY ADDS A CLASS OF "ExternalClass" TO YOUR BODY TAG, WHICH IS WHY THESE WORK */
+        /*RESETS OUTLOOK.COM LINE HEIGHT TO 100% INSTEAD OF ITS DEFAULT OF 131% */
+        .ExternalClass * {
+            line-height: 100%;
+            width: 100%;
+        }
+        /* PREVENTS GREEN DEFAULT COLOR */
+        h2,h2 a,h2 a:visited,h3,h3 a,h3 a:visited,h4,h5,h6,.t_cht, p {
+            color: inherit !important;
+        }
+
+        /* WEB FONTS */
+
+        /* latin-ext */
+        @font-face {
+            font-family: 'Archivo Narrow';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Archivo Narrow Regular'), local('ArchivoNarrow-Regular'), url(https://fonts.gstatic.com/s/archivonarrow/v8/tss0ApVBdCYD5Q7hcxTE1ArZ0bb-iXxw2d8oBxk.woff2) format('woff2');
+            unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+        }
+        /* latin */
+        @font-face {
+            font-family: 'Archivo Narrow';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Archivo Narrow Regular'), local('ArchivoNarrow-Regular'), url(https://fonts.gstatic.com/s/archivonarrow/v8/tss0ApVBdCYD5Q7hcxTE1ArZ0bbwiXxw2d8o.woff2) format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
+
+        /* Rockwell */
+        @font-face {
+            font-family: 'Rockwell';
+            src: url(https://www.planetfitness.com/themes/planet_fitness/css/webfonts/33EE73_0_0.eot);
+            src: url(https://www.planetfitness.com/themes/planet_fitness/css/webfonts/33EE73_0_0.eot#iefix) format('embedded-opentype'), url(https://www.planetfitness.com/themes/planet_fitness/css/webfonts/33EE73_0_0.woff2) format('woff2'), url(https://www.planetfitness.com/themes/planet_fitness/css/webfonts/33EE73_0_0.woff) format('woff'), url(https://www.planetfitness.com/themes/planet_fitness/css/webfonts/33EE73_0_0.ttf) format('truetype')
+        }
+
+        /* END WEB FONTS */
+
+        @media only screen and (max-width: 599px) {
+            /*------------MOBILE HIDE AND SHOW---------------*/
+            .mobileHide {
+                display: none !important;
+                height: 0px !important;
+                width: 0px !important;
+                max-height: 0px !important;
+                max-width: 0px !important;
+                font-size: 0px !important;
+                line-height: 0px !important;
+            }
+            .mobileShow {
+                display: block !important;
+                height: auto !important;
+                width: auto !important;
+                max-height: none !important;
+                max-width: none !important;
+                font-size: 10px !important;
+                line-height: 10px !important;
+            }
+            /*-------------ALIGNMENT-------------------------*/
+            .block {
+                display: block !important;
+            }
+            .inlineBlock {
+                display: inline-block !important;
+            }
+            .centerBlock {
+                margin: 0px auto !important;
+                float: none !important;
+            }
+            .centerText {text-align: center !important;}
+            .leftText {text-align: left !important;}
+            .rightText {text-align: right !important;}
+            .floatLeft {float: left !important;}
+
+            /*---------HEIGHT----------*/
+            .heightAuto {height: auto !important;}
+
+            /*---------WIDTH----------*/
+            .widthAuto {width: auto !important;}
+            .widthFull {width: 100% !important; min-width: inherit !important;}
+            .width400 {width: 400px !important; min-width: inherit !important;}
+            .width320 {width: 320px !important; min-width: inherit !important;}
+            .width318 {width: 318px !important;}
+            .width310 {width: 310px !important;}
+            .width300 {width: 300px !important;}
+            .width298 {width: 298px !important;}
+            .width290 {width: 290px !important;}
+            .width280 {width: 280px !important;}
+            .width278 {width: 278px !important;}
+            .width270 {width: 270px !important;}
+            .width260 {width: 260px !important;}
+            .width250 {width: 250px !important;}
+            .width240 {width: 240px !important;}
+            .width230 {width: 230px !important;}
+            .width220 {width: 220px !important;}
+            .width210 {width: 210px !important;}
+            .width200 {width: 200px !important;}
+            .width190 {width: 190px !important;}
+            .width180 {width: 180px !important;}
+            .width170 {width: 170px !important;}
+            .width160 {width: 160px !important;}
+            .width150 {width: 150px !important;}
+            .width140 {width: 140px !important;}
+            .width130 {width: 130px !important;}
+            .width120 {width: 120px !important;}
+            .width110 {width: 110px !important;}
+            .width100 {width: 100px !important;}
+            .width90 {width: 90px !important;}
+            .width80 {width: 80px !important;}
+            .width70 {width: 70px !important;}
+            .width60 {width: 60px !important;}
+            .width50 {width: 50px !important;}
+            .width40 {width: 40px !important;}
+            .width30 {width: 30px !important;}
+            .width20 {width: 20px !important;}
+            .width10 {width: 10px !important;}
+            .width5 {width: 5px !important;}
+
+            /*---------PADDING----------*/
+            .clearPadding {padding: 0px !important}
+            .clearLeftPadding {padding-left: 0px !important;}
+            .clearRightPadding {padding-right: 0px !important;}
+            .clearTopPadding {padding-top: 0px !important;}
+            .clearBottomPadding {padding-bottom: 0px !important;}
+
+            .padding50 {padding: 50px !important;}
+            .padding40 {padding: 40px !important;}
+            .padding30 {padding: 30px !important;}
+            .padding20 {padding: 20px !important;}
+            .padding19 {padding: 19px !important;}
+            .padding15 {padding: 15px !important;}
+            .padding10 {padding: 10px !important;}
+            .padding9 {padding: 9px !important;}
+            .padding5 {padding: 5px !important;}
+
+            .paddingLeft100 {padding-left: 100px !important;}
+            .paddingLeft90 {padding-left: 90px !important;}
+            .paddingLeft80 {padding-left: 80px !important;}
+            .paddingLeft70 {padding-left: 70px !important;}
+            .paddingLeft60 {padding-left: 60px !important;}
+            .paddingLeft50 {padding-left: 50px !important;}
+            .paddingLeft40 {padding-left: 40px !important;}
+            .paddingLeft30 {padding-left: 30px !important;}
+            .paddingLeft20 {padding-left: 20px !important;}
+            .paddingLeft10 {padding-left: 10px !important;}
+            .paddingLeft5 {padding-left: 5px !important;}
+
+            .paddingRight100 {padding-right: 100px !important;}
+            .paddingRight90 {padding-right: 90px !important;}
+            .paddingRight80 {padding-right: 80px !important;}
+            .paddingRight70 {padding-right: 70px !important;}
+            .paddingRight60 {padding-right: 60px !important;}
+            .paddingRight50 {padding-right: 50px !important;}
+            .paddingRight40 {padding-right: 40px !important;}
+            .paddingRight30 {padding-right: 30px !important;}
+            .paddingRight20 {padding-right: 20px !important;}
+            .paddingRight10 {padding-right: 10px !important;}
+            .paddingRight5 {padding-right: 5px !important;}
+
+            .paddingBottom100 {padding-bottom: 100px !important;}
+            .paddingBottom90 {padding-bottom: 90px !important;}
+            .paddingBottom80 {padding-bottom: 80px !important;}
+            .paddingBottom70 {padding-bottom: 70px !important;}
+            .paddingBottom60 {padding-bottom: 60px !important;}
+            .paddingBottom50 {padding-bottom: 50px !important;}
+            .paddingBottom40 {padding-bottom: 40px !important;}
+            .paddingBottom30 {padding-bottom: 30px !important;}
+            .paddingBottom20 {padding-bottom: 20px !important;}
+            .paddingBottom10 {padding-bottom: 10px !important;}
+            .paddingBottom5 {padding-bottom: 5px !important;}
+
+            .paddingTop100 {padding-top: 100px !important;}
+            .paddingTop90 {padding-top: 90px !important;}
+            .paddingTop80 {padding-top: 80px !important;}
+            .paddingTop70 {padding-top: 70px !important;}
+            .paddingTop60 {padding-top: 60px !important;}
+            .paddingTop50 {padding-top: 50px !important;}
+            .paddingTop40 {padding-top: 40px !important;}
+            .paddingTop30 {padding-top: 30px !important;}
+            .paddingTop20 {padding-top: 20px !important;}
+            .paddingTop10 {padding-top: 10px !important;}
+            .paddingTop5 {padding-top: 5px !important;}
+
+            /*---------BORDERS----------*/
+            .clearBorders { border: none !important;}
+            .clearLeftBorder {border-left: none !important;}
+            .clearRightBorder {border-right: none !important;}
+            .clearTopBorder {border-top: none !important;}
+            .clearBottomBorder {border-bottom: none !important;}
+
+            .leftBorder {border-left: 1px solid #666666 !important;}
+            .rightBorder {border-right: 1px solid #666666 !important;}
+            .topBorder {border-top: 1px solid #666666 !important;}
+            .bottomBorder {border-bottom: 1px solid #666666 !important;}
+
+            /*---------FONT SIZES----------*/
+            .font40 {font-size:40px !important; line-height: 52px !important;}
+            .font35 {font-size:35px !important; line-height: 44px !important;}
+            .font30 {font-size:30px !important; line-height: 38px !important;}
+            .font25 {font-size:25px !important; line-height: 32px !important;}
+            .font20 {font-size:20px !important; line-height: 26px !important;}
+            .font18 {font-size:18px !important; line-height: 22px !important;}
+            .font17 {font-size:17px !important; line-height: 21px !important;}
+            .font16 {font-size:16px !important; line-height: 20px !important;}
+            .font15 {font-size:15px !important; line-height: 19px !important;}
+            .font14 {font-size:14px !important; line-height: 18px !important;}
+            .font13 {font-size:13px !important; line-height: 17px !important;}
+            .font12 {font-size:12px !important; line-height: 16px !important;}
+            .font11 {font-size:11px !important; line-height: 14px !important;}
+            .font10 {font-size:10px !important; line-height: 13px !important;}
+
+        }
+    </style>
+</head>
+
+<body align="center" style="background: #111111; margin: 0px; padding: 0px;">
+<!--[if mso]>
+<style type="text/css">
+    body, table, td, a {font-family: Arial, Helvetica, sans-serif !important;}
+</style>
+<![endif]-->
+<!-- 100% WIDTH WRAPPER BACKGROUND TABLE -->
+<table style="background: #111111;" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td align="center">
+            <!-- FIXED WIDTH, CENTERED WRAPPER TABLE -->
+            <table class="width400" style="table-layout: fixed; min-width: 600px;" width="600" align="center" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="padding: 20px 10px;">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <!-- LOGO -->
+                            <tr>
+                                <td>
+                                    <table width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="background:#F6F6F6; text-align: center; font-family: 'Rockwell', 'Arial Black', Arial, sans-serif; font-size: 24px; color: #414147; font-weight: bold;">
+                                                
+                                             
+                                            <a href="https://mandrillapp.com/track/click/30738550/www.planetfitness.com?p=eyJzIjoiTXBzUTkwVGhUNDFYS2xMcGJvZ25ZTDNrOGtrIiwidiI6MSwicCI6IntcInVcIjozMDczODU1MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5wbGFuZXRmaXRuZXNzLmNvbVxcXC9cIixcImlkXCI6XCJhN2FjYzk4OTFiMDY0MzUzYTk5MjM4YTYwNzQ4OTJkMFwiLFwidXJsX2lkc1wiOltcImYwYTMyYTI4OWFlNTFhNWIwYTg5ZjU0Y2YzMzNmNmZhY2ViOTBmZGFcIl19In0" alias="logo">
+                                            
+                                            <img src="https://images.ctfassets.net/nhduxlsunsu5/4jKcxTPrcRB2r7kHj1DexB/4d9e4cef273b8579a9ea96997ca5aac7/pf-logo.jpg" alt="Planet Fitness" width="600" style="color:#414147; display: block; padding: 0px; text-align: center; height: auto; width: 100%; border: 0px;"></a></td></tr></table>
+                                </td>
+                            </tr>
+
+                            <!-- HEADER IMAGE -->
+                            <tr>
+                                <td>
+                                    <table width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="background: #ffffff; text-align: center; font-family: 'Rockwell', 'Arial Black', Arial, sans-serif; font-size: 32px; color: #5b2b82; font-weight: bold;">
+                                             
+                                      
+                                     <img src="https://images.ctfassets.net/nhduxlsunsu5/FN2EYAhhJH10zXwOWlM7y/a933535f0da0c7bedf641c2d58c0dae8/verifyAccountEn.png" alt="Verify Your Account" width="600" style="color:#5b2b82; display: block; padding: 0px; text-align: center; height: auto; width: 100%; border: 0px;">                               
+                                     
+                                     </td></tr></table>
+                                </td>
+                            </tr>
+
+                            <!-- BODY TEXT -->
+                            <tr>
+                                <td valign="top" align="left" style="background-color:#ffffff;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+                                        <tr>
+                                            <td class="padding20" style="background: #ffffff; padding: 25px 50px 0px 50px; text-align: center; font-family: 'Archivo Narrow', Arial, 'sans-serif'; font-size: 16px; line-height: 22px; color: #5b2b82;">
+                                                    
+                                             
+                                            To complete your account setup, please verify your email address by clicking on the button below.
+                                            
+
+                                            </td></tr></table>
+                                </td>
+                            </tr>
+                            <!-- BUTTON -->
+                            <tr>
+                                <td style="background-color: #ffffff;">
+                                    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+
+                                        <tr>
+                                            <td align="center" style="background-color: #ffffff;padding: 25px 0px 25px 0px;">
+                                                <table border="0" cellpadding="0" cellspacing="0" class="widthFull" style="background-color: #fbd801;">
+
+                                                    <tr>
+                                                        <td width="250" height="45" style="background: #fbd801; font-family: 'Rockwell', 'Arial Black', Arial, sans-serif; text-align: center; font-size: 15px; line-height: 15px;">
+                                                            <a href="https://mandrillapp.com/track/click/30738550/planetfitness.auth0.com?p=eyJzIjoibnAyWXdReHkydHhsVllrWFVQSWU3QV96b25rIiwidiI6MSwicCI6IntcInVcIjozMDczODU1MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3BsYW5ldGZpdG5lc3MuYXV0aDAuY29tXFxcL3VcXFwvZW1haWwtdmVyaWZpY2F0aW9uP3RpY2tldD1qZ1RsczlJMlV2amZkcG5tc3RwTExEY1JVVWdNYTZ0WSNcIixcImlkXCI6XCJhN2FjYzk4OTFiMDY0MzUzYTk5MjM4YTYwNzQ4OTJkMFwiLFwidXJsX2lkc1wiOltcImUyZGQ0MDJhZWJiNjUxMTliMDVhMTExNjcyZTUxODJhMTU0NTY5NmZcIl19In0" style="text-decoration: none; color: #5b2b82; padding: 15px 20px; border: 1px solid #fbd801; display: block; font-weight: bold; text-transform: none;" target="_blank">
+                                                                    
+                                                             
+                                                            Verify your account
+                                                            
+                                                            </a></td></tr></table></td></tr></table>
+                                </td>
+                            </tr>
+                            <!-- TEXT LINK -->
+                            <tr>
+                                <td valign="top" align="left" style="background-color:#ffffff;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+                                        <tr>
+                                            <td class="padding20" style="background: #ffffff; padding: 0px 50px 25px 50px; text-align: center; font-family: 'Archivo Narrow', Arial, 'sans-serif'; font-size: 16px; line-height: 22px; color: #5b2b82;">
+                                                        
+                                                 
+                                                Having trouble? Please copy and paste this link into your web browser:
+                                                
+                                                <br>
+                                                <a href="https://mandrillapp.com/track/click/30738550/planetfitness.auth0.com?p=eyJzIjoibnAyWXdReHkydHhsVllrWFVQSWU3QV96b25rIiwidiI6MSwicCI6IntcInVcIjozMDczODU1MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3BsYW5ldGZpdG5lc3MuYXV0aDAuY29tXFxcL3VcXFwvZW1haWwtdmVyaWZpY2F0aW9uP3RpY2tldD1qZ1RsczlJMlV2amZkcG5tc3RwTExEY1JVVWdNYTZ0WSNcIixcImlkXCI6XCJhN2FjYzk4OTFiMDY0MzUzYTk5MjM4YTYwNzQ4OTJkMFwiLFwidXJsX2lkc1wiOltcImUyZGQ0MDJhZWJiNjUxMTliMDVhMTExNjcyZTUxODJhMTU0NTY5NmZcIl19In0" style="color:#5b2b82">https://planetfitness.auth0.com/u/email-verification?ticket=jgTls9I2UvjfdpnmstpLLDcRUUgMa6tY#</a></td></tr></table>
+                                </td>
+                            </tr>
+
+                            <!-- FOOTER -->
+                            <tr>
+                                <td>
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+                                        <tr>
+                                            <td align="center" bgcolor="#5b2b82" valign="top">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+                                                    <tr>
+                                                        <td align="center" class="align-center" style="padding-top: 20px;" valign="top">
+                                                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+                                                                <tr>
+                                                                    <td align="center" style="padding-bottom:10px;" valign="top">
+                                                                                
+                                                                         
+                                                                        <a alias="footer_ThumbIMG" href="https://mandrillapp.com/track/click/30738550/www.planetfitness.com?p=eyJzIjoiTXBzUTkwVGhUNDFYS2xMcGJvZ25ZTDNrOGtrIiwidiI6MSwicCI6IntcInVcIjozMDczODU1MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5wbGFuZXRmaXRuZXNzLmNvbVxcXC9cIixcImlkXCI6XCJhN2FjYzk4OTFiMDY0MzUzYTk5MjM4YTYwNzQ4OTJkMFwiLFwidXJsX2lkc1wiOltcImYwYTMyYTI4OWFlNTFhNWIwYTg5ZjU0Y2YzMzNmNmZhY2ViOTBmZGFcIl19In0" target="_blank"><img alt="Planet Fitness" border="0" height="92" src="https://images.ctfassets.net/nhduxlsunsu5/1KHY8evDiOI2ElHSp0AnDR/a60f6f8c6d6b55cbff29aa596b8f2b67/pf-footer-logo.png" width="77">
+                                                                        
+                                                                        </a></td></tr><tr>
+                                                                <td align="center" valign="top">
+                                                                    <table border="0" cellpadding="0" cellspacing="0" width="120">
+
+                                                                        <tr>
+                                                                            <td align="center" valign="top">
+                                                                                <a alias="icon_Facebook" href="https://mandrillapp.com/track/click/30738550/www.facebook.com?p=eyJzIjoiVVBNVjJ4Z1l2THhQR3hSSWREUXJMQVI1Q2tZIiwidiI6MSwicCI6IntcInVcIjozMDczODU1MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5mYWNlYm9vay5jb21cXFwvcGxhbmV0Zml0bmVzc1wiLFwiaWRcIjpcImE3YWNjOTg5MWIwNjQzNTNhOTkyMzhhNjA3NDg5MmQwXCIsXCJ1cmxfaWRzXCI6W1wiMTA4MTdhYmQ5M2VmOGIwOGIzYTVlNWRhNDQ5OWFmMGIxY2Y0ZjgzNFwiXX0ifQ" target="_blank"><img alt="Facebook" border="0" height="22" src="https://images.ctfassets.net/nhduxlsunsu5/6XWEX3Xcoav9Ya8SKPdmY4/3bd7491288ccced9fa0017f0d5500670/2018_template_iconFacebook.png" width="22"></a></td><td align="center" valign="top">
+                                                                            <a alias="icon_Instagram" href="https://mandrillapp.com/track/click/30738550/www.instagram.com?p=eyJzIjoiWTFOZ0JCMURreGRZRkNjdWtRV2VEZW1NbGI4IiwidiI6MSwicCI6IntcInVcIjozMDczODU1MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5pbnN0YWdyYW0uY29tXFxcL3BsYW5ldGZpdG5lc3NcXFwvXCIsXCJpZFwiOlwiYTdhY2M5ODkxYjA2NDM1M2E5OTIzOGE2MDc0ODkyZDBcIixcInVybF9pZHNcIjpbXCJhYzVkMDFhZjlkOGVkODhmZWM1MjUzYmVjYzM0MGM0MjlhNGJlNGY0XCJdfSJ9" target="_blank"><img alt="Instagram" border="0" height="22" src="https://images.ctfassets.net/nhduxlsunsu5/5XarqYA4LCKXV9v9fyOpqt/8181bb902679f5f939b722bd469f76a1/2018_template_iconInstagram.png" width="22"></a></td><td align="center" valign="top">
+                                                                            <a alias="icon_Twitter" href="https://mandrillapp.com/track/click/30738550/twitter.com?p=eyJzIjoidW4xUGJ5dEF2bE1RZkI2MnJXczFJV0lkYWlnIiwidiI6MSwicCI6IntcInVcIjozMDczODU1MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3R3aXR0ZXIuY29tXFxcL1BsYW5ldEZpdG5lc3NcIixcImlkXCI6XCJhN2FjYzk4OTFiMDY0MzUzYTk5MjM4YTYwNzQ4OTJkMFwiLFwidXJsX2lkc1wiOltcIjcyMjU5NTgwMWZjOWI4MDgyODlmY2U0NTNlZTBiOTBjZDM5NmVmNmFcIl19In0" target="_blank"><img alt="Twitter" border="0" height="22" src="https://images.ctfassets.net/nhduxlsunsu5/4Stu9vJB46POozeSEFu23r/cae982dc0204cf8222b237d0dc751b8e/2018_template_iconTwitter.png" width="22"></a></td><td align="center" valign="top">
+                                                                            <a alias="icon_YouTube" href="https://mandrillapp.com/track/click/30738550/www.youtube.com?p=eyJzIjoiV1BmYlJBX3JfUUpMeXV3bUI2VkJTTTgzdy13IiwidiI6MSwicCI6IntcInVcIjozMDczODU1MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy55b3V0dWJlLmNvbVxcXC91c2VyXFxcL3BsYW5ldGZpdG5lc3NuaFwiLFwiaWRcIjpcImE3YWNjOTg5MWIwNjQzNTNhOTkyMzhhNjA3NDg5MmQwXCIsXCJ1cmxfaWRzXCI6W1wiMTA2NWE0ZWY1YzZmNzQ0NjVlZDFiOWUwZWQ0Y2NjNDA0MGEyMzYzZVwiXX0ifQ" target="_blank"><img alt="YouTube" border="0" height="22" src="https://images.ctfassets.net/nhduxlsunsu5/64k4XplVHhek0sZg2VtdFm/26ef44a76f36f9e085c2b1d34f370141/2018_template_iconYouTube.png " width="22"></a></td></tr></table></td></tr><tr>
+                                                                <td align="center" style="color: #ffffff; font-size: 12px;font-family:Arial, Helvetica, sans-serif; padding-bottom: 5px; padding-top: 10px;padding-bottom: 10px;" valign="top">
+                                                                            
+                                                                     
+                                                                     <a alias="link_planetfitness.com" href="https://mandrillapp.com/track/click/30738550/www.planetfitness.com?p=eyJzIjoiTXBzUTkwVGhUNDFYS2xMcGJvZ25ZTDNrOGtrIiwidiI6MSwicCI6IntcInVcIjozMDczODU1MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5wbGFuZXRmaXRuZXNzLmNvbVxcXC9cIixcImlkXCI6XCJhN2FjYzk4OTFiMDY0MzUzYTk5MjM4YTYwNzQ4OTJkMFwiLFwidXJsX2lkc1wiOltcImYwYTMyYTI4OWFlNTFhNWIwYTg5ZjU0Y2YzMzNmNmZhY2ViOTBmZGFcIl19In0" style="color: #ffffff; font-size: 12px;font-family:Arial, Helvetica, sans-serif; text-decoration: none;">
+                                                                     
+                                                                   planetfitness.com</a></td></tr></table></td></tr></table></td></tr></table></td></tr>
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <!-- END OF FIXED WIDTH WRAPPER TABLE -->
+        </td>
+    </tr>
+</table>
+<!-- END OF 100% WIDTH WRAPPER BACKGROUND TABLE -->
+<img src="https://mandrillapp.com/track/open.php?u=30738550&amp;id=a7acc9891b064353a99238a6074892d0" height="1" width="1" alt=""></body>
+</html>
+
+--_av-vpcex7xoxN9badBQgksLoA--

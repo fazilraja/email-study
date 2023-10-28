@@ -1,0 +1,599 @@
+Received: from MW5PR20MB4523.namprd20.prod.outlook.com (2603:10b6:303:19b::9)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Sun, 17 Sep 2023
+ 23:44:07 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=gQrL+gMeB//+mvKPtnoIlH/VYXAqrj9EtZVZCbI2dgewhmH2FjRXT160OULKMZamk18TUHX87OwjmdAG/R3OGtKge1CUgunWBretaS+v4NXOAruWmE31rXHCFyRnL0wtzM9qR6R3aVjjf7nEBBAGzX/RWBxC4JhvKbllT2MIaUe5k6nGEPOlrqPII1cDHObVXY5sDdXgzw1hO5O8SzYDupMQkpMJ+WW5n2PhTQ3nbzU1jhCh7lpQ73ypCsCgkTAtdRAnth2rbF4H6DZ0K4BRVQOytzdchnNvTTVALxIHqyCnKHtsgUn1NHSta7K6PkmBxvzaV7SLjNv2ncYB+dmgkA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oIldV0g14ys+ZRO9uqILsLZquJj1utDG+2bgTMfrz/Y=;
+ b=eaSSjwXEbGHV+ukFrpICUnykT1iI4Q8njXMTbBUpmIDdYuNPLZw+4F9MJy7mET/JQ4E4Jcw8nsph+1Woa4cwDokJtJyJyKrFggzk4dambNGOflqrFdpWghA0o0IcTIyUJdf3boWwdwUMmnRVqV/eyPSQ7Qt4rMpFTE2F0jLHAUOD89fe4eHvVg0D00dQZ+/NlYeh5NjS2pEh8sD85qMhDIb6dtn39ZOGGRI+4S6aeEK3i6UZJJhpt+3sGOxrtMdAFKCTbX5CpWonezMrJkwRDtM3cSvahhwCVXlxIU/yDSLCcCcqJHWeJwtebnGMYPeAR8/jfaRHA1zqdSqe72R6bw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.210.172) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=smtp.udacity.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=udacity.com; dkim=pass (signature was verified)
+ header.d=udacity.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounces+594946-651e-tobinsilvestre086=sooners.us@smtp.udacity.com]
+ dkim=[1,1,header.i=@udacity.com] dmarc=[1,1,header.from=udacity.com])
+Received: from AS9PR01CA0025.eurprd01.prod.exchangelabs.com
+ (2603:10a6:20b:542::6) by MW5PR20MB4523.namprd20.prod.outlook.com
+ (2603:10b6:303:19b::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.21; Sun, 17 Sep
+ 2023 23:44:06 +0000
+Received: from AM2PEPF0001C709.eurprd05.prod.outlook.com
+ (2603:10a6:20b:542:cafe::47) by AS9PR01CA0025.outlook.office365.com
+ (2603:10a6:20b:542::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26 via Frontend
+ Transport; Sun, 17 Sep 2023 23:44:05 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.210.172)
+ smtp.mailfrom=smtp.udacity.com; dkim=pass (signature was verified)
+ header.d=udacity.com;dmarc=pass action=none
+ header.from=udacity.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ smtp.udacity.com discourages use of 209.85.210.172 as permitted sender)
+Received: from mail-pf1-f172.google.com (209.85.210.172) by
+ AM2PEPF0001C709.mail.protection.outlook.com (10.167.16.197) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.19 via Frontend Transport; Sun, 17 Sep 2023 23:44:05 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:B4DA2A89973C660D511AEA228349701DDCAC26E0C2292795DC643B270EBAD752;UpperCasedChecksum:46646F7C0E700AEC375137CCDF6A3F944F3E3BA9B99102B484A78AF88FCDBED2;SizeAsReceived:6778;Count:27
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-68fac346f6aso3625764b3a.3
+        for <tobinsilvestre@outlook.com>; Sun, 17 Sep 2023 16:44:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694994245; x=1695599045;
+        h=x-forwarded-for:list-unsubscribe:to:subject:message-id:mime-version
+         :from:date:dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oIldV0g14ys+ZRO9uqILsLZquJj1utDG+2bgTMfrz/Y=;
+        b=p3ciI2XpjnoBoOuzmCBHu7dWU4CP4kqAYsF5j9vS5ziAeaMZsf30Cmgl5yjXddu+ua
+         PaIbSa2zKI7u1I8hrZM00rtOcnXNKF7gt92SR0O8I359EUV6Gdr+CokP6mtYLKoJgi/c
+         5u//Fz5rN5YOwjH8/ziKE7LSbiQVn7ccnrZQBKsqJrKVNC/WqALaNGOl2k9oFpgCrcnC
+         TTrBKMMyNZwoLsAVYKXKVahD2N3jDoEcMzpZM8XFT+HQUtua+je/2OAr5SWifmO1Fq68
+         1sLNA32bgGW5faWVWHb2os/XB+0+kHcgUoVFRYgpZZwN+tubAUo2GdeQk5Ps13eyvYuu
+         N9hg==
+X-Gm-Message-State: AOJu0Yy/VRQbtR/XP7Z9BQlHWfT8mSUqjthm3K0xKH0G9BZWaEsmZWiu
+	w70v0mRvsZv1sjs0EfnWdtBgOxHv7D2IBjNvmA==
+X-Google-Smtp-Source: AGHT+IERl4Pp7IwpkfVXMftqiWKpUtWgvsBtJJLcDgrousdFbK1YXI4mAxmnjPaoNUNrNTxwWYzkax80EWN/23F5ouqLsvLdxq4=
+X-Received: by 2002:a05:6a00:9a3:b0:68f:d036:9bc5 with SMTP id u35-20020a056a0009a300b0068fd0369bc5mr10159336pfg.2.1694994245032;
+        Sun, 17 Sep 2023 16:44:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694994245; cv=none;
+        d=google.com; s=arc-20160816;
+        b=ov75D0TmMdlowdMIk41UXm/SDRaZ9bx5d7MOWSbCwu3zvvX40XrmXu7V/SfrPAG+17
+         DYyrkdk7NvakLyxRYZdEcGrwdAjDiui+nLyWnMM2vfDdA8Ke+QTNN9WBYT33bQQhQo3D
+         mJC/lJaSbI2QbngY54/sV3GCI7KF1ePcb1CyaKA8bQBXr5+kYhVQZJyW+8q3ecLQp5bC
+         MQEba/BEVm+EMeO7v/TPFeDuhCkIUOC9IWVhjElX3rystfjQoctE20YQpUu+lDwNvLZc
+         tKMbM0zzKu5vGUpEak0hAteABivUr0ErkIYuYS4Eygx7mKZZSr/ASUndMg73nUWDLZGM
+         QP3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-unsubscribe:to:subject:message-id:mime-version:from:date
+         :dkim-signature;
+        bh=oIldV0g14ys+ZRO9uqILsLZquJj1utDG+2bgTMfrz/Y=;
+        fh=tiSjaKn63WB4KSdDr1NodcpqzNR0dDRNqSoIx8Lyk64=;
+        b=k50qXEcqzVVHsSSwk5sviq53skT+Su6xpf4R8Q5czGjLSkneghGcem8lMRMdh/Rssw
+         Cknfwg+IVxwUuFsfGOannsc5uIqFgMO9S3zFNTEJamTrltckHv1EVz/LsCMRs9fSKY67
+         GZ09hmgCsRtqD9hN1Gnn66aVG4Kvy18rkhQUzfJ3aCOUaJFrs4s7BBVaMISGCZUF5JYY
+         XKOqx/XsQ0cxg+QYTmVHLC7NfoG67yXhhMFYB2RB8IQ3nmZsYu8sY8IQ5cwEdvFvBkoS
+         qXcLeuzjBtI7kMz/oiMbYzh/l/ffm/mk6YPeCLstUMGowfzfnGajKJVVuszVvYB31gky
+         cVgw==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@udacity.com header.s=s1 header.b=DA4SpLfs;
+       spf=pass (google.com: domain of bounces+594946-651e-tobinsilvestre086=sooners.us@smtp.udacity.com designates 167.89.32.129 as permitted sender) smtp.mailfrom="bounces+594946-651e-tobinsilvestre086=sooners.us@smtp.udacity.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=udacity.com
+Return-Path: bounces+594946-651e-tobinsilvestre086=sooners.us@smtp.udacity.com
+Received: from o7.br.t.udacity.com (o7.br.t.udacity.com. [167.89.32.129])
+        by gmr-mx.google.com with ESMTPS id x20-20020aa793b4000000b0068fd3b8aa16si793201pff.6.2023.09.17.16.44.04
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Sep 2023 16:44:04 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounces+594946-651e-tobinsilvestre086=sooners.us@smtp.udacity.com designates 167.89.32.129 as permitted sender) client-ip=167.89.32.129;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@udacity.com header.s=s1 header.b=DA4SpLfs;       spf=pass
+ (google.com: domain of
+ bounces+594946-651e-tobinsilvestre086=sooners.us@smtp.udacity.com designates
+ 167.89.32.129 as permitted sender)
+ smtp.mailfrom="bounces+594946-651e-tobinsilvestre086=sooners.us@smtp.udacity.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=udacity.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=udacity.com;
+	h=content-type:from:mime-version:subject:to:list-unsubscribe:cc:
+	content-type:from:subject:to;
+	s=s1; bh=oIldV0g14ys+ZRO9uqILsLZquJj1utDG+2bgTMfrz/Y=;
+	b=DA4SpLfsBQ+U0Qw5VoefSYHZpHwbn5y5jP6V0R7SuTooLbSbf+bAS83KMLN3OBvapKiz
+	pMyXPtWNsrBHsFLgu5qLAVXoxKduyD2BgLTGc4nr6F+SM5VsyhhziT6EORfzao+MZ+fwWo
+	9xl8tf6QZ9g8ltNXq7l1gexjNwHVZ1CIyz6blg7S1vJqUYwhMsIZFKtpWvnfuHhnO9n/i1
+	LdGuzG02NzK6hVhDVGBRY2+1CsFJj/VynXGvmypXJ/+7Y2rAXPxTjcUVz0XTwvxW2e77sY
+	Zly+jsYE+7EzSG0gx7vmbyyn0tLY7EWZOPsNhU2ThtzxyvgXwtnw1b4ryFaA4Y4Q==
+Received: by filterdrecv-d7bbbc8bf-jcg2g with SMTP id filterdrecv-d7bbbc8bf-jcg2g-1-65078F42-A
+        2023-09-17 23:44:02.540165484 +0000 UTC m=+210737.265464775
+Received: from NTk0OTQ2 (unknown)
+	by geopod-ismtpd-10 (SG) with HTTP
+	id XKTpWy8-SfGzLh-Nq9lBXA
+	Sun, 17 Sep 2023 23:44:02.414 +0000 (UTC)
+Content-Type: multipart/alternative; boundary=cde1d71a1bf953245e72a05a6ff9177e40cd7dbf2c2613e99fc1288cb127
+Date: Sun, 17 Sep 2023 23:44:02 +0000 (UTC)
+From: Udacity <support@udacity.com>
+Message-ID: <XKTpWy8-SfGzLh-Nq9lBXA@geopod-ismtpd-10>
+Subject: Verify Your Email on Udacity
+X-SG-EID:
+ =?us-ascii?Q?=2FF3gGeno+zlCG3C71QjIxOhsxTVVGLujCbLl7Au2E0krlJGuH72fHiaOmiwkZ9?=
+ =?us-ascii?Q?0JK+XNFsJ7jAHuGc0Bukxx0NZdhJOb8IWGA4QlU?=
+ =?us-ascii?Q?TvM9hFTlz=2FGZz8ezq3BRozdSm+ZLoUObySIJOFI?=
+ =?us-ascii?Q?akQuMfFZdOBx0OxnOzr5HFZowDHM=2F74LQc=2FXEq4?=
+ =?us-ascii?Q?yxvQUHUXKycBWK2WYadNbyWVcnC7fDXM5exx0DL?=
+ =?us-ascii?Q?kq4awF+ZxO4ja1LvAhhl8miMrDlKtJpzlcpZMP?=
+X-SG-ID:
+ =?us-ascii?Q?N2C25iY2uzGMFz6rgvQsb0uZLSDJ3rxWuu4vDURExf7Q79ypoDVIums9d4HxE7?=
+ =?us-ascii?Q?ysQUz3Koz1=2FkKkmEs=2FPwq99fQRqUvKyUjgAUKJe?=
+ =?us-ascii?Q?o3nL7Q=3D?=
+To: tobinsilvestre086@sooners.us
+X-Entity-ID: fgv6/8jLblz9Zz0OBiqbAA==
+List-Unsubscribe:
+ =?us-ascii?Q?=3Cmailto=3Aunsubscribe=40smtp=2Eudacity=2Ecom=3Fsubject=3D594946=2E66kZi-YNY8?=
+ =?us-ascii?Q?=5FxzbmYgMl9KA6ki5Z36yEuqnMhH-MCawloMDAwd?=
+ =?us-ascii?Q?TAwMOK6iqrhdpC-ECfYIWiof-tfJqEN3ZdXhJIu?=
+ =?us-ascii?Q?4oRcAga-YoonDPqrg6tsq-jIEo=5FA3wo44TOAKPC?=
+ =?us-ascii?Q?yNm1kDToJhmPcJko1drUUCSQDjilwOs8gbHwydW?=
+ =?us-ascii?Q?rilJSknB-4OL1ogw=3D=3D=2E5ixiuOS2NUqGbE-LcAPS?=
+ =?us-ascii?Q?ByCGRiIdKX7aEfOr6r-X4VRoMDAwdTAwMKJn7Vo?=
+ =?us-ascii?Q?DcX5uGb3447EYnsBlAJ8sNKWgo34SwCpL6QFW5K?=
+ =?us-ascii?Q?ZUemxE1z0Ro-wEFYT9P7sGJv68YmhLwH=5F4asmXc?=
+ =?us-ascii?Q?ocKLQebNn0RM1zQBaNvsdgE4tB3ZiiM9M61ZLSo?=
+ =?us-ascii?Q?bEFqRw1HRKpWh4IB2EAVBh=5F-74NC-XZZiYB=5Fbst?=
+ =?us-ascii?Q?BHmWNI8-VQNCjX21am6Zxuw=5FXc1UT4nclcJRHBm?=
+ =?us-ascii?Q?G02jgkGm6qK2k=3D=3E?=
+X-Forwarded-For: tobinsilvestre086@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 27
+X-MS-Exchange-Organization-ExpirationStartTime: 17 Sep 2023 23:44:05.4933
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ f5546f78-dd8c-4ff5-d7fd-08dbb7d7fab2
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ AM2PEPF0001C709:EE_|MW5PR20MB4523:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ AM2PEPF0001C709.eurprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/17/2023 11:41:40 PM
+X-MS-Office365-Filtering-Correlation-Id: f5546f78-dd8c-4ff5-d7fd-08dbb7d7fab2
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.210.172
+X-SID-PRA: SUPPORT@UDACITY.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:4;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2023 23:44:05.3683
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5546f78-dd8c-4ff5-d7fd-08dbb7d7fab2
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ AM2PEPF0001C709.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR20MB4523
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.1074819
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(2008001134)(2008121020)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPlsy9LMtMSQwVObkkxVrMaFNdBhBwTtP+5rfmTHH6F1o0QP7fxFzHzebFnZXCNIFYkIVzYvozH+3gg29YEZFEHle6WNqqbGHffrGrzcclyXWCRCjczyHvjCS8R5G08Q77WLcf+f2pbNvLUXh4/5CgmSdxWnk6TW0hcRAEOLMek0HSk/L+rhC4+wzySJaDDOrmY=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TEYzOXduR1FRRmdMSktMOHJub2doazFEdjZpbStpN1BsakJndmh0QWNDMDZ1?=
+ =?utf-8?B?TFBQbFg5ZjZVVDByaFF2VFYvZjQ5Rk5NL1BMYVppaFNVUEtTM0Rmb3hJclRE?=
+ =?utf-8?B?WFhJZFNNZ1BjQ1BTd2RQRjA3aTAzT1pJemMyaUJGTGNEanJXSWVLY0tJVVBF?=
+ =?utf-8?B?N3hNb1VBbXEzZVNWSDZEZHBWcTNoMmJkenJJbWh0eUdSaU5iVTFEaEpvZ1h1?=
+ =?utf-8?B?b09UVTJPaERzNnNGdS80MFFoS2kzL0tGQjNmY05zdWJSTmgxZkRhTlRoTzVs?=
+ =?utf-8?B?RjYxK2VDV2F3em5iVVM0bnAyMWxwZWZJNklIbTQzdGdHSmF1dlg3aDhIWENu?=
+ =?utf-8?B?S2IrUHBya29iRmxDMFVqOHBxSHJJSTJPVFRUZllnNFYvdFlBK3RLdjllSUo5?=
+ =?utf-8?B?bzExMldONkhyNGwwcUFhQmN3WlJsMU0zMFkyVnRMc1k5TDV6OGNmWTJlc2Yy?=
+ =?utf-8?B?NlY2eEgzWXFNWGt0aXJ2dEgxZGxURDlSRXluci9DbWtaUnNQR2J0VmtCMzdC?=
+ =?utf-8?B?WlJyTnMwa21TeVZZSFU0TG51OUJhdzJESU5tS2hIMFM0aXdKK3JLQ0Q4VGI5?=
+ =?utf-8?B?c3JjM2lteDFjNTNFQ2kvZFFydE9XUzVqamIrOEY1T010OUpWaExxMmVOVys1?=
+ =?utf-8?B?TjJDZHcweUJhNHpkOXpTTXB6YUlCcXlPNWhVUW9nc05IU3ArajdSelhnV0JO?=
+ =?utf-8?B?SEw0elJUazFEakVsQUFPakJPNW12cGN5aTg0ZUlpU08za0Z1NCszLzFDVXhI?=
+ =?utf-8?B?YWREWnlpVUowUVNRMkhWdGtGbHNwYlludXVyZGt1cjV5eVk0T2l5L0ExRlN3?=
+ =?utf-8?B?K2xMUDVaYWFQb29YM1JDeldpdFk1QldFd1VVUGZvSU5MSFBmNzk4eElvQTMw?=
+ =?utf-8?B?SkJiMkExU3pPQkhCUEdudGU3SFF1eG5WQWl1bTUzMkpEZkpPeWZ6MTVnYjJJ?=
+ =?utf-8?B?MFR0b3Bvb2pYSGoyVUJQZU5oVlU0ZVpWcXFneTJtVHhiWE5ESVVYOS9BVFFM?=
+ =?utf-8?B?ODIwcms2eU5TVUQvUGNYYnpsYU5HTzREeWJsMGNwUHB4SE1FTm1PbGI1ZjNn?=
+ =?utf-8?B?L0VVRThOQURlcE9ZVGczVHIvVGZJUjNOeHZtNWRVb3VzM05lYktCUFh4YVE3?=
+ =?utf-8?B?NjQ4Qkh1TmNGbG5QeXhlUHVLQzJEOCtlYllveDdwTzh3SlRRSlNvK0JrYnlr?=
+ =?utf-8?B?ZHd4cVZCdVRmemJNYVNtQ01kNmhhTEZDZmxtMFE4MlVqK01mRngrMFoyM0tC?=
+ =?utf-8?B?OVJOTjZiMUZqVCswNGgyYXVtYWtGYWN3NTRSaUZxblkrTmlIQkxkcHRVL3ZR?=
+ =?utf-8?B?MlpJQ0RMcHlzVll2c0ZIZStGU0hKc1lrTFUvTjJmdmRqaDZuTEovKzJmMzZT?=
+ =?utf-8?B?M1RHZis4eXJTK2Y4WDVtK0lIVDNOTHkwYTdLZ1lKMVQvQkFNdkEzZmNJSzNU?=
+ =?utf-8?B?OWl2U1lUWDZaWFhxR1hkdEo4eUlDWWM1OHRKc3cvNnd3Mmh4U0FNaDk2NlJj?=
+ =?utf-8?B?Y0RHOWJ2QmFQcjQya3c4WjZqRitiOFplNTFDaUYzTHdpTVlGMWd2VmVoQ2xv?=
+ =?utf-8?B?dlRaY3N2WEtmZThHcTNJbGp3ekdxVnRwaDRlVlFOeU9McitkRHoyK1FSTHZH?=
+ =?utf-8?B?V2RLR3RYNTJlMERMcFRQNVNnQ1duN1Z0SkUzVW8wTGsvWDJzMERFQnZTRTFN?=
+ =?utf-8?B?VnMvU1JDMGcvWkU4VG1CNU1pQ2pWUGd0cVpRUldtZWEvT1pEMjhLUnFBRGtK?=
+ =?utf-8?B?SjhKbVpzTXZXbWczUEpBdXVLOTBLVm5JYnVVOGdPb0kxU2pkYXlEU20zSmEw?=
+ =?utf-8?B?YW1pbS9LalRkU1lBMG9wZER5SWxTNERNanlOaFhMMFFUazYzY2MxYkVoOTY1?=
+ =?utf-8?B?c3VkZk9xbzB0bUFpVmVMTWd2bDNIUFRndWpIeEV6dTE2UW1YRDlhb0tnZ2cy?=
+ =?utf-8?B?QjgwMGwxR1NmZnd0QjUydTNHV2M4VjdJSVJxMVdFNzVjUmVSOXRmbENGRnVp?=
+ =?utf-8?B?blJGbmdzeU5Cdyt4aGJpWUNDeWpqdSs5YkxXdVJTRnhlT1RQUzJiRE15TFZL?=
+ =?utf-8?B?TnRCK2pMZFVqQlZORFlSQ1hrbzJOdXhhTGcxclFqdGhFVG1Ma0xyblZkUlN4?=
+ =?utf-8?B?ZHgxcis4WElmbTBqK3IxbzRvRE95endqVkJRV09IdG9wRTNGSk5CeXdzTjh6?=
+ =?utf-8?B?bTl0dkp0eFljaVZjaWRvTncrTk80ekw2S0hOWituT3AzVEZ5cFBIbDUzVmNp?=
+ =?utf-8?B?YmNWT2E5TWN6Y3FMeEhNNVFuWE4vVVl0cGM5bjM0S05vRmUwKzMxeEhORkp5?=
+ =?utf-8?B?eU8xWHU4cnJ3bGxLaytqZGZXdlF6NDlvenlIbGpIZDB2dUVmcEJ4Zz09?=
+MIME-Version: 1.0
+
+--cde1d71a1bf953245e72a05a6ff9177e40cd7dbf2c2613e99fc1288cb127
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+
+Please verify your email address with the link provided here.
+
+Udacity ( https://auth.udacity.com/verify-email?email=3Dtobinsilvestre086%4=
+0sooners.us&code=3D9903cd3d663ad8d889e991f3ebc7fe393e99adc0ec5f68a63506c486=
+6b983d2df9b6b4f78180f44b00d95ac226cce9b80bdcb66b629b18eb2992d682b72e1d89c7d=
+7013acbeb87f0be3cb2369d428229041e3e63273b7325&next=3Dhttps%3A%2F%2Fwww.udac=
+ity.com )
+
+Hello,
+
+Please click the button below to verify your email address.
+
+Verify Email Address ( https://auth.udacity.com/verify-email?email=3Dtobins=
+ilvestre086%40sooners.us&code=3D9903cd3d663ad8d889e991f3ebc7fe393e99adc0ec5=
+f68a63506c4866b983d2df9b6b4f78180f44b00d95ac226cce9b80bdcb66b629b18eb2992d6=
+82b72e1d89c7d7013acbeb87f0be3cb2369d428229041e3e63273b7325&next=3Dhttps%3A%=
+2F%2Fwww.udacity.com )
+
+You may also copy and paste this link in your web browser:
+
+https://auth.udacity.com/verify-email?email=3Dtobinsilvestre086%40sooners.u=
+s&code=3D9903cd3d663ad8d889e991f3ebc7fe393e99adc0ec5f68a63506c4866b983d2df9=
+b6b4f78180f44b00d95ac226cce9b80bdcb66b629b18eb2992d682b72e1d89c7d7013acbeb8=
+7f0be3cb2369d428229041e3e63273b7325&next=3Dhttps%3A%2F%2Fwww.udacity.com
+
+To ensure that you receive future emails from us, please add Udacity to you=
+r email contacts..
+
+Need Help? Contact Support ( https://udacity.zendesk.com )
+
+Udacity=C2=A0 =E2=80=A2 =C2=A02440 W =E2=80=8DEl Cam=E2=80=8Dino Real =C2=
+=A0 =E2=80=A2 =C2=A0Mou=E2=80=8Dntain V=E2=80=8Diew, C=E2=80=8DA 94=E2=80=
+=8D040
+
+Be in demand
+Unsubscribe From This List https://mailer.udacity.com/asm/unsubscribe/?user=
+_id=3D594946&data=3DkC6t6fjOHRlEtSMTH-R_KzrpqqmGYx6oV-H-q35Gma1oMDAwdTAwMED=
+-z_YDkXojcNdP6xI7MHqNz-adQX3TynTRxoc4APAWdeAooExr4q_I-MO3BnOKzuAnpv0yJr-upv=
+TLbTKANdi38pDvwYqYHngvMqItCXtbCUx0QpIEc3v4ngs37x0lMhEdccEvJR8XmypoGcfvHLqKL=
+8RIRuJ1hduCUG5aM3dMdonlQF6t0pVIcjWjW4D7dCq27a6BFVJQKG2x4VXnYzivOwE62hd6ZEeg=
+gb3YAVKJ7F6IXhCLktM-kwiD3ZAmqMCmipPx9pd0DVnkjZzWHbl_QatsvLLDen2f2EJkHdCLavo=
+lncB3WFRleaaIc3-ZsHSkbEOw1lpY1-3gDwWeQuSzkd9mCrkuRejudLVgKlLQJS-eMkoG2_8gFB=
+OOvXQ4YQ=3D=3D | Manage Email Preferences https://mailer.udacity.com/asm/?u=
+ser_id=3D594946&data=3DMCV6aH6xpWwFyPVZZ9bSt11VHXG5xC0g1RY3e9E9H3FoMDAwdTAw=
+MJ0QLLbNeeFo3y3zKRzY80U1OS2RK6gzoyRUmYyYaPwdKJC2gbItwV9gUmE-s-eL8JjEpFe6PRM=
+qUEHynTARE5wqw630CtAep-yOsl-jv6xqs11NslbqnrlEmzolY1j56HrsPTjE8B1eNMNEMQ0XM6=
+oFnNF8L3Vthds90JCmGrICos0WsBTvskJ17lnJmabAT3Ia1tFKNhOKGjkfzCiESzprpRW13784o=
+CHlAivzWxeYyEYfjPVf2JeHkLfff3kP_ZcRtaJpymRPkdkGgpvYTwPFwseio4O6UqfMbeoolGLR=
+52vRK1T6ajnYz9Gr3KxpORD5ATBPrwzXT4MSBKqp79Lr305g0ZAcFsdy7ml0AqpKT-0ybVQaNS-=
+75cyDJapZdw=3D=3D
+--cde1d71a1bf953245e72a05a6ff9177e40cd7dbf2c2613e99fc1288cb127
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=utf-8
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><b=
+ody bgcolor=3D"#fafbfc" style=3D"Margin:0; padding:0;" yahoo=3D"fix">
+  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%">
+    <tr>
+      <td style=3D"background-color:#fafbfc">
+        <center bgcolor=3D"#fafbfc" style=3D"width:100%;background-color:#f=
+afbfc;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+          <div id=3D"maincontent" style=3D"max-width:620px; font-size:0;mar=
+gin:0 auto;">
+            <div class=3D"preheader" style=3D"font-size: 1px; line-height:1=
+px; display: none!important; mso-hide:all;">Please verify your email addres=
+s with the link provided here.=20
+            </div>
+            <!--[if gte mso 9]>
+              <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=
+=3D"width:620px;">
+                <tr>
+                  <td valign=3D"top">
+            <![endif]-->
+
+            <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=
+=3D"width:100%;">
+              <tr>
+                <td>
+                  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" s=
+tyle=3D"width:100%;">
+                    <tr>
+                      <td align=3D"center" style=3D"padding-bottom:20px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"font-family:'Open+Sans', 'Open Sans', Helvetica, Arial, san=
+s-serif; font-size:13px; line-height:18px; color:#00C0EA; text-align:center=
+; width:152px;">
+                          <tr>
+                            <td style=3D"padding:20px 0 10px 0;">
+                              <a href=3D"https://mailer.udacity.com/ls/clic=
+k?upn=3DorLXCy66fGXUGWqdK4HMSjavt3LFvtwg8IBLVaKKWOduPNimY39YiNSPvOzsIxgIVEz=
+m3gqcsWBj0CqlYvKq9nyyBb4UIiJ7mGD3iTD50MofwzHVjT2Aqfbr6ym9w9y3p1skgShFa2VvZM=
+mqLID-2B6M0g76o0PKdJjz-2Bzui-2BO9saWubogzpGWaEDasMUjn3ilZcf-2BkY3HE2ZosN3Rx=
+sHMUftYagLlOwiYB6h8GgHqlHvQmI9hFOy-2FoNFK2CQcfcsxzDeczNFYQ0pAN5XbhfDwV1lca5=
+DffKOQAuBlZpVZHLSkPMOEstZcULReN0WHT3zqdiPWlsSfWb6BI3fEOtktjLQC2gs9cdbC75XWG=
+ppRLFXyt2yb3x89MD0mYEHnhR0XsyZcpvWx9mvK1AW4swvv5g-3D-3D8w7i_nm1feaUEy6z79DR=
+yvvWDpqSbHRoUhQAY-2B3tscihK6NuLuvZKEWIX38Zu-2BatNG0ufDyIyyig4LhjmTN1QuajK3j=
+wtGQsKv4PmsfxIl72InyhEGk2D3kx196gIxdq-2FVE-2BFJJMuYC3nvmYmfIHOd3fhYECnQ0I7S=
+nFXhkGnbm4ZCkCOI2PKQZah8PAzg6pB8aZqXnjYlkVGBvtVWLJUg25iilfWnUjlg1WGvu-2F6yj=
+Yc4A5VBSKT8DKf1TR3IgOFUVxx6bD1lbt7RE9AQfiGPGE-2BxUzv3E7sYP-2Fau8PTkmR2aqQ-3=
+D" style=3D"text-decoration:none;" target=3D"_blank"><img alt=3D"Udacity" b=
+order=3D"0" height=3D"27" src=3D"https://udacity-email.s3.us-west-2.amazona=
+ws.com/Udacity-logo-horiz-RGB.png" style=3D"display:block; width:152px !imp=
+ortant; font-family:'Open+Sans', 'Open Sans', Helvetica, Arial, sans-serif;=
+ font-size:22px; line-height:26px; color:#000000; text-transform:uppercase;=
+ text-align:center; letter-spacing:1px;" width=3D"152"></a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" s=
+tyle=3D"width:100%;">
+                    <tr>
+                      <td bgcolor=3D"#fafbfc" style=3D"width:7px; font-size=
+:1px;">&nbsp;</td>
+                      <td bgcolor=3D"#f5f6f7" style=3D"width:1px; font-size=
+:1px;">&nbsp;</td>
+                      <td bgcolor=3D"#f0f2f3" style=3D"width:1px; font-size=
+:1px;">&nbsp;</td>
+                      <td bgcolor=3D"#edeef1" style=3D"width:1px; font-size=
+:1px;">&nbsp;</td>
+                      <td bgcolor=3D"#ffffff">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"width:100%;">
+                          <tr>
+                            <td style=3D"text-align:center; padding:40px 40=
+px 40px 40px; border-top:3px solid #2015ff;">
+                            <!--[if gte mso 9]>
+                              <table border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" style=3D"width:520px;">
+                                <tr>
+                                  <td valign=3D"top">
+                            <![endif]-->
+                              <div style=3D"display:inline-block; width:100=
+%; max-width:520px;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" style=3D"font-family:'Open+Sans', 'Open Sans', Helvetica, Aria=
+l, sans-serif; font-size:14px; line-height:24px; color:#525C65; text-align:=
+left; width:100%;">
+                                  <tr>
+                                    <td>
+                                      <p style=3D"Margin:0px 0px 20px 0px; =
+font-size:15px; line-height:23px; color:#102231;">
+                                         Hello,=20
+                                      </p>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                      <td style=3D"font-family: Arial, Helv=
+etica, sans-serif; color:#363636;font-size:16px;">
+                                           Please click the button below to=
+ verify your email address. <br> <br>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td align=3D"center" style=3D"padding=
+:0px 0 30px 0;  ">
+                                          <table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" style=3D"border-collapse:separate !important; bord=
+er-radius:15px; width:240px;">
+                                              <tr>
+                                                  <td align=3D"center" vali=
+gn=3D"top">
+                                                  <!--[if gte mso 9]>
+                                                      <table border=3D"0" c=
+ellspacing=3D"0" cellpadding=3D"0" style=3D"width:240px">
+                                                          <tr>
+                                                              <td bgcolor=
+=3D"#01b3e3" style=3D"padding:0px 10px; text-align:center;" valign=3D"top">
+                                                  <![endif]-->
+                                                      <a href=3D"https://ma=
+iler.udacity.com/ls/click?upn=3DorLXCy66fGXUGWqdK4HMSjavt3LFvtwg8IBLVaKKWOd=
+uPNimY39YiNSPvOzsIxgIVEzm3gqcsWBj0CqlYvKq9nyyBb4UIiJ7mGD3iTD50MofwzHVjT2Aqf=
+br6ym9w9y3p1skgShFa2VvZMmqLID-2B6M0g76o0PKdJjz-2Bzui-2BO9saWubogzpGWaEDasMU=
+jn3ilZcf-2BkY3HE2ZosN3RxsHMUftYagLlOwiYB6h8GgHqlHvQmI9hFOy-2FoNFK2CQcfcsxzD=
+eczNFYQ0pAN5XbhfDwV1lca5DffKOQAuBlZpVZHLSkPMOEstZcULReN0WHT3zqdiPWlsSfWb6BI=
+3fEOtktjLQC2gs9cdbC75XWGppRLFXyt2yb3x89MD0mYEHnhR0XsyZcpvWx9mvK1AW4swvv5g-3=
+D-3D8EBI_nm1feaUEy6z79DRyvvWDpqSbHRoUhQAY-2B3tscihK6NuLuvZKEWIX38Zu-2BatNG0=
+ufDyIyyig4LhjmTN1QuajK3sACzQEHPAnb0G6sLyPeGKNOPJjWDPWMcz91wiVHw7eUOp7B5AiVX=
+mygh8rRhBHBkBfuVFp7zPyP5XpMtQLsIsZRHncKkpOQt8mcLbKMbh5CDBJLmTtQ7P2GtbuTWBhg=
+OZawiN0z7S0cOZv5FPmv-2FcWql7atHiiZGXIaNtdUTuD8f7xn3LebK9VrqCzlJD5ypP0EvLqLJ=
+gHW0leUrUUiiM8-3D" target=3D"_blank" style=3D"background-color:#2015ff; bor=
+der-collapse:separate !important; border-top:10px solid #2015ff; border-bot=
+tom:10px solid #2015ff; border-right:30px solid #2015ff; border-left:30px s=
+olid #2015ff; border-radius:4px; color:#ffffff; display:inline-block; font-=
+family:'Open+Sans','Open Sans',Helvetica, Arial, sans-serif; font-size:14px=
+;   text-align:center; text-decoration:none; letter-spacing:2px;">Verify Em=
+ail Address</a>
+                                                  <!--[if gte mso 9]>
+                                                              </td>
+                                                          </tr>
+                                                      </table>
+                                                  <![endif]-->
+                                                  </td>
+                                              </tr>
+                                          </table>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                          <p style=3D"Margin:0px 0 20px 0; =
+font-family: Arial, Helvetica, sans-serif; color:#363636;font-size:16px;">Y=
+ou may also copy and paste this link in your web browser:</p>
+                                          <p style=3D"Margin:20px 0; font-s=
+ize:16px; line-height:17px; word-wrap:break-word; word-break:break-all;"><a=
+ href=3D"https://mailer.udacity.com/ls/click?upn=3DorLXCy66fGXUGWqdK4HMSjav=
+t3LFvtwg8IBLVaKKWOduPNimY39YiNSPvOzsIxgIVEzm3gqcsWBj0CqlYvKq9nyyBb4UIiJ7mGD=
+3iTD50MofwzHVjT2Aqfbr6ym9w9y3p1skgShFa2VvZMmqLID-2B6M0g76o0PKdJjz-2Bzui-2BO=
+9saWubogzpGWaEDasMUjn3ilZcf-2BkY3HE2ZosN3RxsHMUftYagLlOwiYB6h8GgHqlHvQmI9hF=
+Oy-2FoNFK2CQcfcsxzDeczNFYQ0pAN5XbhfDwV1lca5DffKOQAuBlZpVZHLSkPMOEstZcULReN0=
+WHT3zqdiPWlsSfWb6BI3fEOtktjLQC2gs9cdbC75XWGppRLFXyt2yb3x89MD0mYEHnhR0XsyZcp=
+vWx9mvK1AW4swvv5g-3D-3DcN41_nm1feaUEy6z79DRyvvWDpqSbHRoUhQAY-2B3tscihK6NuLu=
+vZKEWIX38Zu-2BatNG0ufDyIyyig4LhjmTN1QuajK3lc1KGqAB8PnbtLh8lhjw5Kt8m61ZA1QHC=
+ZyOwKi1BHSHvswOzkhQp6JJ-2BRXuYY7FCcIqtPjgQA2T4Jk6UDMHWtbH1RWSbcTDzJ2JfdllzE=
+PJKIGKvh4HNK85eVN-2FQNdKqATcveoX0jLd4-2Fy8PKe-2Fh5vkhqAqNBp9B3-2F7W9Vbi0aFs=
+LR-2BrM-2Bf0vLOhyioMyxE-2F-2BIuib7shCkJLiiI4GD69U-3D" style=3D"text-decorat=
+ion: none; color: #2015ff;" target=3D"_blank">https://auth.udacity.com/veri=
+fy-email?email=3Dtobinsilvestre086%40sooners.us&amp;code=3D9903cd3d663ad8d8=
+89e991f3ebc7fe393e99adc0ec5f68a63506c4866b983d2df9b6b4f78180f44b00d95ac226c=
+ce9b80bdcb66b629b18eb2992d682b72e1d89c7d7013acbeb87f0be3cb2369d428229041e3e=
+63273b7325&amp;next=3Dhttps%3A%2F%2Fwww.udacity.com</a></p>
+                                      </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td style=3D"font-family: Arial, Helvet=
+ica, sans-serif; color:#363636;font-size:16px;">
+                                     To ensure that you receive future emai=
+ls from us, please add Udacity to your email contacts..
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                              <!--[if gte mso 9]>
+                                    </td>
+                                  </tr>
+                                </table>
+                              <![endif]-->
+                            </td>
+                          </tr>
+                          <tr>
+                            <td bgcolor=3D"#e0e2e5" style=3D"height:1px; wi=
+dth:100%; line-height:1px; font-size:0;">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td bgcolor=3D"#e0e2e4" style=3D"height:1px; wi=
+dth:100%; line-height:1px; font-size:0;">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td bgcolor=3D"#e8ebed" style=3D"height:1px; wi=
+dth:100%; line-height:1px; font-size:0;">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td bgcolor=3D"#f1f3f6" style=3D"height:1px; wi=
+dth:100%; line-height:1px; font-size:0;">&nbsp;</td>
+                          </tr>
+                        </table>
+                      </td>
+                      <td bgcolor=3D"#edeef1" style=3D"width:1px; font-size=
+:1px;">&nbsp;</td>
+                      <td bgcolor=3D"#f0f2f3" style=3D"width:1px; font-size=
+:1px;">&nbsp;</td>
+                      <td bgcolor=3D"#f5f6f7" style=3D"width:1px; font-size=
+:1px;">&nbsp;</td>
+                      <td bgcolor=3D"#fafbfc" style=3D"width:7px; font-size=
+:1px;">&nbsp;</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                   <p style=3D"Margin:20px 0 20px 0; font-family: Arial, He=
+lvetica, sans-serif; color:#363636;font-size:16px;">Need Help? <a href=3D"h=
+ttps://mailer.udacity.com/ls/click?upn=3DkxWrQSIS5VLCFk-2FQEgpko6uzWoowh2ox=
+7-2BVRgChOCERkqd3wVh2KZzI13mB-2B2FGrgCeH_nm1feaUEy6z79DRyvvWDpqSbHRoUhQAY-2=
+B3tscihK6NuLuvZKEWIX38Zu-2BatNG0ufDyIyyig4LhjmTN1QuajK3rYi1t8FiS7Gj4-2Bd2oU=
+ESvZeMEvtEs3iQM0Sov6iuZnlp-2F-2Fe4jSXg1F3GEq6QmoB3x1zhT2lI6ss1PyAdXxgPUqzWD=
+G5lPZirdZqbkHbDEqhEzpUN-2B4OIab5kBMX8YXLeJCHyD65lIw7uRo2tBg-2F881sr1qteX4DE=
+X2x-2BSsDD2-2Fl0YfD5PLA87G5YXfnN93CeYrHVxGXctkmNXIdEo0zvuw-3D" style=3D"tex=
+t-decoration: none; color: #2015ff;" target=3D"_blank">Contact Support</a><=
+/p>
+                </td>
+              </tr>
+              =20
+              =20
+              <tr>
+                <td align=3D"center" style=3D"padding:20px 20px 40px 20px;"=
+>
+                  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" s=
+tyle=3D"font-family:'Open+Sans', 'Open Sans', Helvetica, Arial, sans-serif;=
+ font-size:12px; line-height:18px;  text-align:center; width:auto;">
+                    <tr>
+                      <td style=3D"color:#b7bdc1;">
+                        <p style=3D"color:#b7bdc1;padding-top:20px;"><span =
+class=3D"appleLinksGrey"><a href=3D"" style=3D"text-decoration:none!importa=
+nt;color:#b7bdc1;">Udacity&nbsp; =E2=80=A2 &nbsp;2440 W =E2=80=8DEl Cam=E2=
+=80=8Dino Real &nbsp; =E2=80=A2 &nbsp;Mou=E2=80=8Dntain V=E2=80=8Diew, C=E2=
+=80=8DA 94=E2=80=8D040</a></span></p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          <!--[if gte mso 9]>
+                </td>
+              </tr>
+            </table>
+          <![endif]-->
+          </div>
+          <div style=3D" width:100%;">
+            <table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" style=
+=3D"width:100%;">
+              <tr>
+                <td align=3D"center" bgcolor=3D"#7d97ad" style=3D"padding:1=
+0px 0;">
+                  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" s=
+tyle=3D"font-family:'Open+Sans', 'Open Sans', Helvetica, Arial, sans-serif;=
+ font-size:14px; line-height:19px;  text-align:center; width:auto;">
+                    <tr>
+                      <td style=3D"color:#ffffff;">
+                        Be in demand
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </center>
+      </td>
+    </tr>
+  </table>
+<a href=3D"https://mailer.udacity.com/asm/unsubscribe/?user_id=3D594946&amp=
+;data=3DkC6t6fjOHRlEtSMTH-R_KzrpqqmGYx6oV-H-q35Gma1oMDAwdTAwMED-z_YDkXojcNd=
+P6xI7MHqNz-adQX3TynTRxoc4APAWdeAooExr4q_I-MO3BnOKzuAnpv0yJr-upvTLbTKANdi38p=
+DvwYqYHngvMqItCXtbCUx0QpIEc3v4ngs37x0lMhEdccEvJR8XmypoGcfvHLqKL8RIRuJ1hduCU=
+G5aM3dMdonlQF6t0pVIcjWjW4D7dCq27a6BFVJQKG2x4VXnYzivOwE62hd6ZEeggb3YAVKJ7F6I=
+XhCLktM-kwiD3ZAmqMCmipPx9pd0DVnkjZzWHbl_QatsvLLDen2f2EJkHdCLavolncB3WFRleaa=
+Ic3-ZsHSkbEOw1lpY1-3gDwWeQuSzkd9mCrkuRejudLVgKlLQJS-eMkoG2_8gFBOOvXQ4YQ=3D=
+=3D">Unsubscribe From This List</a> | <a href=3D"https://mailer.udacity.com=
+/asm/?user_id=3D594946&amp;data=3DMCV6aH6xpWwFyPVZZ9bSt11VHXG5xC0g1RY3e9E9H=
+3FoMDAwdTAwMJ0QLLbNeeFo3y3zKRzY80U1OS2RK6gzoyRUmYyYaPwdKJC2gbItwV9gUmE-s-eL=
+8JjEpFe6PRMqUEHynTARE5wqw630CtAep-yOsl-jv6xqs11NslbqnrlEmzolY1j56HrsPTjE8B1=
+eNMNEMQ0XM6oFnNF8L3Vthds90JCmGrICos0WsBTvskJ17lnJmabAT3Ia1tFKNhOKGjkfzCiESz=
+prpRW13784oCHlAivzWxeYyEYfjPVf2JeHkLfff3kP_ZcRtaJpymRPkdkGgpvYTwPFwseio4O6U=
+qfMbeoolGLR52vRK1T6ajnYz9Gr3KxpORD5ATBPrwzXT4MSBKqp79Lr305g0ZAcFsdy7ml0AqpK=
+T-0ybVQaNS-75cyDJapZdw=3D=3D">Manage Email Preferences</a><img src=3D"https=
+://mailer.udacity.com/wf/open?upn=3DFvUHYnu4r807c3Vu1k5Na-2FAs2fIrXkwY5HAVT=
+6eB9EwZ5tIFYLVlsWTGu-2F5qm2PKXH0muVsUle-2BEXrMNxKS0gZiBGSaelmVwQpmIKoqVqhy3=
+k2i0zXrCv-2Fu5tzvBi4iuHm3O-2Fpu0-2Bj04g84TiKCmplL4zCq46ATuCJr03qgib-2FXKk4z=
+6T3IQQFnrsDka1-2F8SbKbCNdL5ut0RabUPkexQFd7OSTrmUnu6A7Ejmygb8eDPhjsafMFONVcL=
+JXJCdMRaHuRr9prLeGJTdZ5Gta6HA-2Fk7GhuzK5IQFFLncxfCFpuw8lL0iHY0ces9e7872QJx"=
+ alt=3D"" width=3D"1" height=3D"1" border=3D"0" style=3D"height:1px !import=
+ant;width:1px !important;border-width:0 !important;margin-top:0 !important;=
+margin-bottom:0 !important;margin-right:0 !important;margin-left:0 !importa=
+nt;padding-top:0 !important;padding-bottom:0 !important;padding-right:0 !im=
+portant;padding-left:0 !important;"></body>
+
+--cde1d71a1bf953245e72a05a6ff9177e40cd7dbf2c2613e99fc1288cb127--

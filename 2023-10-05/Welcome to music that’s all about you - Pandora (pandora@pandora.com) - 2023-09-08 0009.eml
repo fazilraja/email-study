@@ -1,0 +1,848 @@
+Received: from LV3PR20MB7145.namprd20.prod.outlook.com (2603:10b6:408:1b6::17)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Fri, 8 Sep 2023
+ 05:09:36 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=iDwOicrm0sB6DImpaVQRW4BIu+pAjU6vDxRE1fCoksbMJccQomFMeIQYS6ZKCbqjq7ctGuAMqRXzz7RhiopDWT0YY84OIgDss55ZY6qLrnycESGJ1P5PAz794GMZLeKIHF4Qg/3YtTwzxcYKT9cULaIFxndlEh2gH7vkTPgFLwaADLm+xhPszmetJboLEMkxus34mxleCRRgRJck/hgxav673mjJ0knJPZ5aefNSPP+fJlinydupr8DpKpsfC/Taq8drcQQXtSTAFXqakSwkg+g/Ts/DAuxFX9G88WKOh1ExHo9za+DG8bg/KkGtnL/2tNX6/X+wXFq59yiIlMPrUw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uFcxiUjtRNEe8BqQsxDFIZsaW7cfI95GHBRkSsQRP1M=;
+ b=eG/nbTUfwQHCxczF8wPU0BQjl392ZDTgZDO+ffDcUJZOqxedmDycOOQ34Dg5XeXHQa11cpL9FE6NMWEO4A94hsDvuKtC8ZhS4+kaMZUvmFNWfUy6YCDgGioIhJA0Cp/AskWjRhN7SZUfdBeW/YoyG0NYqYGqe151s6dBiHOYmgvMeZCSsMW2qmaADPNEwCHk/fzHs0SM5HIOp/KDNOwBGsCGq5Bg5Dy/MeP+aJ0MlcYyf2MBXWEvR3pYWXCq6znqtYgsJ2GJr+N++CAGyKbthFJh/E5Djh9Yq0tmk1MOa18hmkFvPZ7PmNoQ6TTXX6einT8vXLkm3fPNZjGD3FZ6sQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.221.181) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=sg.pandora.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=pandora.com; dkim=pass (signature was verified)
+ header.d=pandora.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounces+213868-53b9-tobinsilvestre105=sooners.us@sg.pandora.com]
+ dkim=[1,1,header.i=@pandora.com] dmarc=[1,1,header.from=pandora.com])
+Received: from DUZPR01CA0263.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4b9::11) by LV3PR20MB7145.namprd20.prod.outlook.com
+ (2603:10b6:408:1b6::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.23; Fri, 8 Sep
+ 2023 05:09:34 +0000
+Received: from DU6PEPF0000A7DD.eurprd02.prod.outlook.com
+ (2603:10a6:10:4b9:cafe::65) by DUZPR01CA0263.outlook.office365.com
+ (2603:10a6:10:4b9::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30 via Frontend
+ Transport; Fri, 8 Sep 2023 05:09:33 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.221.181)
+ smtp.mailfrom=sg.pandora.com; dkim=pass (signature was verified)
+ header.d=pandora.com;dmarc=pass action=none
+ header.from=pandora.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ sg.pandora.com discourages use of 209.85.221.181 as permitted sender)
+Received: from mail-vk1-f181.google.com (209.85.221.181) by
+ DU6PEPF0000A7DD.mail.protection.outlook.com (10.167.8.37) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.25 via Frontend Transport; Fri, 8 Sep 2023 05:09:33 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:4F567AB3B63EE67FE6EA4A559305855C623E346C0DFEFE4F438E12AE0AEB46EF;UpperCasedChecksum:FDC43AEA9D713458BA7ED965F98D6B463820C37A2CFE6A21779150B9F6866C99;SizeAsReceived:5843;Count:28
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-48faba23f51so604324e0c.1
+        for <tobinsilvestre@outlook.com>; Thu, 07 Sep 2023 22:09:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694149773; x=1694754573;
+        h=x-forwarded-for:to:reply-to:subject:message-id:mime-version:from
+         :date:content-transfer-encoding:dkim-signature:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uFcxiUjtRNEe8BqQsxDFIZsaW7cfI95GHBRkSsQRP1M=;
+        b=AX0R3IIlXBrdxQK/MnIuOoe4JaOG1KPWprkh3g0GDJ4eKAySi6JPOlha+k9TGiqhk1
+         61oMmx5IzYyrcpi8oZAboUs+ETuKAy7dSJ7vxDZUZqydx1WQVyALaWXKSt3fGpZTb56u
+         uGXBMiVvsRXN/S4UGbXtYCrNt8UI1/biXMxlqiU2cKOAMali/VQshy/nefra2+p6snVk
+         kw7wAECcqlIEq0qX/53M9AHsYjk+Y5q4zVPFk5v1Kfub/dGVnmMEWsWPzVViZ829nVPQ
+         4FVjovssAVClEX5tC8lEh6LSg17Jq960uBfItfAxudmxtL6EXaBzDdrJSfJkBBobi6O8
+         0vqg==
+X-Gm-Message-State: AOJu0YyGL8pkDy7I/aT0Q6Gl7bPwlxtI9r6s0/ziyOsIByoFwpoPJjKU
+	bPt8NOHecmUyzEXhydUaR6QxhRrY9x4odEdehQ==
+X-Google-Smtp-Source: AGHT+IFjKeZ/tAY8l7k9QmWP0BCOYfa3va9otWR9siDQrATyH0jInHrQna1IG0G4QQuTGhg/XEgiFhk0wReb0B06b4FBb27vos0=
+X-Received: by 2002:a1f:6244:0:b0:490:a0fb:e08f with SMTP id w65-20020a1f6244000000b00490a0fbe08fmr1800634vkb.1.1694149773515;
+        Thu, 07 Sep 2023 22:09:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694149773; cv=none;
+        d=google.com; s=arc-20160816;
+        b=jZlUebNLGArrE7TKIvBfp5aVZAQav2Znbfu0k2DOAHE+d9C9n/Dm9hC/Qzl6ihM+xl
+         aBVW/qX3NrY77f/DYmMNZhD87dJqd2HTd/GzlmFHQV2j4i8/k7Jt4YGcz8IDxtjabecW
+         XUmyKJutPLjFv5+OnVVcWVXU0fdWikdbqnxxetyOGsfT8EuXjnmJhHXVRHJhEg4CD4Bv
+         XmiR09/J5OaZn4c28nUv1tocU5U3WZlu++llwjj2+gq61f1v5g1zw3NnRPsyUxrsmO6r
+         GyjLfgFUcowTwZT3DY4vT4ck/ANQMQUv1oCrlRLV/AWVZCodoMv26Bh1+d5IZQlf3pMO
+         A8SA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=to:reply-to:subject:message-id:mime-version:from:date
+         :content-transfer-encoding:dkim-signature;
+        bh=uFcxiUjtRNEe8BqQsxDFIZsaW7cfI95GHBRkSsQRP1M=;
+        fh=7s2z8M1+LA/Mn7BbDbX6Uf2RU4C8w7NYRtt6dGzMn/c=;
+        b=uG2+QF2gJhpudM3OE1X6sfpzXHcNwN4IEtwHgmHVHKG2ZXRwXluNsto3VNszIVPHS9
+         5oUR4DeSJjRVK4swhf08iztTiyOqa8uVlQqDvvtXqUuZBChPzm56rUlX1OiQoOhFjQ4e
+         rItSc3rOreja8eHqDRayIta6nfuKZ7Vbvkt6+38sSkOp10Br0pB6F40tMZvG3NaR7/6p
+         Qr6covIOg5f05O53d6Qb61GSb67iwh/MNk22M8L3rcVZksPJ5HTahQXyzhGhz6K0UNiB
+         0JpPv++elBZ5jgjekpA4ouXMQNv8/ZsijtuFMI/6YhC6odY7Pwgmm8H1ZQ/MwuRbI/6B
+         UaRA==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@pandora.com header.s=may2015 header.b=ONZJfKIZ;
+       spf=pass (google.com: domain of bounces+213868-53b9-tobinsilvestre105=sooners.us@sg.pandora.com designates 50.31.44.170 as permitted sender) smtp.mailfrom="bounces+213868-53b9-tobinsilvestre105=sooners.us@sg.pandora.com";
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=pandora.com
+Return-Path: bounces+213868-53b9-tobinsilvestre105=sooners.us@sg.pandora.com
+Received: from o2.sg.pandora.com (o2.sg.pandora.com. [50.31.44.170])
+        by gmr-mx.google.com with ESMTPS id r204-20020a1fa8d5000000b0049362af6c50si148549vke.5.2023.09.07.22.09.33
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Sep 2023 22:09:33 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounces+213868-53b9-tobinsilvestre105=sooners.us@sg.pandora.com designates 50.31.44.170 as permitted sender) client-ip=50.31.44.170;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@pandora.com header.s=may2015 header.b=ONZJfKIZ;       spf=pass
+ (google.com: domain of
+ bounces+213868-53b9-tobinsilvestre105=sooners.us@sg.pandora.com designates
+ 50.31.44.170 as permitted sender)
+ smtp.mailfrom="bounces+213868-53b9-tobinsilvestre105=sooners.us@sg.pandora.com";
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=pandora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pandora.com;
+	h=content-transfer-encoding:content-type:from:mime-version:subject:
+	reply-to:to:cc:content-type:from:subject:to;
+	s=may2015; bh=uFcxiUjtRNEe8BqQsxDFIZsaW7cfI95GHBRkSsQRP1M=;
+	b=ONZJfKIZ7koP1Xh04ohNRYpRPUZs9SRktHuHQUaWLs8P5/v0j4WV3qp6ee0TGl9HmTY1
+	PIdYVbM10+uGdSvT89uvTEroFY9h9Nv8HsKFO15Z6OSr8Fnn26hSZ08jKoDNB479jcvZ8n
+	s23PtETnhfuVfklt7aZrNWHeJgPbgeqUo=
+Received: by filterdrecv-86c7d77d8f-jm6wb with SMTP id filterdrecv-86c7d77d8f-jm6wb-1-64FAAC8B-34
+        2023-09-08 05:09:31.92292676 +0000 UTC m=+10388006.845255098
+Received: from MjEzODY4 (unknown)
+	by geopod-ismtpd-4 (SG) with HTTP
+	id B45yCebWRsKsyzml7EjyEg
+	Fri, 08 Sep 2023 05:09:31.848 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=utf-8
+Date: Fri, 08 Sep 2023 05:09:31 +0000 (UTC)
+From: Pandora <pandora@pandora.com>
+Message-ID: <B45yCebWRsKsyzml7EjyEg@geopod-ismtpd-4>
+Subject: Welcome to music =?UTF-8?B?dGhhdOKAmXM=?= all about you
+Reply-To: Pandora <no-reply@pandora.com>
+X-SG-EID:
+ =?us-ascii?Q?PNS8Z6BIeZ6znZutGeC90PcqK5jagYWd2xP1wlI0E6xgtdBWMmmq2yDZeVnYxY?=
+ =?us-ascii?Q?uCpCqU60sGOy9OdE764HEpLJXTQUy5iosNjje9y?=
+ =?us-ascii?Q?Er9q8UsYZ2SnzGx=2F+RbGxIf5B0f5hLA1JqP6s1j?=
+ =?us-ascii?Q?P21wks4Hc8Bl6exbiCsQqGXP=2FM4vX0BsTc1QkSy?=
+ =?us-ascii?Q?HJ9EtgWGaH1XzuTaoiMRs4191VA6qgH73gIIUcO?=
+ =?us-ascii?Q?S1khugn39kDZidLElzNABo0Ms5XXnKeoa0uZ8g?=
+X-SG-ID:
+ =?us-ascii?Q?N2C25iY2uzGMFz6rgvQsb5p+KGZuKYk4qBC+Dkz3nuYI56w1fWLxITtSbEQzDp?=
+ =?us-ascii?Q?FcK7wl53oSRfNbkEWMVypd8A=3D=3D?=
+To: tobinsilvestre105@sooners.us
+X-Entity-ID: ykDac+0402VJt8aFxp+g9Q==
+X-Forwarded-For: tobinsilvestre105@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 28
+X-MS-Exchange-Organization-ExpirationStartTime: 08 Sep 2023 05:09:33.8258
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ dbeaa321-dd0a-481f-67b4-08dbb029ca5c
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DU6PEPF0000A7DD:EE_|LV3PR20MB7145:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DU6PEPF0000A7DD.eurprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/8/2023 4:56:36 AM
+X-MS-Office365-Filtering-Correlation-Id: dbeaa321-dd0a-481f-67b4-08dbb029ca5c
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.221.181
+X-SID-PRA: PANDORA@PANDORA.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 3
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2023 05:09:33.7320
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbeaa321-dd0a-481f-67b4-08dbb029ca5c
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DU6PEPF0000A7DD.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR20MB7145
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.8231247
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6768.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(90014020)(91030020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPniimBRvZY1zFhlBioCsZHS3PRCMmpXjDejrtSPCKy1LH8Z5sIOVedQz1UgceN1bLyeWrp2ATwOzv5Vn4gSDijyfjLNl4XRPL3d6vobeypW0gmY0Bw2a4v2uOoC7iscU8kMnWL7CBS7XIQVl7GYEybc7azT4AYbShPmmTDxj36EEDsp/Fm172WTRlsdyF9chnWbmB8b/SWWEQ==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0wO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OHRuREhSTkQyRTA5ZWlBSklwU1pabk1LbnpjVUVMamhJcXNobmhKeW1qcnI1?=
+ =?utf-8?B?TXd6YzViZURRLy9OajZ4WHpvblh4QlRpTkpZVzhTelVoTjh5Y0F0NW5NSWEz?=
+ =?utf-8?B?UFR0bTFrcWt5ZVREOHNyNUN3bVFyL0ZxREJWd2ROSCtmRkIxai9ibmRieWpv?=
+ =?utf-8?B?L0trTVBWck9tbzBSUGtWVjI4N0NOZ1FPWnR4c2hNaEhic3dRNmhBOElEd09U?=
+ =?utf-8?B?Y1d2WGlIM2o0ZWVrcVZ1SkRrd3RZVFBHNm1lTGlzWEJuUlhKWjRFY0srUHkv?=
+ =?utf-8?B?ZnowMG9iSldOcG9kUU5TV001NlpBVk10ZXJQL2x2dHlzOWxWbzlWWFVhNEZC?=
+ =?utf-8?B?bE1PVmFxMGE5WnZvNXByOGc0R2NLK05BZU82R0N0LzNISnZvRWdTNm1HTlVF?=
+ =?utf-8?B?YXRGQmkzbTVtRVY4bCtSNlNwNktHNjljSkxlRU5GUUVGQXN5OU5XK2phUTY2?=
+ =?utf-8?B?NDJ3dUtVc001NERTRnYrZmhBd1FJWFE2Tnlva2R5eGdoWUV4cWRNMDNhclpM?=
+ =?utf-8?B?R0tvbXVOTTNkL25laUtubjlSRC9ITFg5OXEyalJ3NGlXQ2lIUVcybEdZNEJy?=
+ =?utf-8?B?RW9DQi96WGJ6M29zNmlRbXQxZ29Bc0kwMHdINmFMeGlaK1VUS1gxUnhXZmRT?=
+ =?utf-8?B?Nm5hdS9GakpCWlpJSUNubUdiTHF0Yy9zamJEWHBkSjMzQlYzcnI0QWhOUXlU?=
+ =?utf-8?B?ajdaZnA5UFljQ3ZnZldtUzZ4d1FwUnVkUE1nZS9yckpHWHd2cy9Ed1g2ZE1E?=
+ =?utf-8?B?cHdPeHBzUElWRXorQm9OUElXa0VyR1dvdXljekxSWFQ5UDlsY3kzVmxPdEFz?=
+ =?utf-8?B?b2FaalZrNkRIdWF2b0M5Tk4yTUxjbysyS2dWWnkwZlNob3RBR1MzaE55S3k1?=
+ =?utf-8?B?RnNod3k2NGRaTk9jZWx4cWtmUi9RVUUyWTdmaUFSUGVDQ1kzbHBkcDZQaEdJ?=
+ =?utf-8?B?M2lsVi9hdHhMeEpNZWdLMDN2Q00rcXphTTdVSmovZS8weHBwUldEcmhJVWRB?=
+ =?utf-8?B?cW5ENm1mVlJGU2dkd0NGdmRPRTMrR2YyRDkxR01QMWRBN2ZNcWtkS0NoT3Rm?=
+ =?utf-8?B?TngzQ2p1SjBFT0FjLzZiUlFBamMzdGhROEg0NVhUb1ptQlZIaWdMV3o4ency?=
+ =?utf-8?B?ckNnbFVnWGJCL3g3OHVEWXVaUEpBV1VRS1FEV2lxS2gvRStwQk9GZ1RhZnNO?=
+ =?utf-8?B?WVk5cEM3UlRkVjZoZ2RCUEQ5YVRYeU8xQnpQNTN0Z1ZrTnorWDlTN29jeEJp?=
+ =?utf-8?B?M1M4NHN4bXVHVnY4SlNDdzJ2aTcyNGhzdVBRd1I1NVQrM3g2SXJFTTRzZGVq?=
+ =?utf-8?B?bE9JTm1KaGxPMUw4OGJCZVIweG1hMEVZWTlPNjZOcjdXZCtyeXlESXF0UEg2?=
+ =?utf-8?B?R09pMUZiekoyK1dhK2x3U1dYK2VvdG1ObXdpblRualdqNUkvcHcwWG9QVFY5?=
+ =?utf-8?B?MlM2SGFWQ3hReU9rTGdzTEIzSHU3UmVkOUNsYVc0cE5LUUgyMHRwS1M5MWJj?=
+ =?utf-8?B?RGFVVm0xczh3dTB5NllKNmlkSFlqUG1xUk9Yc1BFa2NKY01jNGxzZU1CKzBW?=
+ =?utf-8?B?TVJZSGNPUmNoUllwbU5pY2tnbVVGb084WFZZNTdnOUIvUmlPSEhWTjVoakEv?=
+ =?utf-8?B?WWVsZi9nZEpuLzdOS1F0N0FOUXY3clliSVBFbFZQcGx3Y1V4d2w1NlEzdmJu?=
+ =?utf-8?B?NllxUGNEdjJVT3ZKZzZvcVAvY2FsczZxQmovR29USUlSSVlRS2FSdEdkN0lI?=
+ =?utf-8?B?SUVnNnFxUGxQTlN0Q2FNUUpCWHpDZ0hmV0VIVWRVdE02aFZ2dG9nMnYyQ2dY?=
+ =?utf-8?B?SkNnTWNCZTBHWENtSVZMaDhSd3A4RzBhWHlkcHRmN1VKVGNSKzJ0Ykpuem1I?=
+ =?utf-8?B?WnY3cXRrWmlReDd1UGR5cm81c3lBNktjcXAwUS9TYk8zZzhWWTdEZ214YlZQ?=
+ =?utf-8?B?YlhheVJKdENVYi9kdEVwLzJpVEZ3UFkxV3FjYTlhRmRIbnFpN2MrK25pd3Rt?=
+ =?utf-8?B?NE9IRmlYTWgxK1lPT3pmTHBMdXN2VFdxTHQ3ckVRd2x4ZnhIVjNSMVNiZnBZ?=
+ =?utf-8?B?ZnpOZExadWNGU3BaY0RtTTVQMXpJeFh5cmFlMTJBSVBHdmNiME0vRkdJNGlV?=
+ =?utf-8?B?N2N5a2NRSENqMitJTU9SSEh2aDV3dUNCQXJEQ1VZRzNYb3Y3MjF5Uk9CZ2pm?=
+ =?utf-8?B?dHU2cExLUWRUYjE0WVBUT2FUZnRrdkp4MUlVQTAwd2FOcnJMVTkrdjZnazJN?=
+ =?utf-8?B?NWpGYVA0M2FqeU80cHVFMzc1OTR3PT0=?=
+MIME-Version: 1.0
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html lang=3D"en" xmlns=3D"ht=
+tp://www.w3.org/1999/xhtml" xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns=
+:o=3D"urn:schemas-microsoft-com:o=EF=AC=83ce:o=EF=AC=83ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><s=
+cript type=3D"application/ld+json">
+        [{
+            "@context": "http://schema.org/",
+            "@type": "Organization",
+            "logo": "https://www.pandora.com/static/email/2018/banners/P_lo=
+go.png"
+        },{
+            "@context": "http://schema.org/",
+            "@type": "PromotionCard",
+            "image": "https://www.pandora.com/static/email/2020/16394_Day0/=
+gmail.jpg"
+        }]
+    </script>
+   =20
+    <title>Pandora</title>
+    <link rel=3D"icon" href=3D"https://www.pandora.com/static/creatives/pan=
+dora_email/responsive/favicon.png">
+   =20
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=
+=3D1, minimum-scale=3D1, maximum-scale=3D1">
+    <meta name=3D"x-apple-disable-message-reformatting">
+    <!--[if !mso]><!--><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=
+=3DEdge"><!--<![endif]-->
+
+    <!-- *** Outlook Font Fix *** -->
+    <!--[if (gte mso 9)|(IE)]><style type=3D"text/css">
+    table {border-collapse: collapse;}
+    table, td {mso-table-lspace: 0pt;mso-table-rspace: 0pt;}
+    img {-ms-interpolation-mode: bicubic;}
+    body, p, div, td, a {font-family:Calibri, Tahoma, Helvetica, Tahoma !im=
+portant; }
+</style>
+    <![endif]-->
+
+    <!-- *** Outlook 120 DPI Scaling Solution *** -->
+    <!--[if gte mso 9]><xml>
+    <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+</xml><![endif]-->
+    <style type=3D"text/css">
+
+        html {
+            width:100%;
+        }
+
+        body {
+            background-color:#ececec;
+            margin:0;
+            padding:0;
+        }
+
+        .ReadMsgBody {
+            background-color:#ececec;
+            width:100%;
+        }
+
+        .ExternalClass {
+            background-color:#ececec;
+            width:100%;
+        }
+
+        td {
+            font-family:Avenir, Helvetica Neue, Helvetica, Arial, Tahoma;
+        }
+
+        a {
+            color:#ffffff;
+            text-decoration:none;
+        }
+
+        a:hover {
+            color:#ffffff;
+        }
+
+        a[x-apple-data-detectors] {
+            color:inherit!important;
+            text-decoration:none!important;
+            font-size:inherit!important;
+            font-family:inherit!important;
+            font-weight:inherit!important;
+            line-height:inherit!important;
+        }
+
+        p, div {
+            margin:0;
+            padding:0;
+        }
+
+        table {
+            border-collapse:collapse;
+        }
+
+
+        /*** prevents font resizing */
+        html, body, table, td, a, span {
+            -webkit-text-size-adjust:none;
+        }
+
+        .mbl {
+            display:none;
+            font-size:0;
+            max-height:0;
+        }
+
+        .gmailfix {
+            display:none!important;
+        }
+
+        @media only screen and (max-width:580px){
+
+            /*** below is style for body */
+
+            body {
+                width:auto!important;
+            }
+
+            /*** below is style for full width table */
+            .table-600 {
+                width:100%!important;
+                height:auto!important;
+            }
+
+            /*** resets the width for mobile */
+            .main-width {
+                min-width:0!important;
+                width:100%!important;
+            }
+            .line {
+                width:90%!important;
+            }
+            .bkgr {	background-image:url('https://www.pandora.com/static/em=
+ail/2020/16394_Day0/bg_mbl.jpg')!important;
+            }
+
+            /*** below is style for content area */
+            .no-mbl { display:none!important; }
+
+            .mbl {
+                display:inline!important;
+                height:auto!important;
+                max-height:none!important;
+                overflow:visible!important;
+                width:100%!important;
+            }
+            .top-logo	{
+                padding-top:25px!important;
+            }
+            .scale {
+                height:auto!important;
+                max-height:none!important;
+                max-width:none!important;
+                width:100%!important;
+            }
+            .mbl-text-style-1	{
+                font-size:20px!important;
+                padding:26px 20px!important;
+            }
+            .mbl-text-style-2	{
+                font-size:18px!important;
+            }
+            .outer-cell {
+                padding:0!important;
+            }
+            .text-col	{
+                padding:60px 20px 22px 20px!important;
+            }
+            .text-col2	{
+                padding-left:20px!important;
+                padding-right:20px!important;
+            }
+            .feature-table {
+                min-width:0!important;
+                text-align:center!important;
+                width:100%!important;
+            }
+            .features {
+                width:100%!important;
+                padding-right:30px!important;
+                text-align:center!important;
+            }
+            .features2 {
+                width:100%!important;
+                padding:0!important;
+                text-align:center!important;
+            }
+            .animation {
+                text-align:center!important;
+                margin: 0 auto;
+            }
+            .btn	 {
+                font-size:18px!important;
+                letter-spacing: 0.05em!important;
+            }
+
+            /*** below is style for footer - do not change */
+            #social {
+                width:84%!important;
+            }
+            #social-icons {
+                width:56px!important;
+            }
+        }
+    </style>
+</head>
+<body bgcolor=3D"#ececec" style=3D"background-color:#fff;">
+<div style=3D"display: none; font-size: 0; line-height: 0; max-height: 0; m=
+ax-width: 0; width: 0; opacity: 0; overflow: hidden;">Find the jams for eve=
+ry mood! Create stations from your favorite songs, artists, or genres, and =
+discover personalized music and podcasts that speak to you.  |</div>
+
+<table role=3D"presentation" align=3D"center" bgcolor=3D"#ececec" cellpaddi=
+ng=3D"0" cellspacing=3D"0" style=3D"margin: 0; padding: 0;" width=3D"100%">
+    <tr>
+        <td>
+            <center>
+                <!-- 600px WRAPPER OPEN -->
+                <table role=3D"presentation" align=3D"center" bgcolor=3D"#f=
+fffff" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"table-600"=
+ width=3D"600">
+                    <tr>
+                        <td align=3D"center" class=3D"table-600" width=3D"6=
+00">
+
+                            <!-- START OF BACKGROUND -->
+                            <table role=3D"presentation" width=3D"100%" bor=
+der=3D"0" align=3D"center" cellpadding=3D"0" cellspacing=3D"0">
+                                <tr>
+                                    <td class=3D"bkgr" width=3D"100%" align=
+=3D"center" style=3D"background-position: top center;" background=3D"https:=
+//www.pandora.com/static/email/2020/16394_Day0/bg.jpg" bgcolor=3D"#5158ee" =
+valign=3D"top">
+                                        <!--[if gte mso 9]>
+                                        <v:rect xmlns:v=3D"urn:schemas-micr=
+osoft-com:vml" fill=3D"true" stroke=3D"false" style=3D"width:600px; height:=
+434px;">
+                                            <v:fill type=3D"tile" src=3D"ht=
+tps://www.pandora.com/static/email/2020/16394_Day0/bg.jpg" color=3D"#5158ee=
+" />
+                                            <v:textbox inset=3D"0,0,0,0">
+                                        <![endif]-->
+                                        <div>
+                                            <!-- Contents -->
+                                            <table role=3D"presentation" wi=
+dth=3D"100%" align=3D"center" cellpadding=3D"0" cellspacing=3D"0" border=3D=
+"0">
+                                                <tr>
+                                                    <td align=3D"center" cl=
+ass=3D"top-logo" style=3D"padding:29px 0 0 0; font-family:Avenir, 'Helvetic=
+a Neue', Helvetica, Arial, Tahoma; font-size:18px; color:#ffffff;"><img src=
+=3D"https://pandora.com/static/email/2020/16394_Day0/header.png" width=3D"6=
+00" class=3D"scale" alt=3D"Discover the Soundtrack Tuned To You" border=3D"=
+0" style=3D"display:block; max-width:600px; max-height: 170px;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class=3D"mbl-text-s=
+tyle-1" valign=3D"top" align=3D"center" style=3D"padding:16px 20px 38px 20p=
+x; font-family:Avenir, 'Helvetica Neue', Helvetica, Arial, Tahoma; text-ali=
+gn:center; color:#ffffff; font-size:24px; line-height:1.3; font-weight:norm=
+al; letter-spacing:0.005em;">
+                                                        Just search and pla=
+y what you want, or <span class=3D"no-mbl"><br></span>browse to discover pe=
+rsonalized music, <span class=3D"no-mbl"><br></span>
+                                                        podcasts, exclusive=
+ artist stories, and more.
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align=3D"center" st=
+yle=3D"padding-bottom: 38px;">
+
+                                                        <table role=3D"pres=
+entation" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+                                                            <tr>
+		<td class=3D"btn" align=3D"center" bgcolor=3D"#9ef712" style=3D"padding: =
+14px 28px; font-size:19px; letter-spacing: 0.05em; color: #000000;"><a href=
+=3D"http://pxsg.pandora.com/ls/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSkXbZgDN=
+lo5Uh3qkmWkm-2F-2FVmDMAi5Z-2BpVKEyD1DX2RmNbz7jAXw-2F3L7qKE9hrlSPHv4aFEUHDw6=
+U-2BaUAKJKA4Oz3omNqPJ-2BYeGiDo1fb85NaTbtk_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1=
+MRemwMkarb3Xtz3Bu6UajElHgSTc-2FsBLZF3qQpuDs58LVeQ3-2FecRUi8TiuTXA4hKasO5VSC=
+312SUsX1GY6rp2jznxCrOGUTTb1cPPzYH7FR5IGznvDrdXAF2ZKg4-2Bu-2FrygYYMJtjugM-2B=
+kSqolr0BhddhgLlBzC1F9d4EZ6SQUU0c5OzurPqezpWhiuHTqkqHDqb859Fyv9pdHbiQd5q4C-2=
+FMtNOKqSfWYQpK1adlf9OiD75mZ-2BFnnGAQ-3D-3D" style=3D"color: #000000; font-f=
+amily:Avenir, 'Helvetica Neue', Helvetica, Arial, Tahoma; text-decoration: =
+none; font-weight: bold; display: block; text-transform: uppercase;">Listen=
+ Now</a></td>
+                                                            </tr>
+                                                        </table>
+
+                                                    </td>
+                                                </tr>
+                                            </table>                       =
+               <!-- Contents END -->
+                                            <!-- Containing Table END-->
+                                            <!--[if gte mso 9]>
+                                            </v:fill></v:rect><![endif]-->
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- BLUE BACKGROUND OUTER WRAPPER CLOSE -->
+                            <!-- START OF FEATURE 1-->
+                            <table role=3D"presentation" width=3D"100%" bor=
+der=3D"0" cellspacing=3D"0" cellpadding=3D"0" bgcolor=3D"#ffffff">
+                                <tr>
+                                    <td class=3D"outer-cell" style=3D"paddi=
+ng-top:70px; text-align:left;">
+                                        <!--[if mso ]><table role=3D"presen=
+tation" width=3D"100%" cellspacing=3D"0" cellpadding=3D"0" border=3D"0">
+                                        <tr>
+                                            <td width=3D"329"><![endif]-->
+                                        <table role=3D"presentation" width=
+=3D"54%" class=3D"main-width" align=3D"right" border=3D"0" cellspacing=3D"0=
+" cellpadding=3D"0" style=3D"margin:0; border-collapse:collapse; mso-table-=
+lspace:0pt; mso-table-rspace:0pt; ">
+                                            <tr>
+                                                <td align=3D"center" class=
+=3D"text-col" style=3D"padding:85px 22px 22px 0;"><a href=3D"http://pxsg.pa=
+ndora.com/ls/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSlr0dPxQU8q7lgl4gGP-2BrUwR=
+ARU25ZO1xXDD38mrqsw4z-2FeWDik8VZvI-2BkKN-2Bv2CjW6JHVFsMXxw8HaeDQcpZcoBvc1gU=
+Dt6pSEx4AuEj2QAFvA-_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6UajE=
+lHgSTc-2FsBLZF3qQpuDs58LVeQ3-2FecRUizVlPMFoZbX9O8gq5cM8a-2FEwKhWE3nCIPhsgH8=
+p3TAfh1P8KAK9014Zg7PaAowh4KNHb-2B03GMU-2Faq3Zbw1RMEQLuVjKJ2hM0HBJiqL6J9xBqP=
+p3CX7rK-2B7Wxc-2Bgm82OSS8MgDl-2BPihfjD2bYwQneu46izyMrjnii7JXoBaw2wbIXQ0x3X7=
+CknJn7xyqCTKo2LA-3D-3D"><img src=3D"https://www.pandora.com/static/email/20=
+20/16394_Day0/1.png" width=3D"288" style=3D"max-width: 288px; max-height: 1=
+55px; display:block;" alt=3D"Personalized Music, Podcasts, and Playlists Pi=
+cked Just For You" border=3D"0"></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align=3D"center" class=
+=3D"text-col2" style=3D"font-family:Avenir, 'Helvetica Neue', Helvetica, Ar=
+ial, Tahoma; font-size:20px; color:#000000; font-weight:normal; line-height=
+:1.3; padding:0 22px 30px 0;">
+                                                    Tap the For You button =
+to
+                                                    discover things you=E2=
+=80=99ll love.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!--[if mso ]></td>
+                                    <td width=3D"279"><![endif]-->
+                                        <table role=3D"presentation" width=
+=3D"46%" class=3D"feature-table" align=3D"right" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0" style=3D"padding:0; margin:0; border-collapse:coll=
+apse; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                            <tr>
+                                                <td class=3D"features" styl=
+e=3D"padding:0 20px 60px 0;">
+                                                    <a href=3D"http://pxsg.=
+pandora.com/ls/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSlr0dPxQU8q7lgl4gGP-2BrU=
+wRARU25ZO1xXDD38mrqsw4z-2FeWDik8VZvI-2BkKN-2Bv2CjW6JHVFsMXxw8HaeDQcpZcoBvc1=
+gUDt6pSEx4AuEj2QAj8u7_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6Ua=
+jElHgSTc-2FsBLZF3qQpuDs58LVeQ3-2FecRUi6e7p-2Fsqqg2MYcxtc7s1cKzjNSAR80IjnXyQ=
+LVwYtB-2Bb0hqD-2BcX0-2Byaj7CXywQNNFCnMb4qVb6Ndx5f00f8mS7GBTx-2F-2Fyr-2FPqs1=
+o01djDv7ygphS3tMVS8CWRrDyQa6FdT8cPPz1NhucmmC0S8iDL4JRj0Inmsvt4SIEhYKX4QQ6Tz=
+YMPYcRNUI9zE-2BTJJes6w-3D-3D"><img src=3D"https://www.pandora.com/static/em=
+ail/2020/16394_Day0/WS_Refresh_ForYou_DuaBadBunnyTameImpala.gif" width=3D"2=
+56" alt=3D"Pandora Premium" border=3D"0" style=3D"max-width: 256px; max-hei=
+ght: 439px; display:block;" class=3D"animation"></a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!--[if mso ]></td>
+                                    </tr>
+                                    </table><![endif]-->
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- END OF FEATURE 1-->
+
+
+
+                            <!-- START OF LINE -->
+                            <table role=3D"presentation" align=3D"center" c=
+lass=3D"line" bgcolor=3D"#ffffff" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" width=3D"91%"><tr><td align=3D"center" style=3D"border-top: 3px sol=
+id #cccccc;"></td></tr></table>
+                            <!-- END OF LINE -->
+                            <!-- START OF FEATURE 2-->
+                            <table role=3D"presentation" width=3D"100%" bor=
+der=3D"0" cellspacing=3D"0" cellpadding=3D"0" bgcolor=3D"#ffffff">
+                                <tr>
+                                    <td class=3D"outer-cell" style=3D"paddi=
+ng-left:19px; padding-top:50px; text-align:left;">
+                                        <!--[if mso ]><table role=3D"presen=
+tation" width=3D"100%" cellspacing=3D"0" cellpadding=3D"0" border=3D"0">
+                                        <tr>
+                                            <td width=3D"300"><![endif]-->
+                                        <table role=3D"presentation" width=
+=3D"50%" class=3D"main-width" align=3D"left" border=3D"0" cellspacing=3D"0"=
+ cellpadding=3D"0" style=3D"margin:0; border-collapse:collapse; mso-table-l=
+space:0pt; mso-table-rspace:0pt;">
+                                            <tr>
+                                                <td align=3D"center" class=
+=3D"text-col" style=3D"padding:105px 0 12px 25px;"><a href=3D"http://pxsg.p=
+andora.com/ls/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSkXbZgDNlo5Uh3qkmWkm-2F-2=
+FVmDMAi5Z-2BpVKEyD1DX2RmNbz7jAXw-2F3L7qKE9hrlSPHv4aFEUHDw6U-2BaUAKJKA4Oz3om=
+NqPJ-2BYeGiDo1fb85NaiEH7_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu=
+6UajElHgSTc-2FsBLZF3qQpuDs58LVeQ3-2FecRUi2mxBn-2F5h2s2kH0K8-2Fd5HR1xISfB0FX=
+L2H3fM8SQJdYDiJP7J41UBem-2FcNB9m5z9iVcSQ2QpQvX366zBeyJYQRMdVfw9xHkaKY2l5ape=
+CMORg6F2w3GxL-2Bs58p11X0rhSgId93V6NyEKjw3-2FpCbHhZDzLwMLSYouzCvlV6Y9DaTeraK=
+D79z-2BaslFbpgH9LfZVQ-3D-3D"><img src=3D"https://www.pandora.com/static/ema=
+il/2020/16394_Day0/2.png" width=3D"197" style=3D"max-width: 197px; max-heig=
+ht: 93px; display:block;" alt=3D"Everything You Need In One Place" border=
+=3D"0"></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align=3D"center" class=
+=3D"text-col2" style=3D"font-family:Avenir, 'Helvetica Neue', Helvetica, Ar=
+ial, Tahoma; font-size:20px; color:#000000; font-weight:normal; line-height=
+:1.3; padding:0 0 30px 25px;">
+
+                                                    Go to My Collection to =
+find
+                                                    all your music and podc=
+asts.
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!--[if mso ]></td>
+                                    <td width=3D"290"><![endif]-->
+                                        <table role=3D"presentation" width=
+=3D"50%" class=3D"feature-table" align=3D"left" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" style=3D"padding:0; margin:0; border-collapse:collaps=
+e; mso-table-lspace:0pt; mso-table-rspace:0pt;">
+                                            <tr>
+                                                <td valign=3D"bottom" class=
+=3D"features2" style=3D"padding:0 0 5px 20px;"><a href=3D"http://pxsg.pando=
+ra.com/ls/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSkXbZgDNlo5Uh3qkmWkm-2F-2FVmD=
+MAi5Z-2BpVKEyD1DX2RmNbz7jAXw-2F3L7qKE9hrlSPHv4aFEUHDw6U-2BaUAKJKA4Oz3omNqPJ=
+-2BYeGiDo1fb85NayAhh_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6Uaj=
+ElHgSTc-2FsBLZF3qQpuDs58LVeQ3-2FecRUi0Y6KK5N9zR4WY4sss4YagD9INYG7Akwke5H82s=
+CsCbJNsdIVnA1-2BzKPHlC5xlpatUIEPahxQ6J9clI-2FcNHwNQvRLwTO08oWQkCY1EHh2qIo0a=
+jYYRl95R6bGqfyVE7I8jcRFx7TkMmZIZdQQm5s2XpC0i-2FAsC-2BhT7W9ob35QvalEOSsn1VZs=
+C4-2B1NR3CIU5PQ-3D-3D"><img src=3D"https://www.pandora.com/static/email/202=
+0/16394_Day0/phone.png" width=3D"216" style=3D"max-width: 216px; max-height=
+: 441px; display:block;" alt=3D"The power of thumbs" border=3D"0" class=3D"=
+animation"></a></td>
+                                            </tr>
+                                        </table>
+                                        <!--[if mso ]></td>
+                                    </tr>
+                                    </table><![endif]-->
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- END OF FEATURE 2-->
+                            <table role=3D"presentation" border=3D"0" cells=
+pacing=3D"0" cellpadding=3D"0">
+                                <tr>
+                                    <td align=3D"center" style=3D"padding: =
+40px 0;">
+
+                                        <table role=3D"presentation" border=
+=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+                                            <tr>
+		<td class=3D"btn" align=3D"center" bgcolor=3D"#9ef712" style=3D"padding: =
+14px 28px; font-size:19px; letter-spacing: 0.05em; color: #000000;"><a href=
+=3D"http://pxsg.pandora.com/ls/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSkXbZgDN=
+lo5Uh3qkmWkm-2F-2FVmDMAi5Z-2BpVKEyD1DX2RmNbz7jAXw-2F3L7qKE9hrlSPHv4aFEUHDw6=
+U-2BaUAKJKA4Oz3omNqPJ-2BYeGiDo1fb85Na-Veo_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1=
+MRemwMkarb3Xtz3Bu6UajElHgSTc-2FsBLZF3qQpuDs58LVeQ3-2FecRUi6DikoQWdBBJF-2BUy=
+48mkdm3d-2BCcH4VR4wFYS47ejmW0jq-2FXJePq7gZgLQC5YLS8CYS6Hr63fBfqVIzbLKkqq1kQ=
+DgvcBhcIDzQzN8m5QSt6tJlbrx-2FN9ixje2JhY-2BAHP8Pf-2FMmcUcQQU1SyFD5vDV2-2Bilu=
+vAOZnBTBd1bsCz2VY0Pn9NJDzzatgOULN4FdOe2A-3D-3D" style=3D"color: #000000; fo=
+nt-family:Avenir, 'Helvetica Neue', Helvetica, Arial, Tahoma; text-decorati=
+on: none; font-weight: bold; display: block; text-transform: uppercase;">st=
+art listening</a></td>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- END OF MAIN CONTENT BLOCK -->
+                            <!-- START FOOTER BLOCK -->
+                            <table role=3D"presentation" width=3D"100%" bor=
+der=3D"0" align=3D"center" cellpadding=3D"0" cellspacing=3D"0" bgcolor=3D"#=
+000000" style=3D"padding:0; margin:0;">
+
+                                <tr>
+                                    <td width=3D"100%" align=3D"center" sty=
+le=3D"padding:25px 10px 15px 10px;">
+                                        <table role=3D"presentation" id=3D"=
+social" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"68%" alig=
+n=3D"center" style=3D"padding:0; margin:0 auto;"><tr>
+                                            <td class=3D"social-icons" widt=
+h=3D"82" style=3D"text-align:center;"><a href=3D"http://pxsg.pandora.com/ls=
+/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSg6wIUwBaZ5133D8Ue7FoR5AEsWsf5nsztX7G-=
+2FGWglEqVWHk_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6UajElHgSTc-=
+2FsBLZF3qQpuDs58LVeQ3-2FecRUi8yu0DgEbTA67lQHv302iHIzs1cA8LSnhNw-2BmOYdQWTJx=
+OYk6VdEw59axmUIGC9BRLjAfpmcgz3pFkvbEYhMmV-2FL9m6amuB085vWa6J6uc-2BnJscg8Yum=
+sq8R3QB2ApD4SJUvf35BO3uxyhB6oRzzJIdRYQHCEGPdHNVI4y3VZ48dNAzVHLShxRmjKDQWd-2=
+F7kqA-3D-3D"><img src=3D"https://www.pandora.com/static/email/recur/social_=
+white_f.png" alt=3D"Facebook" width=3D"40" height=3D"40" border=3D"0" style=
+=3D"display:inline-block;"></a></td>
+                                            <td class=3D"social-icons" widt=
+h=3D"82" style=3D"text-align:center;"><a href=3D"http://pxsg.pandora.com/ls=
+/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSkmIJv6oGgdfFb856KiL4lpPhT7wqJeElUN7UI=
+tdRIyhHxPV_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6UajElHgSTc-2F=
+sBLZF3qQpuDs58LVeQ3-2FecRUi5vJ5tOiZGSG-2FGTXsozcs3-2BAUpanrk0HqdeCQGOfOsQ2n=
+HlCdUIB1gUBgpFOZc-2FhNlSSVQcZBsPikfhfAt-2FFjt0P5w7vEdrpXk-2FPJzJeP8nT45cYWk=
+Vu4efdV5K5ljoo2SW0TCdolZQOccFm9cpraGVxfTzNjjMIW3diA93ZpyFViqL-2FAslVTYwOJXe=
+YFSn3vA-3D-3D"><img src=3D"https://www.pandora.com/static/email/recur/socia=
+l_white_i.png" alt=3D"Instagram" width=3D"40" height=3D"40" border=3D"0" st=
+yle=3D"display:inline-block;"></a></td>
+                                            <td class=3D"social-icons" widt=
+h=3D"82" style=3D"text-align:center;"><a href=3D"http://pxsg.pandora.com/ls=
+/click?upn=3DPU7neLx2EO9vyVrDZWop896pj4PbDw8ViGPsVYypHayR2O-2FIFfI9Sx-2Bq-2=
+FezGu-2BnnPAjk_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6UajElHgST=
+c-2FsBLZF3qQpuDs58LVeQ3-2FecRUi4d0HaMfmWgNFzbzNOgqLh1w7KNocMFnteYYLacIKXlF2=
+wVtXa2d1BnwRMxqbSo7aC97G8wH8wbruZgcqJJGh5q-2F9Q-2FETpr6IdTQDW3QW8-2Fvs4HJtW=
+RgR7pNWsUCo8047V2k4CXXI6rc3Q1sNsGIqyjLjHzbz76coyYdgEz0-2F-2BXSnFCblGE3qhvWV=
+MSLvywV-2Bw-3D-3D"><img src=3D"https://www.pandora.com/static/email/recur/s=
+ocial_white_t.png" alt=3D"Twitter" width=3D"40" height=3D"40" border=3D"0" =
+style=3D"display:inline-block;"></a></td>
+                                            <td class=3D"social-icons" widt=
+h=3D"82" style=3D"text-align:center;"><a href=3D"http://pxsg.pandora.com/ls=
+/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSq7iwGthYq3529ci-2BilTDBFCH85IST3WN4Nn=
+HOZ0aup41tmS_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6UajElHgSTc-=
+2FsBLZF3qQpuDs58LVeQ3-2FecRUi0JkgMD1w-2B9yCzpsGDPdn-2FfFNuhVJ9AcGvgGRkkYH3m=
+Qw410vp6OFgUY1dHuX1Uqe4nT-2FDidhr00nGswgUk1qCEj5xVgNj30Z-2FwRK-2FBZY6UAzCbf=
+AJRK0KWpdLkgGiSp4jrh2R4EVLNjzG-2F9TCC0mAZBy08IzjyeUzuM2IMRzYufWOYXbKwQvXlZI=
+KY8MZEEvw-3D-3D"><img src=3D"https://www.pandora.com/static/email/recur/soc=
+ial_white_y.png" alt=3D"YouTube" width=3D"40" height=3D"40" border=3D"0" st=
+yle=3D"display:inline-block;"></a></td>
+                                            <td class=3D"social-icons" widt=
+h=3D"82" style=3D"text-align:center;"><a href=3D"http://pxsg.pandora.com/ls=
+/click?upn=3D0bwjXDvxVgEi-2BE73ON4uHcRXe2shFSQ-2Bu-2BxnW-2FZhi58-3DZnfO_nm1=
+feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6UajElHgSTc-2FsBLZF3qQpuDs58=
+LVeQ3-2FecRUiwSWHpWMfvjw9QioNakfUAUuMHyclUXZcO0U0kKzWwicGxm4rMFsGEdhtoYpba6=
+NHDx2kuI-2BLHnOeV02IfTN5fJfdWbs7y4JKpyvSeKZikRi0rQuD4td6hvwXd81BO2zVZI3SQ9z=
+YPMszNStqoQvR-2Bl3t-2Fp0ZbNY2rR8jhc7WVFHqRY-2BfUC8Diu0DEhB07ldLg-3D-3D"><im=
+g src=3D"https://www.pandora.com/static/email/recur/social_white_b.png" alt=
+=3D"blog" width=3D"40" height=3D"40" border=3D"0" style=3D"display:inline-b=
+lock;"></a></td></tr></table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width=3D"100%" align=3D"center" val=
+ign=3D"top" class=3D"footer" style=3D"padding:1px 15px 1px 15px; font-famil=
+y:Avenir, 'Helvetica Neue', Helvetica, Arial, Tahoma; font-size:13px; line-=
+height:1.3; color:#999999; font-weight:normal; letter-spacing:0.015em;">You=
+ are currently subscribed to receive promotional emails from Pandora.</td>
+                                </tr>
+                                <tr>
+                                    <td width=3D"100%" align=3D"center" val=
+ign=3D"top" class=3D"footer" style=3D"padding:0 15px 6px 15px; font-family:=
+Avenir, 'Helvetica Neue', Helvetica, Arial, Tahoma; font-size:13px; line-he=
+ight:1.3; color:#ffffff; font-weight:normal; letter-spacing:0.015em;">
+	<a href=3D"http://pxsg.pandora.com/ls/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQ=
+SlOZ9HaqWoXQcDtj6XMnM6rIVs4BltDUMGUVZFGYCih-2BJEhfHXBNc8-2B8G3KjULyGS-2BVKT=
+k6gkaB46wanevr6Us4-3Durj1_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3B=
+u6UajElHgSTc-2FsBLZF3qQpuDs58LVeQ3-2FecRUi8KyOb-2BDBfL-2FqmjmPzq4gTzghjJrYL=
+oy0NdOXGruBFxawBemAWTo0Gaj1tu34sQoiBgWUY4QkoV1vT7PIv2VhdaRmOj5r5kqxDkcU-2Fx=
+3FkKYlr1JMJ89mCRukqWOwPkkp-2BDjp3-2FSWA8bSgpqt6SHTVibziuH8TPRjgkgLO0uWvmHOE=
+4KL2PdwcLDkazsEa1e8w-3D-3D" style=3D"color: #ffffff; text-decoration: none;=
+" class=3D"txt-underline">Unsubscribe</a>&nbsp; <span style=3D"color:#99999=
+9;">|</span> &nbsp;<a href=3D"http://pxsg.pandora.com/ls/click?upn=3DLmN8Qj=
+FQlW-2B-2BT4BFawdQSi5RI7Mh9ULCO8c0DlA6upYAlgWRiKcEqWdtoyA2-2BFJNrZtJ_nm1fea=
+UEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6UajElHgSTc-2FsBLZF3qQpuDs58LVe=
+Q3-2FecRUi1ru8tD0xDMBG0AkK3RiS1LjZ4N2-2B7crKeNityzG1w1Zh2gVX3r9kcf7CmzW-2FJ=
+v8w7vHc5-2BSbL1H-2Bydj-2BA45qi0q6dr7ZMmblJpCO-2BgOkGEVp7cHxIQ3dxviAJV19v4E3=
+OFJ1VxYZgA4T00FTaUA-2BYtUzaHG0gybNC0icKhYeoybtvslLkBbcs-2BMGuvaJIoLtg-3D-3D=
+" style=3D"color: #ffffff; text-decoration: none;" class=3D"txt-underline">=
+Privacy Policy</a>&nbsp; <span style=3D"color:#999999;">|</span> &nbsp;<a h=
+ref=3D"[weblink]" style=3D"color:#ffffff; text-decoration:none;" class=3D"t=
+xt-underline">View Online</a>&nbsp; <span style=3D"color:#999999;">|</span>=
+ &nbsp;<a href=3D"http://pxsg.pandora.com/ls/click?upn=3DAiRRT8iGQRhUbvgr8A=
+oK5D83ut-2FRyX1J39-2BzuKaijGM-3DhwAy_nm1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemw=
+Mkarb3Xtz3Bu6UajElHgSTc-2FsBLZF3qQpuDs58LVeQ3-2FecRUi55F-2B9tKVaqfY-2FsecQ4=
+5DxTXCEKy802H9JBL3E9hwtxylvQtz3hUe82OfsfKqPUX56Db0E5ExA7Sh3m-2FTF2hqxG85-2F=
+Cs6sz0UKfzhTPqGCL5DmdXbT9Z31Yhp2Uie8QB6xCl2CGVbAou9-2FltE3iB069ZX1-2BkGZA4X=
+IDKAPXzp63pEC-2BjnVZ8Adqvaoihq2Ui9Q-3D-3D" style=3D"color: #ffffff; text-de=
+coration: none;" class=3D"txt-underline">Help</a></td>
+                                </tr>
+                                <tr>
+                                    <td width=3D"100%" align=3D"center" val=
+ign=3D"top" style=3D"padding:8px 15px 50px 15px; font-family:Avenir, 'Helve=
+tica Neue', Helvetica, Arial, Tahoma; font-size:13px; line-height:1.3; colo=
+r:#999999; font-weight:normal; letter-spacing:0.015em;">
+                                        =C2=A9 2020 Pandora Media, LLC. All=
+ rights reserved.<br>
+                                        <a href=3D"http://pxsg.pandora.com/=
+ls/click?upn=3DLmN8QjFQlW-2B-2BT4BFawdQSh-2FXdc1R-2BYDPP6JRjlFu2eY-3DEV0z_n=
+m1feaUEy6z79DRyvvWDps34-2FZ97hK1MRemwMkarb3Xtz3Bu6UajElHgSTc-2FsBLZF3qQpuDs=
+58LVeQ3-2FecRUiwD6mQBV6ozJO7IXYDkr8aisP3iQEhs8UjwVcfRDcEUJB4E8LEi-2F4t4Y8wB=
+ehwTXJfdXKxhUN-2B9tBuor-2B0t8Qsuxm3VVTxu3tRFRvgtcJVZNlEJqJsiXWMKiDMxVHyvLb4=
+3mBsGlvkQ-2BLSRfHk2mWZkcHQKGCLrloL83gTG4ya2plfI4BN6eZc85M-2BnFAXk0vw-3D-3D"=
+ style=3D"color:#999999; text-decoration:none;"><span style=3D"color:#99999=
+9;">2100 Franklin St #700, Oakland, CA 94612</span></a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- END FOOTER BLOCK -->
+
+                        </td>
+                    </tr>
+                </table>
+            </center>
+
+            <!-- OUTER WRAPPER CLOSE -->
+        </td>
+    </tr>
+</table>
+
+<div class=3D"gmailfix" style=3D"white-space:nowrap; font:15px courier; lin=
+e-height:0;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbs=
+p; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</d=
+iv>
+
+<img src=3D"http://pxsg.pandora.com/wf/open?upn=3DFvUHYnu4r807c3Vu1k5NazK4n=
+aVCVV-2BMzPb8K7AbAk5DVpb8raE4wdFvYQkElXbUXZs-2FLKQTyYBv82UY283wtzukC0fR0xow=
+a6f6ILf5vf7R7m-2F6Bvgopa-2FSSVCaRUZ1Abie6z7VmbfNaOl-2BBxPmGBFcLegduX8XnXWMP=
+ptxYZrZHh-2F9TcZOcAcYOnRjTLxun3Hr909iOTjoAE1KZPnzJJUk2dIzGUozcQ6zK46-2BjZG5=
+El0L9vDee0z2-2F4Xnx9E98BWWWa37-2FWWZkZAseJRawQ-3D-3D" alt=3D"" width=3D"1" =
+height=3D"1" border=3D"0" style=3D"height:1px !important;width:1px !importa=
+nt;border-width:0 !important;margin-top:0 !important;margin-bottom:0 !impor=
+tant;margin-right:0 !important;margin-left:0 !important;padding-top:0 !impo=
+rtant;padding-bottom:0 !important;padding-right:0 !important;padding-left:0=
+ !important;"></body>
+</html>

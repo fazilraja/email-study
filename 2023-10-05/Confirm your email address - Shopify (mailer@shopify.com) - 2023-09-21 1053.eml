@@ -1,0 +1,679 @@
+Received: from SJ1PR20MB4764.namprd20.prod.outlook.com (2603:10b6:a03:45d::21)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Thu, 21 Sep 2023
+ 15:53:07 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=A5/3cXN2LI+oGa+sdwUkOAdJ5fU5smqpkyaboI+nWZ1PkFGY9f0baX93qk6Du/QDcLA9iaG+noPNGS7HKgCWfiJvUMaBsjp7hrojOGkY8on+OqH0NsmU/dlXNdXLW7HpEV1WkGfFsVmhA9VRoVZMRAPlbgw7VYA9IkQ3QVeP0DKo+Mn9aSNOzkps+iOmsqswTaYHvYCJynA8Fkoa62vBs/RrZb+vadR2nAPyVhvPS5QsKcJ00tudIlMmYUsWqAagyHovja2x0jeQZpX7yTMV1x5c7tParjS5VFjEWfyA7FN/YWQi8rhIB9YFyWyD/mVH7LIefoWmn1fS/19cAKvlTg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YEdBHMYJNfBLfw8laa2bgA0VMIt/n7E/m1k9Wt5+9PU=;
+ b=bB5MfAYnH2C+pp0QozgxH/6OpnDvGMlKvolyIAnFP6OFtmaLgfhonwQYMi6f0GNncCMZguYI62EdTmi68Fqoofq8nqhwknOM3joV3xGRztiFcHhiVAzcKG2zdvI7ydvd1/60OpmDL2fnoVPqRHDG1EMX9qQy6f+j7ao//F4MmFnc+j+P5CeKrb8gunNY8G7tYqa8sX297Nw0bXLHWP5M03NqMsJ6jL1q23K3hjmBeoThSZfEbmkcfIvKceoW/ehhIzrt4smt2L9CKz5XyI1C8w4qfGnQpVJpTvyP4VK9o+TmHA9hNnFlYb4GQKwOUcZqQ7NVdZPLDXcKyDGI37fZYg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.222.171) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=mailer.shopify.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=shopify.com; dkim=pass (signature was verified)
+ header.d=shopifyemail.com; dkim=pass (signature was verified)
+ header.d=shopify.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounces+21576350-ee53-tobinsilvestre137=sooners.us@mailer.shopify.com]
+ dkim=[1,1,header.i=@shopify.com] dmarc=[1,1,header.from=shopify.com])
+Received: from DUZPR01CA0286.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4b7::12) by SJ1PR20MB4764.namprd20.prod.outlook.com
+ (2603:10b6:a03:45d::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Thu, 21 Sep
+ 2023 15:53:05 +0000
+Received: from DB1PEPF00039233.eurprd03.prod.outlook.com
+ (2603:10a6:10:4b7:cafe::d3) by DUZPR01CA0286.outlook.office365.com
+ (2603:10a6:10:4b7::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.30 via Frontend
+ Transport; Thu, 21 Sep 2023 15:53:03 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.222.171)
+ smtp.mailfrom=mailer.shopify.com; dkim=pass (signature was verified)
+ header.d=shopifyemail.com;dmarc=pass action=none
+ header.from=shopify.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ mailer.shopify.com discourages use of 209.85.222.171 as permitted sender)
+Received: from mail-qk1-f171.google.com (209.85.222.171) by
+ DB1PEPF00039233.mail.protection.outlook.com (10.167.8.106) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Thu, 21 Sep 2023 15:53:03 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:B64C3BCB50A180578E2A7931AA257DBEAAA7E3A7B1A71BCA7239077C36441CB3;UpperCasedChecksum:3731080911A27DF15941417D0BC0CDCFB1A79DAA67204043B754ACC7B4D43264;SizeAsReceived:9013;Count:27
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-76ef27a8e4dso66385485a.1
+        for <tobinsilvestre@outlook.com>; Thu, 21 Sep 2023 08:53:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695311582; x=1695916382;
+        h=x-forwarded-for:to:subject:message-id:mime-version:from:date
+         :dkim-signature:dkim-signature:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YEdBHMYJNfBLfw8laa2bgA0VMIt/n7E/m1k9Wt5+9PU=;
+        b=YNvunol76bwSeolTCcMj4+dabTNsJzDbJLYaHTfSdThwDInv6SeaRuIPJWwO6WokHw
+         wInzKmqwnjJLY6mzFaunDKpAN3h0ZXk6hKXi6fRHxtZwcYoOBzDcMPPBXXzw/Ez2AAmL
+         qs8y/6igbuhPHHZpn46j6Yo97Jh08PuIN2FyxVd1Rj1X2LS9xCMHgfBSZxLURiKptUpW
+         AQIKnV2kIz/Fea6PXBH0gApKVIRTBuNH0KivKgnRhGXVSMs/5lNRBrOg4pOh+o4AzINp
+         usdtvVS1tso1KXSdSj8Gy3xG8clN19O5km8xsW08dUgiZQw5pVrsVT1ENlFhTHg6qNEv
+         n1NQ==
+X-Gm-Message-State: AOJu0YzyubxHAak8710921KzuUpfzqo6f+f/N+kViAFdtIIaP116Ge8Q
+	wLgyFQYGFd3qowEkL5ZGGsgdMi971Vn4tD8CiQ==
+X-Google-Smtp-Source: AGHT+IFStmk5fjq98CJlBbPGf/TwqU8fBk0fSVY00pOIlEnSbRMCcjj4JSmRlWAxAKAW5sJcMMESE3GAsgcr4pecJBnvxSiErn4=
+X-Received: by 2002:a0c:e047:0:b0:656:1fd2:3794 with SMTP id y7-20020a0ce047000000b006561fd23794mr5151629qvk.41.1695311582827;
+        Thu, 21 Sep 2023 08:53:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695311582; cv=none;
+        d=google.com; s=arc-20160816;
+        b=zcrgcyRVeRevv8rMPTnjXrLJ+jIbF/HjSDeVQ9Jo7TGiO9GWvLBu3QCRcITnlksoTo
+         GwqTWUS1HzVFL7i7YcOeLuW7EhhxZaF9lB337mici/+VemjOSgu/WxUKsjHUBAdXCo9B
+         mZlSJ+ZKf578/52cjEnfunoXw1JJm31MR/5VTRUmZ7OLg/+u+9Q7sBW81D/xgFir8Q73
+         i6VeCwkDEBp4gxvoNUntrHUgkSqajryjTlQYAJa7RoAavGprQ4yAfNSC/Yz09IU5ShCp
+         FriszRacQVftxJ9fjN6/TPwY/V+f66VGYamb0IQIWUVWtj/J/MADHEiL6wqQHZcl9uG7
+         acVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=to:subject:message-id:mime-version:from:date:dkim-signature
+         :dkim-signature;
+        bh=YEdBHMYJNfBLfw8laa2bgA0VMIt/n7E/m1k9Wt5+9PU=;
+        fh=cFLImrwHcerzFsFf3gI0QTbvoiMHmkRTpHhTPk1neXM=;
+        b=szxKvdosb9ZkDqs1pGSyPKHoQgBKkmu5TFPYGOeqZ2Xx7hQZJsGWCl2MRRSTD5w1uZ
+         +OyJFMJoDJbJ2BwYE84RDBcDqx5k+A1qVEtp8QQBoCRNkHzfgzZNVADiwgWMUSYcqWaW
+         xq+huOp/waUR4FkMU+LcYuZYK3ADVIra6enY2DZoWrU1ecpvscToYpZkQ4GQ/BivPyE+
+         2u6p9oFckJMcEB8L0wZ7HklktWkH/8iC6nnsXQkFmtQKx+D6eHZkPvaMMkXmOHX2c5Cc
+         7tU4SVNo3B4YuPzsgfV+hNlUlqFcawJRmNJZiSziHdkzrDWYqmYjAq72LIyrajkWruB7
+         Gp3A==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@shopifyemail.com header.s=amp header.b=MlOjigFe;
+       dkim=pass header.i=@shopify.com header.s=m1 header.b="iin0K/nt";
+       spf=pass (google.com: domain of bounces+21576350-ee53-tobinsilvestre137=sooners.us@mailer.shopify.com designates 149.72.77.15 as permitted sender) smtp.mailfrom="bounces+21576350-ee53-tobinsilvestre137=sooners.us@mailer.shopify.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=shopify.com
+Return-Path:
+ bounces+21576350-ee53-tobinsilvestre137=sooners.us@mailer.shopify.com
+Received: from o30.mailer.shopify.com (o30.mailer.shopify.com. [149.72.77.15])
+        by gmr-mx.google.com with ESMTPS id v4-20020ad45284000000b0065165a3844asi170220qvr.3.2023.09.21.08.53.02
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Sep 2023 08:53:02 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounces+21576350-ee53-tobinsilvestre137=sooners.us@mailer.shopify.com designates 149.72.77.15 as permitted sender) client-ip=149.72.77.15;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@shopifyemail.com header.s=amp header.b=MlOjigFe;       dkim=pass
+ header.i=@shopify.com header.s=m1 header.b="iin0K/nt";       spf=pass
+ (google.com: domain of
+ bounces+21576350-ee53-tobinsilvestre137=sooners.us@mailer.shopify.com
+ designates 149.72.77.15 as permitted sender)
+ smtp.mailfrom="bounces+21576350-ee53-tobinsilvestre137=sooners.us@mailer.shopify.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=shopify.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shopifyemail.com;
+	h=content-type:from:mime-version:subject:to:cc:content-type:from:
+	subject:to;
+	s=amp; bh=YEdBHMYJNfBLfw8laa2bgA0VMIt/n7E/m1k9Wt5+9PU=;
+	b=MlOjigFeIhKPV29snJC6AKyoOsKbL9bPHA//vhoUUwwcG7KQE2INotwgBHPavjgF7gFf
+	EGuLBKz62/w8Vf7uUZiEHTJkrResD7PqOQcbN+JAs20kmKUCgz8Ao2FUv/7PgUSqWI3heC
+	Lky7Hgiic4BGi57klFz3XAPTLH2I2tH7ZAVTQNc+zm4VoeO4g3Stucta9x4AStxEzbLNcN
+	5ytJhZNk08z9wUYFPqesTggvRttrCHT/pjiOcusqsczTkwvbjbbJwrOvqsNoJ/pvZRbpas
+	acUmxbktx6jXPHqUppPTmATYvfDuU0swILpOsX2/kgHc4bFX5nwkwm3gqFXfxY6Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shopify.com;
+	h=content-type:from:mime-version:subject:to:cc:content-type:from:
+	subject:to;
+	s=m1; bh=YEdBHMYJNfBLfw8laa2bgA0VMIt/n7E/m1k9Wt5+9PU=;
+	b=iin0K/ntz5Rr2lckZXS5vdlBpqtrPEzSXensEoXrvZ56ghWbDf552VbG3wn+PzS2i17B
+	nYF2PRSo5FaYTwtRpyrRCw9d1z0OPizNI1aWjOXSvOOMBgq+bIUtPi2/V42B4+BUlcGoVh
+	HxtpPB+CZRA4dAVZuzCE20b4NF4OFuPP8=
+Received: by filterdrecv-7bd468c8f9-26clj with SMTP id filterdrecv-7bd468c8f9-26clj-1-650C66DE-3A
+        2023-09-21 15:53:02.540483699 +0000 UTC m=+11549588.405853717
+Received: from MjE1NzYzNTA (unknown)
+	by geopod-ismtpd-35 (SG) with HTTP
+	id zT5aZQrZRQi-6KU7f8Lxug
+	Thu, 21 Sep 2023 15:53:02.468 +0000 (UTC)
+Content-Type: multipart/alternative; boundary=7929727b985895216ad43caa1168ed898c79e240f4837a421551c9c589e9
+Date: Thu, 21 Sep 2023 15:53:02 +0000 (UTC)
+From: Shopify <mailer@shopify.com>
+Message-ID: <E102006A-1786F4E6D635FBE3-079690D4@shopify.com>
+Subject: Confirm your email address
+X-SG-EID:
+ =?us-ascii?Q?kGTXYPhJpECQbya0ED2FCSpVyQHAwkowwlkRpNLxTI44qc8gf4EW2rW35gWeTl?=
+ =?us-ascii?Q?FicjeAgSPDfQSJvDfssgAJpr2dgV=2FwoCmpLPKnU?=
+ =?us-ascii?Q?wbX96NUyIR83UDoK=2F9zgAPE541Zh7wM4Sh=2FMLBF?=
+ =?us-ascii?Q?j8Rm+1fMTbbCm0Pd+V0g1gX+A1Bav2CCihD0ESd?=
+ =?us-ascii?Q?u81WMyrxcmYOJ5UNK9UlOEXrA4KcK6eqD=2FZ1JQs?=
+ =?us-ascii?Q?vQY6bCoIgO0tSeUsHw3zPZiRnaPjJbPkBwO96J?=
+X-SG-ID:
+ =?us-ascii?Q?N2C25iY2uzGMFz6rgvQsb8raWjw0ZPf1VmjsCkspi=2FKOpeJUHWlRJMC+AMZBck?=
+ =?us-ascii?Q?1FYU1zIFcChE+GfCMfkGnqbzOqoaOfUyU3rgDeB?=
+ =?us-ascii?Q?QzkqeYlzhlDZhk6K0KN0zQSZ1=2FhoS6vi65h1qnr?=
+ =?us-ascii?Q?3BKur2DCuJffRex=2Fkk9z1eGuZuL6rRNMzkWhjPK?=
+ =?us-ascii?Q?tyfQ7zzJ8ykcRlqbLFaZkKois=2Fb49zwCbMbZ0nR?=
+ =?us-ascii?Q?kU7jVqERDKNTWJ54=2F9+pUfkwUtG+IXvZX7g3UjF?=
+ =?us-ascii?Q?1zynHah2hhXT6=2FUtinTNT9xZh3qn9EbTq49QSZe?=
+ =?us-ascii?Q?j+kJ+SOjsRZ19HzksH8=2F1CLwiXFZvIturMrptHj?=
+ =?us-ascii?Q?nTHv19g0dJp7ga8kIZ8dVbbg49Rnu8JRP6Xr=2FaM?=
+ =?us-ascii?Q?J1TqTEOTcU4K2RPD=2F2n1Z3KRMgH+JThSt2U+X6N?=
+ =?us-ascii?Q?YkFFKFuMrqfakXth6eMYkMKLE1eptRyKIyPHkBD?=
+ =?us-ascii?Q?3ogSGNUYkwRnzP5WIZGRz=2FU+Hn69b258Ceg3w2q?=
+ =?us-ascii?Q?M1IkpJRJHtBLlAjbpNQJV8+G1XD77JNddulIjFR?=
+ =?us-ascii?Q?IntwwrbDGW4UEt8RvQdYjuU2x5QDIyvdG=2F28H0H?=
+ =?us-ascii?Q?NTUtvh3kgrjX1A+pBZsUoJHnkCpngKD7v4Mf9Oj?=
+ =?us-ascii?Q?aRyYEEHalhU7MTPOZEe87Yp5iBVFyBLOtBGmClf?=
+ =?us-ascii?Q?m0a5ujz8nFr5fXkdEawe4v9P0X15etVlal6WwG6?=
+ =?us-ascii?Q?2aui9OqZfGL9qlOjI9wGYvYogDbxLnswmJkNr=2Fs?=
+ =?us-ascii?Q?ReSeeJUYk15K1QWs=2FzMv=2FeXU6W+X799etwy5oqR?=
+ =?us-ascii?Q?d5pNrkskgduSIzoM3UWAHHPkn8F3UTxrLrItNhe?=
+ =?us-ascii?Q?luGPNhtaotvmFK3JvKMece=2FatfeAeIoge36UCj5?=
+ =?us-ascii?Q?hWfcYA+12=2F36x8m=2FYD0PzQS3lAK=2F5AIwQ+eG1gs?=
+ =?us-ascii?Q?EkRc=2Fn2z4UkSqbnB=2FDJbL87DSKiY=2FCgZg4qDiHl?=
+ =?us-ascii?Q?7QDGHvKAqV+9GgAtVegSyUmI0d4EXYLkf+oPQ=2Fi?=
+ =?us-ascii?Q?eVJNyGDAyhmnyOKMFsro+vezi26XB0LYWQBRDfi?=
+ =?us-ascii?Q?6Qw1DfI4YN=2FxhOF38ZCRIidqFDzkE2BH4NlqOtQ?=
+ =?us-ascii?Q?tIL0Ca8i3EhZkgn5i07ZCPzQE6StDDSXkSE12i6?=
+ =?us-ascii?Q?ti18natIx7HDQIBARzVS7KYkxfC6Yeb80EYnw98?=
+ =?us-ascii?Q?vbKvvFM4ZjxJ229kNMg9o2kgCX9OhFMEHiibBNS?=
+ =?us-ascii?Q?frMYMispf2jPSAVLuA3H1Z0d05+fzwOcQzHBYo+?=
+ =?us-ascii?Q?dALDWt10gSPwb8VtwCNN2m0alIsXehTDnDeY0Dw?=
+ =?us-ascii?Q?0DAm0rrUv+ZxDugmw9aVlteaB4WpafEll8uBX3f?=
+ =?us-ascii?Q?Ej+nPhEEYwjtUaARhaiQnlwabKKakg6=2Fg8+qRqh?=
+ =?us-ascii?Q?m9xsScEaiDQdX+at1FkSiaVNPqMGVzDEjWLW+jA?=
+ =?us-ascii?Q?2T=2FYBaF83ZWjdMRdAwqru7kamPWbmGIqGuAuPK=2F?=
+ =?us-ascii?Q?A5ZYhgxhGvjUdsdgCRPkF71bgIvDZCOIgyPpeNM?=
+ =?us-ascii?Q?HKrD1c+jPQE2ANIVmaTAc5imLVe=2FmgBT4Z8=2FTXa?=
+ =?us-ascii?Q?4MIOxTMLQDhUM1csh6gyoJycyHQkRYG65EnyPqn?=
+ =?us-ascii?Q?DST=2F7FjoHy6QjI1P3dFg2Ua=2Fae4kb=2FUzpH=2FoZhr?=
+ =?us-ascii?Q?HmlPZZdQEhWAmvhppCBh9ZMGeF3LieiLroCvfBz?=
+ =?us-ascii?Q?0M+jOTXudtB5LUhlCC9cgMUWWgNXcusbMJm7qnc?=
+ =?us-ascii?Q?8eu9M+BTTGREZBRkZPM92XiO4riH0Lf1zHx=2Fl0Z?=
+ =?us-ascii?Q?Rz=2Fn2avc6qlwUSFqFKSUScs0EZluElaePktsDlC?=
+ =?us-ascii?Q?DWJAAxqQnIuRGzLR3TSZtzkL8wcW25jRoHVvyJ7?=
+ =?us-ascii?Q?i2GwcozNVQw=3D=3D?=
+To: tobinsilvestre137@sooners.us
+X-Entity-ID: pG5GoYnoNsWhvk/clivqvA==
+X-Forwarded-For: tobinsilvestre137@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 27
+X-MS-Exchange-Organization-ExpirationStartTime: 21 Sep 2023 15:53:03.8250
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 9c9474d8-1f68-4204-7c37-08dbbabad715
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DB1PEPF00039233:EE_|SJ1PR20MB4764:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DB1PEPF00039233.eurprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/21/2023 3:46:41 PM
+X-MS-Office365-Filtering-Correlation-Id: 9c9474d8-1f68-4204-7c37-08dbbabad715
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.222.171
+X-SID-PRA: MAILER@SHOPIFY.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2023 15:53:03.7156
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c9474d8-1f68-4204-7c37-08dbbabad715
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DB1PEPF00039233.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR20MB4764
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.3693057
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPmF8KieAyc4lmH8Wv17zzo2i6i1SzPfmg7Y5+mC/83pDZvZ0fKxKT8hnXRFOnwTZmZsDxUOOnCKpfaSYC1LVk8J3cRXb8WITjFLIRai6w0xayvzJOpAx5OVqvqDcFlt4aPwX+kD+Xdo6q8f07cFqAEGxyMek/955rdo5WuwlbKNCFN0kDovyKVMTndQa2kez8l58fercLs7Yw==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0wO0Q9MTtHRD0yO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VkIzSUNObWhub0lKMktTWFhxRno5T2NMTlN4alBIRGZqWTE5cExFakd1b21j?=
+ =?utf-8?B?OVo0OUttUXF2d0thMXV4RU8ySHRzY3A1YVphbEpnc016YldYTno5SkxkYjdh?=
+ =?utf-8?B?VnJMa0xnbEliUGl0cmFhZXJzRi8xSzNIZFE0cnFsa0gwTEp2c3lTNFp0cXF6?=
+ =?utf-8?B?dXAzSElCRHRwTjJJem00NU53RXMybXc4ZWVlbVRvYW1saFVVSmZ5aWFDdzg5?=
+ =?utf-8?B?QWw2ZlBpcFNrUmhpVWNWTVF4MHBORWFMVEhjdjRwRHU3K1BDNnhkdkpmaEFz?=
+ =?utf-8?B?QlJWWEZZVVRlN0FhODMrTXFER1YzN0VrdkVDNm9KQkxLZjNGMENXTkFhWm1r?=
+ =?utf-8?B?V1Zib1BKMElxSE1GQThVV2pUWE5OKzlvaWZ4M2JETkFzZ3hSRjdISDNpd2pw?=
+ =?utf-8?B?bENkVWhkNGZFN2xSN2RGNndHdzlmc3lhOTNpb21OSUdoK0JydmFXMVRIUEZv?=
+ =?utf-8?B?Z0JsN0dhbVh0TFBpMUhvNVNBMi9jNXpJUTNtSEU0UldRVUM2NEtqRHA5MitE?=
+ =?utf-8?B?N2M0U0RScEZUbHBRYmpocEJXdzRSdUo2NlRKbU4xZHlxb2NIbGtiSGRoQ0J3?=
+ =?utf-8?B?VUhNOWVlMWZRRmpUWGlDSmowZ3dmVVhMVktlUW5DVnBiWTdiZDZCWTdGRU9E?=
+ =?utf-8?B?VnpnTCtlS25vaDU4d0o4RXV3OEErSU1GanQ0WEFpZzN5ZzlUTUI4REliUXcw?=
+ =?utf-8?B?MFZtMkJ3OEQ1eXFSb3hZNG14d3lZYjk1azljOHdGT3A4ZGhPMEk4bWYzeVMy?=
+ =?utf-8?B?dWttRDIxbks3SVBPc0grOVVUdVc0S0NuaUc0Ymx6QUU3UzUxdkc4MFhxT1BT?=
+ =?utf-8?B?dzlDTzhOaDlqdm9US0t5NjBtZU9NeG5xUnRJQkpWeW5McGx5VUhNNTNDY2lB?=
+ =?utf-8?B?SE9YOHFUU3diMHltaHRpcHlCdUVucTZpVW1jZlBGdzdYK2NIVThTVHZuQWdM?=
+ =?utf-8?B?ZHFTOVJ3Q2F2dzRNeE9SMXlhODE1dUZ1UDladkpZeU5IYWc1ZmhnZXhCYVFV?=
+ =?utf-8?B?ZVB5Q3d3dngvdC9oT3BidmJXZGhrK1N2V0ZaN0NIemRlWGVqb1RWVjUzT1hC?=
+ =?utf-8?B?V1gvcDlXWDBrTGVsSGZ0QmZyZmFWY1NocC9Jc2V4MUlVRGEwNWVoV1dxVDlL?=
+ =?utf-8?B?RnZ2RFlUc0JiMXVKZkl4aUw5NXpnTGJ4V3hiZnYrZWxCaDFaUXFVTllUM0pa?=
+ =?utf-8?B?R3d6SlA3dTNmWWZlbUJibUhORjZvNGJtQWJmKzZsbmRualYvaUtBYU4zQWRZ?=
+ =?utf-8?B?eWJFN0tlODhqaVhhSTl6VUo0OVphTDJ2c3hKcCs0eDMreUNSVDFvd0wvelpa?=
+ =?utf-8?B?TXVZR1JBQTJ0NHV2MUFHdFBvYmpjN2FQUzdZTUU5WkVMdWQxYTE0WXBibHEz?=
+ =?utf-8?B?aFFqdGh0cTlRem9rQlpyK0x5YUIvQ3ljZEMzV0VWNnNVemR5cmtzWmVaSWF0?=
+ =?utf-8?B?WUl2SUJvZlErTUJ5c1ZvWE9qMUgwL1Y0V2Q5bnJMODlMT1Y1M0JyTUExWmo5?=
+ =?utf-8?B?MjdlN1B4NFBybjRVaDYwQjdVNGwrcThzMThDSUZwQ3NZRzdBMHNMemExaGg1?=
+ =?utf-8?B?ZkhCam01T05iNEh6LzJXTjVyQTBQL0JMMzZMcXhkOFZ2ZERTMTlObjMvaEdk?=
+ =?utf-8?B?djBDQ08vQlZTcXBvVmlKdW91TUVNOWlZNU5lZXd1Z0w3TVB2YlkxU1RaRlkz?=
+ =?utf-8?B?Ump3cWdFVGd3V3U3L2k4RlNKK2F4RFUybXlDVUk3MWpoUTFPUXlxNUVJTmxQ?=
+ =?utf-8?B?NGZCRVZRdUVSMEM4V2NGRnF2cGE3ZytBK3J3UnFPMGRaL094WFRqQ0lZc1B3?=
+ =?utf-8?B?UGw0OFNVQXlHWlo3NnlNSUE4dEowR1NXUHk4VVpmRDRnREJRZVVORm1ZZExZ?=
+ =?utf-8?B?WXR4Rm9kVFAwYTU2WHU5Sm9vTXUrbVlBbEc5UlE5QWNidUtuaVVFb1NTWGtB?=
+ =?utf-8?B?V29lV2xCQkJPaHBCM2h3ZDhURjJidGJEYU5aYml0V2tHR2JWdUFjeG0zZ3g4?=
+ =?utf-8?B?QmpCWSt3ZzRzVkxVZHZIK3M1dGxzdUVFN3NPZkU1aldFbmFtdDhXMUV4Qkxq?=
+ =?utf-8?B?Z0xiVU82Sm5OVkpvQllKNFY4bThaU1NOb1JwZWVEQmQxZ0RRTStoeGVPdGUv?=
+ =?utf-8?B?KzFKWXlISTlwakdodEIyRTc1c1poWWoybUM2TFN6NzVnL1k3ZldRY0lHaW9P?=
+ =?utf-8?B?QWc9PQ==?=
+MIME-Version: 1.0
+
+--7929727b985895216ad43caa1168ed898c79e240f4837a421551c9c589e9
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+
+*******************
+Welcome to Shopify.
+*******************
+
+*****************************************************************
+You=E2=80=99re receiving this message because you recently signed up for
+a Shopify account.
+*****************************************************************
+
+-----------------------------------------------------------------
+Confirm your email address by clicking the button below. This
+step adds extra security to your business by verifying you own
+this email.
+-----------------------------------------------------------------
+
+Confirm email=20
+( https://accounts.shopify.com/email-verifications/68a0qcVqKKCIGnflhLWryWw-=
+JpfqrdU5XyO8t1pcMt3UmFJY_vhHlcvz4vl0JTToVlI )
+
+
+This link will expire in 10 days. If you have questions,
+we=E2=80=99re here to help=20
+( https://help.shopify.com/en/questions#/contact ).
+
+151 O'Connor Street, Ground floor, Ottawa, ON, K2P
+2L8
+--7929727b985895216ad43caa1168ed898c79e240f4837a421551c9c589e9
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=utf-8
+
+<!DOCTYPE html><html lang=3D"en-US" style=3D"font-size: 14px; font-weight: =
+400; line-height: 20px; text-transform: initial; letter-spacing: initial; c=
+olor: #202223; font-family: -apple-system, BlinkMacSystemFont, San Francisc=
+o, Segoe UI, Roboto, Helvetica Neue, sans-serif; --x-uplift-bg-primary: #30=
+3030; --x-uplift-bg-primary-hover: #1A1A1A; --x-uplift-text-interactive: #0=
+05BD3; --x-uplift-text-interactive-hover: #005BD3; --x-uplift-text-interact=
+ive-active: #002E6A; --x-uplift-border-interactive-focus: #005BD3; --x-upli=
+ft-button-border-radius: 8px; --x-uplift-avatar-border-radius: 10px; --x-up=
+lift-badge-bg-success: #A1EDD0; --x-uplift-avatar-bg-1: #FBCFFB; --x-uplift=
+-avatar-primary-1: #791A79; --x-uplift-avatar-bg-2: #38FAA3; --x-uplift-ava=
+tar-primary-2: #0C5132; --x-uplift-avatar-bg-3: #92EDDE; --x-uplift-avatar-=
+primary-3: #095346; --x-uplift-avatar-bg-4: #C0E1FF; --x-uplift-avatar-prim=
+ary-4: #0C5132; --x-uplift-avatar-bg-5: #FED1DD; --x-uplift-avatar-primary-=
+5: #8D0448; margin: 0; padding: 0;"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+    <meta name=3D"viewport" content=3D"user-scalable=3Dno, width=3Ddevice-w=
+idth, initial-scale=3D1, maximum-scale=3D1">
+    <meta name=3D"referrer" content=3D"no-referrer">
+
+   =20
+    <!-- Styles specific to Outlook 2007, 2010 and 2013 -->
+      <!--[if gte mso 9]>
+        <style>
+          ul,
+          ol {
+           margin: 0 0 0 24px;
+          }
+
+          dd {
+            text-indent: -3em;
+          }
+        </style>
+    <![endif]-->
+    <style data-premailer=3D"ignore">
+      .apple-link a {
+        color: inherit !important;
+        text-decoration: none !important;
+      }
+
+      .mail-token {
+        font-size: 21px !important;
+        font-weight: bold !important;
+      }
+
+      @media screen and (max-width: 470px) {
+        .mail-body > tbody > tr > td {
+          padding-top: 0 !important;
+        }
+
+        .mail-body__content > tbody > tr > td {
+          border-radius: 0;
+          border-top: 0 !important;
+          border-right: 0 !important;
+          border-left: 0 !important;
+        }
+
+        .mail-sections > tbody > tr > td {
+          padding-right: 0 !important;
+          padding-left: 0 !important;
+        }
+
+        .mail-section > tbody > tr > td:first-child {
+          padding-left: 20px !important;
+        }
+
+        .mail-section > tbody > tr > td:last-child {
+          padding-right: 20px !important;
+        }
+
+        .mail-help-center > tbody > tr > td:first-child {
+          padding-left: 20px !important;
+        }
+
+        .mail-help-center > tbody > tr > td:last-child {
+          padding-right: 20px !important;
+        }
+      }
+    </style>
+  <style>body {
+margin: 0 !important; padding: 0;
+}
+body {
+height: 100%; width: 100%;
+}
+img {
+border: 0; height: auto; line-height: 0; outline: none; text-decoration: no=
+ne; vertical-align: top; -ms-interpolation-mode: bicubic;
+}
+.ReadMsgBody {
+width: 100%;
+}
+.ExternalClass {
+width: 100%;
+}
+.ExternalClass {
+line-height: 100%;
+}
+body {
+-webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-=
+adjust: 100%; text-size-adjust: 100%;
+}
+body {
+font-size: 14px; font-weight: 400; line-height: 20px; text-transform: initi=
+al; letter-spacing: initial; color: #202223; font-family: -apple-system, Bl=
+inkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-ser=
+if;
+}
+.ui-button--primary:hover {
+border-radius: 0.46875rem; background: var(--x-uplift-bg-primary-hover, lin=
+ear-gradient(180deg, rgba(255,255,255,0) 88.54%, rgba(255,255,255,0.11) 100=
+%)); -webkit-box-shadow: 0px 1px 0px 0px rgba(255,255,255,0.24) inset,1px 0=
+px 0px 0px rgba(255,255,255,0.16) inset,-1px 0px 0px 0px rgba(255,255,255,0=
+.16) inset,0px -1.5px 0px 0px rgba(255,255,255,0.07) inset,0px 0px 0px 0.5p=
+x var(--x-uplift-bg-primary-hover); box-shadow: 0px 1px 0px 0px rgba(255,25=
+5,255,0.24) inset,1px 0px 0px 0px rgba(255,255,255,0.16) inset,-1px 0px 0px=
+ 0px rgba(255,255,255,0.16) inset,0px -1.5px 0px 0px rgba(255,255,255,0.07)=
+ inset,0px 0px 0px 0.5px var(--x-uplift-bg-primary-hover);
+}
+.btn-primary:not(.ui-context-bar__actions-primary):hover {
+border-radius: 0.46875rem; background: var(--x-uplift-bg-primary-hover, lin=
+ear-gradient(180deg, rgba(255,255,255,0) 88.54%, rgba(255,255,255,0.11) 100=
+%)); -webkit-box-shadow: 0px 1px 0px 0px rgba(255,255,255,0.24) inset,1px 0=
+px 0px 0px rgba(255,255,255,0.16) inset,-1px 0px 0px 0px rgba(255,255,255,0=
+.16) inset,0px -1.5px 0px 0px rgba(255,255,255,0.07) inset,0px 0px 0px 0.5p=
+x var(--x-uplift-bg-primary-hover); box-shadow: 0px 1px 0px 0px rgba(255,25=
+5,255,0.24) inset,1px 0px 0px 0px rgba(255,255,255,0.16) inset,-1px 0px 0px=
+ 0px rgba(255,255,255,0.16) inset,0px -1.5px 0px 0px rgba(255,255,255,0.07)=
+ inset,0px 0px 0px 0.5px var(--x-uplift-bg-primary-hover);
+}
+.ui-button--primary:active {
+border-radius: 0.5rem; background: var(--x-uplift-bg-primary-hover); -webki=
+t-box-shadow: 0px 2px 0px 0px #000 inset,1px 0px 1px 0px rgba(0,0,0,0.2) in=
+set,-1px 0px 1px 0px rgba(0,0,0,0.2) inset; box-shadow: 0px 2px 0px 0px #00=
+0 inset,1px 0px 1px 0px rgba(0,0,0,0.2) inset,-1px 0px 1px 0px rgba(0,0,0,0=
+.2) inset;
+}
+.btn-primary:not(.ui-context-bar__actions-primary):active {
+border-radius: 0.5rem; background: var(--x-uplift-bg-primary-hover); -webki=
+t-box-shadow: 0px 2px 0px 0px #000 inset,1px 0px 1px 0px rgba(0,0,0,0.2) in=
+set,-1px 0px 1px 0px rgba(0,0,0,0.2) inset; box-shadow: 0px 2px 0px 0px #00=
+0 inset,1px 0px 1px 0px rgba(0,0,0,0.2) inset,-1px 0px 1px 0px rgba(0,0,0,0=
+.2) inset;
+}
+a:hover {
+color: var(--x-uplift-text-interactive-hover);
+}
+a:focus {
+color: var(--x-uplift-text-interactive-hover);
+}
+a:active {
+color: var(--x-uplift-text-interactive-active);
+}
+.login-card__content .next-input:focus {
+-webkit-box-shadow: 0 0 0 1px var(--x-uplift-border-interactive-focus); box=
+-shadow: 0 0 0 1px var(--x-uplift-border-interactive-focus); border-color: =
+var(--x-uplift-border-interactive-focus);
+}
+.login-card__content .combined-email-field-wrapper .next-input-wrapper:not(=
+.next-input-wrapper--is-error) .combined-input-wrapper:focus-within {
+-webkit-box-shadow: 0 0 0 1px var(--x-uplift-border-interactive-focus); box=
+-shadow: 0 0 0 1px var(--x-uplift-border-interactive-focus); border-color: =
+var(--x-uplift-border-interactive-focus); border-radius: var(--x-uplift-but=
+ton-border-radius);
+}
+.ui-context-bar.ui-context-bar--is-dirty .ui-context-bar__actions-cancel:ho=
+ver {
+background-color: var(--p-action-secondary-hovered);
+}
+.ui-context-bar.ui-context-bar--is-dirty .ui-context-bar__actions-primary:h=
+over {
+background: var(--p-action-primary-hovered);
+}
+@media screen and (min-width: breakpoint(display-text)) {
+  html {
+    font-size: 14px;
+  }
+  body {
+    font-size: 14px;
+  }
+  pre {
+    font-size: 14px;
+  }
+  h1 {
+    font-size: 14px;
+  }
+  h2 {
+    font-size: 14px;
+  }
+  h3 {
+    font-size: 14px;
+  }
+  h4 {
+    font-size: 14px;
+  }
+  h5 {
+    font-size: 14px;
+  }
+  h6 {
+    font-size: 14px;
+  }
+  .mail-button {
+    font-size: 14px;
+  }
+  .mail-button-destroy {
+    font-size: 14px;
+  }
+}
+@media (max-width: 534px) {
+  .mail-body>tbody>tr>td:nth-child(2) {
+    width: 100% !important;
+  }
+  .mail-body__content {
+    padding: 0 !important; border-left: 0 !important; border-right: 0 !impo=
+rtant; border-top: none !important; border-radius: 0 !important; width: 100=
+% !important; max-width: none !important; margin-top: 0 !important;
+  }
+}
+</style>
+</head>
+  <body style=3D"height: 100%; width: 100%; -webkit-text-size-adjust: 100%;=
+ -moz-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-size-adjust:=
+ 100%; font-size: 14px; font-weight: 400; line-height: 20px; text-transform=
+: initial; letter-spacing: initial; color: #202223; font-family: -apple-sys=
+tem, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, s=
+ans-serif; margin: 0; padding: 0;">
+    <table class=3D"mail-body" style=3D"width: 100%; border-collapse: colla=
+pse; border-spacing: 0; -webkit-text-size-adjust: 100%; -moz-text-size-adju=
+st: 100%; -ms-text-size-adjust: 100%; text-size-adjust: 100%; mso-table-lsp=
+ace: 0; mso-table-rspace: 0; margin-top: 0; margin-bottom: 0; padding: 0;" =
+cellpadding=3D"0" cellspacing=3D"0"><tbody><tr style=3D"margin-top: 0; marg=
+in-bottom: 0; padding: 0;">
+<td style=3D"-webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -=
+ms-text-size-adjust: 100%; text-size-adjust: 100%; mso-table-lspace: 0; mso=
+-table-rspace: 0; margin-top: 0; margin-bottom: 0; padding: 0; border-width=
+: 0;"></td>
+<td style=3D"-webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -=
+ms-text-size-adjust: 100%; text-size-adjust: 100%; mso-table-lspace: 0; mso=
+-table-rspace: 0; margin-top: 0; margin-bottom: 0; width: 470px; padding: 0=
+; border-width: 0;"><table class=3D"mail-body__content" align=3D"center" st=
+yle=3D"width: 100%; border-collapse: initial; border-spacing: 0; -webkit-te=
+xt-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 10=
+0%; text-size-adjust: 100%; mso-table-lspace: 0; mso-table-rspace: 0; max-w=
+idth: 470px; text-align: left; border-radius: 8px; overflow: hidden; margin=
+: 32px auto 0; padding: 0; border: 1px solid #c9cccf;" cellpadding=3D"0" ce=
+llspacing=3D"0"><tbody><tr style=3D"margin-top: 0; margin-bottom: 0; paddin=
+g: 0;"><td style=3D"-webkit-text-size-adjust: 100%; -moz-text-size-adjust: =
+100%; -ms-text-size-adjust: 100%; text-size-adjust: 100%; mso-table-lspace:=
+ 0; mso-table-rspace: 0; margin-top: 0; margin-bottom: 0; padding: 0; borde=
+r-width: 0;"><table class=3D"mail-sections" style=3D"width: 100%; border-co=
+llapse: collapse; border-spacing: 0; -webkit-text-size-adjust: 100%; -moz-t=
+ext-size-adjust: 100%; -ms-text-size-adjust: 100%; text-size-adjust: 100%; =
+mso-table-lspace: 0; mso-table-rspace: 0; margin-top: 0; margin-bottom: 0; =
+padding: 0;" cellpadding=3D"0" cellspacing=3D"0"><tbody><tr style=3D"margin=
+-top: 0; margin-bottom: 0; padding: 0;"><td style=3D"-webkit-text-size-adju=
+st: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-siz=
+e-adjust: 100%; mso-table-lspace: 0; mso-table-rspace: 0; margin-top: 0; ma=
+rgin-bottom: 0; padding: 20px; border-width: 0;">
+<table class=3D"mail-section mail-section--type-primary" style=3D"width: 10=
+0%; border-collapse: collapse; border-spacing: 0; -webkit-text-size-adjust:=
+ 100%; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-size-a=
+djust: 100%; mso-table-lspace: 0; mso-table-rspace: 0; margin-top: 0; margi=
+n-bottom: 0; padding: 0;" cellpadding=3D"0" cellspacing=3D"0"><tbody><tr st=
+yle=3D"margin-top: 0; margin-bottom: 0; padding: 0;"><td style=3D"-webkit-t=
+ext-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 1=
+00%; text-size-adjust: 100%; mso-table-lspace: 0; mso-table-rspace: 0; marg=
+in-top: 0; margin-bottom: 0; padding: 0 0 20px; border-width: 0;"><table st=
+yle=3D"width: 100%; border-collapse: collapse; border-spacing: 0; -webkit-t=
+ext-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 1=
+00%; text-size-adjust: 100%; mso-table-lspace: 0; mso-table-rspace: 0; marg=
+in-top: 0; margin-bottom: 0; padding: 0;" cellpadding=3D"0" cellspacing=3D"=
+0"><tbody>
+<tr style=3D"margin-top: 0; margin-bottom: 0; padding: 0;"><td style=3D"-we=
+bkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adj=
+ust: 100%; text-size-adjust: 100%; mso-table-lspace: 0; mso-table-rspace: 0=
+; margin-top: 0; margin-bottom: 0; padding: 0; border-width: 0;"><h1 class=
+=3D"mail-title" style=3D"margin-top: 0; margin-bottom: 0; font-size: 16px; =
+font-weight: 600; line-height: 24px; text-transform: initial; letter-spacin=
+g: initial; padding: 0;">
+    Welcome to Shopify.
+</h1></td></tr>
+<tr style=3D"margin-top: 0; margin-bottom: 0; padding: 0;"><td style=3D"-we=
+bkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adj=
+ust: 100%; text-size-adjust: 100%; mso-table-lspace: 0; mso-table-rspace: 0=
+; margin-top: 0; margin-bottom: 0; padding: 16px 0 0; border-width: 0;"><h1=
+ style=3D"margin-top: 0; margin-bottom: 0; font-size: 15px; font-weight: 40=
+0; line-height: 20px; text-transform: initial; letter-spacing: initial; pad=
+ding: 0;">
+    You=E2=80=99re receiving this message because you recently signed up fo=
+r a Shopify account.
+</h1></td></tr>
+<tr style=3D"margin-top: 0; margin-bottom: 0; padding: 0;"><td style=3D"-we=
+bkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adj=
+ust: 100%; text-size-adjust: 100%; mso-table-lspace: 0; mso-table-rspace: 0=
+; margin-top: 0; margin-bottom: 0; padding: 16px 0 0; border-width: 0;"><h2=
+ style=3D"margin-top: 0; margin-bottom: 0; font-size: 15px; font-weight: 40=
+0; line-height: 20px; text-transform: initial; letter-spacing: initial; pad=
+ding: 0;">
+    Confirm your email address by clicking the button below. This step adds=
+ extra security to your business by verifying you own this email.
+</h2></td></tr>
+<tr style=3D"margin-top: 0; margin-bottom: 0; padding: 0;"><td style=3D"-we=
+bkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adj=
+ust: 100%; text-size-adjust: 100%; mso-table-lspace: 0; mso-table-rspace: 0=
+; margin-top: 0; margin-bottom: 0; padding: 16px 0 0; border-width: 0;"><a =
+class=3D"mail-button" href=3D"https://accounts.shopify.com/email-verificati=
+ons/68a0qcVqKKCIGnflhLWryWw-JpfqrdU5XyO8t1pcMt3UmFJY_vhHlcvz4vl0JTToVlI" st=
+yle=3D"-webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-tex=
+t-size-adjust: 100%; text-size-adjust: 100%; margin-top: 0; margin-bottom: =
+0; color: white; text-decoration: none; display: inline-block; font-size: 1=
+6px; font-weight: 400; line-height: 24px; text-transform: initial; letter-s=
+pacing: initial; background-color: #008060; border-radius: 4px; padding: 0;=
+ border-color: #008060; border-style: solid; border-width: 10px 20px;">Conf=
+irm email</a></td></tr>
+</tbody></table></td></tr></tbody></table>
+       =20
+  <table class=3D"mail-section" style=3D"width: 100%; border-collapse: coll=
+apse; border-spacing: 0; -webkit-text-size-adjust: 100%; -moz-text-size-adj=
+ust: 100%; -ms-text-size-adjust: 100%; text-size-adjust: 100%; mso-table-ls=
+pace: 0; mso-table-rspace: 0; margin-top: 0; margin-bottom: 0; padding: 0;"=
+ cellpadding=3D"0" cellspacing=3D"0"><tbody><tr style=3D"margin-top: 0; mar=
+gin-bottom: 0; padding: 0;"><td style=3D"-webkit-text-size-adjust: 100%; -m=
+oz-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-size-adjust: 10=
+0%; mso-table-lspace: 0; mso-table-rspace: 0; margin-top: 0; margin-bottom:=
+ 0; border-top-color: #c9cccf; border-top-style: solid; padding: 20px 0 0; =
+border-width: 1px 0 0;">
+    <p style=3D"-webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%=
+; -ms-text-size-adjust: 100%; text-size-adjust: 100%; margin-top: 0; margin=
+-bottom: 0; padding: 0;">This link will expire in 10 days. If you have ques=
+tions, <a href=3D"https://help.shopify.com/en/questions#/contact" style=3D"=
+-webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-=
+adjust: 100%; text-size-adjust: 100%; margin-top: 0; margin-bottom: 0; colo=
+r: var(--x-uplift-text-interactive); text-decoration: none; padding: 0;">we=
+=E2=80=99re here to help</a>.</p>
+</td></tr></tbody></table>
+</td></tr></tbody></table></td></tr></tbody></table></td>
+<td style=3D"-webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -=
+ms-text-size-adjust: 100%; text-size-adjust: 100%; mso-table-lspace: 0; mso=
+-table-rspace: 0; margin-top: 0; margin-bottom: 0; padding: 0; border-width=
+: 0;"></td>
+</tr></tbody></table>
+    <footer>
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"mail=
+-footer" style=3D"width: 100%; border-collapse: collapse; border-spacing: 0=
+; -webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-siz=
+e-adjust: 100%; text-size-adjust: 100%; mso-table-lspace: 0; mso-table-rspa=
+ce: 0; font-size: 12px; line-height: 20px; color: #6d7175; max-width: 470px=
+; margin: 32px auto 0; padding: 0;">
+        <tbody>
+            <tr style=3D"margin-top: 0; margin-bottom: 0; padding: 0;">
+              <td align=3D"center" valign=3D"bottom" style=3D"-webkit-text-=
+size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 100%;=
+ text-size-adjust: 100%; mso-table-lspace: 0; mso-table-rspace: 0; margin-t=
+op: 0; margin-bottom: 0; padding: 0 20px; border-width: 0;">
+                <img alt=3D"" width=3D"89" src=3D"https://shopify-assets.sh=
+opifycdn.com/accounts/production/theme_configuration/logo/oauth_provider/me=
+rchant/logo.svg?v=3D1631025778" style=3D"height: auto; line-height: 0; outl=
+ine: none; text-decoration: none; vertical-align: top; -ms-interpolation-mo=
+de: bicubic; border-width: 0;">
+              </td>
+            </tr>
+          <tr style=3D"margin-top: 0; margin-bottom: 0; padding: 0;">
+            <td align=3D"center" style=3D"-webkit-text-size-adjust: 100%; -=
+moz-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-size-adjust: 1=
+00%; mso-table-lspace: 0; mso-table-rspace: 0; margin-top: 0; margin-bottom=
+: 0; padding: 8px 20px 20px; border-width: 0;">
+              <p style=3D"-webkit-text-size-adjust: 100%; -moz-text-size-ad=
+just: 100%; -ms-text-size-adjust: 100%; text-size-adjust: 100%; margin-top:=
+ 0; margin-bottom: 0; padding: 0;"><span class=3D"apple-link">151 O'Connor =
+Street, Ground floor, Ottawa, ON, K2P 2L8</span></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </footer>
+ =20
+
+</body></html>=
+
+--7929727b985895216ad43caa1168ed898c79e240f4837a421551c9c589e9--

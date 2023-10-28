@@ -1,0 +1,854 @@
+Received: from DM4PR20MB5655.namprd20.prod.outlook.com (2603:10b6:8:10c::12)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Fri, 22 Sep 2023
+ 05:41:44 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=Xwcuv2G4df9ieQ5nT/Mq14JEalR2OakmZWQzHSAz+jwIuyLsW9sf7MNuqokVoAEKfo5qjDe9OWcqzMe+O1i1DO1AVS6T8C8fFIP4y+5gUaaqWNvdUr1hvdA+AP9jbaNpO5D06crpfRvrWxctwBks+vFmjtCjuDuVtRsYPM516LFIyalCjZj1hw3iGZkRcL4Qy/dolpmXnvYhJpEfzNFUcDJb32CqBSvEF91zFa6p5uf+Cn56CgMYXuYJodxqsoMGm3fHjF1aSvfZAQkXOBtT6u+3V/bhwDxqYOEqJ0RC1AFwtQTHQXBwS3OVN3FfWprGXmz6QeBsF2KaQmV0a0TZmQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eFPFtghPR/LzYwLIrwB2vM0jNNv1Pn6PLDx8nysSJdU=;
+ b=mZBPBJGXd1FvsogxUs1pVBuEcJ/z+CpQ6AEpLBg2tCHIyVIDYcNFBjZYUkNKkwMLlJ8ZgbABd9M7aKyAQXK7nodVHJVYtzqcJcPNjS2TJXXurvYIzvTv74w6mUSSLVNcFfUqindB11XdAuGM9VZ/Fytk3zruTjKPxTFCpbzUXWL2yV4F39d4fBtTsWu2gr0iixDBrd+6EHQYVwC6Sv1IifJsrBbKP/OC+hth9uEW8ZARnx3j4LfV5gG1oziz/QOM1pjKXrh42pI8NMskXAeSGyJxiqT2F374cbSxclHrsGuQgCCR6F09JOzdu4MmNVJtuCpZggRcX7KJXyCn01L5JA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.214.180) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=us-west-2.amazonses.com; dmarc=pass (p=reject sp=quarantine
+ pct=100) action=none header.from=mail.turo.com; dkim=pass (signature was
+ verified) header.d=mail.turo.com; dkim=pass (signature was verified)
+ header.d=amazonses.com; arc=pass (0 oda=1 ltdi=1
+ dkim=[1,1,header.i=@mail.turo.com] dmarc=[1,1,header.from=turo.com])
+Received: from CH2PR15CA0024.namprd15.prod.outlook.com (2603:10b6:610:51::34)
+ by DM4PR20MB5655.namprd20.prod.outlook.com (2603:10b6:8:10c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Fri, 22 Sep
+ 2023 05:41:43 +0000
+Received: from DS2PEPF00003444.namprd04.prod.outlook.com
+ (2603:10b6:610:51:cafe::61) by CH2PR15CA0024.outlook.office365.com
+ (2603:10b6:610:51::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.32 via Frontend
+ Transport; Fri, 22 Sep 2023 05:41:42 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.214.180)
+ smtp.mailfrom=us-west-2.amazonses.com; dkim=pass (signature was verified)
+ header.d=mail.turo.com;dmarc=pass action=none
+ header.from=mail.turo.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of us-west-2.amazonses.com
+ does not designate 209.85.214.180 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.214.180;
+ helo=mail-pl1-f180.google.com;
+Received: from mail-pl1-f180.google.com (209.85.214.180) by
+ DS2PEPF00003444.mail.protection.outlook.com (10.167.17.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.19 via Frontend Transport; Fri, 22 Sep 2023 05:41:42 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:69CF67F5DC92B72AA948EF43E199EE5C44611E6AC94FE50D0A9E7D0DF3D50286;UpperCasedChecksum:4175B81BDD774A9A43454181FF235D45AC1CF4AF73AE3218234956106140B541;SizeAsReceived:6107;Count:24
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1c46b30a1ceso15289265ad.3
+        for <tobinsilvestre@outlook.com>; Thu, 21 Sep 2023 22:41:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695361302; x=1695966102;
+        h=x-forwarded-for:feedback-id:mime-version:subject:message-id:to:from
+         :date:dkim-signature:dkim-signature:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eFPFtghPR/LzYwLIrwB2vM0jNNv1Pn6PLDx8nysSJdU=;
+        b=iUA0u8LR1KW+UKVKditEzknLssB8VeCf7T0jE17bdGxrT4eKSRyozoWqcRAPK5ylSh
+         frv1+XFeEmvWNlhGwltsjJS8xIbVPrPFYqrifnElJClNo6fcpLyXbu8/2U8Emx2jxaIT
+         dLeDSYKS5lkoQQcYL+EH9NP3/ac59Xloq0wSnubB6seSNrzlW834Bu9ovXkkZ1uSvXDP
+         T2aqs3cWM6jCwE60G5HS+SA+2VreM65/Guf8/cqsJyHZKQ/2qxC7Qk/WlHDZDka45kcV
+         oY05jVRwBZ5lwmE4gGFwS42vaB2Q2048O4M0ND6PniUUqvEkH/szsE9GvzNgVgEYkMEt
+         qRfQ==
+X-Gm-Message-State: AOJu0YzzbFWR73dqh+vmX+e9MGdFlx5mIsYoD6UiFTb7nszh/yU1bUo9
+	5MaXhzS+JotS96Dg4OBtAIpqW1GfkBbCdVDJ2g==
+X-Google-Smtp-Source: AGHT+IE0kzF493kpBppnWPjPuUaxe7M+wutdNVsx6F5BN0KmVpwa3pDYxB1VFC0zK/NSm5AhfmYijnSFnvU22TFJ3flpheNFzmo=
+X-Received: by 2002:a17:90b:17c3:b0:276:b87d:2324 with SMTP id me3-20020a17090b17c300b00276b87d2324mr7765079pjb.38.1695361302408;
+        Thu, 21 Sep 2023 22:41:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695361302; cv=none;
+        d=google.com; s=arc-20160816;
+        b=FR+kp1gTxuyrTqI9/5qvAo1oY8WkpSsAanU8gcUih3g306MFkeLt9+ftvpOZK7/xVG
+         RNC59m+FjJCFlxZMs+IlNuBsEeoQgaIdZO1XA0W3ue6GozMutyoeVKFYkEgmJXShYO6S
+         oRwwHvIyyXhxhJ5E0K+vfoOrz0pHL9u4dWYUUBbikwBZhuKlkvRfoSY6o5YA8yExaEd9
+         3AS0nMHHdBx4AQPHD+wABhX1MU2ZNx2Et5yW9yAgLaB476/eIBfxIzFk7OfZEM46ogzq
+         jb3Qb9hgNnSZgdiX1tTAiq6ZEJUjhsHctqyEaOZJ9ogj1PcscBLaAjXJInNdh/6JEAWX
+         hzbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=feedback-id:mime-version:subject:message-id:to:from:date
+         :dkim-signature:dkim-signature;
+        bh=eFPFtghPR/LzYwLIrwB2vM0jNNv1Pn6PLDx8nysSJdU=;
+        fh=ky7OQbOyFcCxLpEddM2mumEAGuBNJA2UZBaTP5hH9e8=;
+        b=taoCO4cUQ0rkUlvR1phfFkUDPqpwIzrEgD3WUtTtfJ/h0WRPGflU0uo4LLj11WucKf
+         YGmff0BXB5gzisgcIjI/sTwvv14ihGXgaQsoi1JxNLY5MpFKdja0z+uZ5qFjtRoLyCTd
+         0SeyFDy8ySnzDS3axItrIudbJa2x74e7V/qfhuJy7LEZVIzdcFI7kuwOLxHyR0l49Px5
+         vHJR6TJHDiJAbJS2IigPYBddTx4Cg++ABcCAu/akLMuM4ZHoiVHUizqOG3W6Luji0f2Y
+         IHtzzmpDOg9j4MRIbBKXcj0fQOkHaWw+tNwbD6v1kUGLPoatAD2UO7kqVo8cbK/EX0Rj
+         o/BQ==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@mail.turo.com header.s=wlaio2opzigq5asscyf7vtbeauqdpdpx header.b=BtdCeHt1;
+       dkim=pass header.i=@amazonses.com header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=nHk76MLh;
+       spf=pass (google.com: domain of 0101018abb687c8a-df5f2bc5-bcc1-43e0-bc35-3047e471cc89-000000@us-west-2.amazonses.com designates 54.240.27.62 as permitted sender) smtp.mailfrom=0101018abb687c8a-df5f2bc5-bcc1-43e0-bc35-3047e471cc89-000000@us-west-2.amazonses.com;
+       dmarc=pass (p=REJECT sp=QUARANTINE dis=NONE) header.from=turo.com
+Return-Path:
+ 0101018abb687c8a-df5f2bc5-bcc1-43e0-bc35-3047e471cc89-000000@us-west-2.amazonses.com
+Received: from a27-62.smtp-out.us-west-2.amazonses.com (a27-62.smtp-out.us-west-2.amazonses.com. [54.240.27.62])
+        by gmr-mx.google.com with ESMTPS id km12-20020a17090327cc00b001bc3c072baesi268470plb.13.2023.09.21.22.41.42
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Sep 2023 22:41:42 -0700 (PDT)
+Received-SPF: pass (google.com: domain of 0101018abb687c8a-df5f2bc5-bcc1-43e0-bc35-3047e471cc89-000000@us-west-2.amazonses.com designates 54.240.27.62 as permitted sender) client-ip=54.240.27.62;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@mail.turo.com header.s=wlaio2opzigq5asscyf7vtbeauqdpdpx
+ header.b=BtdCeHt1;       dkim=pass header.i=@amazonses.com
+ header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=nHk76MLh;       spf=pass
+ (google.com: domain of
+ 0101018abb687c8a-df5f2bc5-bcc1-43e0-bc35-3047e471cc89-000000@us-west-2.amazonses.com
+ designates 54.240.27.62 as permitted sender)
+ smtp.mailfrom=0101018abb687c8a-df5f2bc5-bcc1-43e0-bc35-3047e471cc89-000000@us-west-2.amazonses.com;
+       dmarc=pass (p=REJECT sp=QUARANTINE dis=NONE) header.from=turo.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=wlaio2opzigq5asscyf7vtbeauqdpdpx; d=mail.turo.com; t=1695361301;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type;
+	bh=qbbSKddTMIq08SQ2bbBESHbCe1v99d5wCOGi2O1c0Q8=;
+	b=BtdCeHt1mtygpXnpD5LxbPRVnqotN4owvi5TWb5jAl+nd2qI5LjA2XjjEKgEAWzO
+	UUarIZpwAfZNuvlRqCtOIe4hyEDXHjJDCttgMZ5b2a84KTx1FOWRDJh0e1k7tDT8QoP
+	uRiq483HTqgRsN8mQ7jfYt0MXWk3Hh0w4nZMK1wquI/VgcC0QviYzEnpltUn1oHKkMx
+	KAl6YuWnGTvk4EFzGimznZEW1mpvLVRBASmncpBhqcW6Z0ItWcOopDu6gljsAH8zqD9
+	b7vaq/qWfCB0MK3L0DqX755awRGh88B8tZW+18jMY8lYRfbeQEad0EvTAO1qatPSoGY
+	oq51Zjf16Q==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1695361301;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=qbbSKddTMIq08SQ2bbBESHbCe1v99d5wCOGi2O1c0Q8=;
+	b=nHk76MLhdXrvubb9ERFXfx0nEX9+3Pw/3ZjVrq3AIs0F+WueMYT4w8alqBQ2B3I7
+	DHXkT6tIMhv9qQTeRGhkhpG/9K/LliJEPHw/9QwgV9WoogQYjIc3LYFpcVmwVTMl3Gy
+	6UTeJxLm1gt4du7yKeMRzRI9XrfmF80staqdDY9U=
+Date: Fri, 22 Sep 2023 05:41:41 +0000
+From: Turo <noreply@mail.turo.com>
+To: tobinsilvestre125@sooners.us
+Message-ID: <0101018abb687c8a-df5f2bc5-bcc1-43e0-bc35-3047e471cc89-000000@us-west-2.amazonses.com>
+Subject: Buckle up
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_122_920468925.1695361301332"
+Feedback-ID: 1.us-west-2./70sU4ZfHoRb5hwfhq+nbxxCL1ezY8QZH3lq0f+AOsw=:AmazonSES
+X-SES-Outgoing: 2023.09.22-54.240.27.62
+X-Forwarded-For: tobinsilvestre125@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 24
+X-MS-Exchange-Organization-ExpirationStartTime: 22 Sep 2023 05:41:42.9092
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 312bbf94-c45a-47d1-ab59-08dbbb2e99f7
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DS2PEPF00003444:EE_|DM4PR20MB5655:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DS2PEPF00003444.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/22/2023 5:27:33 AM
+X-MS-Office365-Filtering-Correlation-Id: 312bbf94-c45a-47d1-ab59-08dbbb2e99f7
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.214.180
+X-SID-PRA: NOREPLY@MAIL.TURO.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2023 05:41:42.8779
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 312bbf94-c45a-47d1-ab59-08dbbb2e99f7
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS2PEPF00003444.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR20MB5655
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.5020110
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6813.014
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPky0cqRm9s26qc5/ZF3rqivGSoK6tvNW3ouoLSJdfPVmxU903sn9gGcv7nKsflwQKnJ+s3VPM2CwgZZKP+7Gt7E28BYXBjruk32Tt8bWhRHH6AqZlZphH5OJZfRCcsjOPDNK14o9OL6nZIdkiiMcpV/nMlckqgbxbdhT1Qp4G89OGwH0O56jCXlDXamFDUygBY=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?K2NiK0xNL3RodUVaS0x0dmFJUXZGRThQL3ZaREdGeDl6bWNDQkY4UnFNVUxo?=
+ =?utf-8?B?RE9wUzIyT0hLTEY2UWlQcGxuL202NjZEVjExMVV5R0hpVE05Q2xIMFR2L0ZZ?=
+ =?utf-8?B?MnRad21MblkxRFBITVpPby9sYS8yYUdldGZLcVZPZkl1cnNMY2tCU3cxOU9P?=
+ =?utf-8?B?bGJDMWpKQlowa2x0N2g0MllrQVRTSk95MG1kSmV0TG8yZjB4K25SekprTjVB?=
+ =?utf-8?B?R2pxUmdLdVNiQ3hER2hScVRFUVhQbFZKWGViR2RnTUF2cWtXU09TVFZMTGtq?=
+ =?utf-8?B?U2QwQ2MyUEgxcXZSOVdJSmloSXR5b3YxUGY1Qmhac1Jpcnh6WlpSU0pKdkhx?=
+ =?utf-8?B?SC83VUZvTitSc3RpR0x0eUNONndIUFNPSU04bWE0blZFQkRzRnh4MExHNXV0?=
+ =?utf-8?B?ZXJDeTJlQWljZVRocjBSZVFIVDF3YTdzS0JUV1ArUC9xaWd0Y2Z2c0xZZzA1?=
+ =?utf-8?B?bGpPVHJGZkRNNEZIazhvRXpEVXBZdm5XQSs3NWxia1ZQSTdjV3EwamxzNEVB?=
+ =?utf-8?B?cmtvY2thcHYxZUtPd1pUcVlKYytad1dQazI4ZzdWT21ndHhhNm1ST2w3VER1?=
+ =?utf-8?B?RU5mRDB2OFk5Ym9uMTFMSEpqTFVidGVqczZuT1RObE1WaVFvSU9YUytWK3lL?=
+ =?utf-8?B?SHR2azBEcDBiLzdFRm44QlllNE90SU9QVG0ydWtoSVh0UEJzQkhXcCs2b2E2?=
+ =?utf-8?B?aXBiNFFQRGYxdm16NEpmMEx0TVlKRUlTSHBZM1o3VDU2YzJqVStzVjlsQlI1?=
+ =?utf-8?B?L2YvZnRraHpKM3NZKytyU0pwU1JESFRaazRVZlhOSHM2ay9DQVhEK3ZGa256?=
+ =?utf-8?B?a3cyRjczNkJMSjIzOU4vRzNtU0c1MHZaa1lGVmg1WWJVODlJZDhjWmZEcENT?=
+ =?utf-8?B?TXV2Q2lnVEk3Z2F5dWlrd25EbHFaQWlRS25PWE9va2V6WXVjaGJmdFFSOEV0?=
+ =?utf-8?B?QkxNNFFiVDdVNGpMWjVldmVxelEybE9aT092SEl6RjQzT2hFZHdUTGJtbEhO?=
+ =?utf-8?B?TkMyRTg4ZEdvenkwa0t1bittSzlsRllzc0hlTEhoZGhPMFR3SFhGelpDd0sr?=
+ =?utf-8?B?YXlTUW9zSFBNY3grN1NEWDdWSE1Fcmgrd2h1czFxcXAxcnVjWElHSjdwT1U5?=
+ =?utf-8?B?MmNUQVd6eDZKalFMVDZKWURDK1NxTk16RGVzMmtTK2RoYnJWQVhUZ2YvMmV3?=
+ =?utf-8?B?RUpCbE40bnJYcytMU25YU0c4VUpyNVVHZ0h4UzRhRlQxTkVSY1ZJN1RVV1Ju?=
+ =?utf-8?B?Q24rZDhiVGxScVRPZTExZEErUjB2bFF4MGhEdnFrbVpwdFp0S1ZQcDNsaExi?=
+ =?utf-8?B?Sm8yT2hYeEpydXd0YnA4TGNpTTRRaHhOc0ZGMHdaOTZTRTRiZXpFM0ZFYkxL?=
+ =?utf-8?B?bjRlVWdNVG4vdnVoaVVueWVsbExCUm5ydHpKRVNyZTJkL3hFV3h6VHMyU21B?=
+ =?utf-8?B?T2p3UHhheStqNWFmbGY0NFJKWHJkNVoyc3UwUEI4a1VZdFNneWk3cTFiOWRP?=
+ =?utf-8?B?MGxvUVVqUTFEMXVoVEJoVk5rMlF5dXlXQ2lKUWhPaTR4Y0xQT3B3NXJEVE1V?=
+ =?utf-8?B?WjJNajQwYUY3ek9mMnZvOTNsL2hqS2N3T0ZrY1lPVk9pRXZYTk1TQ2g3dFZT?=
+ =?utf-8?B?ZUVCYzJGRnVSbHViT05pRHUvcVU3ekJ3STkxdDV4MnBRR0ZzRUZDNXFYSm1v?=
+ =?utf-8?B?RHRQS1E3VVhDSWt1TmdCUTdvWCtBaHpiamtMQkwxeHREaVBOeFFPYWVlSzk0?=
+ =?utf-8?B?ajAzdzc4UXFjc3I1WVBXMkZlcEhjRGdOM3Y0aUhIc09WMTFVVStFWkpvb3NF?=
+ =?utf-8?B?MnBkT2xsOFUwWGRxS3drdlNXRXdidHdFUzk1YkdrQUlyYmVsOGZEbWV4eFJy?=
+ =?utf-8?B?RWZTT0RSalFSSlRRWVVQREVFVS9hZkNEN1l5Q1R5OXJmQXBMZEthcTFQS2tp?=
+ =?utf-8?B?Z3BLUEptc3Jhb1hZbUpJdzNxZjl0VTRHeS95ODRWRWllQzV5aE5HZHhMS0RW?=
+ =?utf-8?B?ZFhZOHNNUFBVVVdOdnNpdVY1blpJeUlWaWdCYTNwRXBYaVQyNUFZZVppYUpy?=
+ =?utf-8?B?SnN5UjAvQnNFcCs4R01iK1lnVjhJN0FUQkRaTlFDbTQ5cDVNOFU4UmdZT3F3?=
+ =?utf-8?B?KzB6UjhKSjJzSjNFY29TNHVxdStlNCtEQUFETFJjWlV2YWFSVG9ob1cxazAw?=
+ =?utf-8?B?TlBtcDRXbVdsSGh6ellYdFc4QXhQZENJeWU0cklxb2d6NHBuNmFhS2RTZ0Np?=
+ =?utf-8?Q?hjyaWWRvjFqK831KEhU9ZMnO1M4av6cv7WVPYWnl18=3D?=
+MIME-Version: 1.0
+
+------=_Part_122_920468925.1695361301332
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Welcome
+
+
+Welcome to the world=E2=80=99s largest car sharing marketplace
+
+Welcome to Turo, Tobin!
+
+It=E2=80=99s a big world out there with a lot to explore. Behind the wheel =
+of the right car, the possibilities ahead are nearly endless. Have a look a=
+round and find the perfect car for whatever the journey calls for.
+
+Browse cars (https://turo.com/us/en/search)
+
+Become a host
+
+Join the vibrant community of Turo hosts adding thousands to their annual i=
+ncome. Build your own car sharing business on Turo =E2=80=94 entrepreneurs =
+of all experience levels welcome!
+
+Explore hosting on Turo (https://turo.com/list-your-car)
+
+Have a question? Contact customer support: https://support.turo.com/access/=
+login?return_to=3Dhttps://support.turo.com/
+
+------=_Part_122_920468925.1695361301332
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html xmlns=3D"http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle> Turo </title>
+  <!--[if !mso]><!-->
+  <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+  <!--<![endif]-->
+ =20
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1">
+  <style type=3D"text/css">
+    #outlook a {
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+
+    table,
+    td {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    p {
+      display: block;
+      margin: 13px 0;
+    }
+  </style>
+  <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:AllowPNG/>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+  <![endif]-->
+  <!--[if lte mso 11]>
+    <style type=3D"text/css">
+        .mj-outlook-group-fix {
+            width: 100% !important;
+        }
+    </style>
+  <![endif]-->
+  <!--[if !mso]><!-->
+  <link href=3D"https://resources.turo.com/resources/css/email/rl_basis_gro=
+tesque_font_face.css" rel=3D"stylesheet" type=3D"text/css">
+  <style type=3D"text/css">
+    @import url("https://resources.turo.com/resources/css/email/rl_basis_gr=
+otesque_font_face.css");
+  </style>
+  <!--<![endif]-->
+  <style type=3D"text/css">
+    @media only screen and (min-width: 480px) {
+      .mj-column-per-100 {
+        width: 100% !important;
+        max-width: 100%;
+      }
+    }
+  </style>
+  <style media=3D"screen and (min-width:480px)">
+    .moz-text-html .mj-column-per-100 {
+      width: 100% !important;
+      max-width: 100%;
+    }
+  </style>
+  <style type=3D"text/css">
+    @media only screen and (max-width: 480px) {
+      table.mj-full-width-mobile {
+        width: 100% !important;
+      }
+
+      td.mj-full-width-mobile {
+        width: auto !important;
+      }
+    }
+  </style>
+  <style type=3D"text/css">
+    a {
+      color: #593CFB;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .main-container p {
+      display: inline-block;
+      color: #121214;
+      margin: 0 0 12px;
+      max-width: 428px;
+      font-family: RlBasisGrotesque, Avenir, Helvetica Neue, Helvetica, san=
+s-serif;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 22px;
+      text-transform: none;
+    }
+
+    @media only screen and (min-width: 480px) {
+      p {
+        line-height: 24px;
+      }
+    }
+
+    strong {
+      font-weight: 900;
+    }
+
+    .caption {
+      color: #121214;
+      font-family: RlBasisGrotesque, Avenir, Helvetica Neue, Helvetica, san=
+s-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+      line-height: 16px;
+      text-transform: none;
+    }
+  </style>
+</head>
+<body style=3D"word-spacing:normal;">
+<!-- top banner -->
+<!--[if mso | IE]>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"" style=3D"width:600px;"
+       width=3D"600">
+    <tr>
+        <td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exa=
+ctly;"><![endif]-->
+<div style=3D"margin:0px auto;max-width:600px;background-color:#ffffff;">
+  <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"width:100%;">
+    <tbody>
+    <tr>
+      <td style=3D"direction:ltr;font-size:0px;padding:24px 0 0;text-align:=
+center;">
+        <!--[if mso | IE]>
+          <table role=3D"presentation" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0">
+              <tr>
+                  <td class=3D"" style=3D"vertical-align:top;width:600px;">=
+<![endif]-->
+        <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font=
+-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align=
+:top;width:100%;">
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" width=3D"100%">
+            <tbody>
+            <tr>
+              <td style=3D"background-color:#121214;vertical-align:top;padd=
+ing:8px 24px;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"" width=3D"100%">
+                  <tbody>
+                  <tr>
+                    <td align=3D"center" style=3D"font-size:0px;padding:0;w=
+ord-break:break-word;">
+                    <div style=3D"font-family:RlBasisGrotesque, Avenir, Hel=
+vetica Neue, Helvetica, sans-serif;font-size:12px;font-weight:400;line-heig=
+ht:12px;text-align:center;color:#000000;">
+                                                  <a style=3D"color: #fffff=
+f; text-decoration: underline;" href=3D"https://turo.com/us/en/search">Welc=
+ome to the world=E2=80=99s largest car sharing marketplace</a></div>
+                                            </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--[if mso | IE]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!--[if mso | IE]></td></tr></table><![endif]-->
+<!-- logo -->
+<!--[if mso | IE]>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"" style=3D"width:600px;"
+       width=3D"600">
+    <tr>
+        <td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exa=
+ctly;"><![endif]-->
+<div style=3D"margin:0px auto;max-width:600px;background-color:#ffffff;">
+  <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"width:100%;">
+    <tbody>
+    <tr>
+      <td style=3D"border-left:2px solid #121214;border-right:2px solid #12=
+1214;direction:ltr;font-size:0px;padding:24px 0;text-align:center;">
+        <!--[if mso | IE]>
+          <table role=3D"presentation" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0">
+              <tr>
+                  <td class=3D"" style=3D"vertical-align:top;width:596px;">=
+<![endif]-->
+        <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font=
+-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align=
+:top;width:100%;">
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" style=3D"vertical-align:top;" width=3D"100%">
+            <tbody>
+            <tr>
+              <td align=3D"center" style=3D"font-size:0px;padding:0;word-br=
+eak:break-word;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"border-collapse:collapse;border-spacing:0px;">
+                  <tbody>
+                  <tr>
+                    <td style=3D"width:82px;">
+                      <img alt=3D"Turo" height=3D"auto" src=3D"https://reso=
+urces.turo.com/resources/img/email/logo_footer@2x.png" style=3D"
+                                      border: 0;
+                                      display: block;
+                                      outline: none;
+                                      text-decoration: none;
+                                      height: auto;
+                                      width: 100%;
+                                      font-size: 13px;
+                                    " title=3D"Turo" width=3D"82">
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--[if mso | IE]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!--[if mso | IE]></td></tr></table><![endif]-->
+<!-- main image -->
+<!--[if mso | IE]>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"" style=3D"width:600px;"
+       width=3D"600">
+    <tr>
+        <td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exa=
+ctly;"><![endif]-->
+<div style=3D"margin:0px auto;max-width:600px;background-color:#ffffff">
+  <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"width:100%;">
+    <tbody>
+    <tr>
+      <td style=3D"border-left:2px solid #121214;border-right:2px solid #12=
+1214;direction:ltr;font-size:0px;padding:0;text-align:center;">
+        <!--[if mso | IE]>
+          <table role=3D"presentation" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0">
+              <tr>
+                  <td class=3D"" style=3D"vertical-align:top;width:596px;">=
+<![endif]-->
+        <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font=
+-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align=
+:top;width:100%;">
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" style=3D"vertical-align:top;" width=3D"100%">
+            <tbody>
+            <tr>
+              <td align=3D"center" style=3D"font-size:0px;padding:0;word-br=
+eak:break-word;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"border-collapse:collapse;border-spacing:0px;">
+                  <tbody>
+                  <tr>
+                    <td style=3D"width:596px;">
+                                                  <img height=3D"auto" src=
+=3D"https://resources.turo.com/resources/img/email/welcome/bg_welcomeV4Phot=
+oRenterEnglish_wide@2x.jpg" style=3D"border:0;display:block;outline:none;te=
+xt-decoration:none;height:auto;width:100%;font-size:13px;" width=3D"596">
+                                            </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--[if mso | IE]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!--[if mso | IE]></td></tr></table><![endif]-->
+<!-- injected content -->
+<!--[if mso | IE]>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"" style=3D"width:600px;"
+       width=3D"600">
+    <tr>
+        <td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exa=
+ctly;"><![endif]-->
+<div style=3D"margin:0px auto;max-width:600px;background-color:#ffffff;">
+  <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"width:100%;">
+    <tbody>
+    <tr>
+      <td style=3D"border-left:2px solid #121214;border-right:2px solid #12=
+1214;direction:ltr;font-size:0px;padding:0;text-align:center;">
+        <!--[if mso | IE]>
+          <table role=3D"presentation" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0">
+              <tr>
+                  <td class=3D"" style=3D"vertical-align:top;width:596px;">=
+<![endif]-->
+        <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font=
+-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align=
+:top;width:100%;">
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" width=3D"100%">
+            <tbody>
+            <tr>
+              <td style=3D"vertical-align:top;padding:48px 16px 24px;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"" width=3D"100%">
+                  <tbody>
+                  <tr>
+                    <td align=3D"left" class=3D"main-container" style=3D"fo=
+nt-size:0px;padding:0;word-break:break-word;">
+                      <table cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" border=3D"0" style=3D"color:#000000;font-family: Helvetica, Arial, san=
+s-serif;font-size:13px;line-height:22px;table-layout:auto;width:100%;border=
+:none;">
+
+                         =20
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 =20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  <table width=3D"100%" border=3D"0" cellsp=
+acing=3D"0" cellpadding=3D"0">
+  <tr>
+    <td id=3D"welcome-renter_top" align=3D"center">
+      <p>Welcome to Turo, Tobin!</p>
+      <p>It=E2=80=99s a big world out there with a lot to explore. Behind t=
+he wheel of the right car, the possibilities ahead are nearly endless. Have=
+ a look around and find the perfect car for whatever the journey calls for.=
+</p>
+    </td>
+  </tr>
+  <tr>
+    <td align=3D"center" style=3D"padding:20px 0 40px">
+                <table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0">
+        <tr>
+            <td align=3D"center" width=3D"100%">
+                <table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0">
+                    <tr>
+                        <td align=3D"center">
+                            <a href=3D"https://turo.com/us/en/search" style=
+=3D"font-size:18px;font-family:RlBasisGrotesque, BasisGrotesqueRegular, Bas=
+isGrotesqueMedium, Avenir-Medium, HelveticaNeue-Medium, 'Roboto Medium', sa=
+ns-serif;color:white;background-color:#231f20;text-decoration: none; paddin=
+g: 8px 80px; border: 1px solid #231f20; display: inline-block;">Browse cars=
+</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td id=3D"welcome-renter_bottom" align=3D"center">
+        <h2 style=3D"margin: 0 0 12px; font-family: RlBasisGrotesque, Aveni=
+r, Helvetica Neue, Helvetica, sans-serif; font-Size: 28px; font-weight: 900=
+; letter-spacing: -0.2px; line-height: 32px; text-transform: none;">Become =
+a host</h2>
+        <table style=3D"margin: 0 auto 25px auto;">
+  <tr>
+    <td align=3D"center" width=3D"40" height=3D"2" style=3D"background-colo=
+r: #121214"></td>
+  </tr>
+</table>
+      <p>Join the vibrant community of Turo hosts adding thousands to their=
+ annual income. Build your own car sharing business on Turo =E2=80=94 entre=
+preneurs of all experience levels welcome!</p>
+    </td>
+  </tr>
+  <tr>
+    <td align=3D"center" style=3D"padding:20px 0 24px">
+                <table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0">
+        <tr>
+            <td align=3D"center" width=3D"100%">
+                <table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpa=
+dding=3D"0">
+                    <tr>
+                        <td align=3D"center">
+                            <a href=3D"https://turo.com/list-your-car" styl=
+e=3D"font-size:18px;font-family:RlBasisGrotesque, BasisGrotesqueRegular, Ba=
+sisGrotesqueMedium, Avenir-Medium, HelveticaNeue-Medium, 'Roboto Medium', s=
+ans-serif;color:white;background-color:#231f20;text-decoration: none; paddi=
+ng: 8px 80px; border: 1px solid #231f20; display: inline-block;">Explore ho=
+sting on Turo</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D=
+"0">
+   =20
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" st=
+yle=3D"text-align:center;font-size:16px;color:#000000;padding:32px 0 0">
+    <tr>
+      <td style=3D"padding:32px 0 0;border-top:2px solid #e7e7e7">
+            <span style=3D"
+                font-family: RlBasisGrotesque, Avenir, Helvetica Neue, Helv=
+etica, sans-serif;
+                font-size: 28px;
+                font-weight: 900;
+                letter-spacing: -0.2px;
+                line-height: 32px;
+                text-transform: none;
+                ">Download the Turo app</span>
+      </td>
+    </tr>
+    <tr>
+      <td align=3D"center" style=3D"padding: 24px 0 0 0">
+        <a href=3D"https://apps.apple.com/us/app/turo-better-than-car-renta=
+l/id555063314?ls=3D1" style=3D"outline: none; text-decoration: none; margin=
+-right: 20px">
+
+          <img class=3D"app-store-badge" style=3D"outline: none; border: no=
+ne; width: 120px; height:40px !important;" src=3D"https://resources.turo.co=
+m/resources/img/email/app-store-icon-v1@2x.png" alt=3D"Download on the iTun=
+es App Store">
+        </a>
+        <a href=3D"https://play.google.com/store/apps/details?id=3Dcom.rela=
+yrides.android.relayrides" style=3D"outline: none; text-decoration: none;">
+
+          <img class=3D"play-store-badge" style=3D"outline: none; border: n=
+one; width: 135px; height:40px !important;" src=3D"https://resources.turo.c=
+om/resources/img/email/google-play-icon-v1@2x.png" alt=3D"Download on the G=
+oogle Play Store">
+        </a>
+      </td>
+    </tr>
+  </table>
+</table>
+    </td>
+  </tr>
+</table>
+
+
+                      </table>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--[if mso | IE]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!--[if mso | IE]></td></tr></table><![endif]-->
+<!-- footer -->
+<!--[if mso | IE]>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"" style=3D"width:600px;"
+       width=3D"600">
+    <tr>
+        <td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exa=
+ctly;"><![endif]-->
+<div style=3D"margin:0px auto 24px;max-width:600px;background-color:#ffffff=
+;">
+  <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"width:100%;">
+    <tbody>
+    <tr>
+      <td style=3D"border-bottom:2px solid #121214;border-left:2px solid #1=
+21214;border-right:2px solid #121214;direction:ltr;font-size:0px;padding:0 =
+0 24px;text-align:center;">
+        <!--[if mso | IE]>
+          <table role=3D"presentation" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0">
+              <tr>
+                  <td class=3D"" style=3D"vertical-align:top;width:596px;">=
+<![endif]-->
+        <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font=
+-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align=
+:top;width:100%;">
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" width=3D"100%">
+            <tbody>
+            <tr>
+              <td style=3D"vertical-align:top;padding:0 16px;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"" width=3D"100%">
+                  <tbody>
+                  <tr>
+                    <td align=3D"center" style=3D"font-size:0px;padding:24p=
+x 0 0 0;word-break:break-word;">
+                      <p style=3D"border-top:solid 2px #e7e7e7;font-size:1p=
+x;margin:0px auto;width:100%;">
+                      </p>
+                      <!--[if mso | IE]><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 1px #e7e7e7=
+;font-size:1px;margin:0px auto;width:564px;" role=3D"presentation" width=3D=
+"564px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]-->
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align=3D"center" style=3D"font-size:0px;padding:24p=
+x 0 0;word-break:break-word;">
+                      <div>
+                        <p class=3D"caption" style=3D"margin: 0;">Turo, 111=
+ Sutter St, San Francisco, CA 94104</p>
+                      </div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--[if mso | IE]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!--[if mso | IE]></td></tr></table><![endif]-->
+</div>
+</body>
+</html>
+
+------=_Part_122_920468925.1695361301332--

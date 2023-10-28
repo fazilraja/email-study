@@ -1,0 +1,595 @@
+Received: from MW4PR20MB5374.namprd20.prod.outlook.com (2603:10b6:303:213::5)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Sun, 10 Sep 2023
+ 19:07:15 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=JOucx07uktLXI+PoO73rtxicJVp8UWe1tqYK5acp23faj/3y4pYZcp77zwMMu7TiS8nv1tesCAckL1RgUgXlXLNV/eKI0M+chjpGsmdw4DCHpXTOm99Eh+SvWGQ9CXtxXl3zOM3bXMSwvOdokCkFaXBgZNEKO5uvJ4FDsAnjkgV785ZlSRFnU/SF60WFggDmEM6PZjgXNTEdmQO7UGPXcqtTWUKek9ePF7QvWDDilgb781lkzYiRs6psXq0rslQiCF9KWIDDmUNkz71edWx9kQLEzQ8HFWeMGb/0QEE7vodcvXpx1+WrpCitv8U3hCZjx/W5NzujxWsFoK5vMxipkA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lQjvuFmTUWaWyWrTRjRYaksK7yswZLJBNHveKAq1KfU=;
+ b=mKNNv3TVytm63wZMNczOsKUabHm94yxs+qJaO1ym/BsxPsl+D87l234slufjca2Z8tcpnxOfF6VE0g5zy/3e3y/pTiAxK3Uq926ZFGyB1TOf6Ug+fixMsYzl/157FeLDqqQmbDG4Ammc2ig8CxY6qTkRLrpLnCc1Dgnlupj8RuAM9wbkmm2FPxjlF7ybT7u2EDQNleyfwgOmzDBNvi0UoVBmudvi0IE5JwfG+atdKNMj0RHgVeWEmaNMLMp6pkzMybxgoXTqepS5ryPzGxm7s2BXTdd0fQnfRqyVIbQO5gdLu3kaKZp4axylvlzbHd0KH4SGQwT+Ar8h4IN5BbHxVg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.222.41) smtp.rcpttodomain=outlook.com smtp.mailfrom=mail.canva.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=canva.com;
+ dkim=pass (signature was verified) header.d=canva.com; dkim=pass (signature
+ was verified) header.d=amazonses.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=0100018a807da74d-d915d9ec-8519-4209-bce0-6e7b0863e96d-000000@mail.canva.com]
+ dkim=[1,1,header.i=@canva.com] dmarc=[1,1,header.from=canva.com])
+Received: from SA9P221CA0010.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:25::15)
+ by MW4PR20MB5374.namprd20.prod.outlook.com (2603:10b6:303:213::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.36; Sun, 10 Sep
+ 2023 19:07:14 +0000
+Received: from SA2PEPF0000150A.namprd04.prod.outlook.com
+ (2603:10b6:806:25:cafe::35) by SA9P221CA0010.outlook.office365.com
+ (2603:10b6:806:25::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34 via Frontend
+ Transport; Sun, 10 Sep 2023 19:07:14 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.222.41)
+ smtp.mailfrom=mail.canva.com; dkim=pass (signature was verified)
+ header.d=canva.com;dmarc=pass action=none header.from=canva.com;compauth=pass
+ reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ mail.canva.com discourages use of 209.85.222.41 as permitted sender)
+Received: from mail-ua1-f41.google.com (209.85.222.41) by
+ SA2PEPF0000150A.mail.protection.outlook.com (10.167.242.42) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.16 via Frontend Transport; Sun, 10 Sep 2023 19:07:14 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:0F3C4BE0A26D002EBAA7F2B40EB9EF3790B10A48F5BFF6ADB2C7B687BEA02CB0;UpperCasedChecksum:5ED5A6A6885488CBAC41811AA1A5976B36BFED1CB924AEBFBDEE567F0D1E4BF9;SizeAsReceived:5841;Count:24
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-7870821d9a1so2287920241.1
+        for <tobinsilvestre@outlook.com>; Sun, 10 Sep 2023 12:07:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694372833; x=1694977633;
+        h=x-forwarded-for:feedback-id:mime-version:subject:message-id:to:from
+         :date:dkim-signature:dkim-signature:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lQjvuFmTUWaWyWrTRjRYaksK7yswZLJBNHveKAq1KfU=;
+        b=gxOtslGNIailha98EO2sBuRWatRAZF8CStzrNWbbfv9ZAenNmbj5z4qYAUUmAPlGc8
+         G2RZFyDN8mZas/d2x6V9o463wnHo8PTkCoFk7Kkt42HnTGu48CCo12eg9HOZdnYwXYWu
+         gk0EvNgybyzAHKX2zZYkpxEU+r6y/ycABuC+ae7XTDt4R0jE3b/lVfhxyIukH9Ekv9Fs
+         QBLQYqg4ptAbSGGvAalQ+Ps6Vf8cwV8Iu9222RLI4NbrUzJFzoNMkk4eZPbzljqZwfQQ
+         yr+Au5ycrnLzWQ6ZlPpd8voZim9VwbT8ZPfZndUvAVZ5XVHUYYx+kFeB3us41LwgU4G1
+         NZDQ==
+X-Gm-Message-State: AOJu0Ywbs6ZTD7UJx5iaqDZK5VrHKpxQS+UWxacFth3F2hQ1kRqRzQgP
+	Z7VuDQLSu3kZZ5XdMi+3g4WVsmg6FT1o2h8vfg==
+X-Google-Smtp-Source: AGHT+IFZCyE1E/FPx4ICoNVec753KBI5uHBV0nicXqUEBz4fbK+Bwx4etVTH0qMeok8ZJm8+cs38C6GCYpmb4grwDboIxnzKW90=
+X-Received: by 2002:a1f:2cd4:0:b0:48e:1463:914e with SMTP id s203-20020a1f2cd4000000b0048e1463914emr3292590vks.7.1694372833812;
+        Sun, 10 Sep 2023 12:07:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694372833; cv=none;
+        d=google.com; s=arc-20160816;
+        b=vBioOgLQwnDvX1hh5qi9pjtu557tGWllC47zVg4AEW/LhWzH7zxQjmPki/ZXiyQ0IZ
+         LJ1uOxFvXGeXx/gZV26JjR+08jgWiGw1S77/1njciQ36lEiQrrJAPcGg62VnLuyQGsXQ
+         Cn51u2qzlohHJIK6ZtprMPjjY7ZXUPbrOznuYDT7hD3coLC9XUKF2e9CG6MTDaOH+zh4
+         fOOtbxFpiRuY8piH8dQ6MHxQqtRRiaP+ZF31N+/Rfh2XmOMLdSSq9E0MuKet3K+kG5ZQ
+         10b6GFctgj1FMRP0pjhxe4PsACxj308u4jDAu3KEThFxUUIoW1g3mUFjpPtHdPNQV4qM
+         CFNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=feedback-id:mime-version:subject:message-id:to:from:date
+         :dkim-signature:dkim-signature;
+        bh=lQjvuFmTUWaWyWrTRjRYaksK7yswZLJBNHveKAq1KfU=;
+        fh=wmQQ8H3E529z9vPvbPMutQIhZJ43uv8C6hKD+RYrz1w=;
+        b=u5L54/WoymqdJIKeGOfHAbmR5Coih2I8mO4b6b+hQQXwBg80tbX7UNDukqVsA9Qb6b
+         BXpYpyHlWNuKqcHVy5vui7NEJ4xsBi9Y1cV+Mro9aHKF/gNZVncLSlVoPlRCeqUjQEUE
+         hfd9RGMFgTujo0UPO9WA1AObGgLgJQxsDCfJ9XsZ1QYnvPClnxvQ8vGUxxKtglhVr6j8
+         vj1YSDYY6J5ykY5w7Wz1hQeMtLuDe1y5jskMtPer465S/lJfIdSN4O6tkWrAjZLVWdSR
+         K6QOqzGmNo6+3e2k4ZWANoYHEaIkIZZfO3xyRpoUl7JXFYob2KVewv9Rhuj88uC/UCt6
+         8ntA==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@canva.com header.s=xkxyyrtolalmvgimtwkht75kygs2fvps header.b=RAgcZxTn;
+       dkim=pass header.i=@amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b=YpTPsThW;
+       spf=pass (google.com: domain of 0100018a807da74d-d915d9ec-8519-4209-bce0-6e7b0863e96d-000000@mail.canva.com designates 54.240.76.85 as permitted sender) smtp.mailfrom=0100018a807da74d-d915d9ec-8519-4209-bce0-6e7b0863e96d-000000@mail.canva.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=canva.com
+Return-Path:
+ 0100018a807da74d-d915d9ec-8519-4209-bce0-6e7b0863e96d-000000@mail.canva.com
+Received: from a76-85.smtp-out.amazonses.com (a76-85.smtp-out.amazonses.com. [54.240.76.85])
+        by gmr-mx.google.com with ESMTPS id b205-20020a1fb2d6000000b004937daab34esi843979vkf.4.2023.09.10.12.07.13
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 10 Sep 2023 12:07:13 -0700 (PDT)
+Received-SPF: pass (google.com: domain of 0100018a807da74d-d915d9ec-8519-4209-bce0-6e7b0863e96d-000000@mail.canva.com designates 54.240.76.85 as permitted sender) client-ip=54.240.76.85;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@canva.com header.s=xkxyyrtolalmvgimtwkht75kygs2fvps
+ header.b=RAgcZxTn;       dkim=pass header.i=@amazonses.com
+ header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b=YpTPsThW;       spf=pass
+ (google.com: domain of
+ 0100018a807da74d-d915d9ec-8519-4209-bce0-6e7b0863e96d-000000@mail.canva.com
+ designates 54.240.76.85 as permitted sender)
+ smtp.mailfrom=0100018a807da74d-d915d9ec-8519-4209-bce0-6e7b0863e96d-000000@mail.canva.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=canva.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=xkxyyrtolalmvgimtwkht75kygs2fvps; d=canva.com; t=1694372833;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type;
+	bh=WCvGS+HwCcGgBbjXIAEN28jSqTYDBFTzCzRh2mZpMsE=;
+	b=RAgcZxTnkZQDATq0MpWfuNR0Savih8V8zEWhhSBbqxEClf+C2PmNUM4UnRiI9ODr
+	sqrNpWH/5Q1uHMVGVh7xtkXgzlI+HI6/ER5adfMY6KfhMYW9I2Zmq1LLrDMKcO6u+9L
+	ppIAgGnJnvkexeDjBWglsPvtldE3cGRa08tcSQJQ=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1694372833;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=WCvGS+HwCcGgBbjXIAEN28jSqTYDBFTzCzRh2mZpMsE=;
+	b=YpTPsThWlxUAgMVe1j9L6NYQrft57bNqniswtStRux/j1c2XVpUVW7wP0KbDrsbi
+	T7YFcyVVGolUOYIJeafmh3zhiMyf9duuviUD330uD5bSKUwhk/gETuMKjdz/aIAC2t4
+	iwStYdhFDE1lBFOAMx754dma/po21eDyKFJv/ym4=
+Date: Sun, 10 Sep 2023 19:07:13 +0000
+From: Canva <no-reply@canva.com>
+To: tobinsilvestre065@sooners.us
+Message-ID: <0100018a807da74d-d915d9ec-8519-4209-bce0-6e7b0863e96d-000000@email.amazonses.com>
+Subject: 572754 is your Canva code
+Content-Type: multipart/related; 
+	boundary="----=_Part_5897684_1945325670.1694372833094"
+Feedback-ID: 1.us-east-1.DcdLQsUfV4bQ5Js81yJ5zbYh1g1N/Fje4R2eTpK5fRw=:AmazonSES
+X-SES-Outgoing: 2023.09.10-54.240.76.85
+X-Forwarded-For: tobinsilvestre065@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 24
+X-MS-Exchange-Organization-ExpirationStartTime: 10 Sep 2023 19:07:14.2752
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 9b005154-fb54-4445-deaa-08dbb23124bf
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ SA2PEPF0000150A:EE_|MW4PR20MB5374:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ SA2PEPF0000150A.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/10/2023 7:01:20 PM
+X-MS-Office365-Filtering-Correlation-Id: 9b005154-fb54-4445-deaa-08dbb23124bf
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.222.41
+X-SID-PRA: NO-REPLY@CANVA.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:4;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2023 19:07:14.2440
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b005154-fb54-4445-deaa-08dbb23124bf
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ SA2PEPF0000150A.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR20MB5374
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.6466244
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6768.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(90014020)(91030020)(91040095)(9050020)(9100341)(944500132)(2008001134)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPnzyyqSh8bccyk8z3uiOxRzORV0q/X54g3lsOPM+AOgPHBZyuCfkq0s+35mr3yqSEexRNtJM3CT84/tLWE+qUL+PVbdsEumyD82G0vNQIi1Pl+3knNtqO9EfJdupvtfCkj+3H8mWyRikbcs/+pxDrmlnX8cVcWFaudlre1ELA2ULEG96mr9L+kcen1osq+CEdJ35w/UswkBEA==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VnVFRmlkbUI0SkpveGRTS2IwaWRTSHQ5eFREUVFUbmVWQyt1NTVkVVJXYUlI?=
+ =?utf-8?B?dWROaURSSTBkRnc3OVVYL0g5Z3FJVy9tS0dna0NtYWdkdDZXR0ZoUG1ZN2lp?=
+ =?utf-8?B?L2VVdEtXQkVwRWRqV1VobzVEQUlMUHBYSDJXcnQzUElqSDFyczdaWUpmb0Y5?=
+ =?utf-8?B?RTU0N29qdWVDaERjZDltaGNjLzNGWTdTNVFsVWFtakpLcllBZUptbGpBZkNW?=
+ =?utf-8?B?RklmZGZ4Vk5tdUNwNjVPM01ZbC9lcTJjYXlxY3REcTczK1o5Y0lzbWthYXBv?=
+ =?utf-8?B?dmVCRkc4SmR2eEVxQ3hFU1o4ZXJoOGt2WGJZUmo4M3lkNWlzSjdIaXUvSm9u?=
+ =?utf-8?B?bGUwQ1ZsODBDMmpIbS9qQW85YzY5eEhNQlpRVS9CSEk0RUQ5MzloYUxTMnRi?=
+ =?utf-8?B?dTQ0U1lVM3ExMVd1YmRUdCtMcEtpNC82bGtjWG1HWjQwcU0wNk5KR2ViNk5m?=
+ =?utf-8?B?NGFQcWpNUDNLL21HVEEvb0JCQUROekxZNmVmTk0xOFVhYVFxNUlSMm5PRFNL?=
+ =?utf-8?B?Q1ZDK0pHWllBQUhzc2xaYU5uelVjRkwwYnNPZmlGWmNKQTFsZktzbTdRUUl1?=
+ =?utf-8?B?TnhUeHYrTDVIWkp1MDUxTXJIVUFlZ0hzSVZYZmM2NTk3TXpsVXdvR291Y21a?=
+ =?utf-8?B?LzJkTGpFZ2ptbHhnVWdCOGV6S1RJWjhkc2RsVzFBbmhvZHg2aTNBbnQ3L0Yr?=
+ =?utf-8?B?bHA0U3FYd2hBY0cxejBQbFdZbHphbWtjUzRNUnpPWjlBWEhka084TGFvcUw3?=
+ =?utf-8?B?c0EzdlhIQ1Y5WnBhVVZlVVU4OXdsMGRRY05CS2tpNTZldzBXcFRiSGV5RGVo?=
+ =?utf-8?B?WFNpWjFrcWFRblY5OCtCNXA4K21CdlBwSFo0akZYNG1UQ0EvS0dwc29EWVE4?=
+ =?utf-8?B?dHhFVEc5bXdLUUZwSTk3SmFqdllPNVRVcTFwRHpScEJCbnFzcEhkbTdCRWx3?=
+ =?utf-8?B?aW9ieWZIaCthaHAzdHhuQmVuSWdHdEQzNUIzK3JzUG1BNVZrQVdKOTBnMUN0?=
+ =?utf-8?B?VGN1L1R4NnppdVZWTDFkc3I5dC84cG5XOFhKZzA2a0cvUk5mMTBpZzJQTDEr?=
+ =?utf-8?B?NzlWNUZKM0t3dDlDOE5yRTBCYWNrRTUwcEc3T1JMcU1xSXovRWM3K3Q3ZXVK?=
+ =?utf-8?B?dldUaXZvdHE5QzhiMVBhclZ4YWRQZzJSc3BDNTgxMFlWbm0wMGR5bTBmMVJi?=
+ =?utf-8?B?YjAyazlieWE1TlBTZGZoZUd2VEVWQTI4OVlMbE9tN1FIZWx3c1VsZDYvOFJo?=
+ =?utf-8?B?M0pYN2lBdnB2a0loQldBVnl5Nndxd3prQlZjdkNQK0VlT1FzTVRsYnZmcExa?=
+ =?utf-8?B?MnFlNlhDQjNjMlZSMjgzU1V4bDRjNjBaNVJNbDloK2wrQ0dabFl2S1loSkJu?=
+ =?utf-8?B?T1RhTE9MNGJmRVBaUUJmdGhZTXEwdzNWdk5MeXJWelpwY2hTOVBnRVlxRlht?=
+ =?utf-8?B?WmQxd3BRcHdleTNEQk5ReWtadnFpYUFCb0JEakFDSDU0WTVrcXhFRDNVMEFs?=
+ =?utf-8?B?TFhCUHZPZWJVblh2Q0ZEbGhvQ1h4eWJlQjVBVGFJTWFYanNWNk9kU204a0Fn?=
+ =?utf-8?B?MDh0bUtUbWF0YkdYSnZ5R1F6TUF0Wnl3MW1MTDdVZWtSWFk3L1ZVTTV0Y0NI?=
+ =?utf-8?B?QWo4Sll5RFpVaGw3bG5aMU5EcHlaUjdHY2F0WGlZZFljbTlrTTNTY1BWN0ht?=
+ =?utf-8?B?bFFFbXM4ckx0bGZpMUs2bXY2aElqMURVY0dHTUVORUQ5MU5STHl1R0NwbzBm?=
+ =?utf-8?B?dHBjd0VFeHVOald5NGZneUVpWmZuRFVoSzdGKzdTY2RTVHhodTRaTmtjbE1G?=
+ =?utf-8?B?WCs1Y0d4WmxML2pKYzVmYVJabjNVcE8yUzRXSmlPN3BpVEtGSEhKbm4rZkNB?=
+ =?utf-8?B?eFk2elltK0hudFFnbnlsSW91QXJtayt3VnliOFlXbU9PdVpqWTdPcDdnRnZQ?=
+ =?utf-8?B?ZXFqSFZGNEh3WVZHbVROYVBTUjZjV2UxVlpBWlFZa2xFRUZnTU8vU0d2YkRD?=
+ =?utf-8?B?RlJ6THpmZG56OG9WSFBJZUlmMDU1dDNvSlVmakRKb0dSYXRNc0NOWjhPRUVj?=
+ =?utf-8?B?RDBLbkpldURsSnYyQ2k0bUdSN0ZQZGJnMWQvcStUU09sYksyOFR5ZVk3QlFJ?=
+ =?utf-8?B?VHhsdUlNeGk5WGNWWUtXN1M4d1BHVVZPYjgxbVBRcWNmT1htQUdUUjNlTi9R?=
+ =?utf-8?B?dVE9PQ==?=
+MIME-Version: 1.0
+
+------=_Part_5897684_1945325670.1694372833094
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_5897683_2045215391.1694372833094"
+
+------=_Part_5897683_2045215391.1694372833094
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+
+------=_Part_5897683_2045215391.1694372833094
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html lang=3D"en" xmlns=3D"http://www.w3.org/1999/xhtml" xml=
+ns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com=
+:office:office" dir=3D"ltr"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>572754 is your Canva code</title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+
+<meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1"=
+>
+<style type=3D"text/css">
+#outlook a{padding: 0;}
+.ReadMsgBody{width: 100%;}
+.ExternalClass{width: 100%;}
+.ExternalClass *{line-height: 100%;}
+body{margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-a=
+djust: 100%;}
+table, td{border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspac=
+e: 0pt;}
+img{border: 0; height: auto; line-height: 100%; outline: none; text-decorat=
+ion: none; -ms-interpolation-mode: bicubic;}
+p{display: block; margin: 13px 0;}
+</style>
+<!--[if mso]>
+<xml>
+<o:OfficeDocumentSettings>
+<o:AllowPNG/>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+<!--[if lte mso 11]>
+<style type=3D"text/css">
+.outlook-group-fix{width:100% !important;}
+</style>
+<![endif]-->
+<style type=3D"text/css">=20
+@media only screen and (max-width: 480px) {
+.dys-desktop { display: none !important; }
+div.dys-mobile { display: block !important; }
+tr.dys-mobile { display: table-row !important; }=20
+}
+</style>
+<style type=3D"text/css">
+@media only screen and (max-width:480px) {
+ table.full-width-mobile { width: 100% !important; }
+td.full-width-mobile { width: auto !important; }
+}
+@media only screen and (min-width:480px) {
+.dys-column-per-100 {
+width: 100.000000% !important;
+max-width: 100.000000%;
+}
+}
+u + #body a {color: #7d2ae8;text-decoration: underline;font-size: inherit; =
+font-family: inherit; font-weight: inherit; line-height: inherit; }
+ a {color: #7d2ae8;text-decoration: underline;}
+ html { font-size: 100%; -webkit-text-size-adjust:
+ 100%; font-variant-ligatures: none; -webkit-font-variant-ligatures: none;
+ text-rendering: optimizeLegibility;
+ text-shadow: rgba(0, 0, 0, .01) 0 0 1px;=20
+ font-family: Open Sans, Helvetica, Arial, sans serif;
+ margin:0 !important;
+ }
+ body {
+ margin: 0 !important;
+ }
+ [dir=3Drtl] .bullet {
+ background-position: 100% 0;
+ padding-left: 0;
+ padding-right: 32px;
+ text-align: end;
+ }
+ amp-img.contain img {
+ object-fit: contain;
+ }
+ .submit-button {
+ background: #7d2ae8; color: #ffffff;
+ }
+ .submit-button:disabled {
+ background: rgba(57, 76, 96, 0.15); cursor: not-allowed; color: rgba(17, 2=
+3, 29, 0.6);
+ }
+ form.amp-form-submit-success .hide-on-success { display: none }
+ form.amp-form-submit-error .hide-on-error { display: none }
+ button[disabled] { background: rgba(14, 19, 24, 0.15); color: rgba(14, 19,=
+ 24, 0.45) }
+ button { background: #7d2ae8; color: #ffffff }
+ .hide { display: none }
+ .show { display: block }
+ .inline > table { display: inline !important; }
+ div.inline { display: inline !important; }
+ .show-for-large {
+ display: block } .hide-for-large { display: none } .wrapper {
+ background-color: #edf0f2; } .wrapper-padding { padding: 0 48px }
+ .wrapper-margin { width: 48px } .wrapper-typography { padding: 12px 48px }
+ .header-bottom { height: 36px } .card-image { width: 38.8% } .card-content=
+ {
+ width: 61.2% } .grid-cta { background: #F8F9F9; border-radius: 4px; border=
+:
+ 1px solid #E8E9E9} .word-break, word-break > div { word-break: break-all }
+ .device-image-container table { margin: auto } .grid-cta-button { border:
+ 1px solid #EDF0F2; border-radius: 4px }
+ @media only screen and (max-width:480px) {=20
+ .wrapper-background { border: none !important; border-radius: 0 !important=
+ }
+ .columns-stacked-mobile {} .columns-stacked-mobile .column-left { width:
+ 100%
+ !important; display: inline-block !important; } .columns-stacked-mobile .c=
+olumn-right { display: inline-block
+ !important; width: 100% !important } .columns-stacked-mobile .gutter { dis=
+play: inline-block; width: 100%
+ !important; height: 16px !important } .card-horizontal .card-image { width=
+: 30% }
+ .card-horizontal .card-content { width: 70% } .card-contained .card-image =
+{
+ display: table-footer-group !important; width: 100% !important}
+ .card-contained .card-content { display: table-caption; width: 100%
+ !important } .card-template-stacked .card-image { width: calc(100% - 32px)
+ !important; display: table-caption !important; } .card-template-stacked
+ .card-content { display: table-footer-group !important; width: 100%
+ !important; } .card-template-stacked .gutter { display: none !important; }
+ .card-template-stacked .card-content > p { margin-top: 16px !important; }
+ .card-horizontal-stacked { display: inline-block !important; width: 100%
+ !important } .card-horizontal-stacked .card-content { display: inline-bloc=
+k
+ !important; width: 100% !important; } .card-horizontal-stacked .card-image=
+ {
+ display: inline-block !important; width: 100% !important; }
+ .card-horizontal-stacked .gutter { display: inline-block; width: 100%
+ !important; height: 16px !important } .stack-on-mobile {} .column-left
+ { display: table-caption; width:100% !important; max-width: 100% !importan=
+t; padding: 0 !important } .column-right { display:
+ table-footer-group; max-width: 100% !important; width:100% !important; pad=
+ding: 0 !important }=20
+ .center-on-mobile {
+ text-align:center !important
+ }
+ }
+ @media only screen and (max-width:648px) { .wrapper { background-color: #f=
+ff; }
+ .header-top-padding { border-radius: 0 !important } .header-top-padding td=
+ {
+ height: 24px !important; line-height: 24px } .show-for-large { display: no=
+ne
+ !important } .hide-for-large { display: block !important } .wrapper-paddin=
+g
+ { padding: 0 24px !important } .wrapper-margin { width: 24px !important }
+ .header-bottom { height: 12px; line-height: 12px } .wrapper-typography {
+ padding: 12px 24px !important } .border-radius-for-large,
+ .border-radius-for-large img { border-radius: 0 !important }
+ .spacing-for-large { height: 1px !important; line-height: 0 !important }
+ .image_grid .col { width: 47% } .full-image-block-spacing { height: 24px
+ !important} .card-horizontal-image > table > tbody > tr > td { padding: 0p=
+x
+ 24px 12px 24px !important } .card-horizontal-content > table > tbody > tr =
+>
+ td { padding: 12px 24px 0 24px !important } .header-left { display: table-=
+footer-group !important; width: 320px
+ !important } .header-right { width: 320px !important; display: table-capti=
+on !important; text-align: left
+ !important; } }
+</style>
+<!--[if !mso]><!--><link href=3D"https://fonts.googleapis.com/css?family=3D=
+Open+Sans:400,600,700" rel=3D"stylesheet" type=3D"text/css"><style type=3D"=
+text/css">@import url(https://fonts.googleapis.com/css?family=3DOpen+Sans:4=
+00,600,700);</style><!--<![endif]-->
+</head>
+<body id=3D"body" style=3D"background-color: #FFFFFF;"><span style=3D"width=
+:0;opacity:0;max-height:0;mso-hide:all;overflow:hidden;float:left;display:n=
+one !important;">Enter 572754 in the next 10 mins to continue with Canva</s=
+pan><span style=3D"display: none; max-height: 0px; overflow: hidden;">=CD=
+=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=
+=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=
+=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=
+=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=
+=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =CD=8F =
+=CD=8F =CD=8F =CD=8F =CD=8F =CD=8F </span><div style=3D"background-color: #=
+FFFFFF;" class=3D"body">
+ <!--[if mso | IE]>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" st=
+yle=3D"width:600px;" width=3D"600"><tr><td style=3D"line-height:0px;font-si=
+ze:0px;mso-line-height-rule:exactly;">
+<![endif]--><div style=3D"background:#ffffff;background-color:#ffffff;margi=
+n:0px auto;max-width:600px;"><table align=3D"center" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"background:#fffff=
+f;background-color:#ffffff;width:100%;"><tbody><tr><td style=3D"direction:l=
+tr;font-size:0px;padding:0;padding-bottom:12px;padding-top:12px;text-align:=
+center;vertical-align:top;"><!--[if mso | IE]>
+<table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0"><tr><td style=3D"vertical-align:top;width:600px;">
+<![endif]--><div class=3D"dys-column-per-100 outlook-group-fix" style=3D"di=
+rection:ltr;display:inline-block;font-size:13px;text-align:left;vertical-al=
+ign:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" role=3D"presentation" width=3D"100%"><tbody><tr><td style=3D"padding:0;ve=
+rtical-align:top;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"" width=3D"100%">
+ <tr><td align=3D"left" style=3D"font-size:0px;padding:0;word-break:break-w=
+ord;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"colo=
+r:#000000;font-family:Helvetica, Arial, sans-serif;font-size:13px;line-heig=
+ht:22px;table-layout:auto;width:100%;" width=3D"100%">
+ <tr>
+ <th class=3D"wrapper-margin" width=3D"48">&nbsp;</th>
+ <th>
+ <h1 style=3D"font-family: Open Sans, Helvetica, Arial, sans serif; font-si=
+ze: 32px; font-weight: 700; line-height: 130%; color: #0E1318; letter-spaci=
+ng: -0.5px; margin: 0 0 16px; text-align: left; text-align: start">Log in t=
+o Canva</h1>=20
+ <p style=3D"color: #0E1318; font-family: Open Sans, Helvetica, Arial, sans=
+ serif; font-weight: 400; line-height: 160%; font-size: 14px; margin: 0; te=
+xt-align: left; text-align: start">Welcome back! Enter this code within the=
+ next 10 minutes to log in:</p>
+ </th>=20
+ <th class=3D"wrapper-margin" width=3D"48">&nbsp;</th>
+ </tr>=20
+ </table></td></tr>
+ </table></td></tr></tbody></table></div><!--[if mso | IE]>
+</td></tr></table>
+<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+</td></tr></table>
+<![endif]-->
+ <!--[if mso | IE]>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" st=
+yle=3D"width:600px;" width=3D"600"><tr><td style=3D"line-height:0px;font-si=
+ze:0px;mso-line-height-rule:exactly;">
+<![endif]--><div style=3D"background:#fff;background-color:#fff;margin:0px =
+auto;max-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" role=3D"presentation" style=3D"background:#fff;backgro=
+und-color:#fff;width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size=
+:0px;padding:0;text-align:center;vertical-align:top;"><!--[if mso | IE]>
+<table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0"><tr><td style=3D"vertical-align:top;width:600px;">
+<![endif]--><div class=3D"dys-column-per-100 outlook-group-fix" style=3D"di=
+rection:ltr;display:inline-block;font-size:13px;text-align:left;vertical-al=
+ign:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" role=3D"presentation" width=3D"100%"><tbody><tr><td style=3D"background-c=
+olor:#fff;padding:0;vertical-align:top;"><table border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+ <tr><td align=3D"center" class=3D"wrapper-typography" style=3D"font-size:0=
+px;padding:10px 25px;padding-bottom:12px;padding-left:48px;padding-right:48=
+px;padding-top:12px;word-break:break-word;"><div style=3D"color:#0E1318;fon=
+t-family:Open Sans, Helvetica, Arial, sans serif;font-size:24px;font-weight=
+:700;letter-spacing:-0.3px;line-height:130%;text-align:center;"><p style=3D=
+"margin-top:0;margin-bottom:0">572754</p></div></td></tr>
+ </table></td></tr></tbody></table></div><!--[if mso | IE]>
+</td></tr></table>
+<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+</td></tr></table>
+<![endif]-->
+=20
+=20
+ <!--[if mso | IE]>
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" st=
+yle=3D"width:600px;" width=3D"600"><tr><td style=3D"line-height:0px;font-si=
+ze:0px;mso-line-height-rule:exactly;">
+<![endif]--><div style=3D"margin:0px auto;max-width:600px;"><table align=3D=
+"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentat=
+ion" style=3D"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:=
+0px;padding:0;text-align:center;vertical-align:top;"><!--[if mso | IE]>
+<table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0"><tr><td style=3D"vertical-align:top;width:600px;">
+<![endif]--><div class=3D"dys-column-per-100 outlook-group-fix" style=3D"di=
+rection:ltr;display:inline-block;font-size:13px;text-align:left;vertical-al=
+ign:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" role=3D"presentation" width=3D"100%"><tbody><tr><td style=3D"padding:0;ve=
+rtical-align:top;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"" width=3D"100%">
+ <tr><td align=3D"left" style=3D"font-size:0px;padding:0;word-break:break-w=
+ord;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"colo=
+r:#000000;font-family:Helvetica, Arial, sans-serif;font-size:13px;line-heig=
+ht:22px;table-layout:auto;width:100%;" width=3D"100%">
+ <tr>
+ <th class=3D"wrapper-margin" width=3D"48">&nbsp;</th>
+ <th>
+ <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"color:#00=
+0000;font-family:Helvetica, Arial, sans-serif;font-size:13px;line-height:22=
+px;table-layout:auto;width:100%;" width=3D"100%">
+ <tr>
+ <td style=3D"border-bottom: 1px solid #DDE1E3; height: 36px">
+ &nbsp;
+ </td>
+ </tr>
+ <tr>
+ <td style=3D"height: 24px">&nbsp;</td>
+ </tr>
+ <tr>
+ <td class=3D"center-on-mobile" style=3D"color:#565a5d;font-family:Open San=
+s, Helvetica, Arial, sans serif;font-size:14px;font-weight:400;line-height:=
+160%;text-align:left;text-align:start;">
+ <span>This email's meant for your eyes only!</span> <span>If someone's ask=
+ed you to share this email or code with them, or if you think you received =
+this by mistake, <a href=3D"https://track.canva.com/CL0/https:%2F%2Fcanva.c=
+om%2Fhelp%2Fget-in-touch%2Fcontact-support/1/0100018a807da74d-d915d9ec-8519=
+-4209-bce0-6e7b0863e96d-000000/bFxh8FFmzXEnlNsRnav1OG_gduZg5WDwFiBT5moRabQ=
+=3D317" alias=3D"canvaGetInTouchUrl">please report it</a></span>.
+ </td>
+ </tr>
+ <tr>
+ <td style=3D"height: 24px">&nbsp;</td>
+ </tr>
+ <tr>
+ <td>
+ <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"color:#00=
+0000;font-family:Helvetica, Arial, sans-serif;font-size:13px;line-height:22=
+px;table-layout:auto;width:100%;" width=3D"100%">
+ <tr class=3D"stack-on-mobile inline">
+ <td class=3D"column-left" style=3D"width: 64px">
+ <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"color:#00=
+0000;font-family:Helvetica, Arial, sans-serif;font-size:13px;line-height:22=
+px;table-layout:auto;width:100%;" width=3D"100%">
+ <tr>
+ <td style=3D"margin: 0 auto; width: 100%">
+ <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentati=
+on" style=3D"border-collapse:collapse;border-spacing:0px;"><tbody><tr><td s=
+tyle=3D"width:48px;"><img alt=3D"canva" height=3D"48" src=3D"https://appboy=
+-images.com/appboy/communication/assets/image_assets/images/5e153c090464b92=
+fdc5bb88f/original.png?1578449929" style=3D"border:none;display:block;font-=
+size:13px;height:48px;outline:none;text-decoration:none;width:100%;" width=
+=3D"48"></td></tr></tbody></table>
+ </td>
+ <td class=3D"show-for-large" style=3D"width: 16px"></td>
+ </tr>
+ </table>
+ </td>
+ <td class=3D"column-right">
+ <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"color:#00=
+0000;font-family:Helvetica, Arial, sans-serif;font-size:13px;line-height:22=
+px;table-layout:auto;width:100%;" width=3D"100%">
+ <tr>
+ <td class=3D"center-on-mobile inline" style=3D"color: #565a5d; font-family=
+: Open Sans, Helvetica, Arial, sans serif; font-size: 14px; font-weight: 40=
+0; line-height: 160%; text-align:left; text-align: start; vertical-align: m=
+iddle">
+ <span>Made for you with</span>
+ <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentati=
+on" style=3D"border-collapse:collapse;border-spacing:0px;"><tbody><tr><td s=
+tyle=3D"width:15px;"><img alt=3D"love" height=3D"16" src=3D"https://appboy-=
+images.com/appboy/communication/assets/image_assets/images/5e0190dc6a8d637c=
+8dd20cff/original.png?1577160924" style=3D"border:none;display:block;font-s=
+ize:13px;height:16px;outline:none;text-decoration:none;width:100%;" width=
+=3D"15"></td></tr></tbody></table>
+ <span>from</span> Canva<br>Canva=C2=AE,
+ <span>110 Kippax St, NSW 2010, Australia</span>
+ </td>
+ </tr>
+ </table>
+ </td>
+ </tr>
+ </table>
+ </td>
+ </tr>
+ </table>
+ </th>
+ <th class=3D"wrapper-margin" width=3D"48">&nbsp;</th>
+ </tr>
+ <tr>
+ <td height=3D"48">&nbsp;</td>
+ </tr>
+ </table></td></tr>
+ </table></td></tr></tbody></table></div><!--[if mso | IE]>
+</td></tr></table>
+<![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>
+</td></tr></table>
+<![endif]-->
+</div><img alt=3D"" src=3D"http://track.canva.com/CI0/0100018a807da74d-d915=
+d9ec-8519-4209-bce0-6e7b0863e96d-000000/E5kIB3Y2cCwbSVfnrPfa9aiBI5fw4KScPkg=
+KxPVrVUA=3D317" style=3D"display: none; width: 1px; height: 1px;">
+</body> </html>=
+
+------=_Part_5897683_2045215391.1694372833094--
+
+------=_Part_5897684_1945325670.1694372833094--

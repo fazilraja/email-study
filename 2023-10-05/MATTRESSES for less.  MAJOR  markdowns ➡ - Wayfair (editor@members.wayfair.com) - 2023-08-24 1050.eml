@@ -1,0 +1,2648 @@
+Received: from MN2PR20MB3399.namprd20.prod.outlook.com (2603:10b6:208:26e::23)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Thu, 24 Aug 2023
+ 15:50:14 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=kwP5UfYqQ5YJR2BuHgPZcYfNYFaPjxWGdmRJTUGUTBXFovLGSg2Df8uLndIS6JPW8JEGbntML5CjTStzs6nL9dgXVpEb2HZzevrTkOWV4zt1o0UAZtYyc/Qp2b52aTcB3eVX4wGnsv8dCu3MJPZoG+tKFBgSL3OA6htxmy9Q8W4KGpkt29PgABFgzLyg65VI7sWiXTGd7pMMyTFUZfNnh7hXorS2oSTEodx8+Afz11lrn6v87KS3aewm0MzW2ICfdHcG4ew69eqhJc4gLqjZAeZs3xXK/RcHcdMaDr80uc8QhTNHp9hXcXbIpLJna0mJwYJ4QkRsyJG38MUBsGsGbw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wv4xlWY2vmBnKSw8YtRJYTXzuqfyaZzpvm2i4TpnFSo=;
+ b=odC53OGGF7QsRJT0gnaAdXVyNJuEq/mga9RTdyMevVyKmp4lu6GF58pJaGq7D26jxOBMT1+BEVWDcV4VWwW9f3yswgJ/aLlw3MBIMFDUuOqdap0/x3WnuUCLC+eh9LsgXtpNFHzeWwmtWMZMwwIWhXFu6l5vzUkUV5ls3TCbhqLcT7jVTJrn5XdbwdIDmBxmC/aNF5N+fr+sHWlM/V92z5GoPRiyotopRqucWlmpIg9urijTI9+fIAyQKeIEpIv2Gircs9RXw3XZKLpZipXgfhQLjGVhonrBeXR3NofufO099kXGURgofCwMWxYODA7+2W7dme/4KufKVVBxtwEdZw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.222.49) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=members.wayfair.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=members.wayfair.com; dkim=pass (signature was
+ verified) header.d=members.wayfair.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounces@members.wayfair.com]
+ dkim=[1,1,header.i=@members.wayfair.com]
+ dmarc=[1,1,header.from=members.wayfair.com])
+Received: from DU2PR04CA0224.eurprd04.prod.outlook.com (2603:10a6:10:2b1::19)
+ by MN2PR20MB3399.namprd20.prod.outlook.com (2603:10b6:208:26e::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.27; Thu, 24 Aug
+ 2023 15:50:08 +0000
+Received: from DB5PEPF00014B99.eurprd02.prod.outlook.com
+ (2603:10a6:10:2b1:cafe::ee) by DU2PR04CA0224.outlook.office365.com
+ (2603:10a6:10:2b1::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.27 via Frontend
+ Transport; Thu, 24 Aug 2023 15:50:08 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.222.49)
+ smtp.mailfrom=members.wayfair.com; dkim=pass (signature was verified)
+ header.d=members.wayfair.com;dmarc=pass action=none
+ header.from=members.wayfair.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of members.wayfair.com does
+ not designate 209.85.222.49 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.222.49;
+ helo=mail-ua1-f49.google.com;
+Received: from mail-ua1-f49.google.com (209.85.222.49) by
+ DB5PEPF00014B99.mail.protection.outlook.com (10.167.8.166) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.14 via Frontend Transport; Thu, 24 Aug 2023 15:50:08 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:FC3E2D59D73FC005FA3FB72E96E02A289D6DC08D79DBEE92197698D662DA48DC;UpperCasedChecksum:077FFC74012E2245FAAE72D4836D6432B222D06C673F01138A9B1FED440FB5D1;SizeAsReceived:5579;Count:31
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-7a02252eb5dso1989241.1
+        for <tobinsilvestre@outlook.com>; Thu, 24 Aug 2023 08:50:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692892207; x=1693497007;
+        h=x-forwarded-for:list-unsubscribe:mime-version:subject:message-id:to
+         :reply-to:from:date:dkim-signature:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wv4xlWY2vmBnKSw8YtRJYTXzuqfyaZzpvm2i4TpnFSo=;
+        b=aNzOj2TC6d5MxPhRi98LbtK0B+m3C2W3Pc8rgazFCMJ9u/oNxF6Ri390Ij7jMZlIYJ
+         Q0pND2D4m5VB58TzwbynKbDQAapePpvfzJx033RGQGocpnlZlCyJ6RmiQQTTBcVlpFI3
+         EvgqHNupULEf3jH6IOHUHqNHopwTsbeNWGY17yaySoFSce7OarE80468Gc7/HLfqGjWq
+         KtooWIMfBGAvIrJXeAkmXwMo4VO2kV7Kd7R62dAFNP3WEOUfnVBWkAxUwvThos7C/FNU
+         qB9dTTZSOgb/3GZPBqLRGgVqC6aGEeH8GEX5QIUD+IHPF1jaadcsnEu+fO1nKjgspmGx
+         S9Rg==
+X-Gm-Message-State: AOJu0YwT75kzIc2HdkN6kQn8ryDFAkuKWqFNySQLuiHc841Ze6kRnEJu
+	d0BuWAhsEnylSGrhxvAvEwu56wBnV3I5SHwW9Q==
+X-Google-Smtp-Source: AGHT+IERBZ2LkeZugJ1eiglFnstN+qGsS0mJ2K2xTgVUVhZ9lOWyRAQcA1DEIpjiTUTI6yvXq6jxl1Hwt9O5YGPZlrBphGe9jRY=
+X-Received: by 2002:a67:e403:0:b0:44e:8874:585a with SMTP id d3-20020a67e403000000b0044e8874585amr4064389vsf.27.1692892207688;
+        Thu, 24 Aug 2023 08:50:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692892207; cv=none;
+        d=google.com; s=arc-20160816;
+        b=YiXdGyRdVSFNbak/EeicSglU2HDi9UE/bXf9mlU6s+ouQm2mgHNpVcXK3re1ApVt3r
+         a3gHFedI94oYWrFK2OkgIjWwsX3n44T5wp8WpuzZAwY2UH/T6W1LY9pVnWk03084ue2f
+         Bpc54y7C/GVz08HuL/t0w1Fyq5lRIFurknFaddRgQus4OFRk27G4xVlwfWI/VNLQtbv1
+         c2EBjrbkEXNXDKYrO9RwJK3WCO6XdTqm7/OSdG0QOJNHPfwmu8Vw/UcsBfLJEyHnUfYd
+         TxiOZTOFWHU6rT3vr0z6imINLPWi/CKguBGi808erUdz/+5eZ11nVIN9D3FapKMfS4fX
+         OgLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-unsubscribe:mime-version:subject:message-id:to:reply-to:from
+         :date:dkim-signature;
+        bh=wv4xlWY2vmBnKSw8YtRJYTXzuqfyaZzpvm2i4TpnFSo=;
+        fh=NGnwmZNeI51bN4ToWrsyxHNWHlhyqieWFJi7GDEy4qg=;
+        b=s0v7viJxTV2j1eS8Owm71HGmXtVep1k1z6DMkDqGJW69dFenuzlJF/jbbn1xy9WtzJ
+         bhveFCtdqBPbd8Z1Wd3awm6uGiR/uUk41/pNMKSC/05+4YtEoDgx30nWl6SRkIXw9miP
+         5BfkMTRgLmy1X1l+0x7G4fKyDEedRpaXvuV+oMVPLVtJLx+oqzd6M5i6C8esc1+qYBth
+         rROHvH5Ddk+E3XVeMSbtA4mWiTpyztVPvIbH3OOOJAmCozA+eMyIaNjTqXEn0sG55OHU
+         b0MP5EGhDdhmL6cLLfPNvy8lht74I2rcbkWw08WUMKAyzpz6CuOCOS+qL6RuMbYpQDly
+         Aenw==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@members.wayfair.com header.s=cpm header.b="0oMkf/sw";
+       spf=pass (google.com: domain of bounces@members.wayfair.com designates 35.194.69.102 as permitted sender) smtp.mailfrom=bounces@members.wayfair.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=members.wayfair.com
+Return-Path: bounces@members.wayfair.com
+Received: from bmta25-iad1.members.wayfair.com (bmta25-iad1.members.wayfair.com. [35.194.69.102])
+        by gmr-mx.google.com with ESMTPS id m23-20020ab06d97000000b0079a2dd67946si1210872uah.0.2023.08.24.08.50.07
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 24 Aug 2023 08:50:07 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounces@members.wayfair.com designates 35.194.69.102 as permitted sender) client-ip=35.194.69.102;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@members.wayfair.com header.s=cpm header.b="0oMkf/sw";
+       spf=pass (google.com: domain of bounces@members.wayfair.com designates
+ 35.194.69.102 as permitted sender) smtp.mailfrom=bounces@members.wayfair.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE)
+ header.from=members.wayfair.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=cpm; d=members.wayfair.com;
+ h=Date:From:Reply-To:To:Message-ID:Subject:MIME-Version:Content-Type:
+ List-Unsubscribe; i=editor@members.wayfair.com;
+ bh=wv4xlWY2vmBnKSw8YtRJYTXzuqfyaZzpvm2i4TpnFSo=;
+ b=0oMkf/swuiWUNL79MWSSvAT9o42DkGU74FnjCp+qcBP/uTZz7KL7c1UYps1sFCpOPqchW7nKSItC
+   F+7FtyjZQcdvnRxrbVpyyCp3iLhtaLgkS/BJCa/eTPrdAfRB7GSZc5glMEbBDVGrDRjet9+YBMH9
+   t0+DSOpxHvd75aY/XxvmLzOKfwrbj3MFlHIO8H9r6A/6C+8lRL7W1npdw025Uixp108OfKum9fna
+   PLEFXhrzuGa+BiOajbZyStYC9z3ZTwqdyOy3NgPJrwkwJ5OhTTwuJrEolpIAxX94R9rvI44badGQ
+   rz0snXTDih3sdqMzr8qENgCddbfkjS7R04Wflg==
+Received: by bmta25-iad1.members.wayfair.com id hstu2u2t4acf for <tobinsilvestre032@sooners.us>; Thu, 24 Aug 2023 11:50:07 -0400 (envelope-from <bounces@members.wayfair.com>)
+Date: Thu, 24 Aug 2023 11:50:07 -0400 (EDT)
+From: Wayfair <editor@members.wayfair.com>
+Reply-To: editor@members.wayfair.com
+To: <tobinsilvestre032@sooners.us>
+Message-ID: <c4d0d5bc-245b-4a82-8cae-6d7b7bd512b8@wayfair.com>
+Subject: =?UTF-8?Q?MATTRESSES_for_less._*MAJOR*_markdowns_=E2=9E=A1?=
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_31_1577457627.1692892207371"
+List-Unsubscribe: https://www.wayfair.com/v/account/email_subscriptions/unsubscribe?csnid=72d88b66-1132-4e14-8152-cb36e885747e&_emr=c4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&wfcs=cs9&refid=MKTEML_86371
+x-storeid: 49
+x-emailservicetimestamp: 1692892207371
+x-mailid: 9625
+x-elid: 101
+x-batchid: 2
+x-msgid: c4d0d5bc-245b-4a82-8cae-6d7b7bd512b8
+x-rpcampaign: WF_101_9625_2
+X-Forwarded-For: tobinsilvestre032@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 31
+X-MS-Exchange-Organization-ExpirationStartTime: 24 Aug 2023 15:50:08.1745
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 6eb17c05-d70e-44eb-5b72-08dba4b9cad2
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DB5PEPF00014B99:EE_|MN2PR20MB3399:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DB5PEPF00014B99.eurprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 8/24/2023 2:33:26 PM
+X-MS-Office365-Filtering-Correlation-Id: 6eb17c05-d70e-44eb-5b72-08dba4b9cad2
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.222.49
+X-SID-PRA: EDITOR@MEMBERS.WAYFAIR.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 2
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2023 15:50:08.0652
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6eb17c05-d70e-44eb-5b72-08dba4b9cad2
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DB5PEPF00014B99.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR20MB3399
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:06.4343965
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6699.027
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:0;pcwl:0;kl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(8820095)(9910022)(9545005)(10170022)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPl9542JNb54MVeZcUsR+ULEPcPKFfd/fPT2+HKDkRFhpRlrWJfCXTPHHzILQ3wC9Fpoinl2bOWj6kN6TibdEDQ8pWp1fpDxxOJTPXcwePkK+I7gUhujKH8OsyP1aTrWNfJie19jUiTOBqRMznrBAPclb2AvXb9wLh+VaiFX742F8Jnql9ianu5u3lUcQWn1HgUrZnRQdm3Dqw==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0wO0Q9MTtHRD0yO1NDTD0tMQ==
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TWN1V2dhM3lKYmhWdmdSUzZoL1RmUFZXbnpFb1cwQ3hmU09nUkNyalFrVlVB?=
+ =?utf-8?B?ZjNxQnh3WnJTdjI5ZHlTZ2tJRU1uK2ZEeUxoTmRCNU41dUJXbCtRbmhYanp4?=
+ =?utf-8?B?ZGxaSVFXNEUwWDUzZk9TYUgzTDlLYlJCOGk1b0xmc3RKbms1YXZ0NVd6M2c0?=
+ =?utf-8?B?QnZSQldaZHZoaTFuZlU2RlBYMS82R1Q5TFNqRDlJQzN5UWwzaFlINklyL1ZM?=
+ =?utf-8?B?cUxPQ3F2U3cyeWlRVW02bmh4TUtUejJZQnhhSmdUeGkrRnljcUw0QnVDRVlr?=
+ =?utf-8?B?WS91SVgrY1oyU3NJNktDSktML0JEZ2lGaTBiQlY2QTZuMU04VW5OWkVhVXQv?=
+ =?utf-8?B?NkUyOGxpN1BheEJRY2t0ajdFRjZINktLWTNQcndaRzVLTlAxU0R3TG5BY3FY?=
+ =?utf-8?B?Z0FTUVJ0R2dYZWt1MGdrUVZLT2VhZEgxbnRXbUtvQUc4YXNsekx2UCtvYmtB?=
+ =?utf-8?B?dmljczVqallMSzhObTlJalRMcFJFVHV0allrbE8zSzBsY0ZJMUdhQ0RZU2V0?=
+ =?utf-8?B?RE9TQmJIbmtoSkxXSE13MXEwMVlNMlRIOWtOd1lia2ludG9ZRDBzVWNYODJH?=
+ =?utf-8?B?aFFYQ2Vmd1lQMFJ1VU92UEU0VlJXMC83bmhOenVwUitZbk9HRndoZnc0a2RN?=
+ =?utf-8?B?OC9GUWNKck94ODNyZE9SWGludWcxd0VwVzg5L1dVc0xDUWtFeDMwV0Foajh5?=
+ =?utf-8?B?U1FQUnQ0bGtNUWxXVUFYV25YczNQekh2TUk3SUdYVWd6Q28vSG9wYTduK1ph?=
+ =?utf-8?B?aU1HMXY0ZGpqSk95MVlNMFlMYmFZOXYwSkdZUjg4cFRQUmdNL1AzbTBlZXpz?=
+ =?utf-8?B?OUQ1bG9udzBmQ0JoMmR4SjFNb052V0hRS3NBUTAwUnAvOEdEVTUzUXQ1bXp1?=
+ =?utf-8?B?dE9OS09GR0d6Tm5VdnNRNjI4U3hTQUhDMDBDYXdlNmFzeXd1Mno0eDZ5Rk1Z?=
+ =?utf-8?B?NUZEZzZWUDVUc3RObWxSb09IOTJGcWs2RXBrZVh3bnRJK1JSaTR3VmlUU29Y?=
+ =?utf-8?B?Qmg5UGsxd09HVERaN3RUWTd3SXZuNzBOTzhjeVhyOWdBWGpOWDF4SVlyN3V4?=
+ =?utf-8?B?bURlSUxPbjBqek1kVlVZYWdubjhrS3lnSzJ6S2t3ZXMwNXpTWUIveGlpdmo5?=
+ =?utf-8?B?QmJPQUpnbE5JeElGRDlyYllYZTltSXE0dlBYTVA0SnNSU3BuNVpQMytWUTMz?=
+ =?utf-8?B?WFdVQmxUTWlEWjhjTkU3VzdVdHd6ZEQxa0NNMFpEVFRnTndrTUJiSkt4Q1FD?=
+ =?utf-8?B?YUFwaVRuTWYzV05FYWIxSWtsZjJ6T1VRNU9OT2g5OUcrK1pDTUhWQi9yKzlv?=
+ =?utf-8?B?OURCQXlIcGFjV3pYWU4wTjNPQWNIQ2ljUmIzNjJlZW9ZMkpUNUxyUCsvTDU5?=
+ =?utf-8?B?VzNZZWptM3JtbG93NmhKUGJSMHpXL1lraTRrbmFvQ0QyRGkwaDJYVDFzaFZX?=
+ =?utf-8?B?RHh4YjlCcE5lTkZFRnNCaEx5eXZOVkhROHpPekJRbzlETWVvMXYzRk8wNTNB?=
+ =?utf-8?B?ZE92blllVzFMVzJLenlIL3JwNnNSdEJjc0tDdWdLNy9qMnIzZGZaK0k3M0pa?=
+ =?utf-8?B?R0ZrMmpXelB0ZkkzNHJUUmV0VGtsVTcxdEwwOUFIcktwS2x6bUZ4NXVaOStL?=
+ =?utf-8?B?cEQ1NTRQMVc1UlhVZ0ZOU2Z6dXp2WDZnRm5ieXk2eEhxQUJyKytxRjR2MVVS?=
+ =?utf-8?B?TWFjNDU3elBCUzZkRksremxYdTJPN3VDcTE4aWFWemM4R3ZWOGRrNVpCdDl5?=
+ =?utf-8?B?U1dBSVljSWxJUUVhckZ4LzhxT256aDd0a2NEbUdaYjdSWTYzUnQvZWJRa2RR?=
+ =?utf-8?B?UjlEYjJkR3pWSzZKUllJZWNkUEdSQnlNbzFFa3dDMVA2ZDBhOUMrdnF2UGZM?=
+ =?utf-8?B?bWlzcjZhbTFLbVQvTGRPR1doaTlRT2R6cFlUZ2V6OXdzNGhFMkFrQ25FdEU3?=
+ =?utf-8?B?cjRzQThIY05vL0lkZjUxdnZPSVFyNmFzUEVnbGlUcnpraWtaREFFT2k4ZGV4?=
+ =?utf-8?B?UzdmYTJmVXN2UWZDeDczL2hDN0dKWmlBc3BrNm9EYjNJS1pNQlpqUkxrazg2?=
+ =?utf-8?B?U29hNG9pYmo5VnpNejM0UEJHUnNSWlZySmNOSXlPOXlINGFsdVpYa1ZtQzF4?=
+ =?utf-8?B?N3RNdW0zNkNZYXRkVW1KU0x6TGZuakpZdmVWTjRMY0pxY2Z6dW5pQTM0cmY4?=
+ =?utf-8?B?MENSZHpVbGxSSVIzUjhuYnFpYTF1b3h1dmxkRDhNTVpheTlSbHBNU3NaNGJU?=
+ =?utf-8?B?WGx2VFkxaG9jZUhEVm9SakgrQ3I0cmJwSEJEUy9nMTA0d1BqVUpJd04raUNv?=
+ =?utf-8?B?cnF3cXB5UzRpTWFFOWdWbmpBWmkvRWZnaDQ4a1ZwWGpZTzFXcGhrRnk1V1di?=
+ =?utf-8?B?OVFRUWVFWkVOZ1dPMStIQjlBTDBIRy9DSjR0NGI3dVJSQjB0eHJkU0pKcU9Z?=
+ =?utf-8?B?cGJrVUFUSW1WRXJuK0o1elR4eUZHR2dibnpnVEtycEYrc1l2T2ZST3BKUXli?=
+ =?utf-8?Q?GzXFXfZ8pCd?=
+MIME-Version: 1.0
+
+------=_Part_31_1577457627.1692892207371
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+EXTRA 10% OFF =E2=AD=90 APP-EXCLUSIVE Labor Day deals!
+
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C EXTRA 10=
+% OFF=E2=80=A1 | LABOR DAY APP EARLY ACCESS =E2=86=92EXTRA 10% OFF=E2=80=A1=
+ | LABOR DAY APP EARLY ACCESS =E2=86=92 FREE Shipping Over $35* & Financing=
+ Available1 [ https://wayfairapp.onelink.me/2420802157/AppPromoEmail?af_dp=
+=3Dhttps://www.wayfair.com/daily-sales/extra-20-off-in-app-only~e260720.htm=
+l ] =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C Wayfa=
+ir [https://secure.img1-fg.wfcdn.com/im/73767274/compr-r85/1012/101201513/d=
+efault_name.jpg] [https://www.wayfair.com] Furniture [https://www.wayfair.c=
+om/furniture/cat/furniture-c45974.html]|D=C3=A9cor [https://www.wayfair.com=
+/Decor-C45752.html]|Rugs [https://www.wayfair.com/rugs/cat/rugs-c215385.htm=
+l]|Lighting [https://www.wayfair.com/lighting/cat/lighting-c215735.html]|Sa=
+le [https://www.wayfair.com/daily-sales]
+
+
+
+blockblock=3D"row_0_column_1_items_0_Image"> []  [] []  []
+
+
+
+blockblock=3D"row_1_column_1_items_0_Event-Base">  [] []  [] &nbsp;&raquo;&=
+nbsp;&raquo; []
+blockblock=3D"row_1_column_2_items_0_Event-Base">  [] []  [] &nbsp;&raquo;&=
+nbsp;&raquo; []
+
+
+
+
+
+              []  [] []                                                    =
+                              =20
+
+
+
+
+
+              []  [] []                                                    =
+                              =20
+
+
+
+
+blockblock=3D"row_4_column_1_items_0_Event-Base">  [] []  [] &nbsp;&raquo;&=
+nbsp;&raquo; []
+blockblock=3D"row_4_column_2_items_0_Event-Base">  [] []  [] &nbsp;&raquo;&=
+nbsp;&raquo; []
+
+
+
+
+
+
+blockblock=3D"row_3_column_1_items_0_image"> [https://secure.img1-fg.wfcdn.=
+com/dm/image/32f636f1-16ea-48d9-9dae-9316af052092/wfna_0829_labordayclearan=
+ce_2023_wfus_email_skinny_appearlyaccess.jpg] [https://wayfairapp.onelink.m=
+e/2420802157/AppPromoEmail?af_dp=3Dhttps://www.wayfair.com/daily-sales/labo=
+r-day-early-access-deals-in-app~e262080.html]
+
+
+
+ [https://secure.img1-ag.wfcdn.com/im/25028134/compr-r85/1169/116988926/def=
+ault_name.png] [https://www.wayfair.com/v/business_account/application/pico=
+] Wayfair Professional =C2=BB [https://www.wayfair.com/v/business_account/a=
+pplication/pico] [https://secure.img1-ag.wfcdn.com/im/09022356/compr-r85/10=
+06/100674402/default_name.png] [https://www.wayfair.com/wayfaircard] Wayfai=
+r Credit Card =C2=BB [https://www.wayfair.com/wayfaircard] [https://secure.=
+img1-ag.wfcdn.com/im/04333550/compr-r85/1167/116787079/default_name.png] [h=
+ttps://www.wayfair.com/giftcards] Gift Cards =C2=BB [https://www.wayfair.co=
+m/giftcards] [https://secure.img1-ag.wfcdn.com/im/84562819/compr-r85/1345/1=
+34509890/default_name.png] [https://www.wayfair.com/brand/bbb/browse-our-sh=
+ops] Wayfair Exclusive Brands =C2=BB [https://www.wayfair.com/brand/bbb/bro=
+wse-our-shops] Download the Wayfair App Android App [https://secure.img.wfr=
+cdn.com/st4/stores/common/emails/assets/footer/app_android.png] [https://wa=
+yfairapp.onelink.me/2420802157?pid=3DEmail&c=3DTriggered&af_sub5=3DAppEmail=
+&af_dp=3Dwayfairapp%3A%2F%2Fhome&af_web_dp=3Dhttp%3A%2F%2Fwww.wayfair.com%2=
+Fthe-wayfair-app&refid=3D59e7c241-90d5-49eb-8f9d-da5e3974b7f1] iOS App [htt=
+ps://secure.img.wfrcdn.com/st4/stores/common/emails/assets/footer/app_ios.p=
+ng] [https://wayfairapp.onelink.me/2420802157?pid=3DEmail&c=3DTriggered&af_=
+sub5=3DAppEmail&af_dp=3Dwayfairapp%3A%2F%2Fhome&af_web_dp=3Dhttp%3A%2F%2Fww=
+w.wayfair.com%2Fthe-wayfair-app&refid=3D59e7c241-90d5-49eb-8f9d-da5e3974b7f=
+1] Share Your Style Using #noplacelikeit Instagram [https://secure.img1-ag.=
+wfcdn.com/im/52577457/compr-r85/1167/116787089/default_name.png] [https://i=
+nstagram.com/wayfair] Facebook [https://secure.img1-ag.wfcdn.com/im/4973720=
+2/compr-r85/1167/116787075/default_name.png] [https://www.facebook.com/wayf=
+air] Pinterest [https://secure.img1-ag.wfcdn.com/im/76286136/compr-r85/1167=
+/116787091/default_name.png] [https://www.pinterest.com/wayfair/] Twitter [=
+https://secure.img1-ag.wfcdn.com/im/42233397/compr-r85/1167/116787094/defau=
+lt_name.png] [https://twitter.com/Wayfair] Family of Brands Joss & Main [ht=
+tps://secure.img1-ag.wfcdn.com/im/31479307/compr-r85/1839/183923823/default=
+_name.jpg] [http://www.jossandmain.com] Birch Lane [https://secure.img1-ag.=
+wfcdn.com/im/66754542/compr-r85/1096/109644170/default_name.jpg] [http://ww=
+w.birchlane.com] AllModern [https://secure.img1-ag.wfcdn.com/im/18300562/co=
+mpr-r85/1566/156633277/default_name.jpg] [http://www.allmodern.com] Contact=
+ Us [https://www.wayfair.com/contact_us?source=3D6]| My Account [https://ww=
+w.wayfair.com/session/secure/account/account_welcome.php] | Privacy Policy =
+[https://www.wayfair.com/customerservice/general_info.php#privacy]   This m=
+essage was sent to tobinsilvestre032@sooners.us [tobinsilvestre032@sooners.=
+us].  To manage your email preferences, click here [https://www.wayfair.com=
+/v/account/email_subscriptions/manage].=20
+If you no longer wish to receive emails from us, click here [https://www.wa=
+yfair.com/v/account/email_subscriptions/unsubscribe?topic=3D1&channel=3D1].=
+=20
+To read our privacy policy, click here [https://www.wayfair.com/customerser=
+vice/general_info.php#privacy]. *Free Shipping: Some exclusions apply.
+Read more about our shipping policy [https://www.wayfair.com/customerservic=
+e/shipping_info.php#ordership] 1Subject to credit approval. May not be comb=
+ined with rewards offers. Terms and Conditions apply.=20
+See wayfair.com/wayfaircard [https://www.wayfair.com/wayfaircard] for detai=
+ls. Product prices and availability are limited time and subject to change.
+Quoted prices are in U.S. dollars and are exclusive of shipping and handlin=
+g or sales taxes, if applicable.  Wayfair Inc., 4 Copley Place, Floor 7, Bo=
+ston, MA 02116  [http://li.wayfair.com/imp?s=3D124126000&sz=3D2x1&m=3Dfalse=
+&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http://li.wayfair.com/imp?s=3D12=
+4126001&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http:/=
+/li.wayfair.com/imp?s=3D124126002&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82=
+-8cae-6d7b7bd512b8][http://li.wayfair.com/imp?s=3D124126003&sz=3D2x1&m=3Dfa=
+lse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http://li.wayfair.com/imp?s=
+=3D124126004&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][h=
+ttp://li.wayfair.com/imp?s=3D124126005&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b=
+-4a82-8cae-6d7b7bd512b8][http://li.wayfair.com/imp?s=3D124126006&sz=3D2x1&m=
+=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http://li.wayfair.com/im=
+p?s=3D124126007&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8=
+][http://li.wayfair.com/imp?s=3D124126008&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-2=
+45b-4a82-8cae-6d7b7bd512b8][http://li.wayfair.com/imp?s=3D124126009&sz=3D2x=
+1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http://li.wayfair.com=
+/imp?s=3D124126010&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd51=
+2b8][http://li.wayfair.com/imp?s=3D124126011&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5b=
+c-245b-4a82-8cae-6d7b7bd512b8][http://li.wayfair.com/imp?s=3D124126012&sz=
+=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http://li.wayfai=
+r.com/imp?s=3D124126013&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b=
+7bd512b8][http://li.wayfair.com/imp?s=3D124126014&sz=3D2x1&m=3Dfalse&p=3Dc4=
+d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http://li.wayfair.com/imp?s=3D124126015=
+&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http://li.way=
+fair.com/imp?s=3D124126016&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6=
+d7b7bd512b8][http://li.wayfair.com/imp?s=3D124126017&sz=3D2x1&m=3Dfalse&p=
+=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http://li.wayfair.com/imp?s=3D1241=
+26018&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8][http://l=
+i.wayfair.com/imp?s=3D124126019&sz=3D2x1&m=3Dfalse&p=3Dc4d0d5bc-245b-4a82-8=
+cae-6d7b7bd512b8]
+
+
+blockblock=3D"row_6_column_1_items_0_text"><h5 class=3D"u-Note" style=3D"te=
+xt-align: center;">=E2=80=A1 Select styles only.=C2=A0</h5>
+
+
+
+
+              []  [] []                                                    =
+                              =20
+
+
+
+
+
+
+------=_Part_31_1577457627.1692892207371
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml" style=3D"width:100% !important;padding:0 !important;margin:=
+0 auto !important;"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><s=
+tyle type=3D"text/css">@media only screen and (max-width: 480px) {.u-Button=
+ { padding: 16px 0 !important } }@media only screen and (max-width: 480px) =
+{.u-Button a { padding: 0 32px !important } }@media only screen and (max-wi=
+dth: 480px) {.u-Button--primary { padding: 16px 0 !important } }@media only=
+ screen and (max-width: 480px) {.u-Button--primary .u-ButtonLink { padding:=
+ 0 32px !important } }@media only screen and (max-width: 480px) {.u-Button-=
+-transactional { padding: 16px 0 !important } }@media only screen and (max-=
+width: 480px) {.u-Button--transactional .u-ButtonLink { padding: 0 32px !im=
+portant } }@media only screen and (max-width: 480px) {.u-Button--alternate =
+{ padding: 16px 0 !important } }@media only screen and (max-width: 480px) {=
+.u-Button--alternate .u-ButtonLink { padding: 0 32px !important } }@media o=
+nly screen and (max-width: 480px) {.u-Title { font-size: 32px !important } =
+}@media only screen and (max-width: 480px) {.u-Title--primary { font-size: =
+32px !important } }@media only screen and (max-width: 480px) {.u-Title--sec=
+ondary { font-size: 32px !important } }@media only screen and (max-width: 4=
+80px) {.u-Title--tertiary { font-size: 32px !important } }@media only scree=
+n and (max-width: 480px) {.u-Title--white { font-size: 32px !important } }@=
+media only screen and (max-width: 480px) {.u-Header { font-size: 22px !impo=
+rtant } }@media only screen and (max-width: 480px) {.u-Header--primary { fo=
+nt-size: 22px !important } }@media only screen and (max-width: 480px) {.u-H=
+eader--secondary { font-size: 22px !important } }@media only screen and (ma=
+x-width: 480px) {.u-Header--tertiary { font-size: 22px !important } }@media=
+ only screen and (max-width: 480px) {.u-Header--white { font-size: 22px !im=
+portant } }@font-face {font-family: "Sofia"; src: url(https://secure.img.wf=
+rcdn.com/st4/stores/common/fonts/sofia/sofia_reg.woff) format("woff"); mso-=
+font-alt: "Arial"}@media only screen and (max-width: 480px) {.Header-navCel=
+l { font-size: 13px !important } }@media only screen and (max-width: 480px)=
+ {.FooterMarketing-fullGutter { display: block !important; width: 100% !imp=
+ortant; height: 10px !important; font-size: 1px !important; line-height: 1p=
+x !important } }@media only screen and (max-width: 480px) {.FooterMarketing=
+-gutter { width: 2% !important } }@media only screen and (max-width: 480px)=
+ {.FooterMarketing-rowGutter { height: 8px !important } }@media only screen=
+ and (max-width: 480px) {.FooterApps-iconImg { width: 45% !important; heigh=
+t: auto !important } }@media only screen and (max-width: 480px) {.FooterSoc=
+ial-euCopy { font-size: 18px !important; padding: 0 16px !important } }@med=
+ia only screen and (max-width: 480px) {.ArbitraryContent-productName, .Arbi=
+traryContent-nonStackProductName, .ArbitraryContent-className, .ArbitraryCo=
+ntent-cta { font-size: 13px !important } }@media only screen and (max-width=
+: 480px) {.ArbitraryContent-productName, .ArbitraryContent-nonStackProductN=
+ame { word-break: break-all; display: block; overflow: hidden } }@media onl=
+y screen and (max-width: 480px) {.ArbitraryContent-productName { height: 50=
+px } }@media only screen and (max-width: 480px) {.ArbitraryContent-salesCop=
+y { height: 40px } }@media only screen and (max-width: 480px) {.ArbitraryCo=
+ntent-stars { height: 20px } }@media only screen and (max-width: 480px) {.A=
+rbitraryContent-nonStackProductName { height: 60px } }@media only screen an=
+d (max-width: 480px) {u ~ div { min-width: 100vw } .u-FullWidth { width: 10=
+0% !important; height: auto !important } .u-HalfWidth { width: 50% !importa=
+nt; height: auto !important } .u-ThirdWidth { width: 33% !important; height=
+: auto !important } .u-QuarterWidth { width: 25% !important; height: auto !=
+important } .u-Block { display: block !important; box-sizing: border-box } =
+.u-InlineBlock { display: block !important; float: left !important; box-siz=
+ing: border-box } .u-MobileCenter { text-align: center !important } .u-Mobi=
+leCenterBlock { margin: 0 auto !important } .u-CopyFullWidth { width: 95% !=
+important } .u-FullWidthBlock { width: 100% !important; height: auto !impor=
+tant; display: block !important; box-sizing: border-box } .u-HalfWidthBlock=
+ { width: 50% !important; height: auto !important; display: block !importan=
+t; float: left !important; box-sizing: border-box } body[data-outlook-cycle=
+] .u-OutlookAppStackingFix { width: auto !important; padding: 4px } u + .Gm=
+ail .u-P--5 { padding-left: 5px !important; padding-right: 5px !important }=
+ .u-MP-T--0 { padding-top: 0 !important } .u-MP-R--0 { padding-right: 0 !im=
+portant } .u-MP-B--0 { padding-bottom: 0 !important } .u-MP-L--0 { padding-=
+left: 0 !important } .u-MP--0 { padding: 0 !important } .u-MP-T--1 { paddin=
+g-top: 6px !important } .u-MP-R--1 { padding-right: 6px !important } .u-MP-=
+B--1 { padding-bottom: 6px !important } .u-MP-L--1 { padding-left: 6px !imp=
+ortant } .u-MP--1 { padding: 6px !important } .u-MP-T--2 { padding-top: 12p=
+x !important } .u-MP-R--2 { padding-right: 12px !important } .u-MP-B--2 { p=
+adding-bottom: 12px !important } .u-MP-L--2 { padding-left: 12px !important=
+ } .u-MP--2 { padding: 12px !important } .u-MP-T--3 { padding-top: 18px !im=
+portant } .u-MP-R--3 { padding-right: 18px !important } .u-MP-B--3 { paddin=
+g-bottom: 18px !important } .u-MP-L--3 { padding-left: 18px !important } .u=
+-MP--3 { padding: 18px !important } .u-MP-T--4 { padding-top: 24px !importa=
+nt } .u-MP-R--4 { padding-right: 24px !important } .u-MP-B--4 { padding-bot=
+tom: 24px !important } .u-MP-L--4 { padding-left: 24px !important } .u-MP--=
+4 { padding: 24px !important } .u-MP-T--5 { padding-top: 30px !important } =
+.u-MP-R--5 { padding-right: 30px !important } .u-MP-B--5 { padding-bottom: =
+30px !important } .u-MP-L--5 { padding-left: 30px !important } .u-MP--5 { p=
+adding: 30px !important } #Container { width: 100% !important } .cms-Contai=
+nsBgImg { background-size: 100% !important } .Button--mobileAlignTable { di=
+splay: inline-block } .Button--mobileAlignLeft { text-align: left } .Button=
+--mobileAlignRight { text-align: right } .Text--mobileAlignLeft p, .Text--m=
+obileAlignLeft h1, .Text--mobileAlignLeft h2, .Text--mobileAlignLeft h3, .T=
+ext--mobileAlignLeft h4, .Text--mobileAlignLeft h5, .Text--mobileAlignLeft =
+h6 { text-align: left !important } .Text--mobileAlignRight p, .Text--mobile=
+AlignRight h1, .Text--mobileAlignRight h2, .Text--mobileAlignRight h3, .Tex=
+t--mobileAlignRight h4, .Text--mobileAlignRight h5, .Text--mobileAlignRight=
+ h6 { text-align: right !important } .Text--mobileAlignCenter p, .Text--mob=
+ileAlignCenter h1, .Text--mobileAlignCenter h2, .Text--mobileAlignCenter h3=
+, .Text--mobileAlignCenter h4, .Text--mobileAlignCenter h5, .Text--mobileAl=
+ignCenter h6 { text-align: center !important } .Table-halfWidthBorderSpacin=
+g--8 { border-spacing: 4px } .Table-halfWidthBorderSpacing--8 .u-HalfWidthB=
+lock { margin: 4px !important } .Table-halfWidthBorderSpacing--8 .u-HalfWid=
+thBlock .u-HalfWidthBlock { margin: 0 !important; width: 50% !important } .=
+Table-fullWidthBorderSpacing--8 { border-spacing: 8px 0 } .Table-fullWidthB=
+orderSpacing--8 .u-FullWidthBlock { margin: 8px 0 } .Table-fullWidthBorderS=
+pacing--8 .u-FullWidthBlock .u-FullWidthBlock { margin: 0 !important } .Tab=
+le-halfWidthBorderSpacing--14 { border-spacing: 7px } .Table-halfWidthBorde=
+rSpacing--14 .u-HalfWidthBlock { margin: 7px !important } .Table-halfWidthB=
+orderSpacing--14 .u-HalfWidthBlock .u-HalfWidthBlock { margin: 0 !important=
+; width: 50% !important } .Table-fullWidthBorderSpacing--14 { border-spacin=
+g: 14px 0 } .Table-fullWidthBorderSpacing--14 .u-FullWidthBlock { margin: 1=
+4px 0 } .Table-fullWidthBorderSpacing--14 .u-FullWidthBlock .u-FullWidthBlo=
+ck { margin: 0 !important } .Table-halfWidthBorderSpacing--20 { border-spac=
+ing: 10px } .Table-halfWidthBorderSpacing--20 .u-HalfWidthBlock { margin: 1=
+0px !important } .Table-halfWidthBorderSpacing--20 .u-HalfWidthBlock .u-Hal=
+fWidthBlock { margin: 0 !important; width: 50% !important } .Table-fullWidt=
+hBorderSpacing--20 { border-spacing: 20px 0 } .Table-fullWidthBorderSpacing=
+--20 .u-FullWidthBlock { margin: 20px 0 } .Table-fullWidthBorderSpacing--20=
+ .u-FullWidthBlock .u-FullWidthBlock { margin: 0 !important } .u-MobileHide=
+ { display: none !important } .u-MobileShow { display: block !important; fo=
+nt-size: 100% !important; max-height: none !important } }@media only screen=
+ and (max-width: 480px) {.u-Button { padding: 16px 0 !important } }@media o=
+nly screen and (max-width: 480px) {.u-Button a { padding: 0 32px !important=
+ } }@media only screen and (max-width: 480px) {.u-Button--primary { padding=
+: 16px 0 !important } }@media only screen and (max-width: 480px) {.u-Button=
+--primary .u-ButtonLink { padding: 0 32px !important } }@media only screen =
+and (max-width: 480px) {.u-Button--transactional { padding: 16px 0 !importa=
+nt } }@media only screen and (max-width: 480px) {.u-Button--transactional .=
+u-ButtonLink { padding: 0 32px !important } }@media only screen and (max-wi=
+dth: 480px) {.u-Button--alternate { padding: 16px 0 !important } }@media on=
+ly screen and (max-width: 480px) {.u-Button--alternate .u-ButtonLink { padd=
+ing: 0 32px !important } }@media only screen and (max-width: 480px) {.u-Tit=
+le { font-size: 32px !important } }@media only screen and (max-width: 480px=
+) {.u-Title--primary { font-size: 32px !important } }@media only screen and=
+ (max-width: 480px) {.u-Title--secondary { font-size: 32px !important } }@m=
+edia only screen and (max-width: 480px) {.u-Title--tertiary { font-size: 32=
+px !important } }@media only screen and (max-width: 480px) {.u-Title--white=
+ { font-size: 32px !important } }@media only screen and (max-width: 480px) =
+{.u-Header { font-size: 22px !important } }@media only screen and (max-widt=
+h: 480px) {.u-Header--primary { font-size: 22px !important } }@media only s=
+creen and (max-width: 480px) {.u-Header--secondary { font-size: 22px !impor=
+tant } }@media only screen and (max-width: 480px) {.u-Header--tertiary { fo=
+nt-size: 22px !important } }@media only screen and (max-width: 480px) {.u-H=
+eader--white { font-size: 22px !important } }@font-face {font-family: "Sofi=
+a"; src: url(https://secure.img.wfrcdn.com/st4/stores/common/fonts/sofia/so=
+fia_reg.woff) format("woff"); mso-font-alt: "Arial"}@media only screen and =
+(max-width: 480px) {.u-HalfWidthBlock .EventBlock-name { height: 50px } }@m=
+edia only screen and (max-width: 480px) {.ArbitraryContent-productName, .Ar=
+bitraryContent-nonStackProductName, .ArbitraryContent-className, .Arbitrary=
+Content-cta { font-size: 13px !important } }@media only screen and (max-wid=
+th: 480px) {.ArbitraryContent-productName, .ArbitraryContent-nonStackProduc=
+tName { word-break: break-all; display: block; overflow: hidden } }@media o=
+nly screen and (max-width: 480px) {.ArbitraryContent-productName { height: =
+50px } }@media only screen and (max-width: 480px) {.ArbitraryContent-salesC=
+opy { height: 40px } }@media only screen and (max-width: 480px) {.Arbitrary=
+Content-stars { height: 20px } }@media only screen and (max-width: 480px) {=
+.ArbitraryContent-nonStackProductName { height: 60px } }</style>
+ </head>
+ <body style=3D"padding:0 !important;margin:0 auto !important;width:100% !i=
+mportant;">
+  <table id=3D"Container" width=3D"640" align=3D"center" cellpadding=3D"0" =
+cellspacing=3D"0">
+   <tbody>
+    <tr id=3D"Row-0">
+     <td>
+      <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bord=
+er=3D"0" width=3D"100%">
+       <tbody>
+        <tr>
+         <td width=3D"100%" class=3D"u-PreviewLine" style=3D"max-height:0;f=
+ont-size:0;line-height:0;display:none;">EXTRA 10% OFF =E2=AD=90 APP-EXCLUSI=
+VE Labor Day deals!</td>
+        </tr>
+        <tr>
+         <td width=3D"100%" height=3D"1" style=3D"font-size: 1px;line-heigh=
+t: 1px; mso-line-height-rule: exactly; " id=3D"OpenPixel"><img width=3D"1" =
+height=3D"1" src=3D"https://t.wayfair.com/b.php?x=3Dc2x2YXJyZWN0eGlkPWMxNGE=
+0ZTFjLTQzZWEtNGM2My05OGIwLTgzYWVlNWMyM2JmZSZkY3JlY3R4aWQ9ODc1NDFlMDYtZDEwZS=
+00ZDRhLWIyNTMtNmI0ZmZkN2MyZDM4JmV2ZW50VHlwZT1FbWFpbE9wZW4mc291cmNlPWJhdGNoJ=
+mJhdGNoaWQ9MiZ2YXJpZD0xMiZjc25pZD03MmQ4OGI2Ni0xMTMyLTRlMTQtODE1Mi1jYjM2ZTg4=
+NTc0N2UmYnJjaWQ9MSZsYXlvdXR0ZW1wbGF0ZXJlY3R4aWQ9YzE0YTRlMWMtNDNlYS00YzYzLTk=
+4YjAtODNhZWU1YzIzYmZlJnNrdXJlY3R4aWQ9ZDJmYmU3YjQtZDhmNy00NTdhLWE5OTctYWEzYz=
+IwMTRkYjFjJmV2ZW50X3JlY190eGlkPTA1YTQyNjk1LWVkMjgtNDIzNy1hZTcxLWE5NzM2YjYwY=
+TllNCZyZWZpZD1NS1RFTUxfODYzNzEmZW1saWQ9MTAxJm1haWlkPTk2MjUmbWVzc2FnZUd1aWQ9=
+YzRkMGQ1YmMtMjQ1Yi00YTgyLThjYWUtNmQ3YjdiZDUxMmI4JnRlbXBsYXRlR3VpZD01OWU3YzI=
+0MS05MGQ1LTQ5ZWItOGY5ZC1kYTVlMzk3NGI3ZjEmc3RvcmVJZD00OQ%3D%3D"></td>
+        </tr>
+       </tbody>
+      </table></td>
+    </tr>
+   </tbody>
+   <tbody>
+    <tr id=3D"Row-1">
+     <td>
+      <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bord=
+er=3D"0" width=3D"100%" ?=3D"">
+          <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" =
+border=3D"0" width=3D"100%" dir=3D"" class=3D"">
+           <tbody>
+            <tr>
+             <td width=3D"100%" class=3D" " valign=3D"top" style=3D"padding=
+:0px 0px 0px 0px;" dir=3D"">
+              <table role=3D"presentation" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%">
+               <tbody>
+                <tr>
+                 <td class=3D"u-PreviewLineBuffer" style=3D"max-height:0;fo=
+nt-size:0;line-height:0;display:none;"> &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C </td>
+                </tr>
+                <tr>
+                 <td class=3D"ShipBar ShipBar-copy" style=3D"background-col=
+or:rgb(102, 37, 106);padding:6px;font-size:18px;font-family:sofia, arial, s=
+ans-serif;text-align:center;"><a href=3D"https://wayfairapp.onelink.me/2420=
+802157/AppPromoEmail?af_dp=3Dhttps://www.wayfair.com/daily-sales/extra-20-o=
+ff-in-app-only~e260720.html&amp;slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83ae=
+e5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp=
+;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D0955c37b-6d70-=
+4c63-bb6c-8fe71eda36aa&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&am=
+p;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemp=
+laterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b=
+4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-=
+a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=
+=3D9625" target=3D"_blank" class=3D"ShipBar-copyLink" style=3D"color:rgb(25=
+5, 255, 255);text-decoration:none;"> EXTRA 10% OFF=E2=80=A1 | LABOR DAY APP=
+ EARLY ACCESS =E2=86=92 </a></td>
+                </tr>
+                <tr>
+                 <td class=3D"u-P-T--3 u-P-B--3" align=3D"center" style=3D"=
+padding-top:12px;padding-bottom:12px;"><a href=3D"https://www.wayfair.com/?=
+slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245=
+b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-=
+b253-6b4ffd7c2d38&amp;_eml=3D8160a207-113d-4695-9518-2a1cc7a73f16&amp;sourc=
+e=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-815=
+2-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63=
+-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&am=
+p;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refi=
+d=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=
+=3D"text-decoration:none;"><img class=3D"u-HalfWidth" src=3D"https://secure=
+.img1-fg.wfcdn.com/im/73767274/compr-r85/1012/101201513/default_name.jpg" w=
+idth=3D"215" alt=3D"Wayfair" style=3D"border:none;display:block;"></a></td>
+                </tr>
+                <tr>
+                 <td class=3D"Header-navCell u-Center u-P-B--5" style=3D"co=
+lor:rgb(33, 30, 34);-webkit-text-size-adjust:none;font-size:18px;padding-bo=
+ttom:20px;mso-line-height-alt:120%;line-height:150%;font-family:sofia, aria=
+l, sans-serif;mso-line-height-rule:exactly;text-align:center;"><a href=3D"h=
+ttps://www.wayfair.com/furniture/cat/furniture-c45974.html?slvarrectxid=3Dc=
+14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b=
+7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d3=
+8&amp;_eml=3D8d63ba08-cd5c-47e4-b67a-cde03065b36b&amp;source=3Dbatch&amp;ba=
+tchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&a=
+mp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23b=
+fe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=
+=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371=
+&amp;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" class=3D"u-Color--base=
+" style=3D"color:rgb(33, 30, 34);text-decoration:none;"> Furniture </a>&nbs=
+p;|&nbsp;<a href=3D"https://www.wayfair.com/Decor-C45752.html?slvarrectxid=
+=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-=
+6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7=
+c2d38&amp;_eml=3D6145e075-a4df-4e62-aaf1-06d83bddfaab&amp;source=3Dbatch&am=
+p;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e88574=
+7e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5=
+c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_=
+txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_8=
+6371&amp;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" class=3D"u-Color--=
+base" style=3D"color:rgb(33, 30, 34);text-decoration:none;"> D=C3=A9cor </a=
+>&nbsp;|&nbsp;<a href=3D"https://www.wayfair.com/rugs/cat/rugs-c215385.html=
+?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-24=
+5b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a=
+-b253-6b4ffd7c2d38&amp;_eml=3D5613aea5-3b6a-4e71-b157-454d160955a5&amp;sour=
+ce=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-81=
+52-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c6=
+3-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&a=
+mp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;ref=
+id=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" class=
+=3D"u-Color--base" style=3D"color:rgb(33, 30, 34);text-decoration:none;"> R=
+ugs </a>&nbsp;|&nbsp;<a href=3D"https://www.wayfair.com/lighting/cat/lighti=
+ng-c215735.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_em=
+r=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D875=
+41e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3Db159c1e5-16af-4f06-b2a3-b0b161=
+ab0ada&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b=
+66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc1=
+4a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997=
+-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp=
+;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" target=
+=3D"_blank" class=3D"u-Color--base" style=3D"color:rgb(33, 30, 34);text-dec=
+oration:none;"> Lighting </a>&nbsp;|&nbsp;<a href=3D"https://www.wayfair.co=
+m/daily-sales?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=
+=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D8754=
+1e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D0619ced1-ae6f-4087-89b9-c4e4e8d=
+65c6f&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b6=
+6-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14=
+a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-=
+aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;=
+sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" target=3D=
+"_blank" class=3D"u-Color--sale" style=3D"color:rgb(196, 17, 63);text-decor=
+ation:none;"> Sale </a></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table></td>
+    </tr>
+   </tbody>
+   <tbody>
+    <tr id=3D"Row-2">
+     <td>
+      <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bord=
+er=3D"0" width=3D"100%" ?=3D"">
+          <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" =
+border=3D"0" width=3D"100%" dir=3D"" class=3D"">
+           <tbody>
+            <tr>
+             <td width=3D"100%" class=3D" " valign=3D"top" style=3D"padding=
+:0px 0px 0px 0px;" dir=3D""> <table id=3D"Container" width=3D"640" align=3D=
+"center" cellpadding=3D"0" cellspacing=3D"0">
+ <tbody>
+  <tr id=3D"Row-0">
+   <td>
+    <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" border=
+=3D"0" width=3D"100%" ?=3D"">
+        <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bo=
+rder=3D"0" width=3D"100%" dir=3D"" class=3D"">
+         <tbody>
+          <tr>
+           <td width=3D"100%" class=3D" " valign=3D"top" style=3D"padding:0=
+px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%">
+             <tbody>
+              <tr>
+               <td style=3D" padding:0px 0px 0px 0px;" class=3D" ">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D" " style=3D"" align=3D"right" valign=3D"top=
+"><a href=3D"https://www.wayfair.com/daily-sales?slvarrectxid=3Dc14a4e1c-43=
+ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&a=
+mp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3D306c8d07-7cfb-4788-bf41-4904fdbd4ac3&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://secure.img1-fg.wfcdn.com/im/98903023/compr-r85/1017/1=
+93871017/top_picks_banner_04_top.jpg" width=3D"640" class=3D"u-FullWidth" s=
+tyle=3D"border-radius:0px;border:none;display:block;" alt=3D""></a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>
+          </tr>
+         </tbody>
+        </table></td>
+      </tr>
+     </tbody>
+    </table></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr id=3D"Row-1">
+   <td>
+    <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" border=
+=3D"0" width=3D"100%" ?=3D"">
+        <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bo=
+rder=3D"0" width=3D"100%" dir=3D"" class=3D"">
+           =20
+         <tbody>
+          <tr class=3D"">
+             =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/mattre=
+sses-for-less-se35379.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23=
+bfe&amp;eid=3D322279&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wf=
+cs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D1e=
+ec0462-e3fc-488a-9ffd-a3d30a625145&amp;source=3Dbatch&amp;batchid=3D2&amp;v=
+arid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&am=
+p;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectx=
+id=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed2=
+8-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D10=
+1&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;"><img =
+src=3D"https://assets.wfcdn.com/im/13735031/c_crop_resize_zoom-h440-w640%5E=
+compr-r85/1234/123463402/Mattresses+for+Less.jpg" width=3D"296" class=3D"Ev=
+entBlock-img u-FullWidth" alt=3D"Mattresses for Less" style=3D"border-radiu=
+s:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/mattr=
+esses-for-less-se35379.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c2=
+3bfe&amp;eid=3D322279&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;w=
+fcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3Df=
+1855c25-794f-4a58-9ea9-b4b95f48970b&amp;source=3Dbatch&amp;batchid=3D2&amp;=
+varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&a=
+mp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurect=
+xid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed=
+28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D1=
+01&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34);text-=
+decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Mattresses for Less=
+&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-sal=
+e-now%3a-wall-art-se44415.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee=
+5c23bfe&amp;eid=3D343592&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&am=
+p;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3D1eec0462-e3fc-488a-9ffd-a3d30a625145&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://assets.wfcdn.com/im/88459593/c_crop_resize_zoom-h440-=
+w640%5Ecompr-r85/2308/230899918/On+Sale+Now%3A+Wall+Art.jpg" width=3D"296" =
+class=3D"EventBlock-img u-FullWidth" alt=3D"On Sale Now: Wall Art" style=3D=
+"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-sa=
+le-now%3a-wall-art-se44415.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83ae=
+e5c23bfe&amp;eid=3D343592&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&a=
+mp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3Df1855c25-794f-4a58-9ea9-b4b95f48970b&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34)=
+;text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> On Sale Now: =
+Wall Art&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+          </tr>
+          <tr class=3D"">
+            =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/wooden=
+-dining-chairs-you%27ll-love-se40429.html?slvarrectxid=3Dc14a4e1c-43ea-4c63=
+-98b0-83aee5c23bfe&amp;eid=3D330517&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b=
+7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d3=
+8&amp;_eml=3D1eec0462-e3fc-488a-9ffd-a3d30a625145&amp;source=3Dbatch&amp;ba=
+tchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&a=
+mp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23b=
+fe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=
+=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371=
+&amp;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decorati=
+on:none;"><img src=3D"https://assets.wfcdn.com/im/36233932/c_crop_resize_zo=
+om-h440-w640%5Ecompr-r85/2236/223638738/Wooden+Dining+Chairs+You%27ll+Love.=
+jpg" width=3D"296" class=3D"EventBlock-img u-FullWidth" alt=3D"Wooden Dinin=
+g Chairs You'll Love" style=3D"border-radius:8px;border:none;display:block;=
+"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/woode=
+n-dining-chairs-you%27ll-love-se40429.html?slvarrectxid=3Dc14a4e1c-43ea-4c6=
+3-98b0-83aee5c23bfe&amp;eid=3D330517&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7=
+b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d=
+38&amp;_eml=3Df1855c25-794f-4a58-9ea9-b4b95f48970b&amp;source=3Dbatch&amp;b=
+atchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&=
+amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23=
+bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txi=
+d=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_8637=
+1&amp;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33=
+, 30, 34);text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Wood=
+en Dining Chairs You'll Love&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/just-f=
+or-you%3a-ice-makers-se37091.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83=
+aee5c23bfe&amp;eid=3D325523&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8=
+&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_e=
+ml=3D1eec0462-e3fc-488a-9ffd-a3d30a625145&amp;source=3Dbatch&amp;batchid=3D=
+2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://assets.wfcdn.com/im/50074459/c_crop_resize_zoom-h440-=
+w640%5Ecompr-r85/8938/89381727/Just+for+You%3A+Ice+Makers.jpg" width=3D"296=
+" class=3D"EventBlock-img u-FullWidth" alt=3D"Just for You: Ice Makers" sty=
+le=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/just-=
+for-you%3a-ice-makers-se37091.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-8=
+3aee5c23bfe&amp;eid=3D325523&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b=
+8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_=
+eml=3Df1855c25-794f-4a58-9ea9-b4b95f48970b&amp;source=3Dbatch&amp;batchid=
+=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;br=
+cid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&am=
+p;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05=
+a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;=
+emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, =
+34);text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Just for Y=
+ou: Ice Makers&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td> =20
+          </tr>  =20
+         </tbody>
+        </table></td>
+      </tr>
+     </tbody>
+    </table></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr id=3D"Row-2">
+   <td> =20
+    <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" border=
+=3D"0" width=3D"100%" ?=3D"">
+        <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bo=
+rder=3D"0" width=3D"100%" dir=3D"" class=3D"">
+         <tbody>
+          <tr>
+           <td width=3D"100%" class=3D" " valign=3D"top" style=3D"padding:0=
+px 0px 0px 0px;" dir=3D"">              =20
+          </td></tr>
+         </tbody>
+        </table>
+        <table role=3D"presentation" width=3D"100%" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0">
+         <tbody>
+          <tr>
+           <td> <a target=3D"_blank" href=3D"https://www.wayfair.com/home-i=
+mprovement-projects~b129.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5=
+c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;d=
+crectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3De9056bc2-ff71-43=
+4c-8052-b4af27005115&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;=
+csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttempla=
+terectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-=
+d8f7-457a-a997-aa3c2014db1c&amp;dcvrid=3D127392&amp;event_rec_txid=3D05a426=
+95-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emli=
+d=3D101&amp;maiid=3D9625" aria-hidden=3D"true" style=3D"text-decoration:non=
+e;"><img src=3D"https://secure.img1-fg.wfcdn.com/dm/image/4c10c855-efb6-474=
+5-8e84-5d4cff41996e/bathroom_02.gif" width=3D"640" alt=3D"" class=3D"u-Full=
+Width" style=3D"border:none;display:block;"></a>                           =
+                                                     </td>
+          </tr>
+         </tbody>
+        </table>  </td>
+      </tr>
+     </tbody>
+    </table>  </td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr id=3D"Row-3">
+   <td>
+    <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" border=
+=3D"0" width=3D"100%" ?=3D"">
+        <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bo=
+rder=3D"0" width=3D"100%" dir=3D"" class=3D"">
+           =20
+         <tbody>
+          <tr class=3D"">
+             =20
+           <td width=3D"100%" class=3D" " valign=3D"top" style=3D"padding:0=
+px 0px 0px 0px;" dir=3D"">             =20
+          </td></tr>
+         </tbody>
+        </table>
+        <table role=3D"presentation" width=3D"100%" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0">
+         <tbody>
+          <tr>
+           <td> <a target=3D"_blank" href=3D"https://www.wayfair.com/decor-=
+pillows/sb0/live-plants-c1874098.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b=
+0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dc=
+s9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3Df321638d=
+-530f-4511-aa85-d2e1c6335206&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=
+=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;la=
+youttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=
+=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;dcvrid=3D134433&amp;event_rec_t=
+xid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86=
+371&amp;emlid=3D101&amp;maiid=3D9625" aria-hidden=3D"true" style=3D"text-de=
+coration:none;"><img src=3D"https://secure.img1-fg.wfcdn.com/dm/image/7b274=
+cdb-4184-438e-9a0b-da2740c2c0c9/gtkg_minibahn_summer_08.jpg" width=3D"640" =
+alt=3D"" class=3D"u-FullWidth" style=3D"border:none;display:block;"></a>   =
+                                                                           =
+  </td>
+          </tr>
+         </tbody>
+        </table></td> =20
+      </tr>  =20
+     </tbody>
+    </table></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr id=3D"Row-4">
+   <td>
+    <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" border=
+=3D"0" width=3D"100%" ?=3D"">
+        <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bo=
+rder=3D"0" width=3D"100%" dir=3D"" class=3D"">
+           =20
+         <tbody>
+          <tr class=3D"">
+             =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-sal=
+e-now%3a-sheds-se60456.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c2=
+3bfe&amp;eid=3D376356&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;w=
+fcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3Df=
+c9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D2&amp;=
+varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&a=
+mp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurect=
+xid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed=
+28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D1=
+01&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;"><img=
+ src=3D"https://assets.wfcdn.com/im/03326106/c_crop_resize_zoom-h440-w640%5=
+Ecompr-r85/2194/219429748/On+Sale+Now%3A+Sheds.jpg" width=3D"296" class=3D"=
+EventBlock-img u-FullWidth" alt=3D"On Sale Now: Sheds" style=3D"border-radi=
+us:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-sa=
+le-now%3a-sheds-se60456.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c=
+23bfe&amp;eid=3D376356&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;=
+wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D=
+97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=3D2&amp=
+;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&=
+amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurec=
+txid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-e=
+d28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D=
+101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34);text=
+-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> On Sale Now: Sheds=
+&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/slipco=
+vers-from-%2425-se18918.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c=
+23bfe&amp;eid=3D231425&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;=
+wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D=
+fc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D2&amp=
+;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&=
+amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurec=
+txid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-e=
+d28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D=
+101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;"><im=
+g src=3D"https://assets.wfcdn.com/im/06767678/c_crop_resize_zoom-h440-w640%=
+5Ecompr-r85/7067/70675102/Slipcovers+From+%2425.jpg" width=3D"296" class=3D=
+"EventBlock-img u-FullWidth" alt=3D"Slipcovers From $25" style=3D"border-ra=
+dius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/slipc=
+overs-from-%2425-se18918.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5=
+c23bfe&amp;eid=3D231425&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp=
+;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34)=
+;text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Slipcovers Fr=
+om $25&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+          </tr>
+          <tr class=3D"">
+            =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-sal=
+e-now%3a-mattresses-se60386.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83a=
+ee5c23bfe&amp;eid=3D375569&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&=
+amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_em=
+l=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D2=
+&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://assets.wfcdn.com/im/26540857/c_crop_resize_zoom-h440-=
+w640%5Ecompr-r85/2063/206378522/On+Sale+Now%3A+Mattresses.jpg" width=3D"296=
+" class=3D"EventBlock-img u-FullWidth" alt=3D"On Sale Now: Mattresses" styl=
+e=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-sa=
+le-now%3a-mattresses-se60386.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83=
+aee5c23bfe&amp;eid=3D375569&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8=
+&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_e=
+ml=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=3D=
+2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34)=
+;text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> On Sale Now: =
+Mattresses&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/top-ra=
+ted-kitchen-mats-se26540.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5=
+c23bfe&amp;eid=3D284239&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp=
+;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://assets.wfcdn.com/im/07198750/c_crop_resize_zoom-h440-=
+w640%5Ecompr-r85/1317/131778391/Top-Rated+Kitchen+Mats.jpg" width=3D"296" c=
+lass=3D"EventBlock-img u-FullWidth" alt=3D"Top-Rated Kitchen Mats" style=3D=
+"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/top-r=
+ated-kitchen-mats-se26540.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee=
+5c23bfe&amp;eid=3D284239&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&am=
+p;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34)=
+;text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Top-Rated Kit=
+chen Mats&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+          </tr>
+          <tr class=3D"">
+            =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/just-f=
+or-you%3a-shoe-storage-se36597.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-=
+83aee5c23bfe&amp;eid=3D324830&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512=
+b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;=
+_eml=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=
+=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;br=
+cid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&am=
+p;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05=
+a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;=
+emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:no=
+ne;"><img src=3D"https://assets.wfcdn.com/im/10465677/c_crop_resize_zoom-h4=
+40-w640%5Ecompr-r85/1853/185345421/Just+for+You%3A+Shoe+Storage.jpg" width=
+=3D"296" class=3D"EventBlock-img u-FullWidth" alt=3D"Just for You: Shoe Sto=
+rage" style=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/just-=
+for-you%3a-shoe-storage-se36597.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0=
+-83aee5c23bfe&amp;eid=3D324830&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd51=
+2b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp=
+;_eml=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=
+=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;br=
+cid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&am=
+p;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05=
+a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;=
+emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, =
+34);text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Just for Y=
+ou: Shoe Storage&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/top-an=
+ti-fatigue-kitchen-mats-se27239.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0=
+-83aee5c23bfe&amp;eid=3D286495&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd51=
+2b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp=
+;_eml=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=
+=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;br=
+cid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&am=
+p;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05=
+a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;=
+emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:no=
+ne;"><img src=3D"https://assets.wfcdn.com/im/06773327/c_crop_resize_zoom-h4=
+40-w640%5Ecompr-r85/1982/198259005/Top+Anti-Fatigue+Kitchen+Mats.jpg" width=
+=3D"296" class=3D"EventBlock-img u-FullWidth" alt=3D"Top Anti-Fatigue Kitch=
+en Mats" style=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/top-a=
+nti-fatigue-kitchen-mats-se27239.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b=
+0-83aee5c23bfe&amp;eid=3D286495&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd5=
+12b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&am=
+p;_eml=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchi=
+d=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;b=
+rcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&a=
+mp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D0=
+5a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp=
+;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30,=
+ 34);text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Top Anti-=
+Fatigue Kitchen Mats&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+          </tr>
+          <tr class=3D"">
+            =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-sal=
+e-now%3a-tv-stands-se44420.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83ae=
+e5c23bfe&amp;eid=3D343597&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&a=
+mp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://assets.wfcdn.com/im/27223163/c_crop_resize_zoom-h440-=
+w640%5Ecompr-r85/2236/223638283/On+Sale+Now%3A+TV+Stands.jpg" width=3D"296"=
+ class=3D"EventBlock-img u-FullWidth" alt=3D"On Sale Now: TV Stands" style=
+=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-sa=
+le-now%3a-tv-stands-se44420.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83a=
+ee5c23bfe&amp;eid=3D343597&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&=
+amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_em=
+l=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=3D2=
+&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34)=
+;text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> On Sale Now: =
+TV Stands&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/just-f=
+or-you%3a-slipcovers-se18917.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83=
+aee5c23bfe&amp;eid=3D231424&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8=
+&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_e=
+ml=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D=
+2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://assets.wfcdn.com/im/86812972/c_crop_resize_zoom-h440-=
+w640%5Ecompr-r85/1360/136020075/Just+for+You%3A+Slipcovers.jpg" width=3D"29=
+6" class=3D"EventBlock-img u-FullWidth" alt=3D"Just for You: Slipcovers" st=
+yle=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/just-=
+for-you%3a-slipcovers-se18917.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-8=
+3aee5c23bfe&amp;eid=3D231424&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b=
+8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_=
+eml=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=
+=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;br=
+cid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&am=
+p;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05=
+a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;=
+emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, =
+34);text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Just for Y=
+ou: Slipcovers&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+          </tr>
+          <tr class=3D"">
+            =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/our-be=
+st-wall-art-deals-se59171.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee=
+5c23bfe&amp;eid=3D372039&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&am=
+p;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://assets.wfcdn.com/im/49177750/c_crop_resize_zoom-h440-=
+w640%5Ecompr-r85/2531/253176149/Our+Best+Wall+Art+Deals.jpg" width=3D"296" =
+class=3D"EventBlock-img u-FullWidth" alt=3D"Our Best Wall Art Deals" style=
+=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/our-b=
+est-wall-art-deals-se59171.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83ae=
+e5c23bfe&amp;eid=3D372039&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&a=
+mp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34)=
+;text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Our Best Wall=
+ Art Deals&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/our-fa=
+vorite-bathroom-faucets-se20380.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0=
+-83aee5c23bfe&amp;eid=3D246194&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd51=
+2b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp=
+;_eml=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=
+=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;br=
+cid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&am=
+p;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05=
+a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;=
+emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:no=
+ne;"><img src=3D"https://assets.wfcdn.com/im/48140245/c_crop_resize_zoom-h4=
+40-w640%5Ecompr-r85/1546/154632682/Our+Favorite+Bathroom+Faucets.jpg" width=
+=3D"296" class=3D"EventBlock-img u-FullWidth" alt=3D"Our Favorite Bathroom =
+Faucets" style=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/our-f=
+avorite-bathroom-faucets-se20380.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b=
+0-83aee5c23bfe&amp;eid=3D246194&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd5=
+12b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&am=
+p;_eml=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchi=
+d=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;b=
+rcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&a=
+mp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D0=
+5a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp=
+;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30,=
+ 34);text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Our Favor=
+ite Bathroom Faucets&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+          </tr>
+          <tr class=3D"">
+            =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-bud=
+get-firewood-racks-se33953.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83ae=
+e5c23bfe&amp;eid=3D316334&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&a=
+mp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://assets.wfcdn.com/im/22690381/c_crop_resize_zoom-h440-=
+w640%5Ecompr-r85/6927/69275110/On-Budget+Firewood+Racks.jpg" width=3D"296" =
+class=3D"EventBlock-img u-FullWidth" alt=3D"On-Budget Firewood Racks" style=
+=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/on-bu=
+dget-firewood-racks-se33953.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83a=
+ee5c23bfe&amp;eid=3D316334&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&=
+amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_em=
+l=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=3D2=
+&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34)=
+;text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> On-Budget Fir=
+ewood Racks&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/dart-b=
+oards-for-less-se28234.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c2=
+3bfe&amp;eid=3D293484&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;w=
+fcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3Df=
+c9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D2&amp;=
+varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&a=
+mp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurect=
+xid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed=
+28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D1=
+01&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;"><img=
+ src=3D"https://assets.wfcdn.com/im/54677983/c_crop_resize_zoom-h440-w640%5=
+Ecompr-r85/8598/85986285/Dart+Boards+for+Less.jpg" width=3D"296" class=3D"E=
+ventBlock-img u-FullWidth" alt=3D"Dart Boards for Less" style=3D"border-rad=
+ius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/dart-=
+boards-for-less-se28234.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c=
+23bfe&amp;eid=3D293484&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;=
+wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D=
+97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=3D2&amp=
+;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&=
+amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurec=
+txid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-e=
+d28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D=
+101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34);text=
+-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Dart Boards for Le=
+ss&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+          </tr>
+          <tr class=3D"">
+            =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/just-f=
+or-you%3a-tv-stands-se17424.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83a=
+ee5c23bfe&amp;eid=3D223420&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&=
+amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_em=
+l=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=3D2=
+&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:none;=
+"><img src=3D"https://assets.wfcdn.com/im/00931287/c_crop_resize_zoom-h440-=
+w640%5Ecompr-r85/2059/205985105/Just+for+You%3A+TV+Stands.jpg" width=3D"296=
+" class=3D"EventBlock-img u-FullWidth" alt=3D"Just for You: TV Stands" styl=
+e=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/just-=
+for-you%3a-tv-stands-se17424.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83=
+aee5c23bfe&amp;eid=3D223420&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8=
+&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_e=
+ml=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchid=3D=
+2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30, 34)=
+;text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Just for You:=
+ TV Stands&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td>    =20
+           <td width=3D"50%" class=3D"u-FullWidthBlock " valign=3D"top" sty=
+le=3D"padding:0px 0px 0px 0px;" dir=3D"">
+            <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" class=3D"u-FullWidth">
+             <tbody>
+              <tr>
+               <td class=3D" " style=3D"padding:12px 12px 12px 12px;">
+                <table role=3D"presentation" cellpadding=3D"0" cellspacing=
+=3D"0" border=3D"0" width=3D"100%">
+                 <tbody>
+                  <tr>
+                   <td class=3D"u-P-B--1" align=3D"center" style=3D"padding=
+-bottom:4px;"><a href=3D"https://www.wayfair.com/daily-sales/filters/dinner=
+ware-sets-you%27ll-love-se38231.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0=
+-83aee5c23bfe&amp;eid=3D327149&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd51=
+2b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp=
+;_eml=3Dfc9a7271-7b0b-4033-96c5-5bee1cb279c0&amp;source=3Dbatch&amp;batchid=
+=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;br=
+cid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&am=
+p;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05=
+a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;=
+emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decoration:no=
+ne;"><img src=3D"https://assets.wfcdn.com/im/59759328/c_crop_resize_zoom-h4=
+40-w640%5Ecompr-r85/1287/128796717/Dinnerware+Sets+You%27ll+Love.jpg" width=
+=3D"296" class=3D"EventBlock-img u-FullWidth" alt=3D"Dinnerware Sets You'll=
+ Love" style=3D"border-radius:8px;border:none;display:block;"></a></td>
+                  </tr>
+                  <tr>
+                   <td class=3D"EventBlock-name" valign=3D"top" style=3D"co=
+lor:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;mso-line-height-alt:=
+120%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-=
+rule:exactly;"><a href=3D"https://www.wayfair.com/daily-sales/filters/dinne=
+rware-sets-you%27ll-love-se38231.html?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b=
+0-83aee5c23bfe&amp;eid=3D327149&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd5=
+12b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&am=
+p;_eml=3D97114ee4-3b0a-4c0e-8b06-c9cbf215b993&amp;source=3Dbatch&amp;batchi=
+d=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;b=
+rcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&a=
+mp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D0=
+5a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp=
+;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"color:rgb(33, 30,=
+ 34);text-decoration:none;" class=3D" hb-text-wayfair-blacks-80"> Dinnerwar=
+e Sets You'll Love&nbsp;=C2=BB </a></td>
+                  </tr>
+                 </tbody>
+                </table></td>
+              </tr>
+             </tbody>
+            </table></td> =20
+          </tr>  =20
+         </tbody>
+        </table></td>
+      </tr>
+     </tbody>
+    </table></td>
+  </tr>
+ </tbody>
+ <tbody>
+  <tr id=3D"Row-5">
+   <td><span></span></td>
+  </tr>
+ </tbody>
+</table> </td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table></td>
+    </tr>
+   </tbody>
+   <tbody>
+    <tr id=3D"Row-3">
+     <td>
+      <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bord=
+er=3D"0" width=3D"100%" ?=3D"">
+          <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" =
+border=3D"0" width=3D"100%" dir=3D"" class=3D"">
+           <tbody>
+            <tr>
+             <td width=3D"100%" class=3D" " valign=3D"top" style=3D"padding=
+:0px 0px 0px 0px;" dir=3D"">
+              <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D=
+"0" border=3D"0" width=3D"100%">
+               <tbody>
+                <tr>
+                 <td width=3D"100%" style=3D"padding:0px 0px 0px 0px;" clas=
+s=3D" ">
+                  <table role=3D"presentation" cellpadding=3D"0" cellspacin=
+g=3D"0" border=3D"0" width=3D"100%">
+                   <tbody>
+                    <tr>
+                     <td width=3D"auto" style=3D"" align=3D"right" valign=
+=3D"top" class=3D" "><a href=3D"https://wayfairapp.onelink.me/2420802157/Ap=
+pPromoEmail?af_dp=3Dhttps://www.wayfair.com/daily-sales/labor-day-early-acc=
+ess-deals-in-app~e262080.html&amp;slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83=
+aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&a=
+mp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D1ab5116e-3c7=
+5-46fc-ad2e-e2b053444e61&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&=
+amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layoutte=
+mplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe=
+7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae7=
+1-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maii=
+d=3D9625" style=3D"text-decoration:none;"><img src=3D"https://secure.img1-f=
+g.wfcdn.com/dm/image/32f636f1-16ea-48d9-9dae-9316af052092/wfna_0829_laborda=
+yclearance_2023_wfus_email_skinny_appearlyaccess.jpg" width=3D"640" style=
+=3D"border-radius:0px;border:none;display:block;" class=3D"u-FullWidth u-Fu=
+llWidth" alt=3D""></a></td>
+                    </tr>
+                   </tbody>
+                  </table></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table></td>
+    </tr>
+   </tbody>
+   <tbody>
+    <tr id=3D"Row-4">
+     <td>
+      <table width=3D"100%" align=3D"center" cellpadding=3D"0" cellspacing=
+=3D"0">
+       <tbody>
+        <tr id=3D"Row-0">
+         <td>
+          <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" =
+border=3D"0" width=3D"100%" ?=3D"">
+              <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D=
+"0" border=3D"0" width=3D"100%" dir=3D"" class=3D"">
+               <tbody>
+                <tr>
+                 <td width=3D"50%" class=3D" " valign=3D"top" style=3D"padd=
+ing:0px 0px 0px 0px;" dir=3D"">
+                  <table role=3D"presentation" cellpadding=3D"0" cellspacin=
+g=3D"0" border=3D"0" width=3D"100%">
+                   <tbody>
+                    <tr>
+                     <td style=3D" padding:0px 0px 0px 0px;" class=3D" ">
+                      <table role=3D"presentation" cellpadding=3D"0" cellsp=
+acing=3D"0" border=3D"0" width=3D"100%">
+                       <tbody>
+                        <tr>
+                         <td class=3D" " style=3D"" align=3D"right" valign=
+=3D"top"><a href=3D"https://t.wf1.wfrlh.com/rt?slvarrectxid=3Dc14a4e1c-43ea=
+-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp=
+;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3Dba12a36c-f2c8-4973-b8e4-cecf92f9d0c3&amp;eventType=3DEmailClickRedirect&=
+amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132=
+-4e14-8152-cb36e885747e&amp;r=3Dhttps%3A%2F%2Fforms.gle%2F4N8AkJ9AVTCkc1uH6=
+&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c2=
+3bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_tx=
+id=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_863=
+71&amp;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decora=
+tion:none;"><img src=3D"https://secure.img1-fg.wfcdn.com/dm/image/125991cd-=
+e6d5-49f4-8c9b-4c8dbf061cdb/new_markdowns_high_intent_10_static.jpg" width=
+=3D"320" class=3D"u-FullWidth" style=3D"border-radius:0px;border:none;displ=
+ay:block;" alt=3D""></a></td>
+                        </tr>
+                       </tbody>
+                      </table></td>
+                    </tr>
+                   </tbody>
+                  </table></td>
+                 <td width=3D"50%" class=3D" " valign=3D"top" style=3D"padd=
+ing:0px 0px 0px 0px;" dir=3D"">
+                  <table role=3D"presentation" cellpadding=3D"0" cellspacin=
+g=3D"0" border=3D"0" width=3D"100%">
+                   <tbody>
+                    <tr>
+                     <td style=3D" padding:0px 0px 0px 0px;" class=3D" ">
+                      <table role=3D"presentation" cellpadding=3D"0" cellsp=
+acing=3D"0" border=3D"0" width=3D"100%">
+                       <tbody>
+                        <tr>
+                         <td class=3D" " style=3D"" align=3D"right" valign=
+=3D"top"><a href=3D"https://t.wf1.wfrlh.com/rt?slvarrectxid=3Dc14a4e1c-43ea=
+-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp=
+;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3D5aadff76-8618-4285-b635-d71aa6fcd847&amp;eventType=3DEmailClickRedirect&=
+amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132=
+-4e14-8152-cb36e885747e&amp;r=3Dhttps%3A%2F%2Fforms.gle%2F1h4M6J53xgtuuUmN9=
+&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c2=
+3bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_tx=
+id=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_863=
+71&amp;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" style=3D"text-decora=
+tion:none;"><img src=3D"https://secure.img1-fg.wfcdn.com/dm/image/e4fb0b51-=
+5fc7-43fc-9fe8-ba735f6e3dc5/new_markdowns_high_intent_11_static.jpg" width=
+=3D"320" class=3D"u-FullWidth" style=3D"border-radius:0px;border:none;displ=
+ay:block;" alt=3D""></a></td>
+                        </tr>
+                       </tbody>
+                      </table></td>
+                    </tr>
+                   </tbody>
+                  </table></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+       <tbody>
+        <tr id=3D"Row-1">
+         <td><span></span></td>
+        </tr>
+       </tbody>
+      </table></td>
+    </tr>
+   </tbody>
+   <tbody>
+    <tr id=3D"Row-5">
+     <td>
+      <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bord=
+er=3D"0" width=3D"100%" ?=3D"">
+          <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" =
+border=3D"0" width=3D"100%" dir=3D"" class=3D"">
+           <tbody>
+            <tr>
+             <td width=3D"100%" class=3D" " valign=3D"top" style=3D"padding=
+:0px 0px 0px 0px;" dir=3D"">
+              <table role=3D"presentation" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" class=3D"u-FullWidth" width=3D"100%">
+               <tbody>
+                <tr>
+                 <td>
+                  <table role=3D"presentation" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" width=3D"100%">
+                    =20
+                   <tbody>
+                    <tr>
+                     <td class=3D"FooterMarketing" style=3D"border-top:soli=
+d 1px rgb(209, 209, 214);padding:20px 0;">
+                      <table role=3D"presentation" cellpadding=3D"0" cellsp=
+acing=3D"0" border=3D"0" width=3D"100%">
+                       <tbody>
+                        <tr>
+                         <td class=3D"FooterMarketing-block" width=3D"49%" =
+valign=3D"top" style=3D"border-radius:8px;background-color:rgb(245, 245, 24=
+5);padding:16px;">
+                          <table role=3D"presentation" cellpadding=3D"0" ce=
+llspacing=3D"0" border=3D"0" width=3D"100%">
+                           <tbody>
+                            <tr>
+                             <td align=3D"center" valign=3D"top" height=3D"=
+65"><a href=3D"https://www.wayfair.com/v/business_account/application/pico?=
+slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245=
+b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-=
+b253-6b4ffd7c2d38&amp;_eml=3D8f24f0b4-b070-4bf4-9bdd-795d2147a8ce&amp;sourc=
+e=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-815=
+2-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63=
+-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&am=
+p;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refi=
+d=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" aria-hidden=3D"true" sty=
+le=3D"text-decoration:none;"><img src=3D"https://secure.img1-ag.wfcdn.com/i=
+m/25028134/compr-r85/1169/116988926/default_name.png" alt=3D"" width=3D"50"=
+ style=3D"border:none;display:block;"></a></td>
+                            </tr>
+                            <tr>
+                             <td class=3D"u-Copy u-Center" style=3D"color:r=
+gb(33, 30, 34);font-size:18px;mso-line-height-alt:120%;line-height:150%;fon=
+t-family:sofia, arial, sans-serif;mso-line-height-rule:exactly;text-align:c=
+enter;"><a href=3D"https://www.wayfair.com/v/business_account/application/p=
+ico?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc=
+-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4=
+d4a-b253-6b4ffd7c2d38&amp;_eml=3D47abc1d0-f48c-4952-9cc7-a77c47a061ce&amp;s=
+ource=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14=
+-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-=
+4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1=
+c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;=
+refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" class=3D"u-Color--ba=
+se" style=3D"color:rgb(33, 30, 34);text-decoration:none;"> Wayfair Professi=
+onal&nbsp;=C2=BB </a></td>
+                            </tr>
+                           </tbody>
+                          </table></td>
+                         <td width=3D"2%">&nbsp;</td>
+                         <td class=3D"FooterMarketing-block" width=3D"49%" =
+valign=3D"top" style=3D"border-radius:8px;background-color:rgb(245, 245, 24=
+5);padding:16px;">
+                          <table role=3D"presentation" cellpadding=3D"0" ce=
+llspacing=3D"0" border=3D"0" width=3D"100%">
+                           <tbody>
+                            <tr>
+                             <td align=3D"center" valign=3D"top" height=3D"=
+65"><a href=3D"https://www.wayfair.com/wayfaircard?slvarrectxid=3Dc14a4e1c-=
+43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8=
+&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_e=
+ml=3D1715ced4-6f9e-4bee-bf32-bd9e6d2fd0df&amp;source=3Dbatch&amp;batchid=3D=
+2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" aria-hidden=3D"true" style=3D"text-decoration:no=
+ne;"><img src=3D"https://secure.img1-ag.wfcdn.com/im/09022356/compr-r85/100=
+6/100674402/default_name.png" alt=3D"" width=3D"70" style=3D"border:none;di=
+splay:block;"></a></td>
+                            </tr>
+                            <tr>
+                             <td class=3D"u-Copy u-Center" style=3D"color:r=
+gb(33, 30, 34);font-size:18px;mso-line-height-alt:120%;line-height:150%;fon=
+t-family:sofia, arial, sans-serif;mso-line-height-rule:exactly;text-align:c=
+enter;"><a href=3D"https://www.wayfair.com/wayfaircard?slvarrectxid=3Dc14a4=
+e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd5=
+12b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&am=
+p;_eml=3D8ae48a75-adee-4f30-b61b-e77da6353d3a&amp;source=3Dbatch&amp;batchi=
+d=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;b=
+rcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&a=
+mp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D0=
+5a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp=
+;emlid=3D101&amp;maiid=3D9625" class=3D"u-Color--base" style=3D"color:rgb(3=
+3, 30, 34);text-decoration:none;"> Wayfair Credit Card&nbsp;=C2=BB </a></td=
+>
+                            </tr>
+                           </tbody>
+                          </table></td>
+                        </tr>
+                        <tr>
+                         <td class=3D"FooterMarketing-rowGutter" colspan=3D=
+"2" style=3D"font-size:1px;line-height:1px;height:10px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                         <td class=3D"FooterMarketing-block" width=3D"49%" =
+valign=3D"top" style=3D"border-radius:8px;background-color:rgb(245, 245, 24=
+5);padding:16px;">
+                          <table role=3D"presentation" cellpadding=3D"0" ce=
+llspacing=3D"0" border=3D"0" width=3D"100%">
+                           <tbody>
+                            <tr>
+                             <td align=3D"center" valign=3D"top" height=3D"=
+65"><a href=3D"https://www.wayfair.com/giftcards?slvarrectxid=3Dc14a4e1c-43=
+ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&a=
+mp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=
+=3Dbcbb22f7-b72e-4f4c-b455-ca7948f587ce&amp;source=3Dbatch&amp;batchid=3D2&=
+amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625" aria-hidden=3D"true" style=3D"text-decoration:no=
+ne;"><img src=3D"https://secure.img1-ag.wfcdn.com/im/04333550/compr-r85/116=
+7/116787079/default_name.png" alt=3D"" width=3D"50" style=3D"border:none;di=
+splay:block;"></a></td>
+                            </tr>
+                            <tr>
+                             <td class=3D"u-Copy u-Center" style=3D"color:r=
+gb(33, 30, 34);font-size:18px;mso-line-height-alt:120%;line-height:150%;fon=
+t-family:sofia, arial, sans-serif;mso-line-height-rule:exactly;text-align:c=
+enter;"><a href=3D"https://www.wayfair.com/giftcards?slvarrectxid=3Dc14a4e1=
+c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512=
+b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;=
+_eml=3D38705260-31cd-41ee-8172-506f76123735&amp;source=3Dbatch&amp;batchid=
+=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;br=
+cid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&am=
+p;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05=
+a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;=
+emlid=3D101&amp;maiid=3D9625" class=3D"u-Color--base" style=3D"color:rgb(33=
+, 30, 34);text-decoration:none;"> Gift Cards&nbsp;=C2=BB </a></td>
+                            </tr>
+                           </tbody>
+                          </table></td>
+                         <td width=3D"2%">&nbsp;</td>
+                         <td class=3D"FooterMarketing-block" width=3D"49%" =
+valign=3D"top" style=3D"border-radius:8px;background-color:rgb(245, 245, 24=
+5);padding:16px;">
+                          <table role=3D"presentation" cellpadding=3D"0" ce=
+llspacing=3D"0" border=3D"0" width=3D"100%">
+                           <tbody>
+                            <tr>
+                             <td align=3D"center" valign=3D"top" height=3D"=
+65"><a href=3D"https://www.wayfair.com/brand/bbb/browse-our-shops?slvarrect=
+xid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8c=
+ae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4f=
+fd7c2d38&amp;_eml=3D399e982e-84b2-4ee2-b0f2-6aa44f1bacb1&amp;source=3Dbatch=
+&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e88=
+5747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83a=
+ee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_r=
+ec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEM=
+L_86371&amp;emlid=3D101&amp;maiid=3D9625" aria-hidden=3D"true" style=3D"tex=
+t-decoration:none;"><img src=3D"https://secure.img1-ag.wfcdn.com/im/8456281=
+9/compr-r85/1345/134509890/default_name.png" alt=3D"" width=3D"60" style=3D=
+"border:none;display:block;"></a></td>
+                            </tr>
+                            <tr>
+                             <td class=3D"u-Copy u-Center" style=3D"color:r=
+gb(33, 30, 34);font-size:18px;mso-line-height-alt:120%;line-height:150%;fon=
+t-family:sofia, arial, sans-serif;mso-line-height-rule:exactly;text-align:c=
+enter;"><a href=3D"https://www.wayfair.com/brand/bbb/browse-our-shops?slvar=
+rectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a8=
+2-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-=
+6b4ffd7c2d38&amp;_eml=3Da798e0b0-1707-4455-a454-55b4b77a1543&amp;source=3Db=
+atch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb3=
+6e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0=
+-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;eve=
+nt_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DM=
+KTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" class=3D"u-Color--base" style=
+=3D"color:rgb(33, 30, 34);text-decoration:none;"> Wayfair Exclusive Brands&=
+nbsp;=C2=BB </a></td>
+                            </tr>
+                           </tbody>
+                          </table></td>
+                        </tr>
+                       </tbody>
+                      </table></td>
+                    </tr>
+                    <tr>
+                     <td class=3D"u-Copy u-Center" style=3D"color:rgb(33, 3=
+0, 34);font-size:18px;mso-line-height-alt:120%;line-height:150%;font-family=
+:sofia, arial, sans-serif;mso-line-height-rule:exactly;text-align:center;">=
+ Download the Wayfair App </td>
+                    </tr>
+                    <tr>
+                     <td class=3D"FooterApps-icons" align=3D"center" style=
+=3D"padding:12px 12px 20px;"><a href=3D"https://wayfairapp.onelink.me/24208=
+02157?af_dp=3Dwayfairapp%3A%2F%2Fhome&amp;slvarrectxid=3Dc14a4e1c-43ea-4c63=
+-98b0-83aee5c23bfe&amp;c=3DTriggered&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7=
+b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d=
+38&amp;_eml=3D37c3f23d-d180-45a2-a583-e29285bf47d2&amp;pid=3DEmail&amp;sour=
+ce=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-81=
+52-cb36e885747e&amp;af_web_dp=3Dhttp%3A%2F%2Fwww.wayfair.com%2Fthe-wayfair-=
+app&amp;af_sub5=3DAppEmail&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e=
+1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3=
+c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=
+=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" style=3D"te=
+xt-decoration:none;"><img class=3D"FooterApps-iconImg u-InlineBlock" src=3D=
+"https://secure.img.wfrcdn.com/st4/stores/common/emails/assets/footer/app_a=
+ndroid.png" width=3D"196" alt=3D"Android App" style=3D"border:none;display:=
+inline-block;"></a> &nbsp;&nbsp;&nbsp;&nbsp; <a href=3D"https://wayfairapp.=
+onelink.me/2420802157?af_dp=3Dwayfairapp%3A%2F%2Fhome&amp;slvarrectxid=3Dc1=
+4a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;c=3DTriggered&amp;_emr=3Dc4d0d5bc-24=
+5b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a=
+-b253-6b4ffd7c2d38&amp;_eml=3D1dd749cb-d088-49c7-9cff-afbd6323d314&amp;pid=
+=3DEmail&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d8=
+8b66-1132-4e14-8152-cb36e885747e&amp;af_web_dp=3Dhttp%3A%2F%2Fwww.wayfair.c=
+om%2Fthe-wayfair-app&amp;af_sub5=3DAppEmail&amp;brcid=3D1&amp;layouttemplat=
+erectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d=
+8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a97=
+36b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9=
+625" style=3D"text-decoration:none;"><img class=3D"FooterApps-iconImg u-Inl=
+ineBlock" src=3D"https://secure.img.wfrcdn.com/st4/stores/common/emails/ass=
+ets/footer/app_ios.png" width=3D"199" alt=3D"iOS App" style=3D"border:none;=
+display:inline-block;"></a></td>
+                    </tr>
+                    <tr>
+                     <td class=3D"u-P-B--4" style=3D"padding-bottom:16px;">
+                      <table role=3D"presentation" cellpadding=3D"0" cellsp=
+acing=3D"0" border=3D"0" width=3D"100%">
+                       <tbody>
+                        <tr>
+                         <td class=3D"FooterSocial-block" align=3D"center" =
+style=3D"border-radius:8px;background-color:rgb(245, 245, 245);padding:20px=
+;">
+                          <table role=3D"presentation" cellpadding=3D"0" ce=
+llspacing=3D"0" border=3D"0" width=3D"60%" class=3D"u-FullWidth">
+                           <tbody>
+                            <tr>
+                             <td colspan=3D"4" class=3D"u-Copy u-Center u-P=
+-B--5" style=3D"color:rgb(33, 30, 34);font-size:18px;padding-bottom:20px;ms=
+o-line-height-alt:120%;line-height:150%;font-family:sofia, arial, sans-seri=
+f;mso-line-height-rule:exactly;text-align:center;"> Share Your Style Using =
+#noplacelikeit </td>
+                            </tr>
+                            <tr>
+                             <td align=3D"center" class=3D"u-P-L--2 u-P-R--=
+2" style=3D"padding-left:8px;padding-right:8px;"><a href=3D"https://t.wf1.w=
+frlh.com/rt?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3D=
+c4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e0=
+6-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D27258af3-0f43-4048-979d-fb92597ffd=
+42&amp;eventType=3DEmailClickRedirect&amp;source=3Dbatch&amp;batchid=3D2&am=
+p;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;r=3Dhttps=
+%3A%2F%2Finstagram.com%2Fwayfair&amp;brcid=3D1&amp;layouttemplaterectxid=3D=
+c14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a9=
+97-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&a=
+mp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" style=
+=3D"text-decoration:none;"><img src=3D"https://secure.img1-ag.wfcdn.com/im/=
+52577457/compr-r85/1167/116787089/default_name.png" width=3D"40" alt=3D"Ins=
+tagram" style=3D"border:none;display:block;"></a></td>
+                             <td align=3D"center" class=3D"u-P-L--2 u-P-R--=
+2" style=3D"padding-left:8px;padding-right:8px;"><a href=3D"https://t.wf1.w=
+frlh.com/rt?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3D=
+c4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e0=
+6-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3Dfa62955d-349e-4867-8a14-a6365e3521=
+4b&amp;eventType=3DEmailClickRedirect&amp;source=3Dbatch&amp;batchid=3D2&am=
+p;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;r=3Dhttps=
+%3A%2F%2Fwww.facebook.com%2Fwayfair&amp;brcid=3D1&amp;layouttemplaterectxid=
+=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a=
+-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e=
+4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" sty=
+le=3D"text-decoration:none;"><img src=3D"https://secure.img1-ag.wfcdn.com/i=
+m/49737202/compr-r85/1167/116787075/default_name.png" width=3D"40" alt=3D"F=
+acebook" style=3D"border:none;display:block;"></a></td>
+                             <td align=3D"center" class=3D"u-P-L--2 u-P-R--=
+2" style=3D"padding-left:8px;padding-right:8px;"><a href=3D"https://t.wf1.w=
+frlh.com/rt?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3D=
+c4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e0=
+6-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3Dc2a8669d-70de-4d86-bfe2-8028f4eb4d=
+78&amp;eventType=3DEmailClickRedirect&amp;source=3Dbatch&amp;batchid=3D2&am=
+p;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;r=3Dhttps=
+%3A%2F%2Fwww.pinterest.com%2Fwayfair%2F&amp;brcid=3D1&amp;layouttemplaterec=
+txid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-=
+457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b6=
+0a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625"=
+ style=3D"text-decoration:none;"><img src=3D"https://secure.img1-ag.wfcdn.c=
+om/im/76286136/compr-r85/1167/116787091/default_name.png" width=3D"40" alt=
+=3D"Pinterest" style=3D"border:none;display:block;"></a></td>
+                             <td align=3D"center" class=3D"u-P-L--2 u-P-R--=
+2" style=3D"padding-left:8px;padding-right:8px;"><a href=3D"https://t.wf1.w=
+frlh.com/rt?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3D=
+c4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e0=
+6-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3Dbb6ac459-6656-459a-b100-cc08b53111=
+07&amp;eventType=3DEmailClickRedirect&amp;source=3Dbatch&amp;batchid=3D2&am=
+p;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;r=3Dhttps=
+%3A%2F%2Ftwitter.com%2FWayfair&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc1=
+4a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997=
+-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp=
+;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" style=3D=
+"text-decoration:none;"><img src=3D"https://secure.img1-ag.wfcdn.com/im/422=
+33397/compr-r85/1167/116787094/default_name.png" width=3D"40" alt=3D"Twitte=
+r" style=3D"border:none;display:block;"></a></td>
+                            </tr>
+                           </tbody>
+                          </table></td>
+                        </tr>
+                       </tbody>
+                      </table></td>
+                    </tr>
+                    <tr>
+                     <td align=3D"center" class=3D"FooterBrands">
+                      <table role=3D"presentation" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0">
+                       <tbody>
+                        <tr>
+                         <td class=3D"FooterBrands-copy" style=3D"padding:2=
+0px 0 12px;color:rgb(33, 30, 34);font-size:18px;mso-line-height-alt:120%;li=
+ne-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-rule:ex=
+actly;text-align:center;"> Family of Brands </td>
+                        </tr>
+                        <tr>
+                         <td align=3D"center">
+                          <table role=3D"presentation" cellpadding=3D"0" ce=
+llspacing=3D"0" border=3D"0" width=3D"85%" class=3D"u-CopyFullWidth">
+                           <tbody>
+                            <tr>
+                             <td align=3D"center" width=3D"33%"><a href=3D"=
+http://www.jossandmain.com/?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c2=
+3bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcr=
+ectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D6d2c5968-bf8a-4a3d=
+-aa42-a4d1796a0f4c&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;cs=
+nid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplate=
+rectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8=
+f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a973=
+6b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D96=
+25" style=3D"text-decoration:none;"><img src=3D"https://secure.img1-ag.wfcd=
+n.com/im/31479307/compr-r85/1839/183923823/default_name.jpg" alt=3D"Joss &a=
+mp; Main" width=3D"145" class=3D"u-FullWidth" style=3D"border:none;display:=
+block;"></a></td>
+                             <td align=3D"center" width=3D"33%"><a href=3D"=
+http://www.birchlane.com/?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23b=
+fe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrec=
+txid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D7db9d027-416d-4aef-8=
+5d7-1e8d4d21e9f1&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csni=
+d=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplatere=
+ctxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7=
+-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b=
+60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625=
+" style=3D"text-decoration:none;"><img src=3D"https://secure.img1-ag.wfcdn.=
+com/im/66754542/compr-r85/1096/109644170/default_name.jpg" alt=3D"Birch Lan=
+e" width=3D"200" class=3D"u-FullWidth" style=3D"border:none;display:block;"=
+></a></td>
+                             <td align=3D"center" width=3D"33%"><a href=3D"=
+http://www.allmodern.com/?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23b=
+fe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrec=
+txid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D4c3364b9-0065-4e8d-b=
+ce7-d99c2e56f81f&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csni=
+d=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplatere=
+ctxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7=
+-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b=
+60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625=
+" style=3D"text-decoration:none;"><img src=3D"https://secure.img1-ag.wfcdn.=
+com/im/18300562/compr-r85/1566/156633277/default_name.jpg" alt=3D"AllModern=
+" width=3D"175" class=3D"u-FullWidth" style=3D"border:none;display:block;">=
+</a></td>
+                            </tr>
+                           </tbody>
+                          </table></td>
+                        </tr>
+                       </tbody>
+                      </table></td>
+                    </tr>
+                    <tr>
+                     <td class=3D"Footer-links u-P-T--5 " style=3D"padding-=
+top:20px;color:rgb(33, 30, 34);-webkit-text-size-adjust:none;font-size:11px=
+;mso-line-height-alt:120%;line-height:150%;font-family:sofia, arial, sans-s=
+erif;mso-line-height-rule:exactly;text-align:center;"><a href=3D"https://ww=
+w.wayfair.com/contact_us?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bf=
+e&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrect=
+xid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D0d92ad6d-861c-478a-a0=
+5b-39b8afe6e2d8&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=
+=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterec=
+txid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-=
+457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b6=
+0a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625"=
+ target=3D"_blank" class=3D"u-Color--base" style=3D"color:rgb(33, 30, 34);t=
+ext-decoration:none;"> Contact Us </a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp=
+; <a href=3D"https://www.wayfair.com/session/secure/account/account_welcome=
+.php?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5b=
+c-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-=
+4d4a-b253-6b4ffd7c2d38&amp;_eml=3Dc945848e-454e-4fc2-9887-4fcc29d0d0e8&amp;=
+source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e1=
+4-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea=
+-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db=
+1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp=
+;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" target=3D"_blank" c=
+lass=3D"u-Color--base" style=3D"color:rgb(33, 30, 34);text-decoration:none;=
+"> My Account </a></td>
+                    </tr>  =20
+                    <tr>
+                     <td class=3D"Footer-copy" style=3D"padding:16px 16px 0=
+;color:rgb(33, 30, 34);-webkit-text-size-adjust:none;font-size:11px;mso-lin=
+e-height-alt:120%;line-height:150%;font-family:sofia, arial, sans-serif;mso=
+-line-height-rule:exactly;text-align:center;"> This message was sent to <a =
+href=3D"mailto:tobinsilvestre032@sooners.us" class=3D"Footer-copyLink" styl=
+e=3D"color:rgb(33, 30, 34);text-decoration:none;">tobinsilvestre032@sooners=
+.us</a>. </td>
+                    </tr> =20
+                    <tr>
+                     <td class=3D"Footer-copy" style=3D"padding:16px 16px 0=
+;color:rgb(33, 30, 34);-webkit-text-size-adjust:none;font-size:11px;mso-lin=
+e-height-alt:120%;line-height:150%;font-family:sofia, arial, sans-serif;mso=
+-line-height-rule:exactly;text-align:center;"> To manage your email prefere=
+nces, <a href=3D"https://www.wayfair.com/v/account/email_subscriptions/mana=
+ge?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-=
+245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d=
+4a-b253-6b4ffd7c2d38&amp;_eml=3D69681031-0762-4d24-ba37-a50eaacd340d&amp;so=
+urce=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-=
+8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4=
+c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c=
+&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;r=
+efid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" class=3D"Footer-copyL=
+ink u-Underline" style=3D"color:rgb(33, 30, 34);text-decoration:underline;"=
+>click here</a>. <br aria-hidden=3D"true" class=3D"u-MobileHide"> If you no=
+ longer wish to receive emails from us, <a href=3D"https://www.wayfair.com/=
+v/account/email_subscriptions/unsubscribe?slvarrectxid=3Dc14a4e1c-43ea-4c63=
+-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;chan=
+nel=3D1&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38=
+&amp;_eml=3Dfb02f38a-da37-4d32-acdd-08792d83f337&amp;source=3Dbatch&amp;bat=
+chid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&am=
+p;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bf=
+e&amp;topic=3D1&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;e=
+vent_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=
+=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625" class=3D"Footer-copyLink =
+u-Underline" style=3D"color:rgb(33, 30, 34);text-decoration:underline;">cli=
+ck here</a>. <br aria-hidden=3D"true" class=3D"u-MobileHide">To read our pr=
+ivacy policy, <a href=3D"https://www.wayfair.com/customerservice/general_in=
+fo.php?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d=
+5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10=
+e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D505d2221-3004-4f0b-878c-b61add88a34d&am=
+p;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4=
+e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43=
+ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014=
+db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&a=
+mp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9625#privacy" class=3D"=
+Footer-copyLink u-Underline" style=3D"color:rgb(33, 30, 34);text-decoration=
+:underline;">click here</a>. </td>
+                    </tr>
+                    <tr>
+                     <td class=3D"Footer-copy" style=3D"padding:16px 16px 0=
+;color:rgb(33, 30, 34);-webkit-text-size-adjust:none;font-size:11px;mso-lin=
+e-height-alt:120%;line-height:150%;font-family:sofia, arial, sans-serif;mso=
+-line-height-rule:exactly;text-align:center;"> *Free Shipping: Some exclusi=
+ons apply.<br aria-hidden=3D"true"> Read more about our <a href=3D"https://=
+www.wayfair.com/customerservice/shipping_info.php?slvarrectxid=3Dc14a4e1c-4=
+3ea-4c63-98b0-83aee5c23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&=
+amp;wfcs=3Dcs9&amp;dcrectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_em=
+l=3Dbec6e26e-8961-401e-8473-97d78bde91bd&amp;source=3Dbatch&amp;batchid=3D2=
+&amp;varid=3D12&amp;csnid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=
+=3D1&amp;layouttemplaterectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;s=
+kurectxid=3Dd2fbe7b4-d8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42=
+695-ed28-4237-ae71-a9736b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;eml=
+id=3D101&amp;maiid=3D9625#ordership" class=3D"Footer-copyLink" style=3D"col=
+or:rgb(33, 30, 34);text-decoration:none;">shipping policy</a></td>
+                    </tr>
+                    <tr>
+                     <td class=3D"Footer-copy" style=3D"padding:16px 16px 0=
+;color:rgb(33, 30, 34);-webkit-text-size-adjust:none;font-size:11px;mso-lin=
+e-height-alt:120%;line-height:150%;font-family:sofia, arial, sans-serif;mso=
+-line-height-rule:exactly;text-align:center;"><sup>1</sup>Subject to credit=
+ approval. May not be combined with rewards offers. Terms and Conditions ap=
+ply. <br aria-hidden=3D"true" class=3D"u-MobileHide">See <a href=3D"https:/=
+/www.wayfair.com/wayfaircard?slvarrectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c=
+23bfe&amp;_emr=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8&amp;wfcs=3Dcs9&amp;dc=
+rectxid=3D87541e06-d10e-4d4a-b253-6b4ffd7c2d38&amp;_eml=3D1c4ab62c-c276-4b5=
+e-8b22-1a7e812a01f5&amp;source=3Dbatch&amp;batchid=3D2&amp;varid=3D12&amp;c=
+snid=3D72d88b66-1132-4e14-8152-cb36e885747e&amp;brcid=3D1&amp;layouttemplat=
+erectxid=3Dc14a4e1c-43ea-4c63-98b0-83aee5c23bfe&amp;skurectxid=3Dd2fbe7b4-d=
+8f7-457a-a997-aa3c2014db1c&amp;event_rec_txid=3D05a42695-ed28-4237-ae71-a97=
+36b60a9e4&amp;sm=3D1&amp;refid=3DMKTEML_86371&amp;emlid=3D101&amp;maiid=3D9=
+625" class=3D"Footer-copyLink u-Underline" style=3D"color:rgb(33, 30, 34);t=
+ext-decoration:underline;">wayfair.com/wayfaircard</a> for details. </td>
+                    </tr>
+                    <tr>
+                     <td class=3D"Footer-copy" style=3D"padding:16px 16px 0=
+;color:rgb(33, 30, 34);-webkit-text-size-adjust:none;font-size:11px;mso-lin=
+e-height-alt:120%;line-height:150%;font-family:sofia, arial, sans-serif;mso=
+-line-height-rule:exactly;text-align:center;"> Product prices and availabil=
+ity are limited time and subject to change.<br aria-hidden=3D"true">Quoted =
+prices are in U.S. dollars and are exclusive of shipping and handling or sa=
+les taxes, if applicable. </td>
+                    </tr>
+                    <tr>
+                     <td class=3D"Footer-copy" style=3D"padding:16px 16px 0=
+;color:rgb(33, 30, 34);-webkit-text-size-adjust:none;font-size:11px;mso-lin=
+e-height-alt:120%;line-height:150%;font-family:sofia, arial, sans-serif;mso=
+-line-height-rule:exactly;text-align:center;">  Wayfair Inc., 4 Copley Plac=
+e, Floor 7, Boston, MA 02116  </td>
+                    </tr>
+                   </tbody>
+                  </table></td>
+                </tr>
+               </tbody>
+              </table>
+              <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D=
+"0" border=3D"0" width=3D"40" height=3D"6">
+               <tbody>
+                <tr>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126000&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126001&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126002&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126003&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126004&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126005&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126006&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126007&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126008&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126009&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126010&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126011&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126012&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126013&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126014&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126015&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126016&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126017&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126018&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" width=3D"2" height=3D"6" style=3D"border:none;display:block;"></td>
+                 <td><img src=3D"http://li.wayfair.com/imp?s=3D124126019&am=
+p;sz=3D2x1&amp;m=3Dfalse&amp;p=3Dc4d0d5bc-245b-4a82-8cae-6d7b7bd512b8" alt=
+=3D"" aria-hidden=3D"true" width=3D"2" height=3D"6" style=3D"border:none;di=
+splay:block;"></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table></td>
+    </tr>
+   </tbody>
+   <tbody>
+    <tr id=3D"Row-6">
+     <td>
+      <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" bord=
+er=3D"0" width=3D"100%" ?=3D"">
+          <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" =
+border=3D"0" width=3D"100%" dir=3D"" class=3D"">
+           <tbody>
+            <tr>
+             <td width=3D"100%" class=3D" " valign=3D"top" style=3D"padding=
+:0px 0px 0px 0px;" dir=3D"">
+              <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D=
+"0" border=3D"0" width=3D"100%">
+               <tbody>
+                <tr>
+                 <td width=3D"100%" style=3D"padding:0px 0px 0px 0px;word-w=
+rap:break-word;" class=3D" Text "><h5 class=3D"u-Note" style=3D"margin:0;co=
+lor:rgb(33, 30, 34);font-weight:normal;font-size:13px;mso-line-height-alt:1=
+20%;line-height:150%;font-family:sofia, arial, sans-serif;mso-line-height-r=
+ule:exactly;text-align:center;">=E2=80=A1 Select styles only.&nbsp;</h5></t=
+d>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table></td>
+    </tr>
+   </tbody>
+   <tbody>
+    <tr id=3D"Row-7">
+     <td>  </td>
+    </tr>
+   </tbody>
+   <tbody>
+    <tr id=3D"Row-8">
+     <td><span></span></td>
+    </tr>
+   </tbody>
+   <tbody>
+    <tr id=3D"Row-9">
+     <td><span></span></td>
+    </tr>
+   </tbody>
+  </table>
+=20
+</body></html>=
+
+------=_Part_31_1577457627.1692892207371--

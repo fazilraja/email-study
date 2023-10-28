@@ -1,0 +1,910 @@
+Received: from SJ1PR20MB4884.namprd20.prod.outlook.com (::1) by
+ MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Tue, 26 Sep 2023 23:30:26
+ +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=ZWCaFWKNSz4HNnovuq14BwwMPovjK8b5W+DRVskP/g8gL36s79YVdxZVa0AWcpl4w+Lqw3DqmL7vtETlP73NYMpJJ5wyP7H6bBQjXjCrnpPo9dAaCNaQOQugjmiwVavDJTVSv0DRfxaZ81sEPRA2VhobZBFhTcXiW8OvWs9ZEkdBTMpirTQNi4I5u1XB3TCp1RhhvnIUPnMU2TJgTAVN0IDp6J7iMtNXJkUBPvMMHj/rGFY+Gfjk0C8Xcs0Z3qxV3swPyup/yLypX08E/3w/LLE5fti3aqEBZU1Pm/wExBNRTWyqQyNJcIeAtERA6OSjGcPCqUDtD/5HX7ECMbV1nw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=po5OrS5zCvlyiXHYqztLnxf+zz2t+D/rJ7Ic+iyDNhY=;
+ b=Vkunwyv+/zfdHdjdGhMB/fQJwVzYzTLXUYCqS7OmDsGlV2kp++JGoTNSJ2E0x3Xy+plACLPjJWHzlujy6NlEOni/Oom14jxqrdxhCbKv4gcqVWplgMnnS/eQDr0qIXrQzkgqiRuZ/G77cCPXCWR6VlI4zrjB6PqPrZZE6uJIiw18foRdSI3Z7FRgN+P/tEX1AqSygeRiecGEt/XXpsHDnmcBktfeZMb8diJNpTPSbO2P/uCX5TuZN8/SAf0cyqIZ/w8lzex1aete1vshULK/XuIqgAnSX8xwr8IDfJu5vsJA1MhV/ss8qMDS0WVpL0Ctphoy5Q7/YFO14vqfj2deAg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.161.47) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.today.com; dmarc=pass (p=none sp=none pct=100)
+ action=none header.from=hello.today.com; dkim=pass (signature was verified)
+ header.d=hello.today.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=msprvs1=19633lx95d89b=bounces-280172-964@bounce.today.com]
+ dkim=[1,1,header.i=@hello.today.com] dmarc=[1,1,header.from=today.com])
+Received: from CY5P221CA0155.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:6a::10)
+ by SJ1PR20MB4884.namprd20.prod.outlook.com (2603:10b6:a03:455::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.21; Tue, 26 Sep
+ 2023 23:30:24 +0000
+Received: from CY4PEPF0000FCC0.namprd03.prod.outlook.com
+ (2603:10b6:930:6a:cafe::5d) by CY5P221CA0155.outlook.office365.com
+ (2603:10b6:930:6a::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.35 via Frontend
+ Transport; Tue, 26 Sep 2023 23:30:23 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.161.47)
+ smtp.mailfrom=bounce.today.com; dkim=pass (signature was verified)
+ header.d=hello.today.com;dmarc=pass action=none
+ header.from=hello.today.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ bounce.today.com discourages use of 209.85.161.47 as permitted sender)
+Received: from mail-oo1-f47.google.com (209.85.161.47) by
+ CY4PEPF0000FCC0.mail.protection.outlook.com (10.167.242.102) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.19 via Frontend Transport; Tue, 26 Sep 2023 23:30:23 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:F1093F4E69F15E49549F4C519787796FC0F8660684EAABF3B081508ECFC2310D;UpperCasedChecksum:5FC531CB51FC990DCF75CB60ECBE79F624B28411BD19ACC12592B3B74DE9E2F0;SizeAsReceived:5787;Count:28
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-57be7c28423so1720409eaf.0
+        for <tobinsilvestre@outlook.com>; Tue, 26 Sep 2023 16:30:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695771023; x=1696375823;
+        h=x-forwarded-for:feedback-id:from:list-unsubscribe:subject:reply-to
+         :mime-version:date:message-id:to:dkim-signature:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=po5OrS5zCvlyiXHYqztLnxf+zz2t+D/rJ7Ic+iyDNhY=;
+        b=k0A75HAzOdbOZsGQhqWN0B46eCXbq1F5WvDOWC2xbw77AD7zrzI2AEldummcqBeBI4
+         gvyHp0OD9caX0d13GpjHIL6QkUlumuCbf7zY4PDpJv0p1F0i60WiWjmYooyKK5JHwS9x
+         5Vl2o8ho7tpQ+5VLJ5HYZv83+LCEOgJ0x4oK+qbGYr9e7Z6n+y/JaDtHXayNYluaQI8X
+         34G4RceSK8svbNIU98e2NffIJxsoex8r1yPEOiIm6nIApZDsq3RJ0sZhPJl6mtsumloO
+         +2o5A0SVLmVMM9A/RG18O5HXtCDGvA2lZlcSQOfWpbjio+uF6LAkha3jnMl1HPcFB3i1
+         gK2w==
+X-Gm-Message-State: AOJu0YznyhMpG9CG6E2etBf11JCPsN+zlfSBN7sUkwYRzrUEenZG5vrP
+	0oxKPbKZoVzauinfGStTutlmOgBZa65JE1H0fQ==
+X-Google-Smtp-Source: AGHT+IFbAo3aeE46ET4kbrYWJ4A1+nIbPn62bpcFJOIIKFsI3TU0udzEtt5JPsBVwEQkjpF1w9iKldlFbQI731tc6WafnRL63ho=
+X-Received: by 2002:a4a:255d:0:b0:56c:d297:164c with SMTP id v29-20020a4a255d000000b0056cd297164cmr531704ooe.4.1695771023523;
+        Tue, 26 Sep 2023 16:30:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695771023; cv=none;
+        d=google.com; s=arc-20160816;
+        b=a7tevv/hqRVNgc2qZL++dKPwhQiHOglxDLhMfxwTOnxXOj400k3RHI/fCQIKFgKbYr
+         +x0+kLGEBvwbHbZHBfV8rtCVuLhA80vbZpJBeS4sg+v4C5W95UJm56kBcg4cQ2VTGtSo
+         St1Ai9FyVVwVJZ5F9rMUhME4g8jsVaQQnH4ljbGA/600pgSGqlAE3xdE+W0yS9kHBeY9
+         9iLoZ/dAvze/e8CqG6/QWuYLnSU1Rjj13UHdcWz6R7Z0MMvPe4bzgpf0/S7jr9e+auct
+         58VYSZFjW63Lee2KUNXvWmpjskGumeovjyCNTQXf6r6snek47RJCJ1B/n+j3WHtW2vtD
+         GxkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=feedback-id:from:list-unsubscribe:subject:reply-to:mime-version
+         :date:message-id:to:dkim-signature;
+        bh=po5OrS5zCvlyiXHYqztLnxf+zz2t+D/rJ7Ic+iyDNhY=;
+        fh=A28b0e6MH4iESDLaaQ15gKXHRsjP4xWBTknUZC5K7ts=;
+        b=Z7U7olxgJUlYkDy/DkPReyjEsleA/9NdJN9cRD7VKtkV0Ec0LMe4uvs0TtySG+dtnp
+         wvqTYdP2HxOJSA49dZcBTB2bH6Bm+RMUh9wD4GNHOe6VyfJU7jDhvwZJsQT+UDPE/LgJ
+         3UNAO8wJsGAt659Df82YsbeVqzP+uyPMQMMvj7UFoN3z4NDquQLa08bLkgJgOs82Jt4c
+         9p+lAVrpb3/V9oA/tdyYvyxnZi2DaQW+m5uyzVQvapaAw8xAX/sdq8iHILS6KdqAaQMv
+         KGpIkkrwVefIjU3d1/hPc6J26rV2vRMYEFhsZ9WJ7vK9FxYIug/Obuqj9zzQ4txMHLx6
+         cYRQ==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@hello.today.com header.s=scph0522 header.b="QdF3/X9y";
+       spf=pass (google.com: domain of msprvs1=19633lx95d89b=bounces-280172-964@bounce.today.com designates 156.70.53.138 as permitted sender) smtp.mailfrom="msprvs1=19633LX95d89b=bounces-280172-964@bounce.today.com";
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=today.com
+Return-Path: msprvs1=19633LX95d89b=bounces-280172-964@bounce.today.com
+Received: from mta-70-53-138.sparkpostmail.com (mta-70-53-138.sparkpostmail.com. [156.70.53.138])
+        by gmr-mx.google.com with ESMTPS id i18-20020a4abc12000000b0057acba9658bsi1183959oop.2.2023.09.26.16.30.23
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 26 Sep 2023 16:30:23 -0700 (PDT)
+Received-SPF: pass (google.com: domain of msprvs1=19633lx95d89b=bounces-280172-964@bounce.today.com designates 156.70.53.138 as permitted sender) client-ip=156.70.53.138;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@hello.today.com header.s=scph0522 header.b="QdF3/X9y";
+       spf=pass (google.com: domain of
+ msprvs1=19633lx95d89b=bounces-280172-964@bounce.today.com designates
+ 156.70.53.138 as permitted sender)
+ smtp.mailfrom="msprvs1=19633LX95d89b=bounces-280172-964@bounce.today.com";
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=today.com
+X-MSFBL: M3iBOTjB0r4J3OIv2I7wqMLAzQvbZBZdpGRCPXouz5g=|eyJyIjoidG9iaW5zaWx
+	2ZXN0cmUwOTNAc29vbmVycy51cyIsImN1c3RvbWVyX2lkIjoiMjgwMTcyIiwibWV
+	zc2FnZV9pZCI6IjY0ZmE4ZDY5MTM2NTEzOTMwODFkIiwidGVuYW50X2lkIjoic3B
+	jIiwic3ViYWNjb3VudF9pZCI6Ijk2NCJ9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hello.today.com;
+	s=scph0522; t=1695771021; i=@hello.today.com;
+	bh=po5OrS5zCvlyiXHYqztLnxf+zz2t+D/rJ7Ic+iyDNhY=;
+	h=To:Message-ID:Date:Content-Type:Subject:List-Unsubscribe:From:
+	 From:To:Cc:Subject;
+	b=QdF3/X9y7+rocAfU8FwrRJPCTxw4eNVbPIfCMiV1N6kkriT+5+3PrQlCtSSycuVfR
+	 +Stz/TTePjc9t0xIBpg0w0yQpVjMocHLayIqtEhj2KXMMJG5aq7kORAPHKrfNvWDRY
+	 y8Ptj/3JLbu/8ECuSMwRlBrzLAeFkbQJ/nVrR1is=
+To: tobinsilvestre093@sooners.us
+Message-ID: <80.D1.38065.D8963156@hj.mta1vrest.cc.prd.sparkpost>
+Date: Tue, 26 Sep 2023 23:30:21 +0000
+Content-Type: multipart/alternative; boundary="_----G8bh/tx9eRVv2YzjleTsKw===_7F/C1-38065-D8963156"
+Reply-To: todayshow@orders.today.com
+Subject: EARLY ACCESS Starts Now! Get Up to 81% Off Tech & Gadgets!
+X-Campaign-ID: 7809802
+List-Unsubscribe: <https://links.today.com/e/encryptedUnsubscribe?_r=ae0ce0ec0e7845ec900c56b38b1c3248&_s=41778649111548208e3e1da81ee37f14&_t=tg6tIr5pp0Gd7p6cmkiiAWCX0xmgeWhzwrx81SdMhP8sBfcBJax0Ze0VV8xyPez-GBMdnTpzSTxVqGmVrkNUH92yGhYFDhdu0Rq2_VX2zVX6kutUP8APrKD6bF5ENPUs>,<mailto:unsubscribe+7809802+10385561@unsubscribe.iterable.com>
+From: "Shop TODAY Perks" <info@hello.today.com>
+X-Message-ID: 41778649111548208e3e1da81ee37f14
+X-Feedback-ID: 10385561:7809802:61018:iterable
+Feedback-ID: 10385561:7809802:61018:iterable
+X-Forwarded-For: tobinsilvestre093@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 28
+X-MS-Exchange-Organization-ExpirationStartTime: 26 Sep 2023 23:30:23.9674
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 94d0d5b6-f4ea-4917-ae9f-08dbbee88ebf
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000FCC0:EE_|SJ1PR20MB4884:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000FCC0.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/26/2023 10:07:29 PM
+X-MS-Office365-Filtering-Correlation-Id: 94d0d5b6-f4ea-4917-ae9f-08dbbee88ebf
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.161.47
+X-SID-PRA: INFO@HELLO.TODAY.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 5
+X-Microsoft-Antispam: BCL:2;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2023 23:30:23.9361
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 94d0d5b6-f4ea-4917-ae9f-08dbbee88ebf
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000FCC0.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR20MB4884
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.0685173
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6813.014
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:J;OFR:SpamFilterAuthJ;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(4810010)(4910033)(10005027)(9710001)(9555003)(10175021)(9320005)(9245025)(120001);RF:JunkEmail;
+X-Message-Info:
+	6hMotsjLow/GARsiVuvtuJDtZUWbIljUrG6UNZxmGwUBhrrm+/KFgRysLovjLXtTizHDdi8cJJHqw71IQWe1GF/U77aWtuZ6LHst+pHvt1LRPpgGeP8jNzZV0WxIJ0f3cXDDDypR6ZciDR3SGSFipaZbOMvSXnvffqhfgKfs/p72fSdAH8IkDTMhu5TaPV5U0WJDdkk3ewU=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MjtHRD0xO1NDTD02
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Q1pMbGpoZG1rVzA0MzY5cXcycFhrRHJYbEF3ZnhPSktZQnlTY21pakJHVmd5?=
+ =?utf-8?B?NzZ6Y3d4MVdsRjVtemxBSmNoKzlsZ2o1czcrM0c0Q0Z2NVMzaVE1L1AvTDV6?=
+ =?utf-8?B?dzdndE1PNndKNXZuS0ttWmh2Rk0vS0ExUjR4TCtQVWdOZ09kdlZzcXhRUE5m?=
+ =?utf-8?B?RTZ6TzZZQTB3YXVma2ZudEtKeGxpaE5FMDh0ME80NnBwbTlZVjI0YUo2Q29x?=
+ =?utf-8?B?TW9reWdvZTdOa2Rqc2NUMnlLNkJidXBaWU9IV2pQVGpoTjM3ZG5NTWVjOUVj?=
+ =?utf-8?B?Z3Vpa0F5d0RROXY5RkZrVnVLcDFMb0RaTmNKZldoWVJObnExbzQ1anFUcFQr?=
+ =?utf-8?B?aWpJODJUM2M0ODNxTHh0S3U3U1BsNkN2OGVEaDRLeXhpYUlqcGlJZVhSdWNW?=
+ =?utf-8?B?Y243ZE5iTnVJTlpudG02ZS96Ykw4YUx5Zm9lVFcyamFKb0FTUDFnY2t0QU11?=
+ =?utf-8?B?ZmRwL1pXV1grSGRjVWdwdTZkT2ZpeWYzNzIyd3pjQVdkenFublVmU3F5T240?=
+ =?utf-8?B?VFMvVU1hSXVzNTBlSTBLWEVLNEkzbFNjTk5vQWxUVmdqYWVjdGR3STllN2Y3?=
+ =?utf-8?B?TytObVlteld0OFhPa0xKZitOSzRvNG5ScU1HSHZzbTFFaFEvRDU5TEdMNDJz?=
+ =?utf-8?B?N3pmMzFmVHUvbUVXTWRZTEdZZFU0Yi9ZbmcrWTJOUTBQaklvZUgwaTBzS0RI?=
+ =?utf-8?B?d3Y5MWNVU3Q4WDMxNkNqZXdzZW5iQXUrUGNONkpybnZjSTR0ckZ1aUhUOUhW?=
+ =?utf-8?B?ZEwrTnRXb01RUjh2M0RVNStrczdSNDBrNEhWSXUwdmVqTnJ6QkJhVGZJNVVl?=
+ =?utf-8?B?c3N1Q0o1QWdvZm5wK2dTNDR1Y2JkN0ZGbkwrbGVjeFR6aG1TTHllUzVUVzVK?=
+ =?utf-8?B?WSsrZ1ZiODFSZWN0aVphSFN2VzVNMWFrSUNCK0U1NDBUSzk3QzVKcjhzc01w?=
+ =?utf-8?B?c0pZY3A4TDNVK0pRYjI1VktZZk9uUkszeC92QmtJNGVpUE45MURZckRiK2dM?=
+ =?utf-8?B?TzdNZ3Jzanc4SEc1UVdESVFadGsvQmRCNVlxVVhTc1djOWlkS1l1QXhVNWRR?=
+ =?utf-8?B?TzZjY1NhaFQxZGxwUXV0cVRlSXBTOHViSmJlS2xpZnJPeE5kQnRLU3p3Ulda?=
+ =?utf-8?B?dTNQNnk0ZjRsM1dLL1UwTzdWbTJBRkVOMDYyMzlSZ3RKUGZyQk42SlAvejdu?=
+ =?utf-8?B?Q0ZxeG1uSjFJSEpHOGtnVnRJblRKVXRTVnJOVDNkb3dDaS9SNEF4Wi9ZWk8x?=
+ =?utf-8?B?UFEwREtOS0xweE91VFZrWlJhRHJkVTcra0VzVTVaYVZ5UGNFMVpMMXBSd2M0?=
+ =?utf-8?B?UGYyRXNvN2tLN0d0RjlKY09naW5GT3BGSVVsZnNTM3JJNm5tTHRBWjhMcWZ5?=
+ =?utf-8?B?SFBoeVRtMmh4SUZXMDBrMkJkWVJlNzhiYnlQc2dpaVhzYjZBY1RtZCt4MmFP?=
+ =?utf-8?B?VnBSQ0dTQUg0Q3NvTVhZS3BIZXNRU004dnE4b24zYUpWajcxd01rSlNPQWd5?=
+ =?utf-8?B?dzRRZUd3TmxURUJwaUZwVFVoUlhmbitwb1dsVjZqMDhuSFk4dTRIQythRStZ?=
+ =?utf-8?B?ZWp4dkhyNVRGV29zSTN5MkFwYmVUdXF3Z1BhKzdrM3VrRXZIcEx6bENJNkU2?=
+ =?utf-8?B?aE85Q3lrbDZ3cFdKOXlGN2ZGQmhqSGtPTGUwL3RTVTc0Nm12aFFLRlFhKzNB?=
+ =?utf-8?B?Z0xBRnIwWU5EakxjL2RweTl2MnVJeVlISkVSSzZQbVhTZXhLbUh6K2dvNStI?=
+ =?utf-8?B?MVU0M29nVmZJbHp2aW8ra0FLYjhCMGZ3SlRTOHZ2dmhvdXlJeThmY3k2Rldx?=
+ =?utf-8?B?ZmdHYWIvczQ5UElTZlh5Z25Zc0ZPK3oxc2tpeml2elVXalp3WFp6QUZxSjcw?=
+ =?utf-8?B?S1JQalY3SVRpOWI0SGgrSEYxSFV3YWpLYjQyYjZPRWh3dTdpOG52T2EzdWJS?=
+ =?utf-8?B?TlNVNzRidFYxSkI1cmJrU3dIQ2xBV0tIOFg2ek1wT1g1MktuSVJkRTVNTnU3?=
+ =?utf-8?B?bmd2L2N2c1BjL2tadkpFYmhBd1JnSFFLOHZGREVLU0YxWEV4VWtiYVhQSHpZ?=
+ =?utf-8?B?NWpqMzdBNWFCalVlL0ZjUmJvcWh2b2NGRnBsVyt4ZktZUUdFMUhCNUlZWEJP?=
+ =?utf-8?B?YTlqK3NuQWdQeUs1blRUc2RxaWgxMXhmZ2pOdE1POFE2NkpZVUZxc1k3MW1W?=
+ =?utf-8?B?MDNUWmdwVFplSFZKUlBnNERQZy9mL2h1WkJUWHFXMWVWaXNBWWFzWFVONHNO?=
+ =?utf-8?B?RmtPWVd6SnFnYmhhZE1hOWJrdU51MGV1Uk0rM3o1K2E0S3RlaHEwVllUOUlV?=
+ =?utf-8?B?RzkzbGZhQnNqQy90UTRoRHlzQjB3NHJ4YnVDaW5rNnE2SVMxOGo3S05kbTE3?=
+ =?utf-8?B?RWd4MDdBNTF0TklWYkxzYm9UbWdZYUNkdnhHVkVKRGUvdStjekIzWkw1TWxT?=
+ =?utf-8?B?Q0ZNSklxam5RZy9nd291VmZOd3J2M3NWVTNQVVg3ZUtUMEtYNlRtZ0hnR0Va?=
+ =?utf-8?B?a1FPOVJLd2Z6eGgrL09zK2lSNGVTTEpzY3J3UW5tTS9QVE16MzdPWWFtb1Rv?=
+ =?utf-8?B?M2dtcEt3ZGNra0h0K1Q4SFErQzdEVlIzN1E2ZjZnTzVJQkhmYzhwcnNLeENz?=
+ =?utf-8?B?M09zZFJEdVltMmFNK1R5QTVTRjdHUit1a1hmUXVubjF6b29iSGdmUTlmelA4?=
+ =?utf-8?B?cWJwQU5Md3ZOQktXVEZjS2ZkWmJrNEkrM1pFK3NTdW4wTTc1ejd1dDNZRjAz?=
+ =?utf-8?B?eXJnYkhuR2Q5NlJQRkw4dXBJb25sU01UTW5XaFAydFNZWkVoVVAvSHpmaDhR?=
+ =?utf-8?Q?innyFmiYavg6F69ICx7nA=3D?=
+MIME-Version: 1.0
+
+--_----G8bh/tx9eRVv2YzjleTsKw===_7F/C1-38065-D8963156
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+
+Shop wireless charging batteries, folding hand vacuums, shower speakers, an=
+d =0Amore!=0A=0A=0A=0A=0A=0ASep 26, 2023 | VIEW IN BROWSER =0A<https://link=
+s.today.com/e/evib=3F_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&_m=3D41778649111=
+548208e3e1da81ee37f14&_e=3Dtg6tIr5pp0Gd7p6cmkiiAWCX0xmgeWhzwrx81SdMhP8yRKN4=
+wQufyQIeDdYrpgWR>=0A=0A=0A=0A =0A<https://creditcards.wellsfargo.com/cards/=
+active-cash-view-details/=3Fproduct_code=3DCC&subproduct_code=3DAC&sub_chan=
+nel=3DDIS&vendor_code=3DNB&FPID=3D0126D7IDF40000&placement_id=3DDIS_NB_CCD_=
+AC_SHOP_ATL_TodayShow&creative_id=3DNBCUCOMM_TS_AC2PER_LM>=0A =0A<https://c=
+reditcards.wellsfargo.com/cards/active-cash-view-details/=3Fproduct_code=3D=
+CC&subproduct_code=3DAC&sub_channel=3DDIS&vendor_code=3DNB&FPID=3D0126D7IDF=
+40000&placement_id=3DDIS_NB_CCD_AC_SHOP_ATL_TodayShow&creative_id=3DNBCUCOM=
+M_TS_AC2PER_LM>=0A=0A=0A =0A<https://deals.today.com/=3FshowDeals=3D1686763=
+087731&utm_source_uc=3Demail&utm_medium_uc=3Dstealsdeals&utm_campaign_uc=3D=
+092723earlyaccess&utm_content_uc=3Dlogo&utm_program_uc=3DTODAY&utm_source=
+=3Dnewsletter&utm_medium=3DSD&utm_campaign=3D092623earlyaccess>=0A=0A=0A=0A=
+=0ASep 26, 2023 | VIEW IN BROWSER =0A<https://links.today.com/e/evib=3F_t=
+=3Dae0ce0ec0e7845ec900c56b38b1c3248&_m=3D41778649111548208e3e1da81ee37f14&_=
+e=3Dtg6tIr5pp0Gd7p6cmkiiAWCX0xmgeWhzwrx81SdMhP8yRKN4wQufyQIeDdYrpgWR>=0A=0A=
+=0A=0A =0A<https://deals.today.com/=3FshowDeals=3D1686763087731&utm_source_=
+uc=3Demail&utm_medium_uc=3Dstealsdeals&utm_campaign_uc=3D092723earlyaccess&=
+utm_content_uc=3Dlogo&utm_program_uc=3DTODAY&utm_source=3Dnewsletter&utm_me=
+dium=3DSD&utm_campaign=3D092623earlyaccess>=0A=0A=0A=0AEARLY ACCESS =0A<htt=
+ps://deals.today.com/=3FshowDeals=3D1686763087731&utm_source_uc=3Demail&utm=
+_medium_uc=3Dstealsdeals&utm_campaign_uc=3D092723earlyaccess&utm_content_uc=
+=3Dimage&utm_program_uc=3DTODAY&utm_source=3Dnewsletter&utm_medium=3DSD&utm=
+_campaign=3D092623earlyaccess>=0A=0ASTARTS NOW! =0A<https://deals.today.com=
+/=3FshowDeals=3D1686763087731&utm_source_uc=3Demail&utm_medium_uc=3Dstealsd=
+eals&utm_campaign_uc=3D092723earlyaccess&utm_content_uc=3Dimage&utm_program=
+_uc=3DTODAY&utm_source=3Dnewsletter&utm_medium=3DSD&utm_campaign=3D092623ea=
+rlyaccess>=0A=0A=0ATech & Gadgets Up To 81% Off! Gabba Goods, Brookstone, A=
+duro, 3P Experts, And =0AMore! =0A<https://deals.today.com/=3FshowDeals=3D1=
+686763087731&utm_source_uc=3Demail&utm_medium_uc=3Dstealsdeals&utm_campaign=
+_uc=3D092723earlyaccess&utm_content_uc=3Dimage&utm_program_uc=3DTODAY&utm_s=
+ource=3Dnewsletter&utm_medium=3DSD&utm_campaign=3D092623earlyaccess>=0A=0AU=
+NLOCK EARLY ACCESS =0A<https://deals.today.com/=3FshowDeals=3D1686763087731=
+&utm_source_uc=3Demail&utm_medium_uc=3Dstealsdeals&utm_campaign_uc=3D092723=
+earlyaccess&utm_content_uc=3Dimage&utm_program_uc=3DTODAY&utm_source=3Dnews=
+letter&utm_medium=3DSD&utm_campaign=3D092623earlyaccess>=0A=0A=0A=0A=0AEARL=
+Y ACCESS =0A<https://deals.today.com/=3FshowDeals=3D1686763087731&utm_sourc=
+e_uc=3Demail&utm_medium_uc=3Dstealsdeals&utm_campaign_uc=3D092723earlyacces=
+s&utm_content_uc=3Dimage&utm_program_uc=3DTODAY&utm_source=3Dnewsletter&utm=
+_medium=3DSD&utm_campaign=3D092623earlyaccess>=0A=0ASTARTS NOW! =0A<https:/=
+/deals.today.com/=3FshowDeals=3D1686763087731&utm_source_uc=3Demail&utm_med=
+ium_uc=3Dstealsdeals&utm_campaign_uc=3D092723earlyaccess&utm_content_uc=3Di=
+mage&utm_program_uc=3DTODAY&utm_source=3Dnewsletter&utm_medium=3DSD&utm_cam=
+paign=3D092623earlyaccess>=0A=0A=0ATech & Gadgets Up To 81% Off! Gabba Good=
+s, Brookstone, Aduro, 3P Experts, And =0AMore! =0A<https://deals.today.com/=
+=3FshowDeals=3D1686763087731&utm_source_uc=3Demail&utm_medium_uc=3Dstealsde=
+als&utm_campaign_uc=3D092723earlyaccess&utm_content_uc=3Dimage&utm_program_=
+uc=3DTODAY&utm_source=3Dnewsletter&utm_medium=3DSD&utm_campaign=3D092623ear=
+lyaccess>=0A=0AUNLOCK EARLY ACCESS =0A<https://deals.today.com/=3FshowDeals=
+=3D1686763087731&utm_source_uc=3Demail&utm_medium_uc=3Dstealsdeals&utm_camp=
+aign_uc=3D092723earlyaccess&utm_content_uc=3Dimage&utm_program_uc=3DTODAY&u=
+tm_source=3Dnewsletter&utm_medium=3DSD&utm_campaign=3D092623earlyaccess>=0A=
+=0A=0A=0A=0AEnds:=0A=0A=0A=0A=0A=0A=0A=0A*SUBJECT TO AVAILABILITY=0A=0A=0A=
+=0A=C2=A9 2023 NBC UNIVERSAL =E2=80=A2 NO RETURNS, ALL ITEMS ARE FINAL SALE=
+=0A=0A=0A=0AOur editors independently selected these items because we think=
+ you will enjoy =0Athem and might like them at these prices. If you purchas=
+e something through our =0Alinks, TODAY earns a commission.=0A=0A=0A=0ANo l=
+onger want to receive these emails=3F Click here to unsubscribe =0A<https:/=
+/links.today.com/e/encryptedUnsubscribe=3F_r=3Dae0ce0ec0e7845ec900c56b38b1c=
+3248&_s=3D41778649111548208e3e1da81ee37f14&_t=3Dtg6tIr5pp0Gd7p6cmkiiAWCX0xm=
+geWhzwrx81SdMhP8sBfcBJax0Ze0VV8xyPez-GBMdnTpzSTxVqGmVrkNUH92yGhYFDhdu0Rq2_V=
+X2zVX6kutUP8APrKD6bF5ENPUs>=0A. <> =0A=0ATODAY Show NBC - 30 Rockefeller Pl=
+aza, New York, NY 10112
+--_----G8bh/tx9eRVv2YzjleTsKw===_7F/C1-38065-D8963156
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="UTF-8"
+
+<!DOCTYPE html><html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"u=
+rn:schemas-microsoft-com:office:office" lang=3D"en" style=3D"box-sizing: bo=
+rder-box;"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle></title><meta name=3D"viewport" content=3D"width=3Ddevice-width,initia=
+l-scale=3D1"><!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>9=
+6</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]-=
+-><!--[if !mso]><!--><link href=3D"https://nodeassets.nbcnews.com/assets/fo=
+nts/shared/fontface-today.css" rel=3D"stylesheet" type=3D"text/css"><!--<![=
+endif]--><style>*{box-sizing:border-box}body{margin:0;padding:0}a[x-apple-d=
+ata-detectors]{color:inherit!important;text-decoration:inherit!important}#M=
+essageViewBody a{color:inherit;text-decoration:none}p{line-height:inherit}.=
+desktop_hide,.desktop_hide table{mso-hide:all;display:none;max-height:0;ove=
+rflow:hidden}.image_block img+div{display:none}@media(max-width:620px){.ima=
+ge_block img.fullWidth{max-width:100%!important}.mobile_hide{display:none}.=
+row-content{width:100%!important}.stack .column{width:100%;display:block}.m=
+obile_hide{min-height:0;max-height:0;max-width:0;overflow:hidden;font-size:=
+0}.desktop_hide,.desktop_hide table{display:table!important;max-height:none=
+!important}.row-6 .column-1 .block-2.text_block td.pad,.row-7 .column-1 .bl=
+ock-2.text_block td.pad{padding:20px 0!important}.row-7 .column-1{padding:2=
+5px 10px!important}}</style></head><body style=3D"box-sizing: border-box; b=
+ackground-color: #fff; margin: 0; padding: 0; -webkit-text-size-adjust: non=
+e; text-size-adjust: none;">
+<div style=3D"color:transparent;visibility:hidden;opacity:0;font-size:0px;b=
+order:0;max-height:1px;width:1px;margin:0px;padding:0px;border-width:0px!im=
+portant;display:none!important;line-height:0px!important;"><img border=3D"0=
+" width=3D"1" height=3D"1" src=3D"http://track.today.com/q/TnFgTc2qaS1GdsS5=
+CV6u9w~~/AARGbAA~/RgRm9e6NPVcDc3BjQgpk-o1pE2UTkwgdUhx0b2JpbnNpbHZlc3RyZTA5M=
+0Bzb29uZXJzLnVzWAQAAAPE" alt=3D""></div>
+<span style=3D"color:transparent;visibility:hidden;display:none;opacity:0;h=
+eight:0;width:0;font-size:0;">Shop&nbsp;wireless charging batteries, foldin=
+g hand vacuums,&nbsp;shower speakers,&nbsp;and more!</span><img src=3D"http=
+s://links.today.com/e/eo?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D417=
+78649111548208e3e1da81ee37f14&amp;_e=3Dtg6tIr5pp0Gd7p6cmkiiAWCX0xmgeWhzwrx8=
+1SdMhP8sBfcBJax0Ze0VV8xyPez-GBMdnTpzSTxVqGmVrkNUH92yGhYFDhdu0Rq2_VX2zVXWAE8=
+grPQ_2ycxPNFMZa5JA8ILDTSRqAYLLfQf1273ng%3D%3D" style=3D"border:0;width:1px;=
+height:1px;border-width:0px!important;display:none!important;line-height:0!=
+important;" width=3D"1" height=3D"1"><table class=3D"nl-container" width=3D=
+"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentatio=
+n" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: =
+0; background-color: #fff;" bgcolor=3D"#fff"><tbody style=3D"box-sizing: bo=
+rder-box;"><tr style=3D"box-sizing: border-box;"><td style=3D"box-sizing: b=
+order-box;"><table class=3D"row row-1 mobile_hide" align=3D"center" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presenta=
+tion" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspac=
+e: 0;"><tbody style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: bo=
+rder-box;"><td style=3D"box-sizing: border-box;"> <table class=3D"row-conte=
+nt stack" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ role=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0=
+; mso-table-rspace: 0; border-radius: 0; color: #000; width: 600px; margin:=
+ 0 auto;" width=3D"600"><tbody style=3D"box-sizing: border-box;"><tr style=
+=3D"box-sizing: border-box;"><td class=3D"column column-1" width=3D"33.3333=
+33333333336%" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-tab=
+le-rspace: 0; font-weight: 400; text-align: left; padding-bottom: 5px; padd=
+ing-left: 15px; padding-top: 5px; vertical-align: top; border-top: 0; borde=
+r-right: 0; border-bottom: 0; border-left: 0;" align=3D"left" valign=3D"top=
+"> <table class=3D"image_block block-1" width=3D"100%" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: bor=
+der-box; mso-table-lspace: 0; mso-table-rspace: 0;"><tr style=3D"box-sizing=
+: border-box;"><td class=3D"pad" style=3D"box-sizing: border-box; padding-b=
+ottom: 5px; padding-top: 2px; width: 100%;" width=3D"100%"><div class=3D"al=
+ignment" align=3D"left" style=3D"box-sizing: border-box; line-height: 10px;=
+"><img src=3D"https://media.sailthru.com/composer/images/sailthru-prod-5ci/=
+editor_images/Shop%20TODAY%20Perks%20Logo_2.png" style=3D"box-sizing: borde=
+r-box; display: block; height: auto; border: 0; max-width: 185px; width: 10=
+0%;" width=3D"185"></div> </td></tr></table></td><td class=3D"column column=
+-2" width=3D"66.66666666666667%" style=3D"box-sizing: border-box; mso-table=
+-lspace: 0; mso-table-rspace: 0; font-weight: 400; text-align: left; paddin=
+g-bottom: 5px; padding-right: 15px; padding-top: 5px; vertical-align: top; =
+border-top: 0; border-right: 0; border-bottom: 0; border-left: 0;" align=3D=
+"left" valign=3D"top"><table class=3D"text_block block-1" width=3D"100%" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; word-=
+break: break-word;"><tr style=3D"box-sizing: border-box;"><td class=3D"pad"=
+ style=3D"box-sizing: border-box; padding-top: 5px;"><div style=3D"box-sizi=
+ng: border-box; font-family: sans-serif;"><div class=3D"" style=3D"box-sizi=
+ng: border-box; font-size: 14px; font-family: Mada; mso-line-height-alt: 16=
+.8px; color: #2a2a2a; line-height: 1.2;"><p style=3D"box-sizing: border-box=
+; line-height: inherit; margin: 0; font-size: 14px; text-align: right; mso-=
+line-height-alt: 16.8px;"><strong style=3D"box-sizing: border-box;"><span s=
+tyle=3D"box-sizing: border-box; font-size: 11px;"><span style=3D"box-sizing=
+: border-box;">Sep 26, 2023 | <a href=3D"https://links.today.com/e/evib?_t=
+=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D41778649111548208e3e1da81ee37f=
+14&amp;_e=3Dtg6tIr5pp0Gd7p6cmkiiAWCX0xmgeWhzwrx81SdMhP8yRKN4wQufyQIeDdYrpgW=
+R" target=3D"_blank" style=3D"box-sizing: border-box; text-decoration: unde=
+rline; color: #2a2a2a;" rel=3D"noopener">VIEW IN BROWSER</a></span></span><=
+/strong></p> </div></div></td></tr></table></td></tr></tbody></table></td><=
+/tr></tbody></table><table class=3D"row row-2" align=3D"center" width=3D"10=
+0%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" =
+style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0;"=
+><tbody style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-b=
+ox;"><td style=3D"box-sizing: border-box;"><table class=3D"row-content stac=
+k" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso=
+-table-rspace: 0; border-radius: 0; color: #000; width: 600px; margin: 0 au=
+to;" width=3D"600"><tbody style=3D"box-sizing: border-box;"><tr style=3D"bo=
+x-sizing: border-box;"><td class=3D"column column-1" width=3D"100%" style=
+=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; font-=
+weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; verti=
+cal-align: top; border-top: 0; border-right: 0; border-bottom: 0; border-le=
+ft: 0;" align=3D"left" valign=3D"top"><table class=3D"image_block block-1 d=
+esktop_hide" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" role=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: =
+0; mso-table-rspace: 0; mso-hide: all; display: none; max-height: 0; overfl=
+ow: hidden;"><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=
+=3D"box-sizing: border-box; width: 100%; padding-right: 0; padding-left: 0;=
+" width=3D"100%"><div class=3D"alignment" align=3D"center" style=3D"box-siz=
+ing: border-box; line-height: 10px;"><a href=3D"https://links.today.com/u/c=
+lick?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D41778649111548208e3e1da=
+81ee37f14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpGu0DCoKk1Mk-z4bHxbwGd6_SiF4yXBSyceV=
+9z_nOHp9LNLaXFeE4YaN6LtWCqqwSaxNy1MWuc7FLKZCDpRXVDUAyxl7amimB7AVDENiQ-T7CAd=
+H0mNC9zUX7VL_3wfj4BO9T1fLHGGydqOhNq233c0Gi0B5VdyK0HchIncUwJJOl6IS5Tu2nkk76j=
+f-yVjWHcvUX9WZqR7_K6UU4G67IVlhZJ3LlKGD9zK1EWa2tcM8fqR5uzQqyYEEtOkczVmJQrSKP=
+5LX7obA8cf8ECzTBwsZE59ArrQ_IFabK5xdbD-nQDu4TzlwPAtH-7j2_gAlykmKfm9rvn8gsOlf=
+JvqPkHT_jwIBvSqWLVnpSgGBKFgwqN7w-ZzKBDBm-8aKgMBGfq2mdZcw7nc0bAXlGqeVLnlbwb0=
+rxxH2OTNISKPTv9VQnR3UfxklFjKznew6kII0FQ__SWf8cVqvi22ez0eb1D0%3D" target=3D"=
+_blank" style=3D"box-sizing: border-box; outline: none;" tabindex=3D"-1"><i=
+mg class=3D"fullWidth" src=3D"https://d15k2d11r6t6rl.cloudfront.net/public/=
+users/Integrators/669d5713-9b6a-46bb-bd7e-c542cff6dd6a/ae0ce0ec0e7845ec900c=
+56b38b1c3248/Early%20Access%20Email%20banner%20Mobile.png" style=3D"box-siz=
+ing: border-box; display: block; height: auto; border: 0; max-width: 570px;=
+ width: 100%;" width=3D"570"></a></div></td></tr></table><table class=3D"im=
+age_block block-2 mobile_hide" width=3D"100%" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; =
+mso-table-lspace: 0; mso-table-rspace: 0;"><tr style=3D"box-sizing: border-=
+box;"><td class=3D"pad" style=3D"box-sizing: border-box; width: 100%; paddi=
+ng-right: 0; padding-left: 0;" width=3D"100%"><div class=3D"alignment" alig=
+n=3D"center" style=3D"box-sizing: border-box; line-height: 10px;"> <a href=
+=3D"https://links.today.com/u/click?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&a=
+mp;_m=3D41778649111548208e3e1da81ee37f14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpGu0D=
+CoKk1Mk-z4bHxbwGd6_SiF4yXBSyceV9z_nOHp9LNLaXFeE4YaN6LtWCqqwSaxNy1MWuc7FLKZC=
+DpRXVDUAyxl7amimB7AVDENiQ-T7CAdH0mNC9zUX7VL_3wfj4BO9T1fLHGGydqOhNq233c0Gi0B=
+5VdyK0HchIncUwJJOl6IS5Tu2nkk76jf-yVjWHcvUX9WZqR7_K6UU4G67IVlhZJ3LlKGD9zK1EW=
+a2tcM8fqR5uzQqyYEEtOkczVmJQrSKP5LX7obA8cf8ECzTBwsZE59ArrQ_IFabK5xdbD-n-Qgf8=
+PEtZxmZUf1tDCQ_mOLLhh2EI3Z6cmXFT2P_fopQvenzEEszAF43tv-OnRCl7ASBZROBZvpzmZB_=
+0CdD8xiNr42SkTqS1tBmvMmGAXhDB85ScxZKhaTZIxlkRCaOiqi9K6HR5IioT2Cahw7tV6IinnS=
+AhEE8W_8gROmg-OU%3D" target=3D"_blank" style=3D"box-sizing: border-box; out=
+line: none;" tabindex=3D"-1"><img class=3D"fullWidth" src=3D"https://d15k2d=
+11r6t6rl.cloudfront.net/public/users/Integrators/669d5713-9b6a-46bb-bd7e-c5=
+42cff6dd6a/ae0ce0ec0e7845ec900c56b38b1c3248/Early%20Access%20Email%20Deskto=
+p_1.png" style=3D"box-sizing: border-box; display: block; height: auto; bor=
+der: 0; max-width: 570px; width: 100%;" width=3D"570"></a></div></td></tr><=
+/table></td></tr></tbody></table></td></tr></tbody></table><table class=3D"=
+row row-3 mobile_hide" align=3D"center" width=3D"100%" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: bor=
+der-box; mso-table-lspace: 0; mso-table-rspace: 0;"><tbody style=3D"box-siz=
+ing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=3D"box-si=
+zing: border-box;"><table class=3D"row-content stack" align=3D"center" bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D=
+"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; border-r=
+adius: 0; color: #000; width: 600px; margin: 0 auto;" width=3D"600"><tbody =
+style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td=
+ class=3D"column column-1" width=3D"100%" style=3D"box-sizing: border-box; =
+mso-table-lspace: 0; mso-table-rspace: 0; font-weight: 400; text-align: lef=
+t; padding-bottom: 5px; padding-top: 25px; vertical-align: top; border-top:=
+ 0; border-right: 0; border-bottom: 0; border-left: 0;" align=3D"left" vali=
+gn=3D"top"><table class=3D"image_block block-1" width=3D"100%" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-siz=
+ing: border-box; mso-table-lspace: 0; mso-table-rspace: 0;"><tr style=3D"bo=
+x-sizing: border-box;"><td class=3D"pad" style=3D"box-sizing: border-box; p=
+adding-bottom: 10px; width: 100%; padding-right: 0; padding-left: 0;" width=
+=3D"100%"><div class=3D"alignment" align=3D"center" style=3D"box-sizing: bo=
+rder-box; line-height: 10px;"><a href=3D"https://links.today.com/u/click?_t=
+=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D41778649111548208e3e1da81ee37f=
+14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlNPQBpGTdg7OGoKxXHt56oSZYaPf=
+66wQUwrQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2cmXGjm-BG5RulnrNo0DzA5d=
+s1W69HMvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6ZVFrVTywZJGxVFW1fpWuaLQ=
+-qSK2KVykPvAV3zyUi28ZuvnOy345q9NjkiVND-JbzLTJ9Nq5Nl_G7VfAPc1HIvt3_coFVUcioH=
+R0aqQGhtiylMs0oQ6NPl_E7tCgGwAQPlJkUx1kiWTyKKJo5ZIbXO_3CrE4OQW2h7ky4xr8LkWkv=
+fUCJml7YuIHP1P6J9cz0Kk5KsApHz25PCMTjWcWwjR1NBMOsVIe-246S_HNcZjWxnFQiUZtRd9i=
+aQlS1BERvwWpdY0EeWk1nRqn42-AD2KyozIQ-36VNiT7qx_nU8tV8%3D" target=3D"_blank"=
+ style=3D"box-sizing: border-box; outline: none;" tabindex=3D"-1"><img src=
+=3D"https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/669d5713=
+-9b6a-46bb-bd7e-c542cff6dd6a/ae0ce0ec0e7845ec900c56b38b1c3248/StealsDealsLo=
+go.png" style=3D"box-sizing: border-box; display: block; height: auto; bord=
+er: 0; max-width: 300px; width: 100%;" width=3D"300"></a></div></td></tr></=
+table></td></tr></tbody></table></td></tr></tbody></table><table class=3D"r=
+ow row-4 desktop_hide" align=3D"center" width=3D"100%" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: bor=
+der-box; mso-table-lspace: 0; mso-table-rspace: 0; mso-hide: all; display: =
+none; max-height: 0; overflow: hidden;"><tbody style=3D"box-sizing: border-=
+box;"><tr style=3D"box-sizing: border-box;"><td style=3D"box-sizing: border=
+-box;"><table class=3D"row-content" align=3D"center" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: borde=
+r-box; mso-table-lspace: 0; mso-table-rspace: 0; mso-hide: all; display: no=
+ne; max-height: 0; overflow: hidden; border-radius: 0; color: #000; width: =
+600px; margin: 0 auto;" width=3D"600"><tbody style=3D"box-sizing: border-bo=
+x;"><tr style=3D"box-sizing: border-box;"><td class=3D"column column-1" wid=
+th=3D"33.333333333333336%" style=3D"box-sizing: border-box; mso-table-lspac=
+e: 0; mso-table-rspace: 0; font-weight: 400; text-align: left; padding-bott=
+om: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-=
+top: 0; border-right: 0; border-bottom: 0; border-left: 0;" align=3D"left" =
+valign=3D"top"><table class=3D"image_block block-1" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"b=
+ox-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; mso-hide: =
+all; display: none; max-height: 0; overflow: hidden;"> <tr style=3D"box-siz=
+ing: border-box;"><td class=3D"pad" style=3D"box-sizing: border-box; paddin=
+g-bottom: 5px; padding-top: 5px; width: 100%; padding-right: 0; padding-lef=
+t: 0;" width=3D"100%"><div class=3D"alignment" align=3D"left" style=3D"box-=
+sizing: border-box; line-height: 10px;"><img src=3D"https://media.sailthru.=
+com/composer/images/sailthru-prod-5ci/editor_images/Shop%20TODAY%20Perks%20=
+Logo_2.png" style=3D"box-sizing: border-box; display: block; height: auto; =
+border: 0; max-width: 133px; width: 100%;" width=3D"133"></div></td></tr></=
+table></td><td class=3D"column column-2" width=3D"66.66666666666667%" style=
+=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; font-=
+weight: 400; text-align: left; padding-bottom: 5px; padding-right: 10px; pa=
+dding-top: 5px; vertical-align: top; border-top: 0; border-right: 0; border=
+-bottom: 0; border-left: 0;" align=3D"left" valign=3D"top"><table class=3D"=
+text_block block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; mso-table-l=
+space: 0; mso-table-rspace: 0; word-break: break-word; mso-hide: all; displ=
+ay: none; max-height: 0; overflow: hidden;"><tr style=3D"box-sizing: border=
+-box;"><td class=3D"pad" style=3D"box-sizing: border-box; padding-top: 5px;=
+"><div style=3D"box-sizing: border-box; font-family: sans-serif;"><div clas=
+s=3D"" style=3D"box-sizing: border-box; font-size: 14px; font-family: Mada;=
+ mso-line-height-alt: 16.8px; color: #2a2a2a; line-height: 1.2;"><p style=
+=3D"box-sizing: border-box; line-height: inherit; margin: 0; font-size: 14p=
+x; text-align: right; mso-line-height-alt: 16.8px;"><strong style=3D"box-si=
+zing: border-box;"><span style=3D"box-sizing: border-box; font-size: 11px;"=
+><span style=3D"box-sizing: border-box;">Sep 26, 2023 | <a href=3D"https://=
+links.today.com/e/evib?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D41778=
+649111548208e3e1da81ee37f14&amp;_e=3Dtg6tIr5pp0Gd7p6cmkiiAWCX0xmgeWhzwrx81S=
+dMhP8yRKN4wQufyQIeDdYrpgWR" target=3D"_blank" style=3D"box-sizing: border-b=
+ox; text-decoration: underline; color: #2a2a2a;" rel=3D"noopener">VIEW IN B=
+ROWSER</a></span></span></strong></p></div></div></td></tr></table> </td></=
+tr></tbody></table></td></tr></tbody></table><table class=3D"row row-5 desk=
+top_hide" align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; mso-=
+table-lspace: 0; mso-table-rspace: 0; mso-hide: all; display: none; max-hei=
+ght: 0; overflow: hidden;"><tbody style=3D"box-sizing: border-box;"><tr sty=
+le=3D"box-sizing: border-box;"><td style=3D"box-sizing: border-box;"><table=
+ class=3D"row-content stack" align=3D"center" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; =
+mso-table-lspace: 0; mso-table-rspace: 0; mso-hide: all; display: none; max=
+-height: 0; overflow: hidden; border-radius: 0; color: #000; width: 600px; =
+margin: 0 auto;" width=3D"600"><tbody style=3D"box-sizing: border-box;"><tr=
+ style=3D"box-sizing: border-box;"><td class=3D"column column-1" width=3D"1=
+00%" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace=
+: 0; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: =
+25px; vertical-align: top; border-top: 0; border-right: 0; border-bottom: 0=
+; border-left: 0;" align=3D"left" valign=3D"top"><table class=3D"image_bloc=
+k block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0;=
+ mso-table-rspace: 0; mso-hide: all; display: none; max-height: 0; overflow=
+: hidden;"><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=3D=
+"box-sizing: border-box; padding-bottom: 10px; width: 100%; padding-right: =
+0; padding-left: 0;" width=3D"100%"><div class=3D"alignment" align=3D"cente=
+r" style=3D"box-sizing: border-box; line-height: 10px;"><a href=3D"https://=
+links.today.com/u/click?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D4177=
+8649111548208e3e1da81ee37f14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlN=
+PQBpGTdg7OGoKxXHt56oSZYaPf66wQUwrQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-=
+U_2cmXGjm-BG5RulnrNo0DzA5ds1W69HMvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZh=
+dP6ZVFrVTywZJGxVFW1fpWuaLQ-qSK2KVykPvAV3zyUi28ZuvnOy345q9NjkiVND-JbzLTJ9Nq5=
+Nl_G7VfAPc1HIvt3_coFVUcioHR0aqQGhtiylMs0oQ6NPl_E7tCgGwAQPlJkUx1kiWTyKKJo5ZI=
+bXO_7jUFNzAgj9fidrmYeajYfSs1eetrESPpqs6PjBj5N1u227D2fI3qhU24h13nCYb-IkIv4De=
+eNxs-_PYLySEi-fXdniFEvD3cdRy0iBY3T2CnZT5Mew01Zo97EcR4lunGNiMrSrh3U1Qz9x6CtT=
+xccU%3D" target=3D"_blank" style=3D"box-sizing: border-box; outline: none;"=
+ tabindex=3D"-1"><img src=3D"https://d15k2d11r6t6rl.cloudfront.net/public/u=
+sers/Integrators/669d5713-9b6a-46bb-bd7e-c542cff6dd6a/ae0ce0ec0e7845ec900c5=
+6b38b1c3248/StealsDealsLogo.png" style=3D"box-sizing: border-box; display: =
+block; height: auto; border: 0; max-width: 240px; width: 100%;" width=3D"24=
+0"></a></div></td></tr></table></td></tr></tbody></table></td></tr></tbody>=
+</table><table class=3D"row row-6 mobile_hide" align=3D"center" width=3D"10=
+0%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" =
+style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; =
+background-size: auto;"><tbody style=3D"box-sizing: border-box;"><tr style=
+=3D"box-sizing: border-box;"><td style=3D"box-sizing: border-box;"><table c=
+lass=3D"row-content stack" align=3D"center" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; ms=
+o-table-lspace: 0; mso-table-rspace: 0; background-color: #ff5c4f; backgrou=
+nd-image: url(https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrator=
+s/669d5713-9b6a-46bb-bd7e-c542cff6dd6a/ae0ce0ec0e7845ec900c56b38b1c3248/Ste=
+alsDealsGradient.png); background-repeat: no-repeat; background-size: cover=
+; border-radius: 0; color: #000; width: 600px; margin: 0 auto;" width=3D"60=
+0" bgcolor=3D"#ff5c4f" background=3D"https://d15k2d11r6t6rl.cloudfront.net/=
+public/users/Integrators/669d5713-9b6a-46bb-bd7e-c542cff6dd6a/ae0ce0ec0e784=
+5ec900c56b38b1c3248/StealsDealsGradient.png"><tbody style=3D"box-sizing: bo=
+rder-box;"><tr style=3D"box-sizing: border-box;"><td class=3D"column column=
+-1" width=3D"100%" style=3D"box-sizing: border-box; mso-table-lspace: 0; ms=
+o-table-rspace: 0; font-weight: 400; text-align: left; border-left: 20px so=
+lid #fff; border-right: 20px solid #fff; padding-bottom: 40px; padding-left=
+: 10px; padding-right: 10px; padding-top: 40px; vertical-align: top; border=
+-top: 0; border-bottom: 0;" align=3D"left" valign=3D"top"><table class=3D"t=
+ext_block block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; mso-table-ls=
+pace: 0; mso-table-rspace: 0; word-break: break-word;"><tr style=3D"box-siz=
+ing: border-box;"><td class=3D"pad" style=3D"box-sizing: border-box;"><div =
+style=3D"box-sizing: border-box; font-family: sans-serif;"><div class=3D"" =
+style=3D"box-sizing: border-box; font-size: 14px; font-family: Mada; mso-li=
+ne-height-alt: 16.8px; color: #fff; line-height: 1.2;"><p style=3D"box-sizi=
+ng: border-box; line-height: inherit; margin: 0; font-size: 64px; text-alig=
+n: center; mso-line-height-alt: 76.8px;"><span style=3D"box-sizing: border-=
+box; font-size: 64px;"><strong style=3D"box-sizing: border-box;"><a href=3D=
+"https://links.today.com/u/click?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;=
+_m=3D41778649111548208e3e1da81ee37f14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpI0yquby=
+srmd9-vlNPQBpGTdg7OGoKxXHt56oSZYaPf66wQUwrQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThY=
+TmaGsTtd-U_2cmXGjm-BG5RulnrNo0DzA5ds1W69HMvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i=
+8RjYV5sZhdP6ZVM09g2Kib-07J3J0eyOrhXIxP6PFgJ3Hit7p0UpR4GG1T25282c55czUzDpFdr=
+aOqlVHfWPNgSK--dLOl-fsUgfxODdfptGCsVi-p1l3I1F66-sAQki9d9YValR6-NcHq0iywtJVg=
+46KmgWfqlM0vte3h_CrWKZxK3ZUcgLfb8Q9xpH2mhMTG2hbS60LbRdvAIHCZZCn0APJ1T_2-v_v=
+zuJKzhvEkfWYzuBDbzfXyguAfHEW_nPtsV6garyKhqY17eJr7sW90zT9c_UCTFijUSdls0K5V5l=
+0CYFEZFmLfZJNiO8uKqnjL4O0G08Hh6SIN" target=3D"_blank" style=3D"box-sizing: =
+border-box; text-decoration: none; color: #ffffff;" rel=3D"noopener">EARLY =
+ACCESS</a></strong></span></p><p style=3D"box-sizing: border-box; line-heig=
+ht: inherit; margin: 0; font-size: 64px; text-align: center; mso-line-heigh=
+t-alt: 76.8px;"> <span style=3D"box-sizing: border-box; font-size: 64px;"><=
+strong style=3D"box-sizing: border-box;"><a href=3D"https://links.today.com=
+/u/click?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D41778649111548208e3=
+e1da81ee37f14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlNPQBpGTdg7OGoKxX=
+Ht56oSZYaPf66wQUwrQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2cmXGjm-BG5Ru=
+lnrNo0DzA5ds1W69HMvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6ZVM09g2Kib-0=
+7J3J0eyOrhXIxP6PFgJ3Hit7p0UpR4GG1T25282c55czUzDpFdraOqlVHfWPNgSK--dLOl-fsUg=
+fxODdfptGCsVi-p1l3I1F66-sAQki9d9YValR6-NcHq0iywtJVg46KmgWfqlM0vtQL_iwkP3vjj=
+UvmJ9wsQ7PeVUyrOv2idc37kpGlaSjhvJM_d2E9OfKyPszUEBf1C1jExUzEzYjlkiGC0kkMdb2f=
+7yMAMvQghYqRgu8PSW-PHF0h_oVX_YknZceGCGRIa0GjGmTQs07i8RrHo2YoNleLMcPc-LeaUxx=
+aB6vGuGazP" target=3D"_blank" style=3D"box-sizing: border-box; text-decorat=
+ion: none; color: #ffffff;" rel=3D"noopener">STARTS NOW!</a></strong></span=
+></p></div></div></td></tr></table><table class=3D"text_block block-2" widt=
+h=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"present=
+ation" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspa=
+ce: 0; word-break: break-word;"><tr style=3D"box-sizing: border-box;"><td c=
+lass=3D"pad" style=3D"box-sizing: border-box; padding-bottom: 20px; padding=
+-left: 10px; padding-right: 10px; padding-top: 20px;"><div style=3D"box-siz=
+ing: border-box; font-family: sans-serif;"><div class=3D"" style=3D"box-siz=
+ing: border-box; font-size: 14px; font-family: Prata; mso-line-height-alt: =
+21px; color: #fff; line-height: 1.5;"><p style=3D"box-sizing: border-box; l=
+ine-height: inherit; margin: 0; font-size: 28px; text-align: center; mso-li=
+ne-height-alt: 42px; letter-spacing: normal;"> <a href=3D"https://links.tod=
+ay.com/u/click?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D4177864911154=
+8208e3e1da81ee37f14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlNPQBpGTdg7=
+OGoKxXHt56oSZYaPf66wQUwrQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2cmXGjm=
+-BG5RulnrNo0DzA5ds1W69HMvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6ZVM09g=
+2Kib-07J3J0eyOrhXIxP6PFgJ3Hit7p0UpR4GG1T25282c55czUzDpFdraOqlVHfWPNgSK--dLO=
+l-fsUgfxODdfptGCsVi-p1l3I1F66-sAQki9d9YValR6-NcHq0iywtJVg46KmgWfqlM0vtde6GF=
+FpORCydWCOD6OqWbfxshIXBxzmrXT1Ot0uAilkx7tHwrijt4XPztCvjARv4zPDfbxOLJqlzZ8dr=
+sbh4HZM5IHBXysBOfrgmhn6VfwAryV-YMyBri_gBGqY25PlFuSSqGHSHxY4Wz-6fcbXTnHmqRIr=
+18blAcqs4bblCTqd" target=3D"_blank" style=3D"box-sizing: border-box; text-d=
+ecoration: none; color: #ffffff;" rel=3D"noopener">Tech &amp; Gadgets Up To=
+ 81% Off! Gabba Goods, Brookstone, Aduro, 3P Experts, And More!</a></p></di=
+v></div></td></tr></table><table class=3D"button_block block-3" width=3D"10=
+0%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" =
+style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0;"=
+><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=3D"box-sizin=
+g: border-box; padding-bottom: 15px; padding-top: 15px; text-align: center;=
+" align=3D"center"><div class=3D"alignment" align=3D"center" style=3D"box-s=
+izing: border-box;"> <!--[if mso]><v:roundrect xmlns:v=3D"urn:schemas-micro=
+soft-com:vml" xmlns:w=3D"urn:schemas-microsoft-com:office:word" href=3D"htt=
+ps://links.today.com/u/click?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&_m=3D417=
+78649111548208e3e1da81ee37f14&_e=3DuZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlNPQB=
+pGTdg7OGoKxXHt56oSZYaPf66wQUwrQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2=
+cmXGjm-BG5RulnrNo0DzA5ds1W69HMvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6=
+ZVM09g2Kib-07J3J0eyOrhXIxP6PFgJ3Hit7p0UpR4GG1T25282c55czUzDpFdraOqlVHfWPNgS=
+K--dLOl-fsUgfxODdfptGCsVi-p1l3I1F66-sAQki9d9YValR6-NcHq0iywtJVg46KmgWfqlM0v=
+tb86CYb3Y6y0vM4QT0E4q2mQ7tVYjX4LiVn_JKoJ9_ixUuzAjfsnXzAKySvYZgxUrKkK1VJejHW=
+HDHSB8E5fRueeCnjhBNuw9Hay3qvhZaEztXiO5EG5Ii2oEWpcTSKnIcnol8VTX5arddW1cxsqom=
+zcgEqoQ7-_hLeoa68dyWrg" style=3D"height:37px;width:221px;v-text-anchor:midd=
+le;" arcsize=3D"0%" stroke=3D"false" fillcolor=3D"#ffbaad"><w:anchorlock/><=
+v:textbox inset=3D"0px,1px,0px,0px"><center style=3D"color:#2a2a2a; font-fa=
+mily:sans-serif; font-size:15px"><![endif]--> <a href=3D"https://links.toda=
+y.com/u/click?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D41778649111548=
+208e3e1da81ee37f14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlNPQBpGTdg7O=
+GoKxXHt56oSZYaPf66wQUwrQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2cmXGjm-=
+BG5RulnrNo0DzA5ds1W69HMvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6ZVM09g2=
+Kib-07J3J0eyOrhXIxP6PFgJ3Hit7p0UpR4GG1T25282c55czUzDpFdraOqlVHfWPNgSK--dLOl=
+-fsUgfxODdfptGCsVi-p1l3I1F66-sAQki9d9YValR6-NcHq0iywtJVg46KmgWfqlM0vtShWQOZ=
+PMVX-mhtDDN-EDOP2qRFOcg9kML2gVnWHBuViHgLyJbROuf98z_NyhIzRueGSJ0t7HXMI9L7FFR=
+bYiKoxjo-xZzzWrZyK7P0ilo4P6C2ijcvVMIxC927oD0I_n0CvgsOPbM8DmScv0dm0vn2b0Ld1U=
+v2SydXBS0BIYdFi" target=3D"_blank" style=3D"box-sizing: border-box; text-de=
+coration: none; display: inline-block; color: #2a2a2a; background-color: #f=
+fbaad; border-radius: 0px; width: auto; border-top: 0px solid #FF503C; font=
+-weight: 700; border-right: 0px solid #FF503C; border-bottom: 0px solid #FF=
+503C; border-left: 0px solid #FF503C; padding-top: 4px; padding-bottom: 3px=
+; font-family: Mada; font-size: 15px; text-align: center; mso-border-alt: n=
+one; word-break: keep-all;"><span style=3D"box-sizing: border-box; padding-=
+left: 35px; padding-right: 35px; font-size: 15px; display: inline-block; le=
+tter-spacing: normal;"><span style=3D"box-sizing: border-box; word-break: b=
+reak-word; line-height: 30px;">UNLOCK EARLY ACCESS</span></span></a> <!--[i=
+f mso]></center></v:textbox></v:roundrect><![endif]--></div></td></tr></tab=
+le><table class=3D"html_block block-4" width=3D"100%" border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: bord=
+er-box; mso-table-lspace: 0; mso-table-rspace: 0;"><tr style=3D"box-sizing:=
+ border-box;"><td class=3D"pad" style=3D"box-sizing: border-box;"><div styl=
+e=3D"box-sizing: border-box; font-family: CrimsonPro; text-align: center;" =
+align=3D"center"><style>table.button_block.block-3 tbody tr td div a{box-sh=
+adow:3px 3px #2a2a2a}</style></div></td></tr></table></td></tr></tbody></ta=
+ble></td></tr></tbody></table><table class=3D"row row-7 desktop_hide" align=
+=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ role=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0=
+; mso-table-rspace: 0; mso-hide: all; display: none; max-height: 0; overflo=
+w: hidden; background-size: auto;"><tbody style=3D"box-sizing: border-box;"=
+><tr style=3D"box-sizing: border-box;"><td style=3D"box-sizing: border-box;=
+"><table class=3D"row-content stack" align=3D"center" border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: bord=
+er-box; mso-table-lspace: 0; mso-table-rspace: 0; mso-hide: all; display: n=
+one; max-height: 0; overflow: hidden; background-color: #ff5c4f; background=
+-image: url(https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/=
+669d5713-9b6a-46bb-bd7e-c542cff6dd6a/ae0ce0ec0e7845ec900c56b38b1c3248/Steal=
+sDealsGradient.png); background-repeat: no-repeat; background-size: cover; =
+border-radius: 0; color: #000; width: 600px; margin: 0 auto;" width=3D"600"=
+ bgcolor=3D"#ff5c4f" background=3D"https://d15k2d11r6t6rl.cloudfront.net/pu=
+blic/users/Integrators/669d5713-9b6a-46bb-bd7e-c542cff6dd6a/ae0ce0ec0e7845e=
+c900c56b38b1c3248/StealsDealsGradient.png"><tbody style=3D"box-sizing: bord=
+er-box;"><tr style=3D"box-sizing: border-box;"><td class=3D"column column-1=
+" width=3D"100%" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-=
+table-rspace: 0; font-weight: 400; text-align: left; border-left: 20px soli=
+d #fff; border-right: 20px solid #fff; padding-bottom: 40px; padding-left: =
+10px; padding-right: 10px; padding-top: 40px; vertical-align: top; border-t=
+op: 0; border-bottom: 0;" align=3D"left" valign=3D"top"><table class=3D"tex=
+t_block block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; mso-table-lsp=
+ace: 0; mso-table-rspace: 0; word-break: break-word; mso-hide: all; display=
+: none; max-height: 0; overflow: hidden;"><tr style=3D"box-sizing: border-b=
+ox;"><td class=3D"pad" style=3D"box-sizing: border-box;"><div style=3D"box-=
+sizing: border-box; font-family: sans-serif;"><div class=3D"" style=3D"box-=
+sizing: border-box; font-size: 14px; font-family: Mada; mso-line-height-alt=
+: 16.8px; color: #fff; line-height: 1.2;"><p style=3D"box-sizing: border-bo=
+x; line-height: inherit; margin: 0; font-size: 38px; text-align: center; ms=
+o-line-height-alt: 45.6px;"><span style=3D"box-sizing: border-box; font-siz=
+e: 38px;"><strong style=3D"box-sizing: border-box;"><a href=3D"https://link=
+s.today.com/u/click?_t=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D41778649=
+111548208e3e1da81ee37f14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlNPQBp=
+GTdg7OGoKxXHt56oSZYaPf66wQUwrQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2c=
+mXGjm-BG5RulnrNo0DzA5ds1W69HMvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6Z=
+VM09g2Kib-07J3J0eyOrhXIxP6PFgJ3Hit7p0UpR4GG1T25282c55czUzDpFdraOqlVHfWPNgSK=
+--dLOl-fsUgfxODdfptGCsVi-p1l3I1F66-sAQki9d9YValR6-NcHq0iywtJVg46KmgWfqlM0vt=
+al6wqz-5vAsdIueKSpZ7sR3Pc3JzSB2QZFelgv5SKbgKDni4OQC-C95fPyku4pMTGx8e2iwQ7NG=
+X9MigvYJvBHr2E74kD5qq7LL0L2OahX40mZR-ryMJoIHM2W--Fsn00MJUNb7b-ox4v2f7H5MBZY=
+5Q5QLlmFTscajqFegUb49" target=3D"_blank" style=3D"box-sizing: border-box; t=
+ext-decoration: none; color: #ffffff;" rel=3D"noopener">EARLY ACCESS</a></s=
+trong></span></p><p style=3D"box-sizing: border-box; line-height: inherit; =
+margin: 0; font-size: 38px; text-align: center; mso-line-height-alt: 45.6px=
+;"><span style=3D"box-sizing: border-box; font-size: 38px;"><strong style=
+=3D"box-sizing: border-box;"><a href=3D"https://links.today.com/u/click?_t=
+=3Dae0ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D41778649111548208e3e1da81ee37f=
+14&amp;_e=3DuZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlNPQBpGTdg7OGoKxXHt56oSZYaPf=
+66wQUwrQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2cmXGjm-BG5RulnrNo0DzA5d=
+s1W69HMvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6ZVM09g2Kib-07J3J0eyOrhX=
+IxP6PFgJ3Hit7p0UpR4GG1T25282c55czUzDpFdraOqlVHfWPNgSK--dLOl-fsUgfxODdfptGCs=
+Vi-p1l3I1F66-sAQki9d9YValR6-NcHq0iywtJVg46KmgWfqlM0vteFa7G6lfl_5HyO8Rc9EDda=
+F_kiJUMzmLYob_-e1MlYVjgCR2-r5KTevWuIbFZgWKILpf2SXWkvZVoYsZ0yZivi9hXOZDCAc09=
+PYRIWUK89qeRLTiOvg2KR3xH8nPBOg_uthahw-8b_Xo2SdIUEPOIgjB54bSLP7MjfLYSRPzQIz"=
+ target=3D"_blank" style=3D"box-sizing: border-box; text-decoration: none; =
+color: #ffffff;" rel=3D"noopener">STARTS NOW!</a></strong></span></p></div>=
+</div></td></tr></table><table class=3D"text_block block-2" width=3D"100%" =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" styl=
+e=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; word=
+-break: break-word; mso-hide: all; display: none; max-height: 0; overflow: =
+hidden;"><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=3D"b=
+ox-sizing: border-box; padding-bottom: 20px; padding-left: 10px; padding-ri=
+ght: 10px; padding-top: 20px;"><div style=3D"box-sizing: border-box; font-f=
+amily: sans-serif;"><div class=3D"" style=3D"box-sizing: border-box; font-s=
+ize: 14px; font-family: Prata; mso-line-height-alt: 21px; color: #fff; line=
+-height: 1.5;"><p style=3D"box-sizing: border-box; line-height: inherit; ma=
+rgin: 0; font-size: 18px; text-align: center; mso-line-height-alt: 27px; le=
+tter-spacing: normal;"> <a href=3D"https://links.today.com/u/click?_t=3Dae0=
+ce0ec0e7845ec900c56b38b1c3248&amp;_m=3D41778649111548208e3e1da81ee37f14&amp=
+;_e=3DuZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlNPQBpGTdg7OGoKxXHt56oSZYaPf66wQUw=
+rQ5cfdJjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2cmXGjm-BG5RulnrNo0DzA5ds1W69H=
+MvsNvux6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6ZVM09g2Kib-07J3J0eyOrhXIxP6PF=
+gJ3Hit7p0UpR4GG1T25282c55czUzDpFdraOqlVHfWPNgSK--dLOl-fsUgfxODdfptGCsVi-p1l=
+3I1F66-sAQki9d9YValR6-NcHq0iywtJVg46KmgWfqlM0vtfoVrTH_VehqUUqBdvywqzFkh6pDe=
+FlF9coPAbeqEHL49XNFVrY0XWzJw8-fzwIuyIIXQ5TIwdCpyc5IzEd6K7TdvYW5jWLO6YkFxOk1=
+n0sLf7igpyc2adpw8DiSAVqsMkHHxgjIj2G8LuuMgtqD0wosqErP8xLD1jaQM5mJFrCm" targe=
+t=3D"_blank" style=3D"box-sizing: border-box; text-decoration: none; color:=
+ #ffffff;" rel=3D"noopener">Tech &amp; Gadgets Up To 81% Off! Gabba Goods, =
+Brookstone, Aduro, 3P Experts, And More!</a></p></div></div></td></tr></tab=
+le><table class=3D"button_block block-3" width=3D"100%" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: bo=
+rder-box; mso-table-lspace: 0; mso-table-rspace: 0; mso-hide: all; display:=
+ none; max-height: 0; overflow: hidden;"><tr style=3D"box-sizing: border-bo=
+x;"><td class=3D"pad" style=3D"box-sizing: border-box; padding-bottom: 15px=
+; padding-top: 15px; text-align: center;" align=3D"center"><div class=3D"al=
+ignment" align=3D"center" style=3D"box-sizing: border-box;"> <!--[if mso]><=
+v:roundrect xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:w=3D"urn:schema=
+s-microsoft-com:office:word" href=3D"https://links.today.com/u/click?_t=3Da=
+e0ce0ec0e7845ec900c56b38b1c3248&_m=3D41778649111548208e3e1da81ee37f14&_e=3D=
+uZQdsVmk_raZzjtx2WIEpI0yqubysrmd9-vlNPQBpGTdg7OGoKxXHt56oSZYaPf66wQUwrQ5cfd=
+Jjb-Llr8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2cmXGjm-BG5RulnrNo0DzA5ds1W69HMvsNvu=
+x6EUwPorsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6ZVM09g2Kib-07J3J0eyOrhXIxP6PFgJ3Hit=
+7p0UpR4GG1T25282c55czUzDpFdraOqlVHfWPNgSK--dLOl-fsUgfxODdfptGCsVi-p1l3I1F66=
+-sAQki9d9YValR6-NcHq0iywtJVg46KmgWfqlM0vtUYWCPctctUULD_2EthqoM7aqv19Ux1uSQM=
+DkDwikh75Q23QmjaHJLjhfnznnPCTkh9uDilKkQjUlKGl6DKHJ9TopfXWJldJGpcYOS3anfwCp3=
+Wjb6suDcjV0CmcBzNBkmF4aHRazv6RsQxidHv-ZF8Y2PxC72M-Gy0sTPJtjcDE" style=3D"he=
+ight:37px;width:221px;v-text-anchor:middle;" arcsize=3D"0%" stroke=3D"false=
+" fillcolor=3D"#ffbaad"><w:anchorlock/><v:textbox inset=3D"0px,1px,0px,0px"=
+><center style=3D"color:#2a2a2a; font-family:sans-serif; font-size:15px"><!=
+[endif]--> <a href=3D"https://links.today.com/u/click?_t=3Dae0ce0ec0e7845ec=
+900c56b38b1c3248&amp;_m=3D41778649111548208e3e1da81ee37f14&amp;_e=3DuZQdsVm=
+k_raZzjtx2WIEpI0yqubysrmd9-vlNPQBpGTdg7OGoKxXHt56oSZYaPf66wQUwrQ5cfdJjb-Llr=
+8Y3-B1dCLchQwAgvq_ThYTmaGsTtd-U_2cmXGjm-BG5RulnrNo0DzA5ds1W69HMvsNvux6EUwPo=
+rsHiPpZIA8Ttr3EleR71i8RjYV5sZhdP6ZVM09g2Kib-07J3J0eyOrhXIxP6PFgJ3Hit7p0UpR4=
+GG1T25282c55czUzDpFdraOqlVHfWPNgSK--dLOl-fsUgfxODdfptGCsVi-p1l3I1F66-sAQki9=
+d9YValR6-NcHq0iywtJVg46KmgWfqlM0vtfc19_gkOohQ02lRWpeqJck4klX2Xk05IAzi-IjLsa=
+Jabbg_RVnkOkI69fvk_-_elegOPua_m-to7IfP0tmnHT-BG1j9Dzar7jisL-m8hczmDwv2p9-iu=
+WjRVeLgjtVqNy2OWIo7L3uW0PmlDPiLkYaOFR4-ieA5aLWVlvaUddh7" target=3D"_blank" =
+style=3D"box-sizing: border-box; text-decoration: none; display: inline-blo=
+ck; color: #2a2a2a; background-color: #ffbaad; border-radius: 0px; width: a=
+uto; border-top: 0px solid #FF503C; font-weight: 700; border-right: 0px sol=
+id #FF503C; border-bottom: 0px solid #FF503C; border-left: 0px solid #FF503=
+C; padding-top: 4px; padding-bottom: 3px; font-family: Mada; font-size: 15p=
+x; text-align: center; mso-border-alt: none; word-break: keep-all;"><span s=
+tyle=3D"box-sizing: border-box; padding-left: 35px; padding-right: 35px; fo=
+nt-size: 15px; display: inline-block; letter-spacing: normal;"><span style=
+=3D"box-sizing: border-box; word-break: break-word; line-height: 30px;">UNL=
+OCK EARLY ACCESS</span></span></a> <!--[if mso]></center></v:textbox></v:ro=
+undrect><![endif]--></div></td></tr></table><table class=3D"html_block bloc=
+k-4" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso=
+-table-rspace: 0; mso-hide: all; display: none; max-height: 0; overflow: hi=
+dden;"><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=3D"box=
+-sizing: border-box;"><div style=3D"box-sizing: border-box; font-family: Cr=
+imsonPro; text-align: center;" align=3D"center"><!--[if false]><!--><style>=
+table.button_block.block-3 tbody tr td div a{box-shadow:3px 3px #2a2a2a}</s=
+tyle><!--<![endif]--></div></td></tr></table></td></tr></tbody></table></td=
+></tr> </tbody></table><table class=3D"row row-8" align=3D"center" width=3D=
+"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentatio=
+n" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: =
+0;"><tbody style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: borde=
+r-box;"><td style=3D"box-sizing: border-box;"><table class=3D"row-content s=
+tack" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0; ms=
+o-table-rspace: 0; border-radius: 0; color: #000; width: 600px; margin: 0 a=
+uto;" width=3D"600"><tbody style=3D"box-sizing: border-box;"><tr style=3D"b=
+ox-sizing: border-box;"><td class=3D"column column-1" width=3D"100%" style=
+=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; font-=
+weight: 400; text-align: left; padding-bottom: 20px; padding-left: 20px; pa=
+dding-right: 20px; padding-top: 15px; vertical-align: top; border-top: 0; b=
+order-right: 0; border-bottom: 0; border-left: 0;" align=3D"left" valign=3D=
+"top"><table class=3D"text_block block-1" width=3D"100%" border=3D"0" cellp=
+adding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: b=
+order-box; mso-table-lspace: 0; mso-table-rspace: 0; word-break: break-word=
+;"><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=3D"box-siz=
+ing: border-box; padding-bottom: 10px;"><div style=3D"box-sizing: border-bo=
+x; font-family: sans-serif;"><div class=3D"" style=3D"box-sizing: border-bo=
+x; font-size: 14px; font-family: Mada; mso-line-height-alt: 21px; color: #f=
+f5c4f; line-height: 1.5;"><p style=3D"box-sizing: border-box; line-height: =
+inherit; margin: 0; font-size: 14px; text-align: center; mso-line-height-al=
+t: 22.5px;"><span style=3D"box-sizing: border-box; font-size: 15px;"><stron=
+g style=3D"box-sizing: border-box;"><span style=3D"box-sizing: border-box;"=
+><span style=3D"box-sizing: border-box;">Ends:</span></span></strong></span=
+></p></div></div></td></tr></table><table class=3D"html_block block-2" widt=
+h=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"present=
+ation" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspa=
+ce: 0;"><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=3D"bo=
+x-sizing: border-box;"><div style=3D"box-sizing: border-box; font-family: C=
+rimsonPro; text-align: center;" align=3D"center"><table width=3D"100%" cell=
+spacing=3D"0" cellpadding=3D"0" style=3D"box-sizing: border-box;"><tbody st=
+yle=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td a=
+lign=3D"center" style=3D"box-sizing: border-box;"><img src=3D"http://i.coun=
+tdownmail.com/2spynh.gif" style=3D"box-sizing: border-box; display: inline-=
+block!important;" border=3D"0" alt=3D"countdownmail.com"></td></tr></tbody>=
+</table></div></td></tr></table><table class=3D"html_block block-3" width=
+=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presenta=
+tion" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspac=
+e: 0;"><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=3D"box=
+-sizing: border-box;"><div style=3D"box-sizing: border-box; font-family: Cr=
+imsonPro; text-align: center;" align=3D"center"><div class=3D"divider-orang=
+e" style=3D"box-sizing: border-box; background-color: #FFBAAD; clip-path: p=
+olygon(0 0, 100% 20%, 98% 70%, 0 100%); max-width: 160px; height: 14px; mar=
+gin: auto;"></div> <style>.divider-orange{background-color:#ffbaad;clip-pat=
+h:polygon(0 0,100% 20%,98% 70%,0 100%);max-width:160px;height:14px;margin:a=
+uto}</style></div></td></tr></table></td></tr></tbody></table></td></tr></t=
+body></table><table class=3D"row row-9" align=3D"center" width=3D"100%" bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0;"><tbo=
+dy style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;">=
+<td style=3D"box-sizing: border-box;"><table class=3D"row-content stack" al=
+ign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pre=
+sentation" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-=
+rspace: 0; color: #000; width: 600px; margin: 0 auto;" width=3D"600"><tbody=
+ style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><t=
+d class=3D"column column-1" width=3D"100%" style=3D"box-sizing: border-box;=
+ mso-table-lspace: 0; mso-table-rspace: 0; font-weight: 400; text-align: le=
+ft; padding-left: 10px; padding-right: 10px; vertical-align: top; border-to=
+p: 0; border-right: 0; border-bottom: 0; border-left: 0;" align=3D"left" va=
+lign=3D"top"><table class=3D"text_block block-1" width=3D"100%" border=3D"0=
+" cellpadding=3D"10" cellspacing=3D"0" role=3D"presentation" style=3D"box-s=
+izing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; word-break: br=
+eak-word;"><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=3D=
+"box-sizing: border-box;"><div style=3D"box-sizing: border-box; font-family=
+: sans-serif;"><div class=3D"" style=3D"box-sizing: border-box; font-size: =
+14px; font-family: Mada; mso-line-height-alt: 16.8px; color: #555; line-hei=
+ght: 1.2;"><p style=3D"box-sizing: border-box; line-height: inherit; margin=
+: 0; font-size: 10px; text-align: center; mso-line-height-alt: 12px;"><span=
+ style=3D"box-sizing: border-box; font-size: 10px; color: #999999;">*SUBJEC=
+T TO AVAILABILITY</span></p><p style=3D"box-sizing: border-box; line-height=
+: inherit; margin: 0; font-size: 10px; text-align: center; mso-line-height-=
+alt: 16.8px;">&nbsp;</p><p style=3D"box-sizing: border-box; line-height: in=
+herit; margin: 0; font-size: 10px; text-align: center; mso-line-height-alt:=
+ 12px;"> <span style=3D"box-sizing: border-box; font-size: 10px; color: #99=
+9999;">=C2=A9 2023 NBC UNIVERSAL =E2=80=A2 NO RETURNS, ALL ITEMS ARE FINAL =
+SALE</span></p><p style=3D"box-sizing: border-box; line-height: inherit; ma=
+rgin: 0; font-size: 10px; text-align: center; mso-line-height-alt: 16.8px;"=
+>&nbsp;</p><p style=3D"box-sizing: border-box; line-height: inherit; margin=
+: 0; font-size: 10px; text-align: center; mso-line-height-alt: 12px;"> <spa=
+n style=3D"box-sizing: border-box; font-size: 10px; color: #999999;">Our ed=
+itors independently selected these items because we think you will enjoy th=
+em and might like them at these prices. If you purchase something through o=
+ur links, TODAY earns a commission.</span></p><p style=3D"box-sizing: borde=
+r-box; line-height: inherit; margin: 0; font-size: 10px; text-align: center=
+; mso-line-height-alt: 16.8px;">&nbsp;</p><p style=3D"box-sizing: border-bo=
+x; line-height: inherit; margin: 0; font-size: 10px; text-align: center; ms=
+o-line-height-alt: 12px;"> <span style=3D"box-sizing: border-box; font-size=
+: 10px; color: #999999;">No longer want to receive these emails? <a href=3D=
+"https://links.today.com/e/encryptedUnsubscribe?_r=3Dae0ce0ec0e7845ec900c56=
+b38b1c3248&amp;_s=3D41778649111548208e3e1da81ee37f14&amp;_t=3Dtg6tIr5pp0Gd7=
+p6cmkiiAWCX0xmgeWhzwrx81SdMhP8sBfcBJax0Ze0VV8xyPez-GBMdnTpzSTxVqGmVrkNUH92y=
+GhYFDhdu0Rq2_VX2zVX6kutUP8APrKD6bF5ENPUs" target=3D"_blank" rel=3D"noopener=
+" style=3D"box-sizing: border-box; color: #555555;">Click here to unsubscri=
+be</a><a href=3D"{optout_confirm_url}" target=3D"_blank" rel=3D"noopener" s=
+tyle=3D"box-sizing: border-box; text-decoration: underline; color: #999999;=
+">.</a>&nbsp;&nbsp;&nbsp;</span></p><p style=3D"box-sizing: border-box; lin=
+e-height: inherit; margin: 0; font-size: 10px; text-align: center; mso-line=
+-height-alt: 12px;"><span style=3D"box-sizing: border-box; font-size: 10px;=
+ color: #999999;">TODAY Show NBC - 30 Rockefeller Plaza, New York, NY 10112=
+</span></p></div></div></td></tr></table></td></tr></tbody></table></td></t=
+r></tbody></table></td></tr></tbody></table><!-- End -->
+<img border=3D"0" width=3D"1" height=3D"1" alt=3D"" src=3D"http://track.tod=
+ay.com/q/iSH_eIUampsI2RLLPbHNOw~~/AARGbAA~/RgRm9e6NPlcDc3BjQgpk-o1pE2UTkwgd=
+Uhx0b2JpbnNpbHZlc3RyZTA5M0Bzb29uZXJzLnVzWAQAAAPE">
+</body></html>=
+
+--_----G8bh/tx9eRVv2YzjleTsKw===_7F/C1-38065-D8963156--

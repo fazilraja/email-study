@@ -1,0 +1,795 @@
+Received: from MW5PR20MB4450.namprd20.prod.outlook.com (2603:10b6:303:1a2::18)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Wed, 13 Sep 2023
+ 18:16:14 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=XTZoxIJHRi4qmPNM0FfWuZn+KPnyXZ+4JO04Fdauz93+xPhs89sRk8nfri8QgaDQDPq6+MbIwD8VQiy/7fnskEn+WUqLiJgyEONE9XBnMwaY6V95O2IFUD53DvK/dLHjT+0H+B2APHXE1I1yMObXKWQMMujJoTE26OTEAHwmudr0ONan17TCK0G8P3L7ou9JcLD83LWdNyYn22NboONULC6Z1vuvntulQjxiap5GHJUNhtXrth6tfYqgavVf9ZCoHlWO68UOD1Ez949e3ECLcXmxyeIc3AxBXV15ehYCmjo6sGHR9vdhI4UU6ciub0RrBUJtU6UUaDHyD+h9Fqy4vg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t5fR+xPy66yYxFiRx3QZkF2b7w8xPSVkgMzl+UuYn5c=;
+ b=QaRY+JbSaR7FPn0rfXVYg21a/PAlSoTlZHu4kdc+mxfdXEQH9p2Pn2m6oOU9d0pzHHvmXWhge7No2Q932W1YgDIAGRh5jcu0CK85yQkDCPaGnZhEtSln3QjDF2FpHRsyzJjkpeFReuyA37fkEgb5elpCgxJquR5+kLViP2o/XelbQxhlhI4wGCqbJWYoFtuXNIg+kSJcFYHoUa5Xz8QUFwt6XgvVV39jv5DUHVHQU90Ptwg8L4xDpisfXdI8oV2gciIcf+VaKaM2ZkVBZ8J8bxOp4PghKqDfC1TOn36cijpe3m3TYpxo84BIsgUg6COAcvo/t2CPF7Of0417uuRH7A==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.160.179) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce-west.twitch.tv; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=twitch.tv; dkim=pass (signature was verified)
+ header.d=twitch.tv; dkim=pass (signature was verified)
+ header.d=amazonses.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=0101018a8fc20086-7f6afd47-d024-447c-bf1d-db0e5171fff5-000000@bounce-west.twitch.tv]
+ dkim=[1,1,header.i=@twitch.tv] dmarc=[1,1,header.from=twitch.tv])
+Received: from AS9PR01CA0024.eurprd01.prod.exchangelabs.com
+ (2603:10a6:20b:540::29) by MW5PR20MB4450.namprd20.prod.outlook.com
+ (2603:10b6:303:1a2::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Wed, 13 Sep
+ 2023 18:16:12 +0000
+Received: from AMS1EPF0000004C.eurprd04.prod.outlook.com
+ (2603:10a6:20b:540:cafe::32) by AS9PR01CA0024.outlook.office365.com
+ (2603:10a6:20b:540::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.20 via Frontend
+ Transport; Wed, 13 Sep 2023 18:16:12 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.160.179)
+ smtp.mailfrom=bounce-west.twitch.tv; dkim=pass (signature was verified)
+ header.d=twitch.tv;dmarc=pass action=none header.from=twitch.tv;compauth=pass
+ reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ bounce-west.twitch.tv discourages use of 209.85.160.179 as permitted sender)
+Received: from mail-qt1-f179.google.com (209.85.160.179) by
+ AMS1EPF0000004C.mail.protection.outlook.com (10.167.16.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Wed, 13 Sep 2023 18:16:12 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:9B1D286F9A0589BF754EBB8C1C421464464C20BED9D7C6615B546E0D7DCCDA80;UpperCasedChecksum:E65C564A328EC03B6EEE1527E3DA5431B8F804648BE77493FD3D2C27ED8B6A1B;SizeAsReceived:6084;Count:25
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-414b0bdea1cso260761cf.1
+        for <tobinsilvestre@outlook.com>; Wed, 13 Sep 2023 11:16:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694628972; x=1695233772;
+        h=x-forwarded-for:feedback-id:date:message-id
+         :content-transfer-encoding:mime-version:subject:to:from
+         :dkim-signature:dkim-signature:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=t5fR+xPy66yYxFiRx3QZkF2b7w8xPSVkgMzl+UuYn5c=;
+        b=tikxYR1lBlSNIc1OE4AknLvpQ3sxfxgVT7CWW9jxkhP1K+TjfpdL86UBg/YdfqlYXp
+         esUH8wDzw2/rftVJUQQDd5FtbL/gIDEcGmUAkS685zOFB/z334dHTqnYwvumHBNzg8UJ
+         yN2pTN0cKDghkvZ0xDZj9KegCUrg7kIfYe1U7wantz7jrIsu6o8Ay5tKtTcb6UWaVbG5
+         5UaWSE3ITdYuAj42nz+OUUzle4DZT4OY3TIUVzODAo9A/LYeEsd+UttRl/W2qtQqYnUp
+         WdqGv+5Uoj+yGNIiIteia7GiiLzvdCvMd69XTVReGK1vJbJSw6cpZxX2yoDKgtRD4QPY
+         o5Lw==
+X-Gm-Message-State: AOJu0YxeGKtUtkv3vY2ReLnPc4y1xIN/eNeJN30lv3rdS5CA6YcPtSZn
+	F8fJh9SC478ZYdIaZhcw4C73vTfkey+5dvWc+A==
+X-Google-Smtp-Source: AGHT+IG6IUgsqP83WqTM938JhnYruxukvuzf3ts0lVQXJTPqMLvaeGRQXLWJpYyrBCcjDQPwCXCL8h+R/B6pMdG8o8OGLm0C6CE=
+X-Received: by 2002:ac8:7f55:0:b0:400:797e:d694 with SMTP id g21-20020ac87f55000000b00400797ed694mr3559563qtk.11.1694628971940;
+        Wed, 13 Sep 2023 11:16:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694628971; cv=none;
+        d=google.com; s=arc-20160816;
+        b=qCCwOyVSbqkbHyac5efx/Pbwu3er1gTDB7fDL/nEpjrC6FBydgQHPX5zTj3zXwaY4q
+         2umKU+hhDB3O3q9cEn9Z+cWh3vJqVWczVXn0yd53SdBa/p8wIfCNbcs3lmQ8tALFr9hS
+         Orgwi8D0FSm7JfLKnoWbabGjKt6xfY657iszWqWD+Z0GNZFgp3tdtZzXa0Orzv3rMe41
+         qwt+kaMbo8qamNHVLF/GHlzawjT+5pXq98bx97jL677bWHF8QqmyHcsh/MQvoccG50gX
+         yNgXj65VUiqTIfX0+8yS/p/mnZ/0PmEardkA5BkA5LVpOLGY/h8ayXTAfTQQneZ0pr9r
+         F8qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=feedback-id:date:message-id:content-transfer-encoding:mime-version
+         :subject:to:from:dkim-signature:dkim-signature;
+        bh=t5fR+xPy66yYxFiRx3QZkF2b7w8xPSVkgMzl+UuYn5c=;
+        fh=o6ohvIH5PbhHOemxDkn+FyxGMoB0nuSvGrHKngmbK4Q=;
+        b=sA+HHzYaI8jI5OVoTUYz0DFUgm5jn5UOrroW9m4WaStYamDVodschQ/Dhw72hpJOPb
+         KmlPOfmLizkEAKOjT0VpzZlmYSeNxn1LZRdKwak8LVYWt4sZTzM7vHYArSFRn7US3ey9
+         StoR0RLm9cIZS3OReALBBnhIXwinyfOnZvWCbagNJlCVdso+awSl46Uj7EiHo+2Vl+8/
+         5ktB3UH3QzEiNZhnRwWRYrmR4XSvYwIhFAUjnIWUccfvA7rD4NZwPk14KAWaPxnXw63F
+         wFDrpowDSgpWU3/fuiXcsLal2W5QxFuHevI0FTndLaqGy+mg/tLq1yxrGZrdp96DKemj
+         V03A==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@twitch.tv header.s=dh6r6vaod6penm5x6ufsnymrqcq2rt3a header.b=ZqFLyrfk;
+       dkim=pass header.i=@amazonses.com header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=OQP+UwY5;
+       spf=pass (google.com: domain of 0101018a8fc20086-7f6afd47-d024-447c-bf1d-db0e5171fff5-000000@bounce-west.twitch.tv designates 54.240.26.66 as permitted sender) smtp.mailfrom=0101018a8fc20086-7f6afd47-d024-447c-bf1d-db0e5171fff5-000000@bounce-west.twitch.tv;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=twitch.tv
+Return-Path:
+ 0101018a8fc20086-7f6afd47-d024-447c-bf1d-db0e5171fff5-000000@bounce-west.twitch.tv
+Received: from a26-66.smtp-out.us-west-2.amazonses.com (a26-66.smtp-out.us-west-2.amazonses.com. [54.240.26.66])
+        by gmr-mx.google.com with ESMTPS id c13-20020ac8110d000000b0041091006a69si1792788qtj.4.2023.09.13.11.16.11
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 Sep 2023 11:16:11 -0700 (PDT)
+Received-SPF: pass (google.com: domain of 0101018a8fc20086-7f6afd47-d024-447c-bf1d-db0e5171fff5-000000@bounce-west.twitch.tv designates 54.240.26.66 as permitted sender) client-ip=54.240.26.66;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@twitch.tv header.s=dh6r6vaod6penm5x6ufsnymrqcq2rt3a
+ header.b=ZqFLyrfk;       dkim=pass header.i=@amazonses.com
+ header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=OQP+UwY5;       spf=pass
+ (google.com: domain of
+ 0101018a8fc20086-7f6afd47-d024-447c-bf1d-db0e5171fff5-000000@bounce-west.twitch.tv
+ designates 54.240.26.66 as permitted sender)
+ smtp.mailfrom=0101018a8fc20086-7f6afd47-d024-447c-bf1d-db0e5171fff5-000000@bounce-west.twitch.tv;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=twitch.tv
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=dh6r6vaod6penm5x6ufsnymrqcq2rt3a; d=twitch.tv; t=1694628970;
+	h=From:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+	bh=t5fR+xPy66yYxFiRx3QZkF2b7w8xPSVkgMzl+UuYn5c=;
+	b=ZqFLyrfkq7R7Ge0Uheip9Zzf8LaQbR7Zqs3z+xrmi9T3/FLCrTYLT4GyX/zCgIF5
+	f983lqcbfPmLseZTbEZOhr+eSyN13IHiI+oOCo131+d9DC8mj/Tf8DxopIhQD76zDKs
+	r4Ps+VVgQdDbriLbDTSfq6KWFPhI9C6ZOWxMIQJc=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1694628970;
+	h=From:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+	bh=t5fR+xPy66yYxFiRx3QZkF2b7w8xPSVkgMzl+UuYn5c=;
+	b=OQP+UwY5ZY9t5T7wPjQ2gQCnvDlj4uEX9BhIQ+Di8XsA47VB4yV117HdbqrrqpE9
+	QHhXbRaLPlerKNcxtNZAwic5Nv2qDaBRQyDSCW2aLnXNhVzbwzgfVti1A2g1hDWdDwR
+	yUpNTrZiqERbLbTMVsbZP38e2nhARNcbiVWyIDPQ=
+From: Twitch <no-reply@twitch.tv>
+To: tobinsilvestre070@sooners.us
+Subject: =?UTF-8?Q?tobinsly,_you_won=E2=80=99t_beli?=
+ =?UTF-8?Q?eve_what_just_happened_=F0=9F=A4=AF?=
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Message-ID: <0101018a8fc20086-7f6afd47-d024-447c-bf1d-db0e5171fff5-000000@us-west-2.amazonses.com>
+Date: Wed, 13 Sep 2023 18:16:10 +0000
+Feedback-ID: 1.us-west-2.6if1qLlyPRc8dOFaAhyZ7qPPGGxp441EVJenuzKlcvQ=:AmazonSES
+X-SES-Outgoing: 2023.09.13-54.240.26.66
+X-Forwarded-For: tobinsilvestre070@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 25
+X-MS-Exchange-Organization-ExpirationStartTime: 13 Sep 2023 18:16:12.3112
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 941fc3fd-cf42-4aa4-7e0c-08dbb48582ea
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ AMS1EPF0000004C:EE_|MW5PR20MB4450:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ AMS1EPF0000004C.eurprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/13/2023 3:56:26 PM
+X-MS-Office365-Filtering-Correlation-Id: 941fc3fd-cf42-4aa4-7e0c-08dbb48582ea
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.160.179
+X-SID-PRA: NO-REPLY@TWITCH.TV
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 2
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 18:16:12.1862
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 941fc3fd-cf42-4aa4-7e0c-08dbb48582ea
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ AMS1EPF0000004C.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR20MB4450
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.6106280
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.005
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9910022)(9545005)(10170022)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPltQ5IDW3xiqh2VNDSohsHRGRhLrCYOe5qNGnqWInkgAhZB7eUB78D+VwfLF/A8jL02XgakbShm21RuFdXZVLvxXkfIeR4uRqgowjyJtTZERYdid5/x14UvBTT9sCJ4oKJJ5rPwMkd0yJdOQC93MhxWpw/KNwzNGHBk1RzPDNsqmLIz71nH89hTlw+vJEPJYqY=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0tMQ==
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UEQ3YXQ5citLajczaXI3a0I5UW12QzhMbElYM0NHOE5sMys2NmFqa0dYSlVi?=
+ =?utf-8?B?NENzc0huNy9GZUQwMzNPRUhDWlc1SXUzN2ZteVZHdUhPWTBvalpkeXF1dmNJ?=
+ =?utf-8?B?ZEtiR2R6VFEzUHBxdVFoQ2NNMHVuYnFPYWxqWXNLVTh0cmN0QmcwUEJBUkNu?=
+ =?utf-8?B?VjN0cjFocCtyY3orYXlpZkc2U2YxQktJc1NDd0pHbEk0djVMTnpXV0VSSXlw?=
+ =?utf-8?B?MENuTnRheHY0VEFxQzhnbDN4RDQ4aVZwUWZ6L2RKSU4vVUVUNjJoN0xnV3hS?=
+ =?utf-8?B?N25pbmpnSkVaOFpFSStwcDRpVXkrVDA5bStkakpzR2RNaEdjVmZOZS9vK1BM?=
+ =?utf-8?B?YUUzbm9xRHF3S3VGN0Q2SGtXamJxSTU2UTZLS2FvR0VlZnYrY1diREtGZWZz?=
+ =?utf-8?B?Wmw5Rm8weVJtR3hMbEVJVDBnSUNPVkJCM0ZVSXhRMytsWnBEaE9BU2syWE9y?=
+ =?utf-8?B?dk51WVNBakdvVGNYVGczRWVRUEtheWs5NGxMdENCc2RtVEZPOTJRbjhhUTRW?=
+ =?utf-8?B?Y1ZrYnlZNUtqZFZPSHA0QTlqbEsyUzNFOThKcEdBVzRBb1gzN0VYaG1hd0NW?=
+ =?utf-8?B?NFVITHhXb1V5cWQ5cjh3Y2Z3Y0h3dFp3bGx0bjN1aW5kQmhoS3lJTUk5M3Z5?=
+ =?utf-8?B?VllteVVRK3JFOE9pbVIrMUVyTm5UbmRpRFVMNkttWE5pcmk3dHVycDV3Zzli?=
+ =?utf-8?B?eDZXVCt0ZS9lanhwMmEweUttUWd4Q1pXT2pXMlhRV2lnbG9ETUpaRHFsbEVZ?=
+ =?utf-8?B?dWNsQ3c4YkV1czY5ZWE3M1ZuSG5DbmlPa3hGNWpFR0dpVE1DMUFXNVFENmk5?=
+ =?utf-8?B?TFlYVlFnbnRIaDZzQTNFV0g0cm9Nbm91ZVNSUGVFTUF3UzU4Nm05OGdaaFdW?=
+ =?utf-8?B?ajM3dko3THpvdHYrM2NLZFZjTVZERVZtMXRuNkVWR3RYVkpZZWF5OSt0UStS?=
+ =?utf-8?B?Vnd1UlRWcy9MRmR2VDUzcUMyQ0VhcmRoUWhSbUo2a2NvZm5ML2ZVb3k4RDhE?=
+ =?utf-8?B?ZnZrbVdJR3VCMFF6NmJNYW1CWURldXc1dXQ4djVOVkJzWGRWa0NyaE9ReHpw?=
+ =?utf-8?B?RzM2NkNYOU9KelBld0JXdzRMczh2VmxLQ3F0dzF1UG9IbFhGaEtTZXd3bXhM?=
+ =?utf-8?B?V2ZWOCtJenhtM0w1VnQ0VlkyOXZWd0NIcUZpMWhQS0hRcDEvK2VHYm9hcDB4?=
+ =?utf-8?B?K2VXWlhzRi81SGpnL21Icm5VU1pMczR4c1grdFRDd3dmMVVCRWNqNm51MTEr?=
+ =?utf-8?B?cElMRkZCbG1EdlpHUXZyWGZKa3pEeEwwK0ZCL1Q5alVKZm9XakUyWDZmOWFS?=
+ =?utf-8?B?Uys0cWN3eERRQ0loaDcxMUt1MzJiYmgzTzdCTUhMOEFBUFdSb2dGWE1rWk1I?=
+ =?utf-8?B?ZC9vL0hIQ3Qra3dQcFlWQU9ndW4reW1XVWZkRnZ6L1Rjb0ZpbFVwVTR6Tzcz?=
+ =?utf-8?B?T2pLdlc4a0tTditLTkxvaFdjeEE2QlVsVUQ1TnYrMUVQWGpRR2pDdERaYy9X?=
+ =?utf-8?B?Nzc3d0FjVVRFWSszdjBRWFFmSWx3YUo2SzZsRW90U0oxeFVacGgwL1duY29w?=
+ =?utf-8?B?WmVKbnAzZUNHNmtFVkdIaDJUa3drWTR0am4xOHYxOUt6SjBSSy9YZW8zWHN5?=
+ =?utf-8?B?bWF6dW1JK09mMHJLQm9uYnd4c01nR0hZcTVjRGlYWHhMdFl2L2QrZTlnN281?=
+ =?utf-8?B?czlkNTNzeU4zRmU3WTlvTlNZek1Ga3F1am5PRmlnMUZaM0tVQkUxU2E4YzZt?=
+ =?utf-8?B?bXh6ZGRSWTFhYlF3NGFMc0dSMU4vbzZGTG1hblpSNEdJbElmUDZ1Q2kyU1ov?=
+ =?utf-8?B?Mm0rTE1JcU42NzJneGg0UHFKdWJja0xwd2VXMkgyamNNZ1FSSjlUL09QUUVo?=
+ =?utf-8?B?b013SmpUQ3NIbFZ4WXoxUFZXaHNXcHpZWHBQUkNqNEpBTUNPQkFvRkxBb1RE?=
+ =?utf-8?B?NkltZEhRSlNKNFFTSTRBVEJlcHVCVzNSWWtWSURjSXlDTktoZXlzOGFsRXJt?=
+ =?utf-8?B?cTZCTzJDdjNYeXBtODR4SkZuUkEzNSs3bFcyZHNhZmtCN3VBVGhVcVpKWEJQ?=
+ =?utf-8?B?SG03VFlzMERMaVRRRUZvWG5WZE8yV25mMCtVSHZwemNMYUF1NnZqS0ZDdkN2?=
+ =?utf-8?B?S0NkL1p3MXlFcnZucjd2bWdJQ0JiY0tvUkJCR1ZzVVBUWndIYlN2WWhuaUNw?=
+ =?utf-8?B?alByZUNUemo5dDM0SzRSeFluM0w5SjZ1M1g2RzdPVE9ESHBTemVuNEh5TFNP?=
+ =?utf-8?B?MTdKOTMzaVJ3NXRGMW0xODNPRFgrUi95STkwUnhWRjA5UmxlbmNhRElpcmlI?=
+ =?utf-8?B?MUZXU2VueVpxN0gyeFNUc3A4cmJ2SkNWT0VzNlZjbXdqNDRYUXN2MDcxdTBP?=
+ =?utf-8?B?R0hCTjF3TjlCSzY1VHg5RkRwVUErWlY5dTNzaWRpMlkyNUJCNVVpTTJjZGRK?=
+ =?utf-8?B?a05hVmNhWjNvY0ZEOTlHWU1nOWRIZjJPT2gvTjF2M2RYUUhuK2FnVmVUTmJW?=
+ =?utf-8?B?S0VNOW9MVFBmRlpXT25qd1hCWk1ud1c5TG14MXRmSHRjb2RRVk05VkZzbkpI?=
+ =?utf-8?B?MWcvOG9teGlpNVVLUXBoTkdKYTJvUmpqSzh2OWRJVzhYYnhzTnA2Q2cxbE9h?=
+ =?utf-8?B?UU9WOVExaWowRnN4NmhTSTc4Q2hXb01GclJIS3g2c0Vod05nNkZsVmQwa3pn?=
+ =?utf-8?Q?WgYS?=
+MIME-Version: 1.0
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" style=3D"margin=
+:0;padding:0;background-color:#efeef1" xmlns:v=3D"urn:schemas-microsoft-com=
+:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:office" lang=3D"en" xml:l=
+ang=3D"en"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><b=
+ase target=3D"=E2=80=9C_blank=E2=80=9D"><meta name=3D"viewport" content=3D"=
+width=3Ddevice-width"><style>div[style*=3D"margin: 16px 0"] {
+margin: 0 !important
+}div+a.cta-purple:hover {
+color: #F0F0FF !important;
+background-color: #772ce8 !important;
+border: 1px solid #772ce8 !important;
+-webkit-transition: all 0.3s ease-out !important;
+transition: all 0.3s ease-out !important
+}div+a.cta-black:hover {
+color: #9146ff !important;
+background-color: #ffffff !important;
+border: 1px solid #ffffff !important;
+-webkit-transition: all 0.3s ease-out !important;
+transition: all 0.3s ease-out !important
+}.header-links span:hover {
+color: #9146ff !important
+}.footer-links span:hover {
+color: #ffffff !important
+}@media only screen and (max-width: 599px){
+.two-column .column {
+max-width: 100% !important
+}
+.fullwidth-img {
+max-width: 100% !important
+}
+}
+@media screen and (max-width: 480px){
+u ~ div {
+width: 100vw !important
+}
+div > u ~ div {
+width: 100% !important
+}
+}
+strong+table:hover {
+background-color: #772ce8 !important
+}strong+table:hover img {
+opacity: 0.9 !important
+}</style></head><body class=3D"body" style=3D"-webkit-text-size-adjust:100%=
+;-ms-text-size-adjust:100%;margin:0;Margin:0;padding:0;min-width:100%;max-w=
+idth:600px;background-color:#ffffff"><div class=3D"preview-text" style=3D"-=
+webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;display:none;font-si=
+ze:1px;color:#333333;line-height:1px;max-height:0px;max-width:0px;opacity:0=
+;overflow:hidden"></div><meta name=3D"viewport" content=3D"width=3Ddevice-w=
+idth,initial-scale=3D1"><link rel=3D"shortcut icon" href=3D"https://static.=
+twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png"><link rel=3D"prec=
+onnect" href=3D"https://fonts.gstatic.com"><link href=3D"https://fonts.goog=
+leapis.com/css2?family=3DInter:wght@300;400;500;600;700&amp;display=3Dswap"=
+ rel=3D"stylesheet"><title>Twitch</title><center class=3D"wrapper" style=3D=
+"width:100%;table-layout:fixed;-webkit-text-size-adjust:100%;-ms-text-size-=
+adjust:100%;text-align:center"><div class=3D"webkit" style=3D"-webkit-text-=
+size-adjust:100%;-ms-text-size-adjust:100%;max-width:600px;width:100%;margi=
+n:0 auto;display:block" lang=3D"en" role=3D"article" aria-label=3D"Email fr=
+om Twitch"><table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0"=
+ border=3D"0" class=3D"outer" align=3D"center" style=3D"-webkit-text-size-a=
+djust:100%;-ms-text-size-adjust:100%;border-spacing:0;font-family:'Inter', =
+Arial, sans-serif;font-style:normal;font-weight:400;color:#5a5a5a;Margin:0 =
+auto;width:100%;max-width:600px;background-color:#000000"><tbody><tr><td cl=
+ass=3D"one-column preloader" style=3D"padding:10px 0 0;max-width:600px;text=
+-align:center"><table role=3D"presentation" cellspacing=3D"0" cellpadding=
+=3D"0" border=3D"0" width=3D"100%" style=3D"-webkit-text-size-adjust:100%;-=
+ms-text-size-adjust:100%;font-style:normal;font-weight:400;color:#ffffff;bo=
+rder-spacing:0;font-family:Arial, Helvetica, sans-serif;margin:0 auto"><tbo=
+dy><tr><td style=3D"padding:0;display:none;max-height:0px;overflow:hidden">=
+Hype moments are happening every&nbsp;second&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&=
+nbsp;=E2=80=8C&nbsp;</td></tr></tbody></table></td></tr><tr><td class=3D"on=
+e-column" style=3D"padding:0;max-width:600px;text-align:center;background-c=
+olor:#000000"><table role=3D"presentation" cellspacing=3D"0" cellpadding=3D=
+"0" border=3D"0" width=3D"100%" style=3D"-webkit-text-size-adjust:100%;-ms-=
+text-size-adjust:100%;font-family:'Inter', Arial, sans-serif;font-style:nor=
+mal;font-weight:400;color:#ffffff;border-spacing:0;margin:0 auto"><tbody><t=
+r><td style=3D"padding:30px 40px 20px;max-width:600px;text-align:center"><t=
+able role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" border=3D"0"=
+ width=3D"100%" style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust=
+:100%;color:#ffffff;border-spacing:0;font-family:'Inter', Arial, sans-serif=
+;font-style:normal;font-weight:400;margin:0 auto"><tbody><tr><td width=3D"5=
+0%" style=3D"text-align:left;padding:0 10px 0 0"><a href=3D"https://www.twi=
+tch.tv/r/e/eyJsb2NhdGlvbiI6ImxvZ28iLCJlbWFpbF9pZCI6IjdmYjY0OTE3LWViMWQtNDBl=
+Mi05MDc5LTQ5MDc2NTQ5OTRmNCIsIm5hbWUiOiJ3ZWxjb21lZW1haWwyYWxsX3Z3cl81NzJfZGF=
+2X2NtY193Y2hfbWlzX2VtYWlsXzIyMyIsInNvdXJjZV9lbWFpbCI6IiIsImN0YV92YWx1ZSI6Ik=
+xPVyIsImNoYW5uZWwiOiIiLCJsb2dpbiI6IiJ9/955078397/9395cbe63ac504a82611a55dac=
+4a7a1dac2bbfe8fcc7b61a8619a2e8009f8d1f?ignore_query=3Dtrue&amp;tt_content=
+=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_mis_email_223&amp;tt_email_id=3D7fb=
+64917-eb1d-40e2-9079-4907654994f4&amp;tt_medium=3Demail" target=3D"_blank" =
+style=3D"text-decoration:none;color:#ffffff;font-size:18px;line-height:22px=
+;font-family:'Inter', Arial, sans-serif;font-style:normal;font-weight:700;t=
+ext-align:center"><div style=3D"-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%;max-width:139px;margin:0"><img src=3D"http://image.sfmarketing=
+.twitch.tv/lib/fe4115707564047f751778/m/4/1e10d7a3-cea1-4721-82e2-47088aef5=
+519.png" alt=3D"Twitch" width=3D"139" height=3D"auto" border=3D"0" style=3D=
+"border:0;border-width:0;width:100%;max-width:139px;height:auto;display:blo=
+ck;Margin:0;white-space:pre-line"></div></a></td><td width=3D"50%" style=3D=
+"text-align:right;padding:0 0 0 10px"><p style=3D"font-size:15px;line-heigh=
+t:25px;font-family: 'Inter', Arial, sans-serif;font-style: normal;font-weig=
+ht: 700;color:#ffffff;Margin:0;"><a class=3D"header-links" href=3D"https://=
+www.twitch.tv/r/e/eyJsb2NhdGlvbiI6Im15QWNjb3VudCIsImVtYWlsX2lkIjoiN2ZiNjQ5M=
+TctZWIxZC00MGUyLTkwNzktNDkwNzY1NDk5NGY0IiwibmFtZSI6IndlbGNvbWVlbWFpbDJhbGxf=
+dndyXzU3Ml9kYXZfY21jX3djaF9taXNfZW1haWxfMjIzIiwic291cmNlX2VtYWlsIjoiIiwiY3R=
+hX3ZhbHVlIjoiIiwiY2hhbm5lbCI6IiIsImxvZ2luIjoiIn0=3D/955078397/3d97bc280e63d=
+e4d9665984f8a38fd770b47774265702a16b6073a686291d6d9/directory/following?ign=
+ore_query=3Dtrue&amp;tt_content=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_mis_=
+email_223&amp;tt_email_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;tt_med=
+ium=3Demail" target=3D"_blank" style=3D"text-decoration:underline;color:#ff=
+ffff"><span style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:100=
+%;text-decoration:underline;color:#ffffff">My Account</span></a></p></td></=
+tr></tbody></table></td></tr></tbody></table></td></tr><tr><td style=3D"pad=
+ding:0 40px 25px;text-align:left"><h2 style=3D"font-family: 'Inter', Arial,=
+ sans-serif; font-style: normal; font-weight: 600; font-size:54px; line-hei=
+ght:60px; color:#beff00; mso-line-height-rule:exactly; Margin:0;"><span sty=
+le=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#ffffff=
+">Streams to</span> check out<img src=3D"http://image.sfmarketing.twitch.tv=
+/lib/fe4115707564047f751778/m/4/0ebed72c-d57c-42e2-8a22-aee05139619d.png" a=
+lt=3D"" width=3D"64" height=3D"40" border=3D"0" style=3D"border:0;border-wi=
+dth:0;width:64px;max-width:64px;height:40px;display:inline-block;Margin:0">=
+</h2></td></tr><tr><td style=3D"padding:0 40px 30px;text-align:left"><h2 st=
+yle=3D"font-family: 'Inter', Arial, sans-serif; font-style: normal; font-we=
+ight: 500; font-size:20px; line-height:30px; color:#ffffff; mso-line-height=
+-rule:exactly; Margin:0;"><span style=3D"-webkit-text-size-adjust:100%;-ms-=
+text-size-adjust:100%;text-decoration:none;color:#ffffff">Here's what the c=
+ommunity is loving on&nbsp;Twitch.</span></h2></td></tr><tr><td dir=3D"ltr"=
+ class=3D"two-column" style=3D"padding:0 40px 0;font-size:0;text-align:cent=
+er"><div class=3D"column" style=3D"-webkit-text-size-adjust:100%;-ms-text-s=
+ize-adjust:100%;width:100%;max-width:260px;display:inline-block;vertical-al=
+ign:middle"><table dir=3D"ltr" role=3D"presentation" align=3D"center" width=
+=3D"100%" style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;=
+font-family:'Inter', Arial, sans-serif;font-style:normal;font-weight:400;co=
+lor:#ffffff;border-spacing:0;Margin:0 auto"><tbody><tr><td style=3D"padding=
+:0 0 30px;text-align:center"><a href=3D"https://www.twitch.tv/r/e/eyJsb2Nhd=
+GlvbiI6IlRvcEdhbWUxSU1HIiwiZW1haWxfaWQiOiI3ZmI2NDkxNy1lYjFkLTQwZTItOTA3OS00=
+OTA3NjU0OTk0ZjQiLCJuYW1lIjoid2VsY29tZWVtYWlsMmFsbF92d3JfNTcyX2Rhdl9jbWNfd2N=
+oX21pc19lbWFpbF8yMjMiLCJzb3VyY2VfZW1haWwiOiIiLCJjdGFfdmFsdWUiOiJMT1ciLCJjaG=
+FubmVsIjoiIiwibG9naW4iOiIifQ=3D=3D/955078397/e6283cad6921d1e2bc19f9ea447ea5=
+91c1d738f6627b68d4c053a5b04c5bfa90/legacyPath?custom_domain_target_url=3Dht=
+tps%3A%2F%2Fmi.twitch.tv%2Fp%2Fcp%2Fe3d697a202c9199d%2Fc%3Fmi_u%3D955078397=
+%26mi_loc%3Den%26url%3Dhttps%253A%252F%252Fmi.twitch.tv%252Fp%252Frp%252F00=
+e5cb521599fce1%252Furl" target=3D"_blank" style=3D"font-family:'Inter', Ari=
+al, sans-serif;font-style:normal;font-weight:500;text-decoration:none;color=
+:#ffffff;font-size:14px;line-height:18px;text-align:center"><div class=3D"f=
+ullwidth-img" style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:1=
+00%;max-width:245px;margin:0"><img class=3D"fullwidth-img" src=3D"https://m=
+i.twitch.tv/p/rp/00e5cb521599fce1.png?mi_u=3D955078397&amp;mi_loc=3Den" alt=
+=3D"Display images to show real-time content" width=3D"245" height=3D"auto"=
+ border=3D"0" style=3D"border:0;border-width:0;width:100%;max-width:245px;h=
+eight:auto;display:block;Margin:0"></div></a></td></tr></tbody></table></di=
+v><div class=3D"column" style=3D"-webkit-text-size-adjust:100%;-ms-text-siz=
+e-adjust:100%;width:100%;max-width:260px;display:inline-block;vertical-alig=
+n:middle"><table dir=3D"ltr" role=3D"presentation" align=3D"center" width=
+=3D"100%" style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;=
+font-family:'Inter', Arial, sans-serif;font-style:normal;font-weight:400;co=
+lor:#ffffff;border-spacing:0;Margin:0 auto"><tbody><tr><td style=3D"padding=
+:0 0 30px;text-align:center"><a href=3D"https://www.twitch.tv/r/e/eyJsb2Nhd=
+GlvbiI6IlRvcEdhbWUySU1HIiwiZW1haWxfaWQiOiI3ZmI2NDkxNy1lYjFkLTQwZTItOTA3OS00=
+OTA3NjU0OTk0ZjQiLCJuYW1lIjoid2VsY29tZWVtYWlsMmFsbF92d3JfNTcyX2Rhdl9jbWNfd2N=
+oX21pc19lbWFpbF8yMjMiLCJzb3VyY2VfZW1haWwiOiIiLCJjdGFfdmFsdWUiOiJMT1ciLCJjaG=
+FubmVsIjoiIiwibG9naW4iOiIifQ=3D=3D/955078397/44d7eb899d3243348a7952016d233e=
+1f640660e1b552103f8bc620cbd8bdc0ae/legacyPath?custom_domain_target_url=3Dht=
+tps%3A%2F%2Fmi.twitch.tv%2Fp%2Fcp%2Fe3d697a202c9199d%2Fc%3Fmi_u%3D955078397=
+%26mi_loc%3Den%26url%3Dhttps%253A%252F%252Fmi.twitch.tv%252Fp%252Frp%252Ffb=
+c69ec8ecc83701%252Furl" target=3D"_blank" style=3D"font-family:'Inter', Ari=
+al, sans-serif;font-style:normal;font-weight:500;text-decoration:none;color=
+:#ffffff;font-size:14px;line-height:18px;text-align:center"><div class=3D"f=
+ullwidth-img" style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:1=
+00%;max-width:245px;margin:0"><img class=3D"fullwidth-img" src=3D"https://m=
+i.twitch.tv/p/rp/fbc69ec8ecc83701.png?mi_u=3D955078397&amp;mi_loc=3Den" alt=
+=3D"Display images to show real-time content" width=3D"245" height=3D"auto"=
+ border=3D"0" style=3D"border:0;border-width:0;width:100%;max-width:245px;h=
+eight:auto;display:block;Margin:0"></div></a></td></tr></tbody></table></di=
+v></td></tr><tr><td dir=3D"ltr" class=3D"two-column" style=3D"padding:0 40p=
+x 10px;font-size:0;text-align:center"><div class=3D"column" style=3D"-webki=
+t-text-size-adjust:100%;-ms-text-size-adjust:100%;width:100%;max-width:260p=
+x;display:inline-block;vertical-align:middle"><table dir=3D"ltr" role=3D"pr=
+esentation" align=3D"center" width=3D"100%" style=3D"-webkit-text-size-adju=
+st:100%;-ms-text-size-adjust:100%;font-family:'Inter', Arial, sans-serif;fo=
+nt-style:normal;font-weight:400;color:#ffffff;border-spacing:0;Margin:0 aut=
+o"><tbody><tr><td style=3D"padding:0 0 30px;text-align:center"><a href=3D"h=
+ttps://www.twitch.tv/r/e/eyJsb2NhdGlvbiI6IlRvcEdhbWUzSU1HIiwiZW1haWxfaWQiOi=
+I3ZmI2NDkxNy1lYjFkLTQwZTItOTA3OS00OTA3NjU0OTk0ZjQiLCJuYW1lIjoid2VsY29tZWVtY=
+WlsMmFsbF92d3JfNTcyX2Rhdl9jbWNfd2NoX21pc19lbWFpbF8yMjMiLCJzb3VyY2VfZW1haWwi=
+OiIiLCJjdGFfdmFsdWUiOiJMT1ciLCJjaGFubmVsIjoiIiwibG9naW4iOiIifQ=3D=3D/955078=
+397/5902d83a87ed996b1158e49140fe27ddd4a5f5b9f62f47c9eba5859ec93af116/legacy=
+Path?custom_domain_target_url=3Dhttps%3A%2F%2Fmi.twitch.tv%2Fp%2Fcp%2Fe3d69=
+7a202c9199d%2Fc%3Fmi_u%3D955078397%26mi_loc%3Den%26url%3Dhttps%253A%252F%25=
+2Fmi.twitch.tv%252Fp%252Frp%252Fb815ddb57032b131%252Furl" target=3D"_blank"=
+ style=3D"font-family:'Inter', Arial, sans-serif;font-style:normal;font-wei=
+ght:500;text-decoration:none;color:#ffffff;font-size:14px;line-height:18px;=
+text-align:center"><div class=3D"fullwidth-img" style=3D"-webkit-text-size-=
+adjust:100%;-ms-text-size-adjust:100%;max-width:245px;margin:0"><img class=
+=3D"fullwidth-img" src=3D"https://mi.twitch.tv/p/rp/b815ddb57032b131.png?mi=
+_u=3D955078397&amp;mi_loc=3Den" alt=3D"Display images to show real-time con=
+tent" width=3D"245" height=3D"auto" border=3D"0" style=3D"border:0;border-w=
+idth:0;width:100%;max-width:245px;height:auto;display:block;Margin:0"></div=
+></a></td></tr></tbody></table></div><div class=3D"column" style=3D"-webkit=
+-text-size-adjust:100%;-ms-text-size-adjust:100%;width:100%;max-width:260px=
+;display:inline-block;vertical-align:middle"><table dir=3D"ltr" role=3D"pre=
+sentation" align=3D"center" width=3D"100%" style=3D"-webkit-text-size-adjus=
+t:100%;-ms-text-size-adjust:100%;font-family:'Inter', Arial, sans-serif;fon=
+t-style:normal;font-weight:400;color:#ffffff;border-spacing:0;Margin:0 auto=
+"><tbody><tr><td style=3D"padding:0 0 30px;text-align:center"><a href=3D"ht=
+tps://www.twitch.tv/r/e/eyJsb2NhdGlvbiI6IlRvcEdhbWU0SU1HIiwiZW1haWxfaWQiOiI=
+3ZmI2NDkxNy1lYjFkLTQwZTItOTA3OS00OTA3NjU0OTk0ZjQiLCJuYW1lIjoid2VsY29tZWVtYW=
+lsMmFsbF92d3JfNTcyX2Rhdl9jbWNfd2NoX21pc19lbWFpbF8yMjMiLCJzb3VyY2VfZW1haWwiO=
+iIiLCJjdGFfdmFsdWUiOiJMT1ciLCJjaGFubmVsIjoiIiwibG9naW4iOiIifQ=3D=3D/9550783=
+97/c563c8ecb2cd066d42148658e23fa98530fb3e96760d1c3642019b9ce322c2c3/legacyP=
+ath?custom_domain_target_url=3Dhttps%3A%2F%2Fmi.twitch.tv%2Fp%2Fcp%2Fe3d697=
+a202c9199d%2Fc%3Fmi_u%3D955078397%26mi_loc%3Den%26url%3Dhttps%253A%252F%252=
+Fmi.twitch.tv%252Fp%252Frp%252Ff652dad586b6032e%252Furl" target=3D"_blank" =
+style=3D"font-family:'Inter', Arial, sans-serif;font-style:normal;font-weig=
+ht:500;text-decoration:none;color:#ffffff;font-size:14px;line-height:18px;t=
+ext-align:center"><div class=3D"fullwidth-img" style=3D"-webkit-text-size-a=
+djust:100%;-ms-text-size-adjust:100%;max-width:245px;margin:0"><img class=
+=3D"fullwidth-img" src=3D"https://mi.twitch.tv/p/rp/f652dad586b6032e.png?mi=
+_u=3D955078397&amp;mi_loc=3Den" alt=3D"Display images to show real-time con=
+tent" width=3D"245" height=3D"auto" border=3D"0" style=3D"border:0;border-w=
+idth:0;width:100%;max-width:245px;height:auto;display:block;Margin:0"></div=
+></a></td></tr></tbody></table></div></td></tr><tr><td style=3D"padding:0 4=
+0px 25px;text-align:left"><h2 style=3D"font-family: 'Inter', Arial, sans-se=
+rif; font-style: normal; font-weight: 600; font-size:54px; line-height:60px=
+; color:#f91fd1; mso-line-height-rule:exactly; Margin:0;"><span style=3D"-w=
+ebkit-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#ffffff">Pick a=
+ category.</span> Jump in.</h2></td></tr><tr><td dir=3D"ltr" class=3D"two-c=
+olumn" style=3D"padding:0 30px;font-size:0;text-align:center"><div class=3D=
+"column" style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;w=
+idth:100%;max-width:270px;display:inline-block;vertical-align:top"><table d=
+ir=3D"ltr" role=3D"presentation" align=3D"center" width=3D"100%" style=3D"-=
+webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;font-family:'Inter',=
+ Arial, sans-serif;font-style:normal;font-weight:400;color:#ffffff;border-s=
+pacing:0;Margin:0 auto"><tbody><tr><td style=3D"padding:0 10px 20px;text-al=
+ign:center"><strong style=3D"display:none;"></strong><table class=3D"cta-w-=
+icon" role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" border=3D"0=
+" width=3D"100%" style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjus=
+t:100%;font-family:'Inter', Arial, sans-serif;font-style:normal;font-weight=
+:400;color:#ffffff;-webkit-transition:all 0.3s ease-out;transition:all 0.3s=
+ ease-out;border-spacing:0;margin:0 auto;background-color:#9146ff;border-ra=
+dius:10px"><tbody><tr><td width=3D"60%" style=3D"padding:0;mso-padding-alt:=
+0px 10px 0px 20px;text-align:left;line-height:10px;mso-line-height-rule:exa=
+ctly"><p style=3D"font-family:'Inter', Arial, sans-serif; font-style:normal=
+; font-weight:600; font-size:24px; line-height:24px; mso-line-height-rule:e=
+xactly; color:#ffffff; Margin:0;"><a href=3D"https://www.twitch.tv/r/e/eyJs=
+b2NhdGlvbiI6ImdhbWVzQ1RBIiwiZW1haWxfaWQiOiI3ZmI2NDkxNy1lYjFkLTQwZTItOTA3OS0=
+0OTA3NjU0OTk0ZjQiLCJuYW1lIjoid2VsY29tZWVtYWlsMmFsbF92d3JfNTcyX2Rhdl9jbWNfd2=
+NoX21pc19lbWFpbF8yMjMiLCJzb3VyY2VfZW1haWwiOiIiLCJjdGFfdmFsdWUiOiJMT1ciLCJja=
+GFubmVsIjoiIiwibG9naW4iOiIifQ=3D=3D/955078397/abb4e2e91213cda0aac9e39209f88=
+20fbad90070fe8a19c8800cfbdccec5c4bc/directory/gaming?ignore_query=3Dtrue&am=
+p;tt_content=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_mis_email_223&amp;tt_em=
+ail_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;tt_medium=3Demail" target=
+=3D"_blank" style=3D"padding:20px 10px;text-decoration:none;color:#ffffff;d=
+isplay:block"><span style=3D"-webkit-text-size-adjust:100%;-ms-text-size-ad=
+just:100%;text-decoration:none;color:#ffffff">Games</span></a></p></td><td =
+width=3D"40%" style=3D"padding:0;text-align:right"><a href=3D"https://www.t=
+witch.tv/r/e/eyJsb2NhdGlvbiI6ImdhbWVzQ1RBIiwiZW1haWxfaWQiOiI3ZmI2NDkxNy1lYj=
+FkLTQwZTItOTA3OS00OTA3NjU0OTk0ZjQiLCJuYW1lIjoid2VsY29tZWVtYWlsMmFsbF92d3JfN=
+TcyX2Rhdl9jbWNfd2NoX21pc19lbWFpbF8yMjMiLCJzb3VyY2VfZW1haWwiOiIiLCJjdGFfdmFs=
+dWUiOiJMT1ciLCJjaGFubmVsIjoiIiwibG9naW4iOiIifQ=3D=3D/955078397/abb4e2e91213=
+cda0aac9e39209f8820fbad90070fe8a19c8800cfbdccec5c4bc/directory/gaming?ignor=
+e_query=3Dtrue&amp;tt_content=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_mis_em=
+ail_223&amp;tt_email_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;tt_mediu=
+m=3Demail" target=3D"_blank" style=3D"display:inline-block;width:100%;font-=
+family:'Inter', Arial, sans-serif;font-style:normal;font-weight:500;text-de=
+coration:none;color:#ffffff;font-size:14px;line-height:18px;text-align:cent=
+er"><img src=3D"http://image.sfmarketing.twitch.tv/lib/fe4115707564047f7517=
+78/m/4/d7ce9b8e-750e-4398-8b9e-a3ee6a40954d.png" alt=3D"" width=3D"96" heig=
+ht=3D"auto" border=3D"0" style=3D"border:0;-webkit-transition:all 0.3s ease=
+-out;transition:all 0.3s ease-out;border-width:0;width:100%;max-width:96px;=
+height:auto;display:block;Margin:0;float:right;border-top-right-radius:10px=
+;border-bottom-right-radius:10px"></a></td></tr></tbody></table></td></tr><=
+tr><td style=3D"padding:0 10px 20px;text-align:center"><strong style=3D"dis=
+play:none;"></strong><table class=3D"cta-w-icon" role=3D"presentation" cell=
+spacing=3D"0" cellpadding=3D"0" border=3D"0" width=3D"100%" style=3D"-webki=
+t-text-size-adjust:100%;-ms-text-size-adjust:100%;font-family:'Inter', Aria=
+l, sans-serif;font-style:normal;font-weight:400;color:#ffffff;-webkit-trans=
+ition:all 0.3s ease-out;transition:all 0.3s ease-out;border-spacing:0;margi=
+n:0 auto;background-color:#9146ff;border-radius:10px"><tbody><tr><td width=
+=3D"60%" style=3D"padding:0;mso-padding-alt:0px 10px 0px 20px;text-align:le=
+ft"><p style=3D"font-family:'Inter', Arial, sans-serif; font-style:normal; =
+font-weight:600; font-size:22px; line-height:22px; mso-line-height-rule:exa=
+ctly; color:#ffffff; Margin:0;"><a href=3D"https://www.twitch.tv/r/e/eyJsb2=
+NhdGlvbiI6Im11c2ljQ1RBIiwiZW1haWxfaWQiOiI3ZmI2NDkxNy1lYjFkLTQwZTItOTA3OS00O=
+TA3NjU0OTk0ZjQiLCJuYW1lIjoid2VsY29tZWVtYWlsMmFsbF92d3JfNTcyX2Rhdl9jbWNfd2No=
+X21pc19lbWFpbF8yMjMiLCJzb3VyY2VfZW1haWwiOiIiLCJjdGFfdmFsdWUiOiJMT1ciLCJjaGF=
+ubmVsIjoiIiwibG9naW4iOiIifQ=3D=3D/955078397/b858d908be66344bf6b1e833bdeb8d5=
+de828e492383b87b113c86268d0843232/directory/game/music?ignore_query=3Dtrue&=
+amp;tt_content=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_mis_email_223&amp;tt_=
+email_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;tt_medium=3Demail" targ=
+et=3D"_blank" style=3D"padding:20px 10px;text-decoration:none;color:#ffffff=
+;display:block"><span style=3D"-webkit-text-size-adjust:100%;-ms-text-size-=
+adjust:100%;text-decoration:none;color:#ffffff">Music</span></a></p></td><t=
+d width=3D"40%" style=3D"padding:0;text-align:right"><a href=3D"https://www=
+.twitch.tv/r/e/eyJsb2NhdGlvbiI6Im11c2ljQ1RBIiwiZW1haWxfaWQiOiI3ZmI2NDkxNy1l=
+YjFkLTQwZTItOTA3OS00OTA3NjU0OTk0ZjQiLCJuYW1lIjoid2VsY29tZWVtYWlsMmFsbF92d3J=
+fNTcyX2Rhdl9jbWNfd2NoX21pc19lbWFpbF8yMjMiLCJzb3VyY2VfZW1haWwiOiIiLCJjdGFfdm=
+FsdWUiOiJMT1ciLCJjaGFubmVsIjoiIiwibG9naW4iOiIifQ=3D=3D/955078397/b858d908be=
+66344bf6b1e833bdeb8d5de828e492383b87b113c86268d0843232/directory/game/music=
+?ignore_query=3Dtrue&amp;tt_content=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_=
+mis_email_223&amp;tt_email_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;tt=
+_medium=3Demail" target=3D"_blank" style=3D"display:inline-block;width:100%=
+;font-family:'Inter', Arial, sans-serif;font-style:normal;font-weight:500;t=
+ext-decoration:none;color:#ffffff;font-size:14px;line-height:18px;text-alig=
+n:center"><img src=3D"http://image.sfmarketing.twitch.tv/lib/fe411570756404=
+7f751778/m/4/1ce1b1c0-2a40-4508-8d05-cf54c11d7066.png" alt=3D"" width=3D"96=
+" height=3D"auto" border=3D"0" style=3D"border:0;-webkit-transition:all 0.3=
+s ease-out;transition:all 0.3s ease-out;border-width:0;width:100%;max-width=
+:96px;height:auto;display:block;Margin:0;float:right;border-top-right-radiu=
+s:10px;border-bottom-right-radius:10px"></a></td></tr></tbody></table></td>=
+</tr></tbody></table></div><div class=3D"column" style=3D"-webkit-text-size=
+-adjust:100%;-ms-text-size-adjust:100%;width:100%;max-width:270px;display:i=
+nline-block;vertical-align:top"><table dir=3D"ltr" role=3D"presentation" al=
+ign=3D"center" width=3D"100%" style=3D"-webkit-text-size-adjust:100%;-ms-te=
+xt-size-adjust:100%;font-family:'Inter', Arial, sans-serif;font-style:norma=
+l;font-weight:400;color:#ffffff;border-spacing:0;Margin:0 auto"><tbody><tr>=
+<td style=3D"padding:0 10px 20px;text-align:center"><strong style=3D"displa=
+y:none;"></strong><table class=3D"cta-w-icon" role=3D"presentation" cellspa=
+cing=3D"0" cellpadding=3D"0" border=3D"0" width=3D"100%" style=3D"-webkit-t=
+ext-size-adjust:100%;-ms-text-size-adjust:100%;font-family:'Inter', Arial, =
+sans-serif;font-style:normal;font-weight:400;color:#ffffff;-webkit-transiti=
+on:all 0.3s ease-out;transition:all 0.3s ease-out;border-spacing:0;margin:0=
+ auto;background-color:#9146ff;border-radius:10px"><tbody><tr><td width=3D"=
+60%" style=3D"padding:0;mso-padding-alt:0px 10px 0px 20px;text-align:left">=
+<p style=3D"font-family:'Inter', Arial, sans-serif; font-style:normal; font=
+-weight:600; font-size:21px; line-height:22px; mso-line-height-rule:exactly=
+; color:#ffffff; Margin:0;"><a href=3D"https://www.twitch.tv/r/e/eyJsb2NhdG=
+lvbiI6Imp1c3RjaGF0dGluZ0NUQSIsImVtYWlsX2lkIjoiN2ZiNjQ5MTctZWIxZC00MGUyLTkwN=
+zktNDkwNzY1NDk5NGY0IiwibmFtZSI6IndlbGNvbWVlbWFpbDJhbGxfdndyXzU3Ml9kYXZfY21j=
+X3djaF9taXNfZW1haWxfMjIzIiwic291cmNlX2VtYWlsIjoiIiwiY3RhX3ZhbHVlIjoiTE9XIiw=
+iY2hhbm5lbCI6IiIsImxvZ2luIjoiIn0=3D/955078397/996de705413f4d9bb81d0b6719cb8=
+5c69c4399ddc19e855f6fb436f4a5236fd7/directory/game/Just%20Chatting?ignore_q=
+uery=3Dtrue&amp;tt_content=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_mis_email=
+_223&amp;tt_email_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;tt_medium=
+=3Demail" target=3D"_blank" style=3D"padding:20px 0 20px 10px;text-decorati=
+on:none;color:#ffffff;display:block"><span style=3D"-webkit-text-size-adjus=
+t:100%;-ms-text-size-adjust:100%;text-decoration:none;color:#ffffff">Just C=
+hatting</span></a></p></td><td width=3D"40%" style=3D"padding:0;text-align:=
+right"><a href=3D"https://www.twitch.tv/r/e/eyJsb2NhdGlvbiI6Imp1c3RjaGF0dGl=
+uZ0NUQSIsImVtYWlsX2lkIjoiN2ZiNjQ5MTctZWIxZC00MGUyLTkwNzktNDkwNzY1NDk5NGY0Ii=
+wibmFtZSI6IndlbGNvbWVlbWFpbDJhbGxfdndyXzU3Ml9kYXZfY21jX3djaF9taXNfZW1haWxfM=
+jIzIiwic291cmNlX2VtYWlsIjoiIiwiY3RhX3ZhbHVlIjoiTE9XIiwiY2hhbm5lbCI6IiIsImxv=
+Z2luIjoiIn0=3D/955078397/996de705413f4d9bb81d0b6719cb85c69c4399ddc19e855f6f=
+b436f4a5236fd7/directory/game/Just%20Chatting?ignore_query=3Dtrue&amp;tt_co=
+ntent=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_mis_email_223&amp;tt_email_id=
+=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;tt_medium=3Demail" target=3D"_b=
+lank" style=3D"display:inline-block;width:100%;font-family:'Inter', Arial, =
+sans-serif;font-style:normal;font-weight:500;text-decoration:none;color:#ff=
+ffff;font-size:14px;line-height:18px;text-align:center"><img src=3D"http://=
+image.sfmarketing.twitch.tv/lib/fe4115707564047f751778/m/4/3c205fe1-91c8-44=
+c3-87be-564e36b8b69e.png" alt=3D"" width=3D"96" height=3D"auto" border=3D"0=
+" style=3D"border:0;-webkit-transition:all 0.3s ease-out;transition:all 0.3=
+s ease-out;border-width:0;width:100%;max-width:96px;height:auto;display:blo=
+ck;Margin:0;float:right;border-top-right-radius:10px;border-bottom-right-ra=
+dius:10px"></a></td></tr></tbody></table></td></tr><tr><td style=3D"padding=
+:0 10px 20px;text-align:center"><strong style=3D"display:none;"></strong><t=
+able class=3D"cta-w-icon" role=3D"presentation" cellspacing=3D"0" cellpaddi=
+ng=3D"0" border=3D"0" width=3D"100%" style=3D"-webkit-text-size-adjust:100%=
+;-ms-text-size-adjust:100%;font-family:'Inter', Arial, sans-serif;font-styl=
+e:normal;font-weight:400;color:#ffffff;-webkit-transition:all 0.3s ease-out=
+;transition:all 0.3s ease-out;border-spacing:0;margin:0 auto;background-col=
+or:#9146ff;border-radius:10px"><tbody><tr><td width=3D"60%" style=3D"paddin=
+g:0;mso-padding-alt:0px 10px 0px 20px;text-align:left"><p style=3D"font-fam=
+ily:'Inter', Arial, sans-serif; font-style:normal; font-weight:600; font-si=
+ze:22px; mso-line-height-rule:exactly; line-height:22px; color:#ffffff; Mar=
+gin:0;"><a href=3D"https://www.twitch.tv/r/e/eyJsb2NhdGlvbiI6InNwb3J0c0NUQS=
+IsImVtYWlsX2lkIjoiN2ZiNjQ5MTctZWIxZC00MGUyLTkwNzktNDkwNzY1NDk5NGY0IiwibmFtZ=
+SI6IndlbGNvbWVlbWFpbDJhbGxfdndyXzU3Ml9kYXZfY21jX3djaF9taXNfZW1haWxfMjIzIiwi=
+c291cmNlX2VtYWlsIjoiIiwiY3RhX3ZhbHVlIjoiTE9XIiwiY2hhbm5lbCI6IiIsImxvZ2luIjo=
+iIn0=3D/955078397/1fbcfa79ef3eba4874ab99e595a5504ba4fc4a6c69f356dd4090738b5=
+154392d/directory/esports?ignore_query=3Dtrue&amp;tt_content=3Dwelcomeemail=
+2all_vwr_572_dav_cmc_wch_mis_email_223&amp;tt_email_id=3D7fb64917-eb1d-40e2=
+-9079-4907654994f4&amp;tt_medium=3Demail" target=3D"_blank" style=3D"paddin=
+g:20px 10px;text-decoration:none;color:#ffffff;display:block"><span style=
+=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-decoration=
+:none;color:#ffffff">Esports</span></a></p></td><td width=3D"40%" valign=3D=
+"top" style=3D"padding:0;text-align:right"><a href=3D"https://www.twitch.tv=
+/r/e/eyJsb2NhdGlvbiI6InNwb3J0c0NUQSIsImVtYWlsX2lkIjoiN2ZiNjQ5MTctZWIxZC00MG=
+UyLTkwNzktNDkwNzY1NDk5NGY0IiwibmFtZSI6IndlbGNvbWVlbWFpbDJhbGxfdndyXzU3Ml9kY=
+XZfY21jX3djaF9taXNfZW1haWxfMjIzIiwic291cmNlX2VtYWlsIjoiIiwiY3RhX3ZhbHVlIjoi=
+TE9XIiwiY2hhbm5lbCI6IiIsImxvZ2luIjoiIn0=3D/955078397/1fbcfa79ef3eba4874ab99=
+e595a5504ba4fc4a6c69f356dd4090738b5154392d/directory/esports?ignore_query=
+=3Dtrue&amp;tt_content=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_mis_email_223=
+&amp;tt_email_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;tt_medium=3Dema=
+il" target=3D"_blank" style=3D"display:inline-block;width:100%;font-family:=
+'Inter', Arial, sans-serif;font-style:normal;font-weight:500;text-decoratio=
+n:none;color:#ffffff;font-size:14px;line-height:18px;text-align:center"><im=
+g src=3D"http://image.sfmarketing.twitch.tv/lib/fe4115707564047f751778/m/4/=
+01c7b043-2315-4bee-b2d1-a43a2c33f239.png" alt=3D"" width=3D"96" height=3D"a=
+uto" border=3D"0" valign=3D"top" style=3D"border:0;-webkit-transition:all 0=
+.3s ease-out;transition:all 0.3s ease-out;border-width:0;width:100%;max-wid=
+th:96px;height:auto;display:block;Margin:0;float:right;border-top-right-rad=
+ius:10px;border-bottom-right-radius:10px"></a></td></tr></tbody></table></t=
+d></tr></tbody></table></div></td></tr><tr><td style=3D"padding:0 40px 30px=
+;text-align:left"><h2 style=3D"font-family: 'Inter', Arial, sans-serif; fon=
+t-style: normal; font-weight: 600; font-size:66px; line-height:70px; color:=
+#69ffc1; mso-line-height-rule:exactly; Margin:0;"><span style=3D"-webkit-te=
+xt-size-adjust:100%;-ms-text-size-adjust:100%;color:#ffffff">Explore</span>=
+ Twitch</h2></td></tr><tr><td style=3D"padding:0 40px 30px;text-align:left"=
+><p style=3D"font-family: 'Inter', Arial, sans-serif; font-style: normal; f=
+ont-weight: 400; font-size:20px; line-height:28px; color:#ffffff; Margin:0;=
+">There are thousands of live streams happening right now on Twitch. That t=
+hing you love? There's a whole community for that. And there's always somet=
+hing new to discover. So whatever you're into, you're in good&nbsp;company.=
+</p></td></tr><tr><td style=3D"text-align:left;padding:0px 40px 60px"><div =
+style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%"><div styl=
+e=3D"-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-hide:all;d=
+isplay:none;height:0;width:0" width=3D"0" height=3D"0"></div><a class=3D"ct=
+a-purple" href=3D"https://www.twitch.tv/r/e/eyJsb2NhdGlvbiI6ImV4cGxvcmV0d2l=
+0Y2hDVEEiLCJlbWFpbF9pZCI6IjdmYjY0OTE3LWViMWQtNDBlMi05MDc5LTQ5MDc2NTQ5OTRmNC=
+IsIm5hbWUiOiJ3ZWxjb21lZW1haWwyYWxsX3Z3cl81NzJfZGF2X2NtY193Y2hfbWlzX2VtYWlsX=
+zIyMyIsInNvdXJjZV9lbWFpbCI6IiIsImN0YV92YWx1ZSI6IkxPVyIsImNoYW5uZWwiOiIiLCJs=
+b2dpbiI6IiJ9/955078397/320e98e5fc81f685266dc36792122191e9ef321029c1de3ad3c8=
+113d0e6b3b31/directory?ignore_query=3Dtrue&amp;tt_content=3Dwelcomeemail2al=
+l_vwr_572_dav_cmc_wch_mis_email_223&amp;tt_email_id=3D7fb64917-eb1d-40e2-90=
+79-4907654994f4&amp;tt_medium=3Demail" target=3D"_blank" style=3D"-webkit-t=
+ransition:all 0.3s ease-out;transition:all 0.3s ease-out;mso-hide:all;borde=
+r-radius:0;padding:10px 5px;background-color:#9146ff;border:1px solid #9146=
+ff;color:#ffffff;display:inline-block;font-size:21px;line-height:29px;font-=
+family:'Inter', Arial, sans-serif;font-style:normal;font-weight:600;text-al=
+ign:center;text-decoration:none;width:230px;-webkit-text-size-adjust:none" =
+width=3D"230">Explore Twitch</a></div></td></tr><tr><td style=3D"mso-hide:a=
+ll;text-align:center;padding:0"><a href=3D"https://www.twitch.tv/r/e/eyJsb2=
+NhdGlvbiI6ImhlYWRlcklNRyIsImVtYWlsX2lkIjoiN2ZiNjQ5MTctZWIxZC00MGUyLTkwNzktN=
+DkwNzY1NDk5NGY0IiwibmFtZSI6IndlbGNvbWVlbWFpbDJhbGxfdndyXzU3Ml9kYXZfY21jX3dj=
+aF9taXNfZW1haWxfMjIzIiwic291cmNlX2VtYWlsIjoiIiwiY3RhX3ZhbHVlIjoiTE9XIiwiY2h=
+hbm5lbCI6IiIsImxvZ2luIjoiIn0=3D/955078397/e1cefad713fc6fbcd91683bc165efa07d=
+1778d107a759cdf5bca5014d623799f?ignore_query=3Dtrue&amp;tt_content=3Dwelcom=
+eemail2all_vwr_572_dav_cmc_wch_mis_email_223&amp;tt_email_id=3D7fb64917-eb1=
+d-40e2-9079-4907654994f4&amp;tt_medium=3Demail" target=3D"_blank" style=3D"=
+text-decoration:none;color:#ffffff;font-size:18px;line-height:22px;font-fam=
+ily:'Inter', Arial, sans-serif;font-style:normal;font-weight:700"><img src=
+=3D"http://image.sfmarketing.twitch.tv/lib/fe4115707564047f751778/m/4/23cdb=
+4f8-a2bf-43c2-b2d3-5ce787abeb5c.gif" alt=3D"" width=3D"600" height=3D"auto"=
+ border=3D"0" style=3D"border:0;border-width:0;width:100%;max-width:600px;h=
+eight:auto;display:block;Margin:0 auto;white-space:pre-line"></a></td></tr>=
+<tr><td class=3D"one-column" style=3D"padding:50px 0 40px;max-width:600px;t=
+ext-align:center;background-color:#000000"><table role=3D"presentation" cel=
+lspacing=3D"0" cellpadding=3D"0" border=3D"0" width=3D"100%" style=3D"-webk=
+it-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#ffffff;border-spa=
+cing:0;font-family:'Inter', Arial, sans-serif;font-style:normal;font-weight=
+:400;margin:0 auto"><tbody><tr><td style=3D"text-align:center;padding:0 50p=
+x 0"><a href=3D"https://www.twitch.tv/r/e/eyJsb2NhdGlvbiI6ImxvZ29Gb290ZXIiL=
+CJlbWFpbF9pZCI6IjdmYjY0OTE3LWViMWQtNDBlMi05MDc5LTQ5MDc2NTQ5OTRmNCIsIm5hbWUi=
+OiJ3ZWxjb21lZW1haWwyYWxsX3Z3cl81NzJfZGF2X2NtY193Y2hfbWlzX2VtYWlsXzIyMyIsInN=
+vdXJjZV9lbWFpbCI6IiIsImN0YV92YWx1ZSI6IkxPVyIsImNoYW5uZWwiOiIiLCJsb2dpbiI6Ii=
+J9/955078397/1e0c833dc92bf612550ed0e230efb63dcf79eb35900c6ec6fde2b4ec24562c=
+ab?ignore_query=3Dtrue&amp;tt_content=3Dwelcomeemail2all_vwr_572_dav_cmc_wc=
+h_mis_email_223&amp;tt_email_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;=
+tt_medium=3Demail" target=3D"_blank" style=3D"text-decoration:none;color:#f=
+fffff;font-size:18px;line-height:22px;font-family:'Inter', Arial, sans-seri=
+f;font-style:normal;font-weight:700;text-align:center"><div style=3D"-webki=
+t-text-size-adjust:100%;-ms-text-size-adjust:100%;max-width:45px;margin:0 a=
+uto"><img src=3D"http://image.sfmarketing.twitch.tv/lib/fe4115707564047f751=
+778/m/2/86a49d5a-1555-4c62-89e0-d3a7c0169fae.png" alt=3D"Twitch" width=3D"4=
+5" height=3D"auto" border=3D"0" style=3D"border:0;border-width:0;width:100%=
+;max-width:45px;height:auto;display:block;Margin:0 auto;white-space:pre-lin=
+e"></div></a></td></tr><tr><td style=3D"padding:15px 50px 0;font-family:'In=
+ter', Arial, sans-serif;font-style:normal;font-weight:500;text-align:center=
+;font-size:16px;line-height:21px;color:#ffffff"><p style=3D"font-size:16px;=
+line-height:21px;font-family: 'Inter', Arial, sans-serif;font-style: normal=
+;font-weight: 500;color:#ffffff;Margin:0;">Connect</p></td></tr><tr><td sty=
+le=3D"padding:15px 50px 0;font-family:'Inter', Arial, sans-serif;font-style=
+:normal;font-weight:500;text-align:center;font-size:16px;line-height:21px;c=
+olor:#832ce4"><p style=3D"font-size:16px;line-height:21px;font-family: 'Int=
+er', Arial, sans-serif;font-style: normal;font-weight: 500;color:#832ce4;Ma=
+rgin:0;"><a class=3D"footer-links" href=3D"https://www.twitch.tv/r/e/eyJsb2=
+NhdGlvbiI6IklHIiwiZW1haWxfaWQiOiI3ZmI2NDkxNy1lYjFkLTQwZTItOTA3OS00OTA3NjU0O=
+Tk0ZjQiLCJuYW1lIjoid2VsY29tZWVtYWlsMmFsbF92d3JfNTcyX2Rhdl9jbWNfd2NoX21pc19l=
+bWFpbF8yMjMiLCJzb3VyY2VfZW1haWwiOiIiLCJjdGFfdmFsdWUiOiIiLCJjaGFubmVsIjoiIiw=
+ibG9naW4iOiIifQ=3D=3D/955078397/d8064db0819ba6750a990663922c85c44228960c38b=
+96af2a37f080ec54727b0/legacyPath?custom_domain_target_url=3Dhttps%3A%2F%2Fw=
+ww.instagram.com%2Ftwitch" target=3D"_blank" style=3D"color:#832ce4;text-de=
+coration:none;display:inline-block"><span style=3D"-webkit-text-size-adjust=
+:100%;-ms-text-size-adjust:100%;color:#832ce4;text-decoration:none;display:=
+inline-block">Instagram</span></a> <span style=3D"-webkit-text-size-adjust:=
+100%;-ms-text-size-adjust:100%;color:#ffffff">|</span> <a class=3D"footer-l=
+inks" href=3D"https://www.twitch.tv/r/e/eyJsb2NhdGlvbiI6IkZhY2Vib29rIiwiZW1=
+haWxfaWQiOiI3ZmI2NDkxNy1lYjFkLTQwZTItOTA3OS00OTA3NjU0OTk0ZjQiLCJuYW1lIjoid2=
+VsY29tZWVtYWlsMmFsbF92d3JfNTcyX2Rhdl9jbWNfd2NoX21pc19lbWFpbF8yMjMiLCJzb3VyY=
+2VfZW1haWwiOiIiLCJjdGFfdmFsdWUiOiIiLCJjaGFubmVsIjoiIiwibG9naW4iOiIifQ=3D=3D=
+/955078397/13f3b4e0e72e8353df93342b8508b14d618a844e77f954b2b6ed74ee3e316a45=
+/legacyPath?custom_domain_target_url=3Dhttps%3A%2F%2Fwww.facebook.com%2FTwi=
+tch" target=3D"_blank" style=3D"color:#832ce4;text-decoration:none;display:=
+inline-block"><span style=3D"-webkit-text-size-adjust:100%;-ms-text-size-ad=
+just:100%;color:#832ce4;text-decoration:none;display:inline-block">Facebook=
+</span></a> <span style=3D"-webkit-text-size-adjust:100%;-ms-text-size-adju=
+st:100%;color:#ffffff">|</span> <a class=3D"footer-links" href=3D"https://w=
+ww.twitch.tv/r/e/eyJsb2NhdGlvbiI6IlR3aXR0ZXIiLCJlbWFpbF9pZCI6IjdmYjY0OTE3LW=
+ViMWQtNDBlMi05MDc5LTQ5MDc2NTQ5OTRmNCIsIm5hbWUiOiJ3ZWxjb21lZW1haWwyYWxsX3Z3c=
+l81NzJfZGF2X2NtY193Y2hfbWlzX2VtYWlsXzIyMyIsInNvdXJjZV9lbWFpbCI6IiIsImN0YV92=
+YWx1ZSI6IiIsImNoYW5uZWwiOiIiLCJsb2dpbiI6IiJ9/955078397/67383c9f26653cb09a57=
+a95a72653d32f78155364162caeead0d3c860da6ff7b/legacyPath?custom_domain_targe=
+t_url=3Dhttps%3A%2F%2Ftwitter.com%2Ftwitch" target=3D"_blank" style=3D"colo=
+r:#832ce4;text-decoration:none;display:inline-block"><span style=3D"-webkit=
+-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#832ce4;text-decorat=
+ion:none;display:inline-block">Twitter</span></a></p></td></tr><tr><td styl=
+e=3D"padding:30px 50px 0;font-family:'Inter', Arial, sans-serif;font-style:=
+normal;font-weight:400;text-align:center;font-size:11px;line-height:16px;co=
+lor:#ffffff"><p style=3D"font-size:11px;line-height:16px;font-family: 'Inte=
+r', Arial, sans-serif;font-style: normal;font-weight: 400;color:#ffffff;Mar=
+gin:0;">This email was sent by: <span style=3D"-webkit-text-size-adjust:100=
+%;-ms-text-size-adjust:100%;font-family:'Inter', Arial, sans-serif;font-sty=
+le:normal;font-weight:600">Twitch</span></p></td></tr><tr><td style=3D"padd=
+ing:10px 50px 0;font-family:'Inter', Arial, sans-serif;font-style:normal;fo=
+nt-weight:400;text-align:center;font-size:11px;line-height:16px;color:#ffff=
+ff"><p style=3D"font-size:11px;line-height:16px;font-family: 'Inter', Arial=
+, sans-serif;font-style: normal;font-weight: 400;color:#ffffff;Margin:0;"><=
+span class=3D"appleLinkWhite" style=3D"-webkit-text-size-adjust:100%;-ms-te=
+xt-size-adjust:100%;color:#ffffff;text-decoration:none">350 Bush St. 2nd Fl=
+oor San Francisco, CA, 94104,&nbsp;US</span></p></td></tr><tr><td style=3D"=
+padding:20px 50px 0;font-family:'Inter', Arial, sans-serif;font-style:norma=
+l;font-weight:400;text-align:center;font-size:11px;line-height:16px;color:#=
+ffffff"><p style=3D"font-size:11px;line-height:16px;font-family: 'Inter', A=
+rial, sans-serif;font-style: normal;font-weight: 400;color:#ffffff;Margin:0=
+;">You're receiving this email because you are a valued member<br>of the Tw=
+itch community. To stop receiving emails from Twitch, <a href=3D"https://ww=
+w.twitch.tv/r/e/eyJsb2NhdGlvbiI6InVuc3ViciIsImVtYWlsX2lkIjoiN2ZiNjQ5MTctZWI=
+xZC00MGUyLTkwNzktNDkwNzY1NDk5NGY0IiwibmFtZSI6IndlbGNvbWVlbWFpbDJhbGxfdndyXz=
+U3Ml9kYXZfY21jX3djaF9taXNfZW1haWxfMjIzIiwic291cmNlX2VtYWlsIjoiIiwiY3RhX3Zhb=
+HVlIjoiTE9XIiwiY2hhbm5lbCI6IiIsImxvZ2luIjoiIn0=3D/955078397/1e70a249d9dca76=
+5949ad4118cc41bddac94aef3907ddd73757f06e18f3e42af/user/remove_me?block=3Dki=
+nd&amp;email_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;email_type=3Dmar=
+keting&amp;ignore_query=3Dtrue&amp;source_email=3Dmarketing&amp;tt_content=
+=3Dkind_unsubscribe&amp;tt_content=3Dwelcomeemail2all_vwr_572_dav_cmc_wch_m=
+is_email_223&amp;tt_email_id=3D7fb64917-eb1d-40e2-9079-4907654994f4&amp;tt_=
+medium=3Dmarketing&amp;tt_medium=3Demail&amp;user_id=3D955078397&amp;valida=
+ting_hash=3Daf5790ca7f59fee87a6f57910a23dab1b2d21964a24745b7fa65210b9bd86aa=
+7" style=3D"color:#ffffff;text-decoration:none"><span style=3D"-webkit-text=
+-size-adjust:100%;-ms-text-size-adjust:100%;color:#ffffff;text-decoration:u=
+nderline"><strong>unsubscribe from this list</strong></span>.</a></p></td><=
+/tr><tr><td style=3D"padding:20px 50px 0;font-family:'Inter', Arial, sans-s=
+erif;font-style:normal;font-weight:400;text-align:center;font-size:11px;lin=
+e-height:16px;color:#ffffff"><p style=3D"font-size:11px;line-height:16px;fo=
+nt-family: 'Inter', Arial, sans-serif;font-style: normal;font-weight: 400;c=
+olor:#ffffff;Margin:0;">=C2=A9<span class=3D"appleLinkWhite" style=3D"-webk=
+it-text-size-adjust:100%;-ms-text-size-adjust:100%;color:#ffffff;text-decor=
+ation:none">2022</span> Twitch. All&nbsp;rights&nbsp;reserved.</p></td></tr=
+></tbody></table></td></tr></tbody></table><table width=3D"1" height=3D"1" =
+cellpadding=3D"0" cellspacing=3D"0" border=3D"0" style=3D"-webkit-text-size=
+-adjust:100%;-ms-text-size-adjust:100%;border-spacing:0;font-family:'Inter'=
+, Arial, sans-serif;font-style:normal;font-weight:400;color:#ffffff"><tbody=
+><tr><td style=3D"padding:0;font-size:0px;line-height:0px"><img src=3D"http=
+://mi.twitch.tv/p/cp/e3d697a202c9199d/o.gif?mi_u=3D955078397" width=3D"1" h=
+eight=3D"1" alt=3D"" aria-hidden=3D"true" style=3D"border:0"></td></tr></tb=
+ody></table></div></center><img src=3D"https://spade.twitch.tv/track?data=
+=3DeyJldmVudCI6ImVtYWlsX29wZW4iLCJwcm9wZXJ0aWVzIjp7Im5vdGlmaWNhdGlvbl9pZCI6=
+IjdmYjY0OTE3LWViMWQtNDBlMi05MDc5LTQ5MDc2NTQ5OTRmNCIsIm5vdGlmaWNhdGlvbl90eXB=
+lIjoid2VsY29tZWVtYWlsMmFsbF92d3JfNTcyX2Rhdl9jbWNfd2NoX21pc19lbWFpbF8yMjMifX=
+0%3D&amp;img=3D1&amp;ua=3D1" width=3D"1" height=3D"1" style=3D"border:0"></=
+body></html>

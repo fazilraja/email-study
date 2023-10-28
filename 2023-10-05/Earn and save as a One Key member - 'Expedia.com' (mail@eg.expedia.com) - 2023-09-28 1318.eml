@@ -1,0 +1,985 @@
+Received: from SJ2PR20MB6141.namprd20.prod.outlook.com (2603:10b6:a03:501::6)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Thu, 28 Sep 2023
+ 18:18:58 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=he7sVpn5yeatHr430RiKwN65VdkfEjwXjp2I5qJtQ4r4NzkBsWDwNXOcGRTsLRLFwMC/PmuLNbg1t/Nj1ilviwWXjuyC2oM1kArm0o7PhhvOjOILsqoHgquZ5dWaNYZylos5NWQn+BqeHBwQ77Zq4brV7Dpc0OkHqEbocc1TZJ8m3WTDZn3L+DayDCwtNQ2pXbRK21kdtly5avhuEb4HaDeQeDTDVCHcJD0fiURwMXdNwrDxb/IH4eWCiH90kZBGJ9ti8TAbi8Wy1O2HMhW+0j8gaaEa7a7Dzzi41z3MzP85Ewv+oHE23VS/SCTik1jLNavqln8Itqb0M9//qVp5FQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nNqv0+5KpVb/zhtySDqnadf9jgCabLjwBpw8MYjnVYM=;
+ b=HOMheuaWokec/yM8iXZLmIm+updBXtKXy5AC5FZfPYpttdfvVXR15iFooM+SCYWhbbAianecaLULa9qgF5V2aQOBrWqYdkP+c0+0LmTJ2GT7B/CgHQ91uXB12bOCTIWBvy3n2kyC6b2NYLaUFTD4uThN49Log6qyxYglvNr6sXCv2CFh0KaKDXok3n8QF9nIwaXyiryTlsjznGomZO/60uIJ4C2pK5qE+EwH3prW+A7eLxV77Baa29IBwL4Vb57aFnh8oxdvWrFQxhIgIyVze9i7giR60LwrOm3nhDd2NkZEiFuMpBdcOJIzO+nim8vulSR3L0QQFzoAOv1hPdIGJw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.166.176) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.eg.expedia.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=eg.expedia.com; dkim=pass (signature was verified)
+ header.d=eg.expedia.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounce-8_html-202287393-90207-526001735-62317@bounce.eg.expedia.com]
+ dkim=[1,1,header.i=@eg.expedia.com] dmarc=[1,1,header.from=eg.expedia.com])
+Received: from CH2PR07CA0043.namprd07.prod.outlook.com (2603:10b6:610:5b::17)
+ by SJ2PR20MB6141.namprd20.prod.outlook.com (2603:10b6:a03:501::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.19; Thu, 28 Sep
+ 2023 18:18:56 +0000
+Received: from DS3PEPF000099DC.namprd04.prod.outlook.com
+ (2603:10b6:610:5b:cafe::45) by CH2PR07CA0043.outlook.office365.com
+ (2603:10b6:610:5b::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.25 via Frontend
+ Transport; Thu, 28 Sep 2023 18:18:55 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.166.176)
+ smtp.mailfrom=bounce.eg.expedia.com; dkim=pass (signature was verified)
+ header.d=eg.expedia.com;dmarc=pass action=none
+ header.from=eg.expedia.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of bounce.eg.expedia.com
+ does not designate 209.85.166.176 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.166.176;
+ helo=mail-il1-f176.google.com;
+Received: from mail-il1-f176.google.com (209.85.166.176) by
+ DS3PEPF000099DC.mail.protection.outlook.com (10.167.17.198) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.14 via Frontend Transport; Thu, 28 Sep 2023 18:18:55 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:465F490DC48C4F605F6DB284EFC72B941147F67A551A607712B1CD2C4D6303CA;UpperCasedChecksum:5CBF9C0A4388F32049C16E75930E0D328110A1E453B0D8C4CA753BD33535C190;SizeAsReceived:6159;Count:30
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3512c43adebso31745935ab.3
+        for <tobinsilvestre@outlook.com>; Thu, 28 Sep 2023 11:18:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695925135; x=1696529935;
+        h=x-forwarded-for:message-id:reply-to:list-id:mime-version
+         :list-unsubscribe-post:list-unsubscribe:date:subject:to:from
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nNqv0+5KpVb/zhtySDqnadf9jgCabLjwBpw8MYjnVYM=;
+        b=hsJeXuipNga254cFrvWWQeLEX32oqN/0YnmKAD9u4Ca6QVGvg3adrAcbcMaZMY9+jV
+         l7HV2/Rw3NBFiLGew+SmRh2EkFMMdoPbgF9zA64Uf2+7pzT/gyLqY2CsQeqTLv1c6715
+         lIiNjHbjmC87deegPZ5WjgBmHYNH0XpZUXYJZI29JD19HVY5zKeJSPgdLmSgk/sfiQFs
+         eeMYJdvqXf93tf3cWkiDAWQPoI2f9pn51qgzUv9OFXmo6a6ctXwwgB/d8bNKWlJq42Fz
+         BSfZZO74hmqN5/3zpZBre9hElKC+SznNJAhDFNiymwJeyOHOQfULWu2cAFZbQk0pER0/
+         Svjg==
+X-Gm-Message-State: AOJu0YzXh9sG5AksBEQL+JdflQGSWutivMkO7UbtnQwLwusj3gFqVy5W
+	HkXjVGPBPKrH1OeXa8FubgNIVFIaQ1iF0gQ7cA==
+X-Google-Smtp-Source: AGHT+IFFFtyP8ZwXO21K/yAhtu+sxtGLfVaCq4IHkkB4IsQ8xL9iVBuccK5N409DvUeDUFPGhL1+dHxuJgIR9kVuJoD/G3TLC9g=
+X-Received: by 2002:a05:6e02:216d:b0:351:5716:2bdb with SMTP id s13-20020a056e02216d00b0035157162bdbmr2432561ilv.5.1695925135633;
+        Thu, 28 Sep 2023 11:18:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695925135; cv=none;
+        d=google.com; s=arc-20160816;
+        b=WnmyHqLuKlkjoyQPGlfC10pwdQPakG1KatpZZxCCZLjUmXNxa9rZHs6gHne7imd7Q3
+         SAltMjV6SsXFCbF88QyD+tkOcj96TPEIV4JB6zzZnCYsVjAXQ6PGmPvUAnx+mUFYSP2r
+         amf2YqfjF71xZ26guM3tAVgqtewyb9709QPNrlA50SKNPgTww2wmbAwW/JcepHpiBoeY
+         A5+mQFFDnNp8XbJeKiO6rMZBGHD1mf3eCopn4NDOUWiuDn6QiTM5fz9MkoJfuPP8kCuG
+         BKdvy0l6WiLcv/r3+y7ZKPRliiuriLzrPY4yUdNGoZESp2gXn4I4fnmVpQc7iFmW7RvZ
+         Jj8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=message-id:reply-to:list-id:mime-version:list-unsubscribe-post
+         :list-unsubscribe:date:subject:to:from:dkim-signature;
+        bh=nNqv0+5KpVb/zhtySDqnadf9jgCabLjwBpw8MYjnVYM=;
+        fh=82POvmWpunkI8Tike2QK/2C2+1Edt/tP0dkptKMECF4=;
+        b=Jb8X99WqY6O31djCpqHh5205NrZx2+x5wzP+PqoVbXI0fM37EnHHHrsdBCILnltd9H
+         vgPEl64BWo4wXUoQEyQrm/jpG6Fv/hCLEZDsel71eE5T6IIC93HrSEfPwfn8wONmXXzS
+         JkpkWqpyuFUyo1vWGsJDRGJne3y+QV7rRfoEZPlbR8K+U40FoEy2QEtIMmP/T3mSOwcR
+         BG9hXa7EfwB9j8Yq/yU8cfKA+EYAehkE+5xYDjQUbPhgq6sR7XWX2gD1p29aAOEBxq2b
+         MIpqW6fuVIRyCdoOL6y4A1FSq8qvAfkTItqoyU6vaqhHXZhU/IBHZuv2I3VBWatLJaNk
+         0WNQ==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@eg.expedia.com header.s=12dkim1 header.b=GZA7j2pc;
+       spf=pass (google.com: domain of bounce-8_html-202287393-90207-526001735-62317@bounce.eg.expedia.com designates 13.110.210.79 as permitted sender) smtp.mailfrom=bounce-8_HTML-202287393-90207-526001735-62317@bounce.eg.expedia.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=eg.expedia.com
+Return-Path:
+ bounce-8_HTML-202287393-90207-526001735-62317@bounce.eg.expedia.com
+Received: from mta4.eg.expedia.com (mta4.eg.expedia.com. [13.110.210.79])
+        by gmr-mx.google.com with ESMTPS id e11-20020a056e0204ab00b00350fd9a47f9si1152323ils.5.2023.09.28.11.18.55
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 28 Sep 2023 11:18:55 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-8_html-202287393-90207-526001735-62317@bounce.eg.expedia.com designates 13.110.210.79 as permitted sender) client-ip=13.110.210.79;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@eg.expedia.com header.s=12dkim1 header.b=GZA7j2pc;       spf=pass
+ (google.com: domain of
+ bounce-8_html-202287393-90207-526001735-62317@bounce.eg.expedia.com
+ designates 13.110.210.79 as permitted sender)
+ smtp.mailfrom=bounce-8_HTML-202287393-90207-526001735-62317@bounce.eg.expedia.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=eg.expedia.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=12dkim1; d=eg.expedia.com;
+ h=From:To:Subject:Date:List-Unsubscribe:List-Unsubscribe-Post:MIME-Version:
+ List-ID:X-CSA-Complaints:Reply-To:Message-ID:Content-Type;
+ i=mail@eg.expedia.com;
+ bh=nNqv0+5KpVb/zhtySDqnadf9jgCabLjwBpw8MYjnVYM=;
+ b=GZA7j2pc04neQlL36HIAwDumfh1xwN+vBa6ALFt0rt54OL/XDtotoql7EenQBmRI8JZyrtNwYy6a
+   pYb0IlLxdr0WyxpIhopPAeUqurR7+SJm9m1EyZfA9V3OpMcLgX541MF5YHWWsg3dty520JZCaxz8
+   pAYfbyk5oMpCkm+uN+QsvQFWLwf2LLGI38Res15RHuO+10qRMS7uJLD+NfZozQaE15j96VRE+3qf
+   qC/wDd3jkb9LUmv7dGtST+YxP+b6Rlcj7O5+3Xjqs/+/9OEQtVrvADNeFW2tMdb05wOhWTpNjQkw
+   pm12e7FonUSLDmxY5h3ELYeUsBZAzEjxlENBbw==
+Received: by mta4.eg.expedia.com id h2n1ou2fmd4h for <tobinsilvestre091@sooners.us>; Thu, 28 Sep 2023 18:18:54 +0000 (envelope-from <bounce-8_HTML-202287393-90207-526001735-62317@bounce.eg.expedia.com>)
+From: "Expedia.com" <mail@eg.expedia.com>
+To: <tobinsilvestre091@sooners.us>
+Subject: Earn and save as a One Key member
+Date: Thu, 28 Sep 2023 12:18:53 -0600
+List-Unsubscribe: <https://click.eg.expedia.com/subscription_center.aspx?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWQiOiI1MjYwMDE3MzUiLCJzIjoiMjAyMjg3MzkzIiwibGlkIjoiOCIsImoiOiI5MDIwNyIsImpiIjoiNjIzMTciLCJkIjoiMTIwMDE4In0.-xoN5pvwIRkIUvWe0-pKzz2Ys42tCGyFZ1ufbBT0ZMk>, <mailto:leave-fdb31c1f2d205921-fe2b167077660c7a761d73-fefd1d70776403-fe3211727364047c721775-fefc1272766503@leave.eg.expedia.com>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+x-CSA-Compliance-Source: SFMC
+List-ID: <526001067.xt.local>
+X-CSA-Complaints: csa-complaints@eco.de
+X-SFMC-Stack: 12
+x-job: 526001735_90207
+Reply-To: "No Reply" <reply-fefd1d70776403-8_HTML-202287393-526001735-62317@eg.expedia.com>
+Message-ID: <aeb3b2b9-bfcc-41a4-8e3c-2ceb796ac9ae@iad4s12mta360.xt.local>
+Content-Type: multipart/alternative;
+	boundary="kclIRh9On0It=_?:"
+X-Forwarded-For: tobinsilvestre091@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 30
+X-MS-Exchange-Organization-ExpirationStartTime: 28 Sep 2023 18:18:55.7813
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ ee59e32a-5a6e-4f40-493b-08dbc04f608c
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DS3PEPF000099DC:EE_|SJ2PR20MB6141:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DS3PEPF000099DC.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/28/2023 6:49:54 AM
+X-MS-Office365-Filtering-Correlation-Id: ee59e32a-5a6e-4f40-493b-08dbc04f608c
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.166.176
+X-SID-PRA: MAIL@EG.EXPEDIA.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:2;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2023 18:18:55.7656
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee59e32a-5a6e-4f40-493b-08dbc04f608c
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS3PEPF000099DC.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR20MB6141
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.5942196
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6813.014
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPlHIYZfSpjIsN3+Zgx94JmKzD07mFTDZt3SllceNc+apfMAo0ju/HKk7FHC8BDjyO81LJ03o9dnrqRBwGg995EZIBnK+gRVaFZiDtwnU3QlM7gryfIMu8eJw9gG53qhaWrEn8AVWDxv0xi6it9xWx4ZkMpv9Ho8mph3GTN7RV6zFch7DiyWTrXv7Pm8/M4bhSMQpKhSz+l8qQ==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZENXamVTZk8zcHQyMmQwSW5BVDZYOUNMeWNtYjRCd3g2OS84MjRPTG0xYk5K?=
+ =?utf-8?B?M05CUXB3Q0JJOTN3S0pHT3BFRVlkU3AvV09waCtJVU51RFQzcmgzZys5d3ZZ?=
+ =?utf-8?B?ckd6ZmF2UTJGR1RRNGJaclpvSEt1dUgvOHhQd1VOK2htejl3VmhxcTFxaTQ0?=
+ =?utf-8?B?WkZFclVhNURiQ0VRdkVjb1RDekdZdHQ4ZlhOTFhBSVZPYlNBQk1aVHNGcFNv?=
+ =?utf-8?B?d2IwR1VacktCSkNlNndkZ1lhdytVY1EvRDJHaEN5MW50TUN5WHRYbnVOTjlC?=
+ =?utf-8?B?eFVzL0pYZWE1YjU0cmxhNFlwOEx2VzZub1pNV1VYYzNZa2lXWXZiRFA2aGdB?=
+ =?utf-8?B?ZmJraW5zN00yZHRsWEhPQlhlNlV5RzZTTUZsckhMb3RWSkVtTnJUTVJRWjk2?=
+ =?utf-8?B?ZWdGZDRFb043Rm45N0RBbWdFeVloY0lTVDMvL0RWNndReGNGNVVKV21UR3Mw?=
+ =?utf-8?B?L28rc01jdUpiK0ZvRWgyQzBOUVRWSnIwUWRvUENpL1JabEtsTHlDNGFxWlVE?=
+ =?utf-8?B?a3NJU1NLc1VKQTdTbHk0ZEZJY0xDL0ZxWUU5LzJTdUJLT0V3MTBtVVFSWmxa?=
+ =?utf-8?B?M1gyTEx0YzlDVHJncE0vVUNqTGI1SkRKMS8xaFBlSVpsZnVPYk9YZ3k5VUdI?=
+ =?utf-8?B?dDVxdlp6UnJlMnBmeUN3aG41R0VLSE9GK3RGTEY5R053c1ErMGVOZHdRcjFx?=
+ =?utf-8?B?dEx5ZlhKa2VEM2RLTGtucmJFRXNKRUNQbGQrWXpvT0RMejVKR3J1YTVXVThl?=
+ =?utf-8?B?UWYyZU5MRDFITzVWSThVenpMUTdnYnZQWllSdEZzRVJpb3ZsZmp4eFlwNFhK?=
+ =?utf-8?B?QTQ3RWdLTTltSlpFM0NGclRHWUtXSnRvakpLbS9ZdDUwZXcyTnMzTklGSXVa?=
+ =?utf-8?B?M0xBd1V2UTBLVGZNMkhQeG9yRDBrTXZ2eEt6VnEvbmJxZmhCNFZxQmdqTS9R?=
+ =?utf-8?B?ekExaTIrZG5MTXFHb0dvYXN4cFpFTEpwb2I3Q0hjNCtKL3RsMmFIcURkYS91?=
+ =?utf-8?B?WFhPanJtZ1kxRktlYUhXdTFTNGV0VmJHYzVyWURPWnNna2dlakxZalBSd284?=
+ =?utf-8?B?cGtLeWVTRkt2VFRNTDNxeVhPYUZ3U0wyWVEzaFZqOTVrRVhlNkF3VjgwaTEw?=
+ =?utf-8?B?aytvNXRxSWlzbkJsUDNWUE05NjRmR2lSdkVJbEpjOWhrZzlFRldhSmJhVGIv?=
+ =?utf-8?B?UU91dzVoRGc3RWsxVmdxdGJFdUhjb0w0NlBFMDl2QjFhaVFaTVo3aTFOTHZo?=
+ =?utf-8?B?VU5PSWUxOWRZQUw1RDU0L1QvbEVXM08zUDdhdG9pZnR0VHRENU1mUFkzSVdN?=
+ =?utf-8?B?NHRhRTFKWUdFRG9FUytqdi9MbGhqcHhvVWQvdEhiRVF1eTNzbVR5S3c2NzVD?=
+ =?utf-8?B?Slo3OHhlTHFvK3NncXlBTEozNUpRNzU1VkxhME9DZm5HSXUyUkR5SkRPNERn?=
+ =?utf-8?B?UzNvcmFxRlZoSm1RM1pqckFlL3ZNR3lZRWVrcnhoRis5U3FmV3VlMjBlbm5s?=
+ =?utf-8?B?eUZ4dDhhM2dMNmozV3NqZ3Uyc1FPcVNoRUI4MGlEL21JZ2lPK2JWRGxZcnlh?=
+ =?utf-8?B?NXFjRDFoZXh3RHdWNEp4ZVg4dG5FN2R1WHdvd2s4NkNUclZ5eWZ3aVVDMmth?=
+ =?utf-8?B?TGYxclkvcWJoVi9KbXc4aDdubmdGZVhZd2hIbVE3dlh5SUUxTDFITFlsejVj?=
+ =?utf-8?B?M3lLczNOTEpTMzlrZ0hqcWk0WVk5amQ1bCthSmdNRnMyMk5Id1JzRERra1dD?=
+ =?utf-8?B?TFFwZkp2MHNqOFRUZmFpRm9FSUs5VzJ4Zk54UjJVRm9EdkhsczcyUUNCRHhM?=
+ =?utf-8?B?eURkbGYwdG1yNzJ0bnQ3WXpZa28xbjRGbkVpSlJZcXlhcnNBV0JEV1BrbW1Z?=
+ =?utf-8?B?anRiWmxqQ0MyYk5ndUhzcnFydkRNNXJOZHg3TE1mdmlVeitnYzAvSDJHT21w?=
+ =?utf-8?B?MFphNHp0WDlSZjNnTHpIcWI0ZENBbzRnTUVRZnlIQ1dPSkl2b05pREt6eUNw?=
+ =?utf-8?B?NzdOdmRrTUhtM1pZM0RSUURpR1V5WTQzaGwvNFNMVXcxM0dIZkhhRGxjUFZE?=
+ =?utf-8?B?STdxYS82bXFybitGc3dXUXFRM1ZQUzlDU1Y3NWFXWnhuL1BqZEdoWCtNUm5v?=
+ =?utf-8?B?WVp1cyt6c0ZFQWRYY01ZTHRiQVZSYWNxTzZ4ZFNSN2dTUDdiMy9QY1lSbzI5?=
+ =?utf-8?Q?JHqf6e7NExKg/5czNDB+TNs=3D?=
+MIME-Version: 1.0
+
+--kclIRh9On0It=_?:
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+
+
+--kclIRh9On0It=_?:
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+<!doctype html><html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+  <title></title>
+  
+
+
+
+    
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<style>
+div, p, h1, h2, h3, h4, span {font-family: Helvetica, Arial, sans-serif;}
+  
+  @media screen {
+   .button-primary, .button-secondary {font-weight: 500!important;}
+   .badge {font-weight: 500!important;} 
+   }
+</style>
+
+<style>
+ 
+   @media screen {
+     
+   @font-face {
+   font-display: swap;
+   font-family: 'Centra No2';
+   src:url("https://a.travel-assets.com/egds/fonts/CentraNo2/CentraNo2-Book.woff2") format("woff2");
+   font-weight: normal;
+   font-style: normal;
+   mso-font-alt: "Centra No2";
+   mso-generic-font-family: swiss;
+   }
+   @font-face {
+   font-display: swap;
+   font-family: 'Centra No2';
+   src:url("https://a.travel-assets.com/egds/fonts/CentraNo2/CentraNo2-Medium.woff2") format("woff2");
+   font-weight: 500;
+   font-style: normal;
+   mso-font-alt: "Centra No2";
+   mso-generic-font-family: swiss;
+   }
+   @font-face {
+   font-display: swap;
+   font-family: 'Centra No2';
+   src:url("https://a.travel-assets.com/egds/fonts/CentraNo2/CentraNo2-Bold.woff2") format("woff2");
+   font-weight: bold;
+   font-style: normal;
+   mso-font-alt: "Centra No2";
+   mso-generic-font-family: swiss;
+   }
+   p, a, li, span { font-family: 'Centra No2', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif!important; }
+   .h-dark, .heading, .custom-font-weight-500, .button__primary__link, .button__secondary__link { font-weight: 500!important; }
+   }
+</style>
+
+
+   <!--[if !mso]><!-->
+    <style>
+        #MessageViewBody, #mail-message-header {height:140px!important;}
+        #MessageViewBody, #MessageWebViewDiv {width: 100% !important;}
+        a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+        }
+     </style>
+     <style>
+        :root {
+        color-scheme: light dark;
+        supported-color-schemes: light dark;
+        }
+     </style>
+     <style>
+        .no-custom-font { font-family: Helvetica, Arial, sans-serif!important; }
+        .border-radius {border-radius: 4px!important;} 
+     </style>
+     <style type="text/css">
+      ReadMsgBody{ width: 100%;}
+      body {-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;margin:0 !important;}
+    </style>
+<!--<![endif]-->
+    
+     <!--[if mso]>
+      <noscript>
+         <xml>
+            <o:OfficeDocumentSettings>
+               <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+         </xml>
+      </noscript>
+      <![endif]-->
+      <!--[if true]>
+      <style> body, table tr, table td, p, a, span {font-family: Arial, Helvetica, sans-serif !important;}</style>
+      <![endif]-->
+  <style> 
+   @media screen and (max-width: 600px) {
+   .w100pc {width: 100%!important; height: auto!important;}
+   .w100pc-only {width: 100%!important;}
+   .w50pc {width: 50%!important; height: auto!important;}
+   .w54 {width: 54px!important; height: auto!important;}
+   .w32 {width: 32px!important; height: auto!important;}
+   .h500 {height:500px!important;}
+   .wauto {width: auto!important;}
+   .hauto {height: auto!important;}
+   .max-w-full {max-width: 100%!important;}
+   .nomob {display: none!important;}
+   .showmob {display: block!important;overflow: visible!important;float: none!important;width: 100%!important;height: auto!important;}
+   .showmobtable {display: table!important;}
+   .text-align-left {text-align: left!important;}
+   .text-align-center {text-align: center!important;}
+   .text-align-right {text-align: right!important;}
+   .m0 {margin: 0!important;}
+   .mt-0 {margin-top: 0px!important;}
+   .mr-0 {margin-right: 0px!important;}
+   .ml-0 {margin-left: 0px!important;}
+   .mb-0 {margin-bottom:0px!important;}
+   .marb8m {margin-bottom:8px!important;}
+   .p0 {padding: 0!important;}
+   .block {display: block!important;}
+   .gutter-margin {margin-left: 32px!important; margin-right: 32px!important;}
+   .gutter-padding {padding-left: 32px!important; padding-right: 32px!important;}
+   .padtb64m {padding-top: 64px !important; padding-bottom: 64px !important;}
+   .pads16m {padding-right: 16px !important; padding-left: 16px !important;}
+   .display-table table, .display-table tbody, .display-table tr {width: 100%!important; display: table!important;}
+   .colsplit {width: 100%!important; float: left!important; display: block!important;}
+   .display-header {width: 100%!important; display: table-header-group!important;}
+   .display-footer {width: 100%!important;display: table-footer-group!important;}
+   .responsive-td {width:100% !important;display:block !important;padding:0!important;}
+   }
+</style>
+<style> 
+   @media screen and (max-width: 480px) {
+   .pads16m {padding-left: 16px!important;padding-right: 16px!important;}
+   }
+</style>
+
+  
+<style>
+  @media (prefers-color-scheme: dark ) {
+
+	/* Darkmode Icon Support */
+	.dark-img {
+			display:inline-block!important;
+			overflow: visible!important;
+			float: none!important;
+			max-height:inherit!important;
+			max-width:inherit!important;
+			line-height: auto!important;
+			margin-top:0px!important;
+			visibility:inherit!important;
+		}
+	.light-img {
+			display:none;
+			display:none !important;
+		}
+	/* Typography Core */
+	.paragraph, .p-dark {
+		color: #F3F3F5 !important;
+	}
+	.heading, .h-dark {
+		color: #FFFFFF !important;
+	}
+	.link {
+		color: #80B2F4 !important;
+	}
+	/* Typography Additional */
+	.list-icon {
+		color: #F3F3F5 !important;
+	}
+	.text-default {
+		color: #F3F3F5 !important;
+	}
+	.text-negative {
+		color: #F55669 !important;
+	}
+	.text-positive, .color-positive {
+		color: #57CA61 !important;
+	}
+	/* Backgrounds & dividers */
+	.background-base, .section, .column, .column-no-stack, .one-col, .two-col-no-stack, .button__secondary__link, .card-secondary {
+		background-color: #0C0E1C !important;
+	}
+	.background-contrast {
+		background-color: #0C0E1C !important;
+	}
+	.border-muted {
+		border-color: #4D5167 !important;
+	}
+	/* Badges */
+	.badge-extra-high-tier {
+		background-color: #506D91 !important;
+	}
+	.badge-high-tier {
+		background-color: #7C6935 !important;
+	}
+	.badge-middle-tier {
+		background-color: #646C75 !important;
+	}
+	.badge-low-tier {
+		background-color: #4262D3 !important;
+	}
+	.badge-utility-standard {
+		background-color: #676A7D !important;
+		color: #FFFFFF !important;
+	}
+	/* Banners */
+	.banner-critical {
+		background-color: #CACCD2 !important;
+		
+	}
+	.banner-heading {
+		color: #0C0E1C !important;
+	}
+	.banner-text {
+		color: #0C0E1C !important;
+		}
+	.banner-link {
+		color: #0C0E1C !important;
+	}
+	/* Buttons */
+	.button-primary {
+		background-color: #3D84F0 !important;
+		color: #0C0E1C !important;
+	}
+	.button-secondary {
+		background-color: #0C0E1C !important;
+		color: #FFFFFF !important;
+		border-color: #4D5167 !important;
+	}
+	.button-tertiary {
+		color: #FFFFFF !important;
+	}
+
+	/* Cards */
+	.card {
+		border-color: #4D5167 !important;
+	}
+	.card-primary {
+		background-color: #0C0E1C !important;
+	}
+	.card-secondary {
+		background-color: #0C0E1C !important;
+	}
+	/* Pill */
+	.pill {
+		background-color: #0C0E1C !important;
+		border-color: #676A7D !important;
+		color: #F3F3F5 !important;
+	}
+	
+	.p-emlcid {color:#0C0E1C !important;}
+}
+</style>
+
+  <style type="text/css">
+  @media only screen and (max-width: 480px) {
+    .container {
+      width: 100% !important;
+    }
+    .footer {
+      width:auto !important;
+      margin-left:0;
+    }
+    .mobile-hidden {
+      display:none !important;
+    }
+    .logo {
+      display:block !important;
+      padding:0 !important;
+    }
+    .header img{
+      max-width:100% !important;
+      height:auto !important;
+      max-height:auto !important;
+    }
+    .photo img {
+      width:100% !important;
+      max-width:100% !important;
+      height:auto !important;
+    }
+    .drop {
+      display:block !important;
+      width: 100% !important;
+      float:left;
+      clear:both;
+    }
+    .footerlogo {
+      display:block !important;
+      width: 100% !important;
+      padding-top:15px;
+      float:left;
+      clear:both;
+    }
+    .nav4, .nav5, .nav6 {
+      display: none !important;
+    }
+    .tableBlock {
+      width:100% !important;
+    }
+    .fluid, .fluid-centered {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+    .fluid-centered {
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+  }
+  @media only screen and (max-width: 600px) {
+    .container {
+      width:100% !important;
+    }
+    .mobile-hidden {
+      display:none !important;
+    }
+    .logo {
+      display:block !important;
+      padding:0 !important;
+    }
+    .photo img {
+      width:100% !important;
+      height:auto !important;
+    }
+    .nav5, .nav6 {
+      display: none !important;
+    }
+    .fluid, .fluid-centered {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+    .fluid-centered {
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+  }
+</style>
+
+  
+</head>
+
+ 
+
+
+
+
+<body id="body" class="body background-contrast" style="margin:0; padding: 0; background-color: #F3F3F5;"><style type="text/css">
+div.preheader 
+{ display: none !important; } 
+</style>
+<div class="preheader" style="font-size: 1px; display: none !important;">Earn OneKeyCash at Expedia, Hotels.com, and Vrbo</div>
+   <div style="font-size: 0; line-height: 0; overflow: hidden;"><img src="https://click.eg.expedia.com/open.aspx?ffcb10-fefd1d70776403-fe23157777620d7b751d74-fe3211727364047c721775-ffc71c-fe2b167077660c7a761d73-fefc1272766503&amp;d=120018&amp;bmt=0" width="1" height="1" alt=""></custom></div>
+  <!-- Preheader -->
+      <div style="visibility:hidden; color:transparent; display: none; font-size: 0px; line-height: 0px; max-height: 0px; max-width: 0px; width: 0px; opacity: 0; overflow: hidden;"></div>
+      
+
+
+<div itemscope="" itemtype="http://schema.org/Organization">
+  <meta itemprop="logo" content="https://image.eg.expedia.com/lib/fe3211727364047c721775/m/1/expedia_logo_favicon.png">
+</div>
+<div itemscope="" itemtype="http://schema.org/EmailMessage">
+  <meta itemprop="subjectLine" content="">
+</div>
+<div itemscope="" itemtype="http://schema.org/DiscountOffer">
+  <meta itemprop="description" content="Get flexible rewards with One Key.">
+  <meta itemprop="discountCode" content="">
+  <meta itemprop="availabilityStarts" content="--T">
+  <meta itemprop="availabilityEnds" content="--T">
+</div>
+<div itemscope="" itemtype="http://schema.org/PromotionCard">
+  <meta itemprop="image" content="https://a.travel-assets.com/travel-assets-manager/cread-1999/gMail_538x138.jpg">
+</div>
+  <!--[if !mso]><!-->
+      
+<div style="display: none; font-family: sans-serif; max-height: 0px; overflow:hidden;">&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌
+ &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌</div>
+  <!--<![endif]-->
+
+ 
+
+   <div role="article" aria-roledescription="email" lang="en" style="font-family: Helvetica, Arial, sans-serif; padding: 0; margin: 0;" dir="ltr" class="EXPEDIA">
+   <table role="presentation" width="100%" class="background-contrast" border="0" cellpadding="0" cellspacing="0" style="width:100%; background-color: #F3F3F5;" dir="ltr"><tr><td class="background-contrast" width="100%" valign="top" align="center" style="background-color: #F3F3F5;">
+   <table role="presentation" class="background-base w100pc" width="600" border="0" cellpadding="0" cellspacing="0"><tr><td class="background-base" width="100%" valign="top" style="background-color: #FFFFFF;">
+      <!-- MODULE START: Header -->
+
+
+<table role="presentation" class="background-base" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="background-color: #FFFFFF;"><tr><td width="100%" align="center">
+  <table role="presentation" width="600" class="background-base w100pc" border="0" cellpadding="0" cellspacing="0" align="center" style="background-color: #FFFFFF;"><tr><td align="left" style="width: 100%; text-align:left;">
+    
+      
+      <p style="margin: 36px 32px 36px 32px; text-align: left; font-size: 16px;" class="gutter-margin text-align-left">
+        <a style="text-decoration: none; vertical-align: middle;" href="https://click.eg.expedia.com/?qs=0896193f16d330d45a2752360b31f1203e199fe4bc8f960faf6f4a88d2f795bdc421492cb1e035b7362bc42cb1849d4e29f9c67ac931ed7d6f21e33254f4535a">
+          <img src="https://image.eg.expedia.com/lib/fe3211727364047c721775/m/1/expedia_logo_product_dark+blue.png" alt="Expedia" width="150" height="auto" style="font-family: sans-serif; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; display: inline-block;">
+        </a>
+      </p>
+   
+  </td></tr></table>
+</td></tr></table>
+
+
+<table role="presentation" class="background-base" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="background-color: #FFFFFF;"><tr><td width="100%" align="center">
+    <table role="presentation" width="600" class="background-base w100pc" border="0" cellpadding="0" cellspacing="0" align="center" style="background-color: #FFFFFF;"><tr><td align="left" style="width: 100%; border-bottom: 1px solid #DFE0E4; line-height:1px;"></td></tr>
+  <tr><td width="100%" height="16"></td></tr></table>
+  </td></tr></table>
+
+<!-- MODULE END: Header -->
+
+      
+        
+      <!-- GLOBAL START: Generic 1 -->
+      
+      <!-- GLOBAL END: Generic 1 -->
+      
+      
+
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation" class="stylingblock-content-wrapper" style="min-width: 100%;">
+  <tr>
+    <td class="stylingblock-content-margin-cell" style="padding: 0px; ">
+      <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: transparent; min-width: 100%; " class="stylingblock-content-wrapper">
+        <tr>
+          <td style="padding: 0px; " class="stylingblock-content-wrapper camarker-inner">
+            <table cellspacing="0" cellpadding="0" role="presentation" style="width: 100%;">
+              <tr>
+                <td>
+                  <table cellspacing="0" cellpadding="0" role="presentation" style="width: 100%;">
+                    <tr>
+                      <td valign="top" class="responsive-td" style="width: 100%; padding-bottom: 0px;">
+                        <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper">
+                          <tr>
+                            <td class="stylingblock-content-wrapper camarker-inner">
+                              <p class="h-dark" style="color: #191E3B; font-size: 28px; line-height: 114%; font-weight: normal; margin: 8px 32px 8px 32px; text-align: left;">
+                                <!--loc.h4.start--><strong>Get rewarded your way with One Key™</strong><!--loc.h4.end-->
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <p style="margin: 16px 32px 4px 32px; text-align: center;" class="nomob">
+                          <a href="https://click.eg.expedia.com/?qs=defe918797102850605a21123943adae8d70724fc23de0b1067e0c57cadb8c3512e8e60386d29827eeb84c3f3c64b6836aa73059ff6889d0c3a472a1c6d8f878" target="_blank">
+                            <img width="536" style="display: inline-block; width: 100%; max-width: 536px; height: auto;" src="https://a.travel-assets.com/travel-assets-manager/cread-1999/eMail_hero_D_536x230.jpg" alt="Earn rewards on hotels, vacation rentals, and more with One Key." class="border-radius">
+                          </a>
+                        </p>
+                        <!--[if !mso]><!-->
+                        <div style="width:0; overflow:hidden; float:left; display:none; height:0px; mso-hide:all;" class="showmob">
+                          <p style="margin: 16px 32px 12px 32px; text-align: center;">
+                            <a href="https://click.eg.expedia.com/?qs=defe918797102850605a21123943adae8d70724fc23de0b1067e0c57cadb8c3512e8e60386d29827eeb84c3f3c64b6836aa73059ff6889d0c3a472a1c6d8f878" target="_blank">
+                              <img width="311" alt="Earn rewards on hotels, vacation rentals, and more with One Key." style="display: block;" src="https://a.travel-assets.com/travel-assets-manager/cread-1999/eMail_hero_M_311x311.jpg" class="max-w-full w100pc border-radius">
+                            </a>
+                          </p>
+                        </div>
+                        <!--<![endif]-->
+                        
+                        
+                       
+                        
+                        <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: transparent; min-width: 100%; " class="stylingblock-content-wrapper">
+                          <tr>
+                            <td style="padding: 0px; " class="stylingblock-content-wrapper camarker-inner">
+                              
+                             
+              <p class="p-dark" style="color: #191E3B; font-size: 14px; line-height: 144%; font-weight: normal; margin: 0 32px 4px 32px; text-align: left;">
+                                              <!--loc.p2.start-->Our rewards program, One Key, gives you flexibility and choice. Earn OneKeyCash™ on eligible hotels, vacation rentals, car rentals, flights, cruises, and more across our three brands.¹ Plus, save instantly with Member Prices on over 100,000 hotels worldwide.<!--loc.p2.end-->
+                              </p>
+                             
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        
+                        <p class="button__primary gutter-margin text-align-center" style="color: #FFFFFF; font-size:16px;line-height:126%;font-weight:bold; font-weight: normal; margin: 8px 32px 16px 32px; text-align: left;">
+                          <a class="block button__primary__link" href="https://click.eg.expedia.com/?qs=defe918797102850934d9f95111530fe8c409bad2885e129b4a1196dcbe82c52e1d492fa0de97710c1c8b8778d965cdb9bedcbedd417ae6288ad9e4f914a8fcd" target="_blank" style="display: inline-block; text-decoration: none; mso-padding-alt: 0; text-transform: none; padding: 8px 16px; border-radius: 40000px; background-color: #1668E3; mso-border-alt: 8px solid #1668E3; color: #FFFFFF; font-size: 16px; line-height: 126%; font-weight: normal;"><!--loc.bp.start--><strong>Earn and save now</strong><!--loc.bp.end-->
+                          </a>
+                        </p>
+                        
+                        
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table cellspacing="0" cellpadding="0" role="presentation" style="width: 100%;">
+                    <tr>
+                      <td valign="top" class="responsive-td" style="width: 100%; padding-top: 0px;"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+      <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px; " class="stylingblock-content-wrapper camarker-inner"><!--     <!-- COMPONENT START: Divider - Line --><div class="section" style="margin: 0 auto; overflow: hidden; background-color: #FFFFFF; display: table; width: 100%; font-size: 0;">
+	<!--[if true]><table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" style="width:536px; text-align:center; background-color: #FFFFFF;"><tr> <td style="width:32px"></td><td style="padding:0;"><![endif]--><div class="column" style="display: inline-block; width: 100%; vertical-align: middle; overflow: hidden; font-family: Helvetica, Arial, sans-serif;">
+		<hr style="margin: 8px 0 24px 0; border-width: 0; background-color: #DFE0E4; height:1px; font-size:1px;">
+	</div><!--[if true]></td><td style="width:32px"></td></tr></table><![endif]--></div><!-- COMPONENT END: Divider - Line --><!----></td></tr></table>
+      <!-- MODULE START: OneKey Benefits Module --> 
+ 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation" style="background-color: #FFFFFF">
+  
+  
+                            <tr>
+                              <td class="stylingblock-content-wrapper camarker-inner">
+                                <p class="h-dark" style="color: #191E3B; font-size: 20px; line-height: 120%; font-weight: normal; margin: 0px 32px 8px 32px; text-align: left;">
+                                  <!--loc.h4.start--><strong>One Key makes every trip more rewarding</strong><!--loc.h4.end--><br>
+                                  
+                                </p>
+                                <p class="p-dark" style="color: #191E3B; font-size: 14px; line-height: 144%; font-weight: normal; margin: 0 32px 8px 32px; text-align: left;">
+                                  <!--loc.p2.start-->Check out your Blue benefits:<!--loc.p2.end-->
+                                </p>
+                              </td>
+                            </tr>     
+  <tr>
+        <td valign="top" style="background-color: #FFFFFF; padding: 16px 32px 16px 32px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation" style="background-color: #FFFFFF; border-radius: 16px; border: 1px solid #818494; width: 100%;">
+ 
+              <tr>
+                    <td style="padding: 12px;">
+                        <p style="margin: 0 0 8px 0;">
+                            <span style="border-radius:4px; background-color: #193082; font-size: 12px; line-height: 134%; font-weight: normal; color: #FFFFFF; text-decoration: none; white-space: nowrap; padding: 4px 10px; display: inline-block; text-align: center;">
+                                <!--[if mso]>&nbsp;&nbsp;<![endif]-->
+                            
+                                
+                                <!--loc.tier.start-->Blue<!--loc.tier.end-->
+                                
+                                <!--[if mso]>&nbsp;&nbsp;<![endif]-->
+                            </span>
+                        </p>
+
+                        <!--- Body Text -->
+                        <p style="margin: 0 0 16px 0; color: #191E3B; font-size: 14px; line-height: 144%; text-align: left; font-weight:bold;" class="p-dark"><!--loc.p.start-->Get instant discounts<!--loc.p.end--></p>
+                      <p style="margin: 0 0 16px 0; color: #191E3B; font-size: 14px; line-height: 144%; text-align: left; font-weight:normal;" class="p-dark"><!--loc.p.start-->Save 10% or more on over 100,000 hotels worldwide with Member Prices on Expedia and Hotels.com<!--loc.p.end--></p>
+                      <p style="margin: 0 0 16px 0; color: #191E3B; font-size: 14px; line-height: 144%; text-align: left; font-weight:bold;" class="p-dark"><!--loc.p.start-->Go further with OneKeyCash<!--loc.p.end--></p>
+                      <p style="margin: 0 0 16px 0; color: #191E3B; font-size: 14px; line-height: 144%; text-align: left; font-weight:normal;" class="p-dark"><!--loc.p.start-->Earn our rewards currency on eligible hotels, vacation rentals, activities, and more¹<!--loc.p.end--></p>
+                      <p style="margin: 0 0 16px 0; color: #191E3B; font-size: 14px; line-height: 144%; text-align: left; font-weight:bold;" class="p-dark"><!--loc.p.start-->Collect trip elements to unlock more perks<!--loc.p.end--></p>
+                      <p style="margin: 0 0 16px 0; color: #191E3B; font-size: 14px; line-height: 144%; text-align: left; font-weight:normal;" class="p-dark"><!--loc.p.start-->Each one you collect takes you closer to the next tier, and to more savings and rewards²<!--loc.p.end--></p>
+                        
+                        <!-- OPTIONAL ICON LIST START -->
+
+                       
+                        <!-- OPTIONAL ICON LIST END -->
+
+
+
+                        <!-- COMPONENT START: Medium Link -->
+                        <p class="link" style="color: #1668E3; font-size: 14px; line-height: 130%; font-weight: normal; margin: 0 0 8px 0; text-align: left;">
+                            <a class="link" href="https://click.eg.expedia.com/?qs=defe918797102850571acad08be1d5a03fb4282003d8fa413eb5a5146ff9956750e327d483314d15707cd6a8687d15055ce41c2838eb00183a274fd0763e83bf" target="_blank" style="color: #1668E3;text-decoration: underline;" target="_blank"><!--loc.lm.start-->See all One Key benefits<!--loc.lm.end--> </a>
+                        </p><!-- COMPONENT END: Medium Link -->
+
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+ 
+<!-- MODULE END: OneKey Benefits Module -->
+
+      <!--
+
+-->
+      <!-- MODULE START: OneKey Benefits Module --> 
+
+
+<!-- MODULE END: OneKey Benefits Module -->
+
+      
+      <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><!--- /// adjust all 3 pixel values to suit --><div style="line-height:16px; height:16px; font-size:16px">
+	&nbsp;</div></td></tr></table>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        <!-- GLOBAL START: Generic 2 -->
+        
+        <!-- GLOBAL END: Generic 2 -->
+        <!-- MODULE START: Footer -->
+        
+
+
+<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px" class="background-base">
+  <tr>
+    <td style="padding: 24px 0 0 0; background-color: #F3F3F5;" class="background-base">
+      <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px;" class="w100pc" class="background-base">
+        <tr>
+          <td width="100%" align="center" class="background-base"><p class="paragraph" style="font-size: 16px; line-height: 150%; font-weight: normal; color: #191E3B; margin: 0 36px 9px 36px;">Download our FREE mobile app</p></td>
+        </tr>
+        <tr>
+          <td width="100%" align="center" valign="top" class="background-base">
+            <center>
+              <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center">
+                <tr>
+                  
+                  <td style="text-align: right;">
+                    <a style="text-decoration: none;" href="https://click.eg.expedia.com/?qs=0896193f16d330d428ed612eee5f0845d475c11098618a4a9b4e3a76de3eecef7474695b451f413fe9d3d9fc46175f8a14ca0e54678aba71050a9b403b1d0365"> 
+                      <img src="https://image.eg.expedia.com/lib/fe3211727364047c721775/m/1/enUS_iOS.png" alt="App Store" width="auto" height="28" style="-ms-interpolation-mode: bicubic; border: 0; height: 28px; line-height: 100%; outline: none; text-decoration: none; width: auto;">
+                    </a>
+                  </td>
+                  <td width="14">&nbsp;</td>
+                  
+                  <td style="text-align: left;">
+                    <a style="text-decoration: none;" href="https://click.eg.expedia.com/?qs=0896193f16d330d4589a7d4fffe672d704bb6a9a33249015c2c4dfaabab77463dc63915bf656fe30f5807934d09d6e0db58bf2f53d493d62650c12c5eb6871a1">
+                      <img src="https://image.eg.expedia.com/lib/fe3211727364047c721775/m/1/enUS_Android.png" alt="Google Play" width="auto" height="28" style="-ms-interpolation-mode: bicubic; border: 0; height: 28px; line-height: 100%; outline: none; text-decoration: none; width: auto;">
+                    </a>
+                  </td>
+                  
+                </tr>
+              </table>
+            </center>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+        
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="w100pc background-base">
+  <tr>
+    <td align="center" width="100%" style="margin: 0 auto; max-width: 600px; background-color: #F3F3F5;" class="background-base">
+      <p style="color: #191E3B; font-size: 12px; line-height: 134%; font-weight: normal; margin: 24px 36px 24px 36px;" class="gutter-margin"> 
+        
+        
+         
+          <a class="link" style="display: inline-block; color: #191E3B; font-size: 12px; line-height: 134%; font-weight: normal; color: #1668E3; text-decoration: underline;" href="https://click.eg.expedia.com/u/?qs=0896193f16d330d4fd4d4fb6e0c94ee336ca0a6ac8217d500b1ae8e729cffe494b4facccd19ef46e23fd689cda586b209cab248afa30d8fe542cc13a6de088de">Unsubscribe from Offers and Inspiration</a>
+          &nbsp;&nbsp;
+        
+        
+          <a class="link" style="display: inline-block; color: #191E3B; font-size: 12px; line-height: 134%; font-weight: normal; color: #1668E3; text-decoration: underline;" href="https://click.eg.expedia.com/u/?qs=0896193f16d330d46e175c83081842aa4d925178d68717943f8a984ea103ad75ad345ae34d1904ee26015196f9eed7e88c814b407d3081c62e42e924911539b1">Manage Preferences</a>
+          &nbsp;&nbsp;
+        
+        
+          <a class="link" style="display: inline-block; color: #191E3B; font-size: 12px; line-height: 134%; font-weight: normal; color: #1668E3; text-decoration: underline;" href="https://click.eg.expedia.com/u/?qs=0896193f16d330d475d8b77fc2fb2f30d363ba0bf6ae4a6df38fa2d716284d3ed10d2461557b632188e4bef726c6df29deb9b7fb55851dfc947b21dbd795f9cb">Privacy Statement</a>
+          &nbsp;&nbsp;
+        
+        
+          <a class="link" style="display: inline-block; color: #191E3B; font-size: 12px; line-height: 134%; font-weight: normal; color: #1668E3; text-decoration: underline;" href="https://click.eg.expedia.com/u/?qs=0896193f16d330d4e486c2ffb9e5e174ce22e5b77bf82dfed9c9af094e2e38dcbf4a66138f1eccefa4782d8d5a1990a3200969686f7462ba82979265714a6803">About Us</a>
+          &nbsp;&nbsp;
+        
+        
+        <a class="link" style="display: inline-block; color: #191E3B; font-size: 12px; line-height: 134%; font-weight: normal; color: #1668E3; text-decoration: underline;" href="https://click.eg.expedia.com/u/?qs=defe9187971028505b00de73a6ed038073029f2ef0f90e2f2965570112653c7315ba18a72b379d30244018f6e402201b5729f6570b2e5ce6cdab845f586d826c">Customer Service</a>
+        
+      </p>
+    </td>
+  </tr>
+</table>
+
+        
+
+
+
+
+
+<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" class="section footer-section">
+  <tr>
+    <td class="section" style="background-color: #F3F3F5;">
+      <p style="text-align: left; color: #191E3B; font-size:12px;line-height:134%;font-weight:normal; margin: 0px 32px 16px 32px;" class="p-dark">¹OneKeyCash is not redeemable for cash and can only be used on Expedia, Hotels.com, and Vrbo. <a href="https://www.expedia.com/emailclick/tBfAWcam_hIlygPnE2zXUwx3pECZXU511esI9S1fv5UPuZg1bWamVd5SOGX9vydE-10xrpg1z-Ez3zkmFcknT2Y6/one-key-terms?EMLCID=US.MKT.SHPRSPCT.c479fab57079f93bd1f0aaf610e71fbf.EML&amp;EMLDTL=DATE20230928-ISSUX.SIDX.KEYX.PAIDX.LANGEN_US.MCIDX.TESTX.VERSX.MIDSX&amp;cta=additional_terms.lnk" target="_blank" class="link" style="color:#1668E3;text-decoration: none;">See One Key terms and conditions.</a> ²Minimum spend of $25 or more (excluding taxes and fees). </p>
+    </td>
+    
+  </tr>
+</table>
+
+                 
+<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" class="background-base footer-section">
+  <tr>
+    <td class="background-base" style="background-color: #F3F3F5;">
+      <p style="text-align: left; color: #191E3B; font-size: 12px; line-height: 134%; font-weight: normal; margin: 0px 32px 0 32px;" class="paragraph">
+    
+    
+     
+
+     This email and its links may contain your personal information; please only forward to people you trust.<br><br>You are receiving this email because you are eligible to receive promotional emails from Expedia.
+         <br>
+         <br>
+    
+        
+     
+
+     Expedia, Attn: EMC Team 1111 Expedia Group Way W., Seattle WA 98119. 
+          <br>
+          <br>
+        
+        
+          
+
+          <strong><a role="presentation" style="color: inherit !important; text-decoration: none !important;">CST# 2029030-50</a></strong>
+          <br>
+          <br>
+        
+        
+          
+
+          © 2023 Expedia, Inc., an Expedia Group company. All rights reserved. Expedia, the Airplane Logo, One Key and OneKeyCash are trademarks or registered trademarks of Expedia, Inc.
+          <br>
+          <br>
+        
+        
+    
+        <a class="link" href="https://view.eg.expedia.com/?qs=bd2d2d1a47536f8f96c2e98a8703aefbcc845bba6aada4a96a780a1233b72d5dcd79dc3c2199d5ea8aefd6c26265611bdb6f7b7a35a799f0ae5e5eb11cdd762d5dc33195f58f9f2b662803ab4b56b76d" style="color: #191E3B; font-size: 12px; line-height: 134%; font-weight: normal; color: #1668E3; margin:0; text-decoration: underline;">View online</a>
+          <br>
+          <br>
+      </p>
+      
+      <p class="p-emlcid" style="color: #191E3B; font-size: 12px; line-height: 134%; font-weight: normal; text-align: left; color: #F3F3F5; margin: 0 32px 0 32px; word-break: break-all; word-break: break-word; word-wrap: break-word; text-decoration: none" aria-hidden="true">EMLCID=US.MKT.SHPRSPCT.c479fab57079f93bd1f0aaf610e71fbf.EML&amp;EMLDTL=DATE20230928-ISSUX.SIDX.KEYX.PAIDX.LANGEN_US.MCIDX.TESTX.VERSX.MIDSX</p>
+      
+    </td>
+  </tr>
+</table>
+
+        <!-- MODULE END: Footer -->
+  
+
+       </td></tr></table>
+       </td></tr></table>
+  
+  </div>
+
+</body>
+</html>
+
+
+
+
+--kclIRh9On0It=_?:--

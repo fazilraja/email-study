@@ -1,0 +1,652 @@
+Received: from DS0PR20MB6782.namprd20.prod.outlook.com (2603:10b6:8:ff::17) by
+ MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Tue, 15 Aug 2023 23:34:29
+ +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=N47nogsGlAezlL/YpbWEjyUuILDHNucPwFBip7yV50r56D8PBiubXXHqoXUL1nai6cg8IQCN/YcGqkpsLO6+V60aqoe7dY7klSsGmwZx1hEfrXOWpAPgYJzQ5m+ieVMYuY/fIrMwSIqq/nd1mEZAy5OlGzzHjEXobZ8UO/rY3v6Ef2wOjP6keMnU6Y+v2MH2KyFTfe9b+UY1TqJPRxuC9JzQ4F3a2QB1wjVFNM0mkojWXfQdsIA76JaXhtcjHrRCi/IJyzTSvtn6W+Qcbha3J12qzUIWNjxXSv56AwSQDj3OaNmlzvRBi2Mo0ucDnmK2zTSV0NHCBADlTCtVoIgUug==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xm+PlsO4xMmCS9/CYpI07OE4XqkJRV7GGLPz87iaxZA=;
+ b=XMHvKhQN8NwHsCCL5v3lrIKQ562FKFxvzzJpOz+OxlEUREufQt6Ejf+ASrp9HSThP12S2k1q2TRAVTaZU0CbqhG46OAM6ZZBHKgY9JWy/zXj63PxULNrtlGOTwaluP0co21Gww3+TQENgKR/3Nlns/Y785T1AGjOjfRP+PT1pwXOsMrRPH9a07hUOSqwizFXP08D0K3kDp6NA/B9F89TjjGDMNVg6lWvxe3et4wcc6st+pFyV4Os+DVDHUE95KV3kX7+STSxA3rbSVOyLqWlqt/fqVhs2IAUsfWmnUje5X1nYLskrEZ141iT7wor30nzJA0+eFGxf0Wo6+92mhLRvQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.167.50) smtp.rcpttodomain=outlook.com smtp.mailfrom=em.yelp.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=yelp.com;
+ dkim=pass (signature was verified) header.d=yelp.com; arc=pass (0 oda=1
+ ltdi=1
+ spf=[1,1,smtp.mailfrom=bounces+6746021-8a9f-tobinsilvestre018=sooners.us@em.yelp.com]
+ dkim=[1,1,header.i=@yelp.com] dmarc=[1,1,header.from=yelp.com])
+Received: from SN7PR04CA0218.namprd04.prod.outlook.com (2603:10b6:806:127::13)
+ by DS0PR20MB6782.namprd20.prod.outlook.com (2603:10b6:8:ff::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.26; Tue, 15 Aug
+ 2023 23:34:28 +0000
+Received: from SA2PEPF00001506.namprd04.prod.outlook.com
+ (2603:10b6:806:127:cafe::3c) by SN7PR04CA0218.outlook.office365.com
+ (2603:10b6:806:127::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.33 via Frontend
+ Transport; Tue, 15 Aug 2023 23:34:28 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.167.50)
+ smtp.mailfrom=em.yelp.com; dkim=pass (signature was verified)
+ header.d=yelp.com;dmarc=pass action=none header.from=yelp.com;compauth=pass
+ reason=100
+Received-SPF: Fail (protection.outlook.com: domain of em.yelp.com does not
+ designate 209.85.167.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.167.50; helo=mail-lf1-f50.google.com;
+Received: from mail-lf1-f50.google.com (209.85.167.50) by
+ SA2PEPF00001506.mail.protection.outlook.com (10.167.242.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.14 via Frontend Transport; Tue, 15 Aug 2023 23:34:28 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:A3F29B8D45607CA82974DEE07FC42A8057CA0AFAA52219A26F602AF8D1C4502E;UpperCasedChecksum:1FB1448AA6B83EA7DBA338D89A98730735DF3D1FA05217F78DAD0A25CD076462;SizeAsReceived:6345;Count:27
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4fe0eb0ca75so8917147e87.2
+        for <tobinsilvestre@outlook.com>; Tue, 15 Aug 2023 16:34:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692142468; x=1692747268;
+        h=x-forwarded-for:to:date:list-unsubscribe:message-id:from:subject
+         :mime-version:dkim-signature:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xm+PlsO4xMmCS9/CYpI07OE4XqkJRV7GGLPz87iaxZA=;
+        b=Af2Z3nhX1ZuOHkm2281dwbTZFirXSo4vpfWmBHxb5WpQ1zM3Ch8eBUSMLVDLiRxHde
+         PfJaWTd6+rsZsmKAPRRyMIm6VkyWXKuTB5DLVfyRTwq9U9hFI9XOJ0hbmMr1stwIfVP8
+         lL2hvYf0UTcnPiIEEojlVlDhEI+4PB2nsX7VzgQX/hcqTt4raw0yg/lBL603VO0fkETh
+         uW6OU46zqCfSiwbUhEx2HuVHXSwPu3P0m5J+fbmhvDiGeF5P9IXPGThCSGfjAvSSjWvl
+         TTMfKGI2z/TBdwMlXrNDssKvNlNW3ghYMt3nIRfSkSFP54BEkrlrrMT8NDEASDzy3TMH
+         0A+A==
+X-Gm-Message-State: AOJu0YxpbRTtEhyxuu/9fmvUeC3NmOhTWksPDYes4pwaLVXZhxARDp52
+	ZVG2ZdS70i0RUWtM1YI1yws0JBe9sOFYevbfMQ==
+X-Google-Smtp-Source: AGHT+IG5MvGVGP4GMBuDugVQsBuIcSKyl5zpkWjRSWwfYkW9rYSfwEni7dPTIFvzsiVewNJ18Hhw/bhSllBU/X5ybDl+gbiSVcU=
+X-Received: by 2002:a05:6512:304d:b0:4ff:7602:5879 with SMTP id b13-20020a056512304d00b004ff76025879mr266672lfb.55.1692142468170;
+        Tue, 15 Aug 2023 16:34:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692142468; cv=none;
+        d=google.com; s=arc-20160816;
+        b=c15cWdTrKL5VSa1aALjlE4QZ0mfMqO+MUf7VQ29mF5D4gva31jbO0wTgOboe8KJfYw
+         vt/IQ/s1f2xqkeDJ4IDinjHy8FY+3ZUDNrsjy/D2eoQcLrc8b3rTQc59EpWlWNQjOnA9
+         3JJ7ncXmCcKASG3cqGUAlKaRTT8ztPVxAlvMVr0sCelxMHVMvXD+ZLCg3USXqDE7A9E2
+         3ltdGTztwE2Vaw1yfxzfb+bzcv7vJ/DLTiF69kyUmbo6pY4Ny/h+s8+EcVd4x7peACsP
+         CwrvyccNk40XtV3LRGD0a+gUWSSSNKDUDw6iR8SmsFptHnQSxdRsPrR0CzR2qimPOgkW
+         Q10Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=to:date:list-unsubscribe:message-id:from:subject:mime-version
+         :dkim-signature;
+        bh=xm+PlsO4xMmCS9/CYpI07OE4XqkJRV7GGLPz87iaxZA=;
+        fh=fuM9Mf+YSOGFQq1K/yD98ml0z1WwrK8Thgp+BHe3xms=;
+        b=SBjq6IDdOpnuBNmqezJoUbBoApzalvk326QimZmlGtJdTGHs/6hnFVTUKjNh4ZbRiR
+         WdeGoysDkSk4mGVPzRmgSfD+Y77+vG15j5kXV9szRKdraBxfn5JvpP7KVFpzjev5sxw9
+         IE9RTonPDo7XIwmT+rSRUvlu8xGdRULSf5BMj5/dyhbAhPy+V/l3YsXGQ+govDcU77Yp
+         ZHdQLLTqyBcl7/qOQpZMayk5XKUkNyCnRyxUgCWemAHa9kN3m/qv0YtyPtLHb8XF8nVh
+         MohIm7N3CiLctzFHirqFfJmLI7PgI5iXcaMYYllS7J3Lk1hgxIEEBsiZFVSWHvmPGzNt
+         WWgg==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@yelp.com header.s=s1 header.b=gQxpywhU;
+       spf=pass (google.com: domain of bounces+6746021-8a9f-tobinsilvestre018=sooners.us@em.yelp.com designates 167.89.8.98 as permitted sender) smtp.mailfrom="bounces+6746021-8a9f-tobinsilvestre018=sooners.us@em.yelp.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=yelp.com
+Return-Path: bounces+6746021-8a9f-tobinsilvestre018=sooners.us@em.yelp.com
+Received: from o1.em.yelp.com (o1.em.yelp.com. [167.89.8.98])
+        by gmr-mx.google.com with ESMTPS id g42-20020a056402322a00b00523bb65dd1fsi824452eda.0.2023.08.15.16.34.26
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Aug 2023 16:34:28 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounces+6746021-8a9f-tobinsilvestre018=sooners.us@em.yelp.com designates 167.89.8.98 as permitted sender) client-ip=167.89.8.98;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@yelp.com header.s=s1 header.b=gQxpywhU;       spf=pass (google.com:
+ domain of bounces+6746021-8a9f-tobinsilvestre018=sooners.us@em.yelp.com
+ designates 167.89.8.98 as permitted sender)
+ smtp.mailfrom="bounces+6746021-8a9f-tobinsilvestre018=sooners.us@em.yelp.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=yelp.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yelp.com;
+	h=mime-version:content-type:subject:from:list-unsubscribe:to:cc:
+	content-type:from:subject:to;
+	s=s1; bh=xm+PlsO4xMmCS9/CYpI07OE4XqkJRV7GGLPz87iaxZA=;
+	b=gQxpywhUtQE3R4wDq7RTSg7vtM3UkOYCDfJF8NHXALbskV2lw6p6jZ/KsmStybBY4QxG
+	mKWHl7uomEBNK3ZzP4WWK2VcWMBYGOBjANAl0AAUW3Usffsm8VbWB9fdK96QKGn0nozJXl
+	6RSrgJomuCyPYxjbcsvqRRJ/u1qBvzVGLbl2g5I6TUSqhuzMVEESYhjN5zMuxop6l7IKbx
+	gQPM38lVODqrqgIzh+vCV/4QypLnqrfSmuyxOUbm3CMpXygXyDsPIh2eYP/rSrSQUmci8P
+	eIRpeZ1FpID9fOmcd8a8mni0IkdTgO/ttsheb+xlcNxSSyNLkCfTQA11Ytek2W1A==
+Received: by filterdrecv-57bfc579f-b9vhb with SMTP id filterdrecv-57bfc579f-b9vhb-1-64DC0B80-3C
+        2023-08-15 23:34:24.848138225 +0000 UTC m=+5199212.642817588
+Received: from smtp-sendgrid.yelpcorp.com (unknown)
+	by geopod-ismtpd-13 (SG)
+	with ESMTP id gpbRD-LVRZOwQ_9XPfOpAg
+	for <tobinsilvestre018@sooners.us>;
+	Tue, 15 Aug 2023 23:34:24.552 +0000 (UTC)
+Content-Type: multipart/alternative;
+ boundary="===============1185151198226422355=="
+Subject: Confirm your email, and enjoy =?UTF-8?B?8J+Yjg==?=
+From: Yelp <no-reply@yelp.com>
+Message-ID:
+ <20230815233424.11.25336.357f437ba5f1bf82551b184d16ccf279@yelp.com>
+List-Unsubscribe:
+ <mailto:returnto+bn+zpNR31ARHRZwYmLMPTNPXv1YD2IuQ-6W94KfRNTI6wuLQQ20Cn9dFnP2J5O-ehft@yelp.com>
+Date: Tue, 15 Aug 2023 23:34:24 +0000 (UTC)
+X-SG-EID:
+ =?us-ascii?Q?zzPGZ1WbaTuRTajdmkX8wOa2CEfoUeDmduCFf=2FzDU8xs6PUpP7h6S2uJStvEfO?=
+ =?us-ascii?Q?m9MwdPavPSIiu1fMqu0CDeroWq8xy=2FE8GyGcwaW?=
+ =?us-ascii?Q?ybp2evyJ+WzySTz2Fd8uOhf+X6Atde44Jmm9wXV?=
+ =?us-ascii?Q?Xn2urrPgbNLF5i=2FYn=2FSOtOkm=2FGLrNGlBlk=2F3mgm?=
+ =?us-ascii?Q?S0WwlWRENvx57izEKP0KRlLawKYbdsOjA81dujY?=
+ =?us-ascii?Q?=2FB3vm4ul5GyH5MOn7Uv1S7OqBXeyuoaCD6QDtq?=
+X-SG-ID:
+ =?us-ascii?Q?N2C25iY2uzGMFz6rgvQsb8raWjw0ZPf1VmjsCkspi=2FKlBs=2FaQAyYZmUqmHVyzK?=
+ =?us-ascii?Q?TNUD85FuXnBkf67DqJXkzhGoxbRT07eakwwK0Rf?=
+ =?us-ascii?Q?hbm+hijbdpimLG7FaUvXG37PT8CXpPpK2n4pihx?=
+ =?us-ascii?Q?z+tstCOin6YHqr6DGpdFEAvmpnt4Ke2R6QaosiF?=
+ =?us-ascii?Q?9SmprRjsJFZl9ZtP99ZTL35=2FI=2FM3I7YuTv1qhA5?=
+ =?us-ascii?Q?F0rxhlGZIsIO3eKytqm3kDr1u6oEJPeJnobDZX?=
+To: "Tobin S." <tobinsilvestre018@sooners.us>
+X-Entity-ID: q3QBpfMYq+YyP3iKjLWrSA==
+X-Forwarded-For: tobinsilvestre018@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 27
+X-MS-Exchange-Organization-ExpirationStartTime: 15 Aug 2023 23:34:28.4993
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 4c70e2aa-79f5-4c7f-ccca-08db9de82b26
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ SA2PEPF00001506:EE_|DS0PR20MB6782:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ SA2PEPF00001506.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 8/15/2023 10:37:50 PM
+X-MS-Office365-Filtering-Correlation-Id: 4c70e2aa-79f5-4c7f-ccca-08db9de82b26
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.167.50
+X-SID-PRA: NO-REPLY@YELP.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2023 23:34:28.4681
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c70e2aa-79f5-4c7f-ccca-08db9de82b26
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ SA2PEPF00001506.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR20MB6782
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.4067528
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6678.025
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:0;pcwl:0;kl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(90014020)(91030020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(8820095)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPkGVX00jDN9hm4sJbQXMtuF1lDdlJpiI8nImPlZ15/HYAFtBWgbWl8LEBr0scS3Zya0teYxQOJ0bBZYfr6+zGzYX7h8Glp+qdGfS2FkRH6ArJNnxQC0JruP8S8Ypw8W+/LHSSd+owHEULJSIwREb3NdooaigWHiY59QvoiT582iMF618p5D9gCfRtakjQCBP0LbVoL+mpopKg==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0wO0Q9MTtHRD0yO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?QlhCR1pJZ3lNOWc2dEZseGwzY1htenY4eklUcXlkN3RaVSt5ajhKeUR2cFBZ?=
+ =?utf-8?B?dU1QVnR3NUc0RDlsSENwVTVHbC9aeHlHUjhMU2dxRVUxTGtDNlJaNmxzMUlX?=
+ =?utf-8?B?eEFoNlA5MUowS1d6YUo0aUdVek53WXhUTCtKeXVTNTdRZVRBWWlZU1p5Z2JT?=
+ =?utf-8?B?SS9MQWVHYXZzZm1xWjg2dlo4VGlNckVZanVPYUtObWllUXM5YzJZTjhxSFdM?=
+ =?utf-8?B?SS9sMzJ5TjhvQm4zU0plK3hjZ0NSd0VabENsZkVuV2pSS0VSaldrWG5WNHV5?=
+ =?utf-8?B?UExGTlhJM08vbEhiR09zN1kxV1pBYWFTRUJKeGkvWDZZTXZzNXNWcVBncVpR?=
+ =?utf-8?B?bUpqTHYzTExIekhaNFo2enZSSHpsTURkeFBaRnBkcXVuZ2gweTI2Q3BIWk9y?=
+ =?utf-8?B?OXg5OEpFWnp3R2hMd1lNNE94RmVhejU2TG15cXd1SHVrT0U2WE5NWGtBVFRL?=
+ =?utf-8?B?TjF0RkdzbjNULzc5bjljOWxDZE42emRJditxVjVYL0t3dWNmVjJyMTFxR0RG?=
+ =?utf-8?B?YTNzalM1RDBoYzRTN3liL1pHbWxXOHVucW1YaTNpdk1kMlFCOFhaNTNnd01R?=
+ =?utf-8?B?YWxKOUN1bEozNmNydkl4NGhsdDMrNVcwRmtYRWdCZDZYY2lPUWFuTDlSaE1Q?=
+ =?utf-8?B?OUYzLzZGeXpuNm1Bc1phZjgyQjNOeEhPMG8ydXdFb21mWU1xNWF5R2wzSDB2?=
+ =?utf-8?B?SnJGeE9zaVpUQkZFM1g4U3U5ZmxWeGZMWU1vbWxocEpWWlplSE5PREZuelI1?=
+ =?utf-8?B?dCs5WXloenh5MS9PYURpQU1FRTErbTdQRWlVSUN3VE13bzl3QTN4djFyUkxI?=
+ =?utf-8?B?KzFSN0JybEpRbEhkUUI3dzZ0WWF2TGdvU0grZHJtWitDN2RYQURiVEhhUU5J?=
+ =?utf-8?B?aW15clFxQjBNVVRjU1dxU2ZwRE02a3FsWEdWMy9mRTBPalp0cG1KaHFqdkxo?=
+ =?utf-8?B?NnBvTXkrdVVRYU1pS2VHc2M5WG9MNk03eEtSb01SeGY4SFVvaENyUVgvMFd6?=
+ =?utf-8?B?eGJ5WnZKb09xUFJaQUp3bnBZbmoyYVlHN3phYnhGVFJyQ0ZkRUs2ZHgvRmRI?=
+ =?utf-8?B?MWIyVXRPTGZGM3hJdUJBL01FTVFaT2FBUGx5QjZkNU9OUGZaM3JVY1UxakZG?=
+ =?utf-8?B?Y2FjK1Y1cHpqMzNocXVPeWZ3eGorNUJrbHRVWnpKa29JaHE1VkpMdHYveG5N?=
+ =?utf-8?B?b1NvZkphV1JIUGF5UVgrMnhyZTB4ZEQzM040TitnMGl5Mk5IN3czNGFNQkho?=
+ =?utf-8?B?RjR2Mnp5QTQyWFhKT3Y4YUJBcU0wYUdibHo5aUNMRHcvblNMVm9pd0x1d2F2?=
+ =?utf-8?B?a3l5bXhLWWhTSXltdE00dm5URzVMTHBETDJ5dE80K2RkZEN6c1p1UzVtVHYw?=
+ =?utf-8?B?NTVCaEtBbHJCWmJIL3VONTVkOGlISENiZXFpQzkxazNVb2VCMnhQTWc4ejhr?=
+ =?utf-8?B?aDRPd0FzRGFoYXVIaW5QTkNvNUErdWZva0w0MTAvbnhXNGRWQVVkYnM4Ym5M?=
+ =?utf-8?B?TjBqNlQxL3dWSG94MlRRb3RtSHdMMXNaWjBjS1lSa1ZDZVlDTWV6M0xkRkVj?=
+ =?utf-8?B?bk00V1FjTStuZ3c0aEVTOHlrZkRPaStKbGcybFZuWlBZUGFCZ3JiSGczcFgw?=
+ =?utf-8?B?REVzTjRYbkhkQVd6VXB6OHRVcEhETXhqczZDU2RrMWNNandVNlk2eHRoRFE2?=
+ =?utf-8?B?Ulg0SlVQMldCMU1LNnR0Z2hvakk5TDZDOWJFWDh1ak04NmVBelcxTk9ER1di?=
+ =?utf-8?B?Zkk2TnViZzVWMENHeGNmUFpsdG8xWEJhMkVmVXRzTVREY3A4c1VId040UTMy?=
+ =?utf-8?B?Qkt6RTh3Vm9yb1pHRGhwTGhIUlc2Y1RrQS9SVUFSaDN0QWZkbVcvYVEwUVAv?=
+ =?utf-8?B?d25jbGUrcHc0SnpLRFBGaWFmcU5SZHd3akNOWmJFeCtaVzFtdHFMWFhGZE4z?=
+ =?utf-8?B?Z0g0dEtIaWwwUHdQZll6am9rRmt0UmI4c1VRYTYrb2w3RWg1ZnVqU3V1Yit2?=
+ =?utf-8?B?UWhmbjNwNldBcDhuY0R0U2VtOTVzMjRDZjU5SW1NNkpLTjlQd0xJZmxYUzdj?=
+ =?utf-8?B?djVCb0sxYUJjMkhVVHFqaXJnd2ttdnBwcW5mUWR6aDczZFM4LzhJWWxIdXVz?=
+ =?utf-8?Q?Pgfr9jxhzH9Rm8iPsp0tznQJH?=
+MIME-Version: 1.0
+
+--===============1185151198226422355==
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+|  |  =20
+--- =20
+ =20
+|  =20
+--- =20
+--- =20
+Confirm your email, and let's go! =20
+ =20
+--- =20
+--- =20
+ =20
+Welcome to Yelp, Tobin S. Start discovering great local businesses using th=
+e thousands of reviews uploaded daily. Plus, find local gems with collectio=
+ns, skip the wait with Waitlist, and more.  =20
+ =20
+ =20
+--- =20
+--- =20
+|  [ Confirm email ](https://www.yelp.com/ce?c=3D5sn2L-S58L87Us9CC3r5Cw&ytl=
+_=3D357f437ba5f1bf82551b184d16ccf279&utm_medium=3Demail&utm_source=3Dconsum=
+er_email_verification&utm_campaign=3DAug-15-2023) =20
+--- =20
+--- =20
+ =20
+We look forward to seeing you on Yelp!  =20
+ =20
+ =20
+--- =20
+ =20
+**\- The Yelp Team**  =20
+ =20
+ =20
+--- =20
+--- =20
+ =20
+|  |  |  =20
+--- =20
+ =20
+=A9 2023 | Yelp Inc., 350 Mission Street, San Francisco, CA 94105, U.S.A. |=
+ www.yelp.com  =20
+ =20
+---
+
+--===============1185151198226422355==
+Content-Type: text/html; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+                <style>
+                   =20
+    body {
+        width: 100% !important;
+        margin: 0 !important;
+        -webkit-text-size-adjust: none;=20
+        -ms-text-size-adjust: none;
+    }
+
+    div[style*=3D"margin: 16px 0"] { margin:0 !important; font-size:100% !i=
+mportant; }
+
+    a {
+        color: #0073bb
+    }
+
+    h1, h2, h3, h4, h5, h6  {
+        color: #d32323 !important;
+        line-height: 100% !important;
+        font-weight: bold !important;
+    }
+
+    h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+        color: #0073bb !important;
+    }
+
+    p {
+        margin: 1em 0;
+    }
+
+    table,
+    table td {
+        border-collapse: collapse;
+    }
+
+    .ExternalClass {
+        width: 100%;
+    }
+
+    .ExternalClass,
+    .ExternalClass p,
+    .ExternalClass span,
+    .ExternalClass font,
+    .ExternalClass td,
+    .ExternalClass div {
+        line-height: 100%;
+    }
+
+    .apple-links-stylefix a {
+        color: inherit !important;
+    }
+
+    @media only screen and (max-width: 480px) {
+        .text {
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+        }
+
+        .hide-mobile {
+            display: none !important;
+        }
+        .mobile-only {
+            max-height: none !important;
+            display: block !important;
+            overflow: visible !important;
+        }
+    }
+
+                </style>
+                <!--[if mso]>
+                <style>
+                    .mso-hidden {
+                        display: none !important;
+                    }
+                </style>
+                <![endif]-->
+            </head>
+
+            <body bgcolor=3D"#f5f5f5" style=3D"
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f5;">
+            <img src=3D"https://www.yelp.com/tracking/track.gif?ytl_=3D357f=
+437ba5f1bf82551b184d16ccf279&amp;utm_medium=3Demail&amp;utm_source=3Dconsum=
+er_email_verification&amp;utm_campaign=3DAug-15-2023" width=3D"0" height=3D=
+"0" align=3D"right"><!--[if (gte mso 9)|(IE)]>
+            <table align=3D"center" cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"620" bgcolor=3D"#f5f5f5" style=3D"background-color: #f5f5f5">
+                <tr>
+                    <td style=3D"border-collapse: collapse;">
+            <![endif]-->
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"background-color: #f5f5f5;" width=3D"100%">
+                    <tr>
+                        <td align=3D"center" style=3D"border-collapse: coll=
+apse;">
+                            <div class=3D"body" style=3D"
+                                max-width: 620px;
+                                min-width: 320px;
+                                margin: 0 auto;">
+                                <table cellpadding=3D"0" cellspacing=3D"0" =
+align=3D"center" bgcolor=3D"#f5f5f5" width=3D"100%" style=3D"
+                                    width: 100%;
+                                    background-color: #f5f5f5;">
+                                    <tr>
+                                        <td style=3D"border-collapse: colla=
+pse;">
+                                                        <table align=3D"cen=
+ter" style=3D"
+        max-width: 620px;
+        min-width: 320px;
+        margin: 0 auto;">
+        <tr>
+            <td style=3D"
+                text-align: center;
+                padding: 15px 0 15px 0;">
+                <img src=3D"https://s3-media0.fl.yelpcdn.com/assets/srv0/ye=
+lp_styleguide/630b5a71b305/assets/img/logos/logo_desktop_xlarge@2x.png" alt=
+=3D"Yelp burst" height=3D"80" width=3D"160">
+            </td>
+        </tr>
+    </table>
+
+
+                                        </td>
+                                    </tr>
+    <tr>
+        <td width=3D"100%" bgcolor=3D"#ffffff" style=3D"
+            border-radius: 3px 3px 0 0;
+            background-color: #ffffff;
+            border-collapse: collapse;">
+            <div style=3D"
+                width: 100%;
+                overflow: hidden;
+                border-radius: 3px 3px 0 0;
+                border: 1px solid #e6e6e6;
+                background-color: #ffffff;">
+                    <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ width=3D"100%">
+        <tr>
+            <td>
+                <img src=3D"https://s3-media0.fl.yelpcdn.com/assets/srv0/ye=
+lp_email_assets/a620fc240433/assets/img/verify_email/email_confirm.jpg" hei=
+ght=3D"auto" width=3D"100%" style=3D"
+                    display: block;
+                    max-width: 620px;">
+            </td>
+        </tr>
+    </table>
+
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td hei=
+ght=3D"18"></td></tr></table>
+
+
+
+           =20
+       =20
+
+    <table width=3D"100%" style=3D"border-spacing: 0; text-align: center; f=
+ont-size: 24px; line-height: 27px; margin: 0; font-weight: bold;">
+        <tr><td class=3D"" style=3D"
+            border-collapse: collapse;
+            padding: 6px 0px 6px 0px;
+            font-family: Helvetica Neue, Arial, sans-serif;">
+                Confirm your email, and let's go!<br>
+
+        </td></tr>
+    </table>
+
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr=
+><td height=3D"18"></td></tr></table>
+
+
+               =20
+
+    <table width=3D"100%" style=3D"border-spacing: 0;">
+        <tr><td class=3D"text" style=3D"
+            border-collapse: collapse;
+            padding: 6px 40px 6px 40px;
+            font-family: Helvetica Neue, Arial, sans-serif;">
+           =20
+    <p style=3D"text-align: left; font-size: 16px; line-height: 24px; margi=
+n: 0;">
+            Welcome to Yelp, Tobin S. Start discovering great local busines=
+ses using the thousands of reviews uploaded daily. Plus, find local gems wi=
+th collections, skip the wait with Waitlist, and more.
+            <br>
+    </p>
+
+        </td></tr>
+    </table>
+
+
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr=
+><td height=3D"18"></td></tr></table>
+
+
+           =20
+       =20
+
+       =20
+
+
+
+
+    <table width=3D"100%" style=3D"border-spacing: 0;">
+        <tr><td class=3D"text" style=3D"
+            border-collapse: collapse;
+            padding: 12px 40px 12px 40px;
+            font-family: Helvetica Neue, Arial, sans-serif;">
+            <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%">
+                <tr>
+                    <td align=3D"center">
+                       =20
+    <!--[if mso]>
+    <span style=3D"
+        width: 80%;
+        display: inline-block;
+        margin-bottom: 6px;
+        text-align: center;
+        background-color: #d91213;
+        border: 1px solid #a50508;">
+
+        <a  href=3D"https://www.yelp.com/ce?c=3D5sn2L-S58L87Us9CC3r5Cw" sty=
+le=3D"
+            display: inline-block;
+            text-decoration: none;
+            font-family: Helvetica Neue, Arial, sans-serif;;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            width: 80%;
+            white-space: nowrap;
+            border-color: #d91213;
+            border-width: 12px 28px;
+            border-style: solid;">
+            Confirm email
+        </a>
+    </span>&nbsp;=20
+    <div style=3D"display:none;">
+    <![endif]-->
+
+       =20
+    <a href=3D"https://www.yelp.com/ce?c=3D5sn2L-S58L87Us9CC3r5Cw&amp;ytl_=
+=3D357f437ba5f1bf82551b184d16ccf279&amp;utm_medium=3Demail&amp;utm_source=
+=3Dconsumer_email_verification&amp;utm_campaign=3DAug-15-2023" style=3D"dis=
+play: inline-block; padding: 12px 28px; text-align: center; text-decoration=
+: none; border: 1px solid #a50508; font-family: Helvetica Neue, Arial, sans=
+-serif;; font-size: 16px; font-weight: bold; color: white; -webkit-border-r=
+adius: 3px; border-radius: 3px; width: 80%; white-space: nowrap; background=
+: #d91213; background-image: linear-gradient(#d90007, #d32323);">
+        Confirm email
+    </a>
+
+    <!--[if mso]>
+    </div>
+    <![endif]-->
+
+                    </td>
+                </tr>
+            </table>
+        </td></tr>
+    </table>
+
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr=
+><td height=3D"18"></td></tr></table>
+
+               =20
+
+    <table width=3D"100%" style=3D"border-spacing: 0;">
+        <tr><td class=3D"text" style=3D"
+            border-collapse: collapse;
+            padding: 6px 40px 6px 40px;
+            font-family: Helvetica Neue, Arial, sans-serif;">
+           =20
+    <p style=3D"text-align: left; font-size: 16px; line-height: 24px; margi=
+n: 0;">
+            We look forward to seeing you on Yelp!
+            <br>
+    </p>
+
+        </td></tr>
+    </table>
+
+
+               =20
+
+    <table width=3D"100%" style=3D"border-spacing: 0;">
+        <tr><td class=3D"text" style=3D"
+            border-collapse: collapse;
+            padding: 6px 40px 6px 40px;
+            font-family: Helvetica Neue, Arial, sans-serif;">
+           =20
+    <p style=3D"text-align: left; font-size: 16px; line-height: 24px; margi=
+n: 0;">
+            <b>- The Yelp Team</b>
+            <br>
+    </p>
+
+        </td></tr>
+    </table>
+
+
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr=
+><td height=3D"18"></td></tr></table>
+
+
+            </div>
+        </td>
+    </tr>
+                                    <tr>
+                                        <td style=3D"border-collapse: colla=
+pse;">
+
+
+    <table width=3D"100%" style=3D"border-spacing: 0;">
+        <tr><td class=3D"text" style=3D"
+            border-collapse: collapse;
+            padding: 40px 40px 40px 40px;
+            font-family: Helvetica Neue, Arial, sans-serif;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" width=3D"100%">
+                                                    <tr>
+                                                        <td class=3D"text" =
+align=3D"center" style=3D"border-collapse: collapse; text-align: center;">
+                                                               =20
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td hei=
+ght=3D"1"></td></tr></table>
+
+
+    <div style=3D"color: #666666" class=3D"apple-links-no-underline">
+        &copy; 2023 | Yelp Inc., 350 Mission Street, San Francisco, CA 9410=
+5, U.S.A. | www.yelp.com
+    </div>
+
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td hei=
+ght=3D"24px"></td></tr></table>
+
+
+    <img width=3D"28" height=3D"38" src=3D"https://s3-media0.fl.yelpcdn.com=
+/assets/srv0/yelp_design_web/5eea52eb184d/assets/img/brand/burst_red@2x.png=
+" alt=3D"Yelp burst" style=3D"border: none;">
+
+
+                                                        </td>
+                                                    </tr>
+                                                </table>
+        </td></tr>
+    </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            <!--[if (gte mso 9)|(IE)]>
+                    </td>
+                </tr>
+            </table>
+            <![endif]-->
+            <img src=3D"https://u6746021.ct.sendgrid.net/wf/open?upn=3DFvUH=
+Ynu4r807c3Vu1k5NawLerN3lSXdzZ9JIBQS-2FGShSxg2nJt8OBsZzfRFZnIs1cTqI2gLwpS06t=
+7I2AvfqbDTWWKcm-2B-2FicswdOrDDbgqcuHQ6BZEn8nB5QUtXWy0ay6BSWP2DrUj-2F9H29c8k=
+3IbuzNaKpKdXfNb81igv8KJJsI97oT-2Bh-2BamrEtZYbSXZBunoJOVijhsHh6YskJgzOw-2Bs-=
+2B5dYqhmc4XmnZokncJbWlqjIRMFNwDgaVXZCKxqIl82N0LfQYGM-2Fug1SV-2BQCLwiBqa-2FA=
+i8w0QLzm9qV-2Fj-2FOj1oY3PY8xhdJpd2VBdlewpY7cp63ZvOzAsVDm6lPXSXTHqDMzbvnLZj6=
+xp-2B6f5c2-2FPUXt5y7k0ERV-2FKfqcFiZ6DhWgb-2FFsJ31NMY7wdFLgGzP8QCfppnupbtQXX=
+6XZws-2BmSRB5-2FRrUTOTiXWlubX1KG" alt=3D"" width=3D"1" height=3D"1" border=
+=3D"0" style=3D"height:1px !important;width:1px !important;border-width:0 !=
+important;margin-top:0 !important;margin-bottom:0 !important;margin-right:0=
+ !important;margin-left:0 !important;padding-top:0 !important;padding-botto=
+m:0 !important;padding-right:0 !important;padding-left:0 !important;"></bod=
+y>
+        </html>=
+
+--===============1185151198226422355==--

@@ -1,0 +1,609 @@
+Received: from MN2PR20MB3301.namprd20.prod.outlook.com (2603:10b6:208:267::14)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Mon, 21 Aug 2023
+ 18:33:53 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=ckfbBDuF9hhS0/evk+dLoWUn/SACLvIPkK+xmEzqFCwnuPhjkYi0kYR3h93ynzybjmzjNK7jUT7uBFNhvXLvuzuLDtBpzQ7WVhVVmVZfEpt4eBGjqVj0H3ZT0p6hMqjm/qpy3QxEamJAK8aU3u8ZrBw++sfcVsHDjuLtThf9Z8ehA2DKZj6inzLaRKgmSTEf5eV/b6abtrhXfD++RkSe6NQ/pw4FGHgHEisz3gw1GOFTh622GjGaUqkh150cDrRQHj0mhK8WYFKM0Uo8gVMqJlUtFiMIcP/Abh5DSYhOliAGbw3MR2RK6Xea5FWdalKZ7wCskN9L/gzGGoMG0SD/gA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eiky9Sdbj04qGH16hw1+O+uETwLOoBT+WZFv8bi2nDA=;
+ b=RKFdkFtBP7dJPt8Ht7UoKZCHaba9MS2nG5AOLC4NMfk3rPbmk9MURNyLLz5ERzHZAwnMx0JHDLXvAFQVzupN42VqwLmWUiNBbsSTccAaf17glVHd0iZJaO9c3AE3XT/3c+sBjQgQ/ftizNtKSD0mvbyK8PbpJWOjeyut3+kcnjfrfslPiBsW1naLvXawj1Hblp1KUFnfClhJtwUthQHKxUYUPDYXKsdNZl2PQ9vGcwiih6ViRJZTNzHktga8ZZ5EbXXEYX0bB90Br5rGGKi8doHW3YD9UTJ0rwFJC9PDC4yyyQOz2lGtsZVzS02m1YsMr1jy4jW44clUPHwb7QK6bQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.210.49) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounces.codewars.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=codewars.com; dkim=pass (signature was verified)
+ header.d=codewars.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=msprvs1=19597sulx2i8z=bounces-199503-1@bounces.codewars.com]
+ dkim=[1,1,header.i=@codewars.com] dmarc=[1,1,header.from=codewars.com])
+Received: from DUZPR01CA0072.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:3c2::10) by MN2PR20MB3301.namprd20.prod.outlook.com
+ (2603:10b6:208:267::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.24; Mon, 21 Aug
+ 2023 18:33:51 +0000
+Received: from DB5PEPF00014B8B.eurprd02.prod.outlook.com
+ (2603:10a6:10:3c2:cafe::9) by DUZPR01CA0072.outlook.office365.com
+ (2603:10a6:10:3c2::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20 via Frontend
+ Transport; Mon, 21 Aug 2023 18:33:51 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.210.49)
+ smtp.mailfrom=bounces.codewars.com; dkim=pass (signature was verified)
+ header.d=codewars.com;dmarc=pass action=none
+ header.from=codewars.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ bounces.codewars.com discourages use of 209.85.210.49 as permitted sender)
+Received: from mail-ot1-f49.google.com (209.85.210.49) by
+ DB5PEPF00014B8B.mail.protection.outlook.com (10.167.8.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.15 via Frontend Transport; Mon, 21 Aug 2023 18:33:51 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:D8805853E43B18A581BF363659142AF68BA492B7F48CF8DA968095AD2086CEF2;UpperCasedChecksum:18FDF5234953E9A4AFA4C0E0B853DC01F430C906AD7D7DDD1A42A66581A0F026;SizeAsReceived:5578;Count:25
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6bd8639e7e5so2372080a34.1
+        for <tobinsilvestre@outlook.com>; Mon, 21 Aug 2023 11:33:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692642831; x=1693247631;
+        h=x-forwarded-for:content-transfer-encoding:mime-version:subject
+         :message-id:to:from:date:dkim-signature:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eiky9Sdbj04qGH16hw1+O+uETwLOoBT+WZFv8bi2nDA=;
+        b=A8yfvuraMmP9/uEfFLh3phszv2zwlwACXY5bwsd9pYrYoJOMUyvoZppe3859mhFHVA
+         0AX3GuHUd6+fvJL5sdAvMHXzPG7AyvEmGc7kZyees6y8RfuZk0LScUdmAIAMbDjsRrT+
+         0A7vKiSQMdpwuSIapdGJOQsXUoN8LZGmLovu57eHq09V/c+F7d58IvmX3iZSpi7LRh3y
+         Pv8FYW0i305IYx61nNKRHAtRLC067RUmOfvxCEPyaxCWzDnntwApbICrbSR7NIvtLlyn
+         PjNS+8DTuII9nRVXeSDfefP8tYe8D+ysJAKa8p/BcMmcq1O6BsVimWUHd8WFHayv4d23
+         BEzA==
+X-Gm-Message-State: AOJu0YwJasWIfO3KvIsMUqA2dS1hanFEOaz0KtMgrkwqfjMrLFfqV+sT
+	d1NtEWInu1jZqHJCnZfeyxPoV2p+4YC5Ey1rKQ==
+X-Google-Smtp-Source: AGHT+IGfsH+PO+lYBSeR+G429QI7Wis1+1Gn4XtsKeCXy7o0OOdCZQfYvOMfDUd5Dhx6a29racMvT4Ep0+rP3giFtJCk8IfRHRI=
+X-Received: by 2002:a9d:7414:0:b0:6bc:9078:81c8 with SMTP id n20-20020a9d7414000000b006bc907881c8mr8679626otk.20.1692642831205;
+        Mon, 21 Aug 2023 11:33:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692642831; cv=none;
+        d=google.com; s=arc-20160816;
+        b=X4wnKuDXBZtvl+XgxHuC9E20oDc0X/Pd9oxL4rFfaBOqByrExqomU2OV9EFQGTCd0c
+         nlRCbpZ0MTw3qsApCG7CjTom7pQ1QCWfud7hBKBC+w9B28ZSN6A1mFAFCWdh3w/qunTc
+         pF0b7ZWK3eBsO/QknnbjoftS3Z4P3dCEDThO/kN84bpIaVBrXk3VayE1fBi7EFh0xS7M
+         gT0DT7peJvM58kAJdbmMVr1pPS3vcTXaKaTYD4HoNlclI6FBLlDppE7xdau6XTaxP9Sq
+         s7RYpbSaQ0SnkxgBT7BpK7wGvqed9ArXRdq5osky4wx5eIE+cwbZCTUtUMso2WRExk/q
+         +NWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=content-transfer-encoding:mime-version:subject:message-id:to:from
+         :date:dkim-signature;
+        bh=eiky9Sdbj04qGH16hw1+O+uETwLOoBT+WZFv8bi2nDA=;
+        fh=/V0KorinXczgqm25JW/xmKtJu5me1TXIY88xi5iuCLM=;
+        b=PFfFNJ+d0sETqn7SG0oHQ5worgx/8DLeutgrUYpCEPNy+bPZLx2Mt6vXISCiO1tfO1
+         kGzNOP2rs2VCWP2igHhSEw08RUgPZcK8dPUCeaf/wut0DlHh5roAVCw7f3//r3QnrLYR
+         xPPO+EipC/PRKH/RNapOrKuWotNO3Vcs2p/l1luXo+NgpAbFrlPe5hNmrym7J/GdlY0y
+         J4G+q81W3vh54q9kDXIxM7N/9ZmXEMvbEBGzvd8bTGLADVfGb4X8Ha+U9uyLVxa4e/mE
+         GgtBtxMldSXuL19TmSUOpzNYGDmFN7AJxS+g8z5GZSoD4I2W7ldPkbYPJgc50gRNcwol
+         3N/Q==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@codewars.com header.s=scph0920 header.b=LyhUvkT0;
+       spf=pass (google.com: domain of msprvs1=19597sulx2i8z=bounces-199503-1@bounces.codewars.com designates 147.253.210.82 as permitted sender) smtp.mailfrom="msprvs1=19597SUlX2I8Z=bounces-199503-1@bounces.codewars.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=codewars.com
+Return-Path: msprvs1=19597SUlX2I8Z=bounces-199503-1@bounces.codewars.com
+Received: from mta-210-82.sparkpostmail.com (mta-210-82.sparkpostmail.com. [147.253.210.82])
+        by gmr-mx.google.com with ESMTPS id dz12-20020a0568306d0c00b006bd3c5a1d59si561456otb.2.2023.08.21.11.33.50
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Aug 2023 11:33:51 -0700 (PDT)
+Received-SPF: pass (google.com: domain of msprvs1=19597sulx2i8z=bounces-199503-1@bounces.codewars.com designates 147.253.210.82 as permitted sender) client-ip=147.253.210.82;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@codewars.com header.s=scph0920 header.b=LyhUvkT0;       spf=pass
+ (google.com: domain of
+ msprvs1=19597sulx2i8z=bounces-199503-1@bounces.codewars.com designates
+ 147.253.210.82 as permitted sender)
+ smtp.mailfrom="msprvs1=19597SUlX2I8Z=bounces-199503-1@bounces.codewars.com";
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=codewars.com
+X-MSFBL: VozEt9LK8/sWAn8RNyukJmGxqcUk0Lc0swsW1Ih95VE=|eyJ0ZW5hbnRfaWQiOiJ
+	zcGMiLCJzdWJhY2NvdW50X2lkIjoiMSIsIm1lc3NhZ2VfaWQiOiI2NGRiMGRhZWU
+	zNjQ3MmI5OTgzZiIsInIiOiJ0b2JpbnNpbHZlc3RyZTA0M0Bzb29uZXJzLnVzIiw
+	iY3VzdG9tZXJfaWQiOiIxOTk1MDMifQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewars.com;
+	s=scph0920; t=1692642830; i=@codewars.com;
+	bh=eiky9Sdbj04qGH16hw1+O+uETwLOoBT+WZFv8bi2nDA=;
+	h=Date:From:To:Message-ID:Subject:Content-Type:From:To:Cc:Subject;
+	b=LyhUvkT0iCgeqXLXOXDs0uPkYxIZVTgCHI+sK+7Fgah3eWG//FHYFtB6W54Lejx2l
+	 dGDfC/DGz8jZKnsUXBiSbJ72CIMjuXyh4ARK6PNcRxazAEC1IggINocA6ATCtBMWV8
+	 7kOaxCWl0Jyc3SYbbxy5HNJWX9J7ptfN5V8ETgzI=
+Authentication-Results-Original: gb.mta1vsmtp.cc.prd.sparkpost
+ smtp.user=<hidden>; auth=pass (LOGIN)
+Received: from [35.196.55.8] ([35.196.55.8:37830] helo=codewars.com)
+	by gb.mta1vsmtp.cc.prd.sparkpost (envelope-from <info@codewars.com>)
+	(ecelerity 4.4.1.18015 r(msys-ecelerity:tags/4.4.1.8)) with ESMTPSA (cipher=AES-256-GCM) 
+	id 89/F3-45267-D0EA3E46; Mon, 21 Aug 2023 18:33:50 +0000
+Date: Mon, 21 Aug 2023 18:33:48 +0000
+From: Codewars <info@codewars.com>
+To: tobinsilvestre043@sooners.us
+Message-ID: <64e3ae0cda4b2_1198f0b4c339285@codewars-production-worker-d5fc99795-jzn5d.mail>
+Subject: Welcome to Codewars, brought to you by Qualified!
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Forwarded-For: tobinsilvestre043@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 25
+X-MS-Exchange-Organization-ExpirationStartTime: 21 Aug 2023 18:33:51.5644
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 407b4e72-65fc-4fe9-70b6-08dba2752ac7
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DB5PEPF00014B8B:EE_|MN2PR20MB3301:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DB5PEPF00014B8B.eurprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 8/21/2023 8:53:15 AM
+X-MS-Office365-Filtering-Correlation-Id: 407b4e72-65fc-4fe9-70b6-08dba2752ac7
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.210.49
+X-SID-PRA: INFO@CODEWARS.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2023 18:33:51.4550
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 407b4e72-65fc-4fe9-70b6-08dba2752ac7
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DB5PEPF00014B8B.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR20MB3301
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.0941896
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6699.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:0;pcwl:0;kl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(8820095)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPmlVw3/wpru+qZJOyMoOr6RazYLjU+tFDZxX/W5oeUIrz/Y3SKm9kZk5mFeiHOkHcbtGoREmLq2rxJ/x9RfhP2EO0egA/UYdjHy0St5jAZ0qY9TjfJiBLGI4wvGmeHwPf/QuukzhEr7EgiKLy9lYcqo7yQJHl7F/CQD4l2cRdlTtipKi3Rui2t3AUzGyWhEgQw=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0wO0Q9MTtHRD0yO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eW1kWklGN3dmSE1UTGUreENzNGlmSWFCVVNLM2c4NnhxK2xESDBUWTAwb1pX?=
+ =?utf-8?B?MG1oZVF6TG5iaXJ5WkNWRTRSeDF5OFdKdVp4Q2Q5dDRMTWZvWE8rbXZFbVgw?=
+ =?utf-8?B?azhGd0dvYnRDaGNtSHg5UFM3SHNNV2hRRTlYNTBZMHB6QU1wQzFBMUtSNUdO?=
+ =?utf-8?B?UGkvbHRmdjY1NWpNUXVoMmREa0FtcDY3MlU3WldPRDVwdE1QcUphVW5BQi84?=
+ =?utf-8?B?OEozOHFJNmNkQ3lzT2pkRXFKaVVvRGt5aGlvanBwY0NNNUVBYzg5VG5HaUhu?=
+ =?utf-8?B?Y1NEM1RJcVFISkpKeHN2VlI0bE9NRW5FRDZoNS93WmNnN0JmZmhrRmhhUVZ1?=
+ =?utf-8?B?RTFQU2VWaHpuc2d6SElyeXl2UDNEcWUwV0lhZjloY0hOcFBpQkd3b21Rb2pn?=
+ =?utf-8?B?a1V1ZE1lM1A5YWpIRjB4WExTaVhNbE5PODMvanpQQXVpK0tic25BUHlkMFFC?=
+ =?utf-8?B?RmNaR1pWUzF1ejZpNTZiV1VQK09reVNmRElGZHo1NFFyQ3UzVUxWWFVvR3I2?=
+ =?utf-8?B?NHViMGlDYkxzVlMvbFNGNFFZZjE4QmY0blhxYzhwbzZHSS9mKzg2bEZWaXRo?=
+ =?utf-8?B?ZldKT3E1QlBtUWpOVHBGZHhVK3Ywd05RTVQ2bTZTOGZWKzE0MnVvbkhqa2JK?=
+ =?utf-8?B?Q2Y4OUFtN3ROYVV2NkNSNERxTlJBWmV2RzZwY0luaFNHYjFLZzdFVUFLNXVi?=
+ =?utf-8?B?NG1oeTViR3d0Z3lsYVoyTVNRc3BsVXdlaEEzRkJkcUNIZGNxM2pxdHA5Z2ZJ?=
+ =?utf-8?B?Rko0THAwZExZSGF4OGI5WEZhV3VRSXhKOVpqQlVWb0I2Y1lRcHhaWW9iWWJt?=
+ =?utf-8?B?WDhHYnNkbkxxYmF0eGVjbmY4MGgvMG9ncm9KVU8vVTFWUU9XL29tRkE1djNm?=
+ =?utf-8?B?bEZlSjB0VXpVTjNQb2RCMDFaa2V6dlg2aDFudTdEKzBoYm1KN0Z3VDlhYUhG?=
+ =?utf-8?B?TEk2dFVUYXg2eTVCUXc3d2hXSlNocWUwM3JJMHJZb0Y0TExWbmRRWWZhTm1t?=
+ =?utf-8?B?MGhrWE9uRzZSMEhBR1Rsc24wcUVuQm8rc0dycUNPM3ZNdWlOYzBGTEttbFpL?=
+ =?utf-8?B?cVFRbllSaVJNUThnbmJCdXp1R0J3UGpLaDY2b3lva1dCR0lkMU51Z2NFNllr?=
+ =?utf-8?B?dWxhWk9wUy9xUS9VNWRiYkdNSGg4cWM2b2lTWU5nQlJGSGwzN3hTeUNvQlpT?=
+ =?utf-8?B?c2lWRWUxNGxnK0Q0VjJhbDJuQU93U2NyKzAyRVNIZExMZVgyNHI2VldPekZ0?=
+ =?utf-8?B?L2JCMkZsb1dYajhaaUhVZVk0cXBVbC9rWDU0MHZ2cHVCOFVFQ2NuNWRWbENW?=
+ =?utf-8?B?b3ozaVlyVXdWbWdkeUV1TkRxOExDZXVTbGtrMWdLdk1PRXBIMTZIeDgwdW5G?=
+ =?utf-8?B?WTJ2UkdXcERSV3A2NE82QlhydmV1UnVDaU5UdkVNN3BjL3c0SWphNGY2YTRX?=
+ =?utf-8?B?OEdSUXpsL2NXRlNhYVdtUlJMMjBudEhmOW5qa3ladURiREUremtLQzJVTGNo?=
+ =?utf-8?B?YXlTc013ZkpXcm1ZVEllUGM1SFZUeWYzL2tpTmdwQ0hZK0JIWERKSUljb015?=
+ =?utf-8?B?YkFaWWZxZURCY3VlZDZDMU5aRzdtaFJJNFlkbTVYVk9OSnVZS3d3ZmZqSzRY?=
+ =?utf-8?B?N2ZZelpGaXlHV04wa0RBd1VNNnZJWGM4c2JCM3dGcWxERHEzQnAwcU0wb016?=
+ =?utf-8?B?NGpTMUVzMFlhL0NwWUZQa29pcDFKUUpKU3RyY1dIOFRYZWxCVjk1S3NxM0hT?=
+ =?utf-8?B?L1VjU2JuVlR4TjhQUzAwMlFvSkdjWDNsZGR0ZnRLQkcwUVFsUUFYWjFLS0tS?=
+ =?utf-8?B?NS8xLzdLZmlZSHVSV1VJdmtHdlZwZFllb1pCaTVzMUlrQmh4SHVtTWo0R1ow?=
+ =?utf-8?B?K2xZNkxlaGl0VzF4c2hlZ3cxOVFQTC9MMVVja0dzTHoveUhMbjRTR2h1WHdJ?=
+ =?utf-8?B?V01SUjhoRWxKcGt6QjY5bWJ6bzRTd05BQ0puMU1wSnpFdzJqZWZ0MEVaaGZm?=
+ =?utf-8?B?bG5aNFNYMXV4dzBsYnk1bTFWZks0TWRUMHVrTFpNRjFycXVUcktXYzNiNGFz?=
+ =?utf-8?B?Z3poVCsvQTZtQnFKK1FBUjlTQzNKaHFUTFc0dklRdE1QSW5OUXBmL3dHVXZC?=
+ =?utf-8?Q?8rw5Yz7mJB1hJUK796/unaH4X?=
+MIME-Version: 1.0
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Codewars</title>
+
+    <!--[if gte mso 6]>
+    <style>
+        table.mcnFollowContent {width:100% !important;}
+        table.mcnShareContent {width:100% !important;}
+    </style>
+    <![endif]-->
+    <style type="text/css">
+        #outlook a{
+            padding:0;
+        }
+        .ReadMsgBody{
+            width:100%;
+        }
+        .ExternalClass{
+            width:100%;
+        }
+        body{
+            margin:0;
+            padding:0;
+            font-family: Helvetica, arial;
+        }
+        a{
+            word-wrap:break-word !important;
+        }
+
+        a.btn {
+          padding: 6px 12px;
+          border-radius: 2px;
+          background-color: #BB432C;
+          color: #fff;
+          text-decoration: none;
+          font-size: 0.9em;
+        }
+
+        a.btn:hover {
+          background-color: #CB533C;
+        }
+        img{
+            border:0;
+            height:auto !important;
+            line-height:100%;
+            outline:none;
+            text-decoration:none;
+        }
+        table,td{
+            border-collapse:collapse;
+            mso-table-lspace:0pt;
+            mso-table-rspace:0pt;
+        }
+        #bodyTable,#bodyCell{
+            height:100% !important;
+            margin:0;
+            padding:0;
+            width:100% !important;
+        }
+        #bodyCell{
+            padding:20px;
+            border-top:0;
+        }
+        .mcnImage{
+            vertical-align:bottom;
+        }
+        .mcnTextContent img{
+            height:auto !important;
+        }
+        body,#bodyTable{
+            background-color:#F8F8F5;
+        }
+        #bodyCell{
+            border-top:0;
+        }
+        #templateContainer{
+            border:0;
+        }
+        h1{
+            color:#606060 !important;
+            display:block;
+            font-family:Helvetica;
+            font-size:40px;
+            font-style:normal;
+            font-weight:bold;
+            line-height:125%;
+            letter-spacing:-1px;
+            margin:0;
+            text-align:left;
+        }
+        h2{
+            color:#404040 !important;
+            display:block;
+            font-family:Helvetica;
+            font-size:22px;
+            font-style:normal;
+            font-weight:bold;
+            line-height:125%;
+            letter-spacing:-.75px;
+            margin:0;
+            text-align:left;
+        }
+
+        h2.mb-15px {
+          margin-bottom: 15px
+        }
+
+        h3{
+            color:#606060 !important;
+            display:block;
+            font-family:Helvetica;
+            font-size:18px;
+            font-style:normal;
+            font-weight:bold;
+            line-height:125%;
+            letter-spacing:-.5px;
+            margin:0;
+            text-align:left;
+        }
+        h4{
+            color:#808080 !important;
+            display:block;
+            font-family:Helvetica;
+            font-size:16px;
+            font-style:normal;
+            font-weight:bold;
+            line-height:125%;
+            letter-spacing:normal;
+            margin:0;
+            text-align:left;
+        }
+        h1 a,h2 a,h3 a,h4 a{
+            color:#6DC6DD;
+            font-weight:bold;
+            text-decoration:none;
+        }
+        #templatePreheader{
+            background-color:#fffff5;
+            border-top:0;
+            border-bottom:2px solid #F2F2F2;
+        }
+        .preheaderContainer .mcnTextContent,.preheaderContainer .mcnTextContent p{
+            color:#b1afaf;
+            font-family:Helvetica;
+            font-size:11px;
+            line-height:125%;
+            text-align:left;
+        }
+        .preheaderContainer .mcnTextContent a{
+            color:#606060;
+            font-weight:normal;
+            text-decoration:underline;
+        }
+        #templateHeader{
+            background-color:#fffff5;
+            border-top:0;
+            border-bottom:2px solid #F2F2F2;
+        }
+        .headerContainer .mcnTextContent,.headerContainer .mcnTextContent p{
+            color:#606060;
+            font-family:Helvetica;
+            font-size:15px;
+            line-height:150%;
+            text-align:left;
+        }
+        .headerContainer .mcnTextContent a{
+            color:#6DC6DD;
+            font-weight:normal;
+            text-decoration:underline;
+        }
+        #templateBody{
+            background-color:#fffff5;
+            border-top:0;
+            border-bottom:2px solid #F2F2F2;
+        }
+        .bodyContainer .mcnTextContent,.bodyContainer .mcnTextContent p{
+            color:#606060;
+            font-family:Helvetica;
+            font-size:15px;
+            line-height:150%;
+            text-align:left;
+        }
+        .bodyContainer .mcnTextContent a{
+            color:#6DC6DD;
+            font-weight:normal;
+            text-decoration:underline;
+        }
+        #templateColumns{
+            background-color:#fffff5;
+            border-top:0;
+            border-bottom:2px solid #F2F2F2;
+        }
+        .leftColumnContainer .mcnTextContent,.leftColumnContainer .mcnTextContent p{
+            color:#606060;
+            font-family:Helvetica;
+            font-size:15px;
+            line-height:150%;
+            text-align:left;
+        }
+        .leftColumnContainer .mcnTextContent a{
+            color:#eb2323;
+            font-weight:normal;
+            text-decoration:underline;
+        }
+        .rightColumnContainer .mcnTextContent,.rightColumnContainer .mcnTextContent p{
+            color:#606060;
+            font-family:Helvetica;
+            font-size:15px;
+            line-height:150%;
+            text-align:left;
+        }
+        .rightColumnContainer .mcnTextContent a{
+            color:#eb2323;
+            font-weight:normal;
+            text-decoration:underline;
+        }
+        #templateFooter{
+            background-color:#fffff5;
+            border-top:0;
+            border-bottom:0;
+        }
+        .footerContainer .mcnTextContent,.footerContainer .mcnTextContent p{
+            color:#999999;
+            font-family:Helvetica;
+            font-size:11px;
+            line-height:125%;
+            text-align:left;
+        }
+        .footerContainer .mcnTextContent a{
+            color:#606060;
+            font-weight:normal;
+            text-decoration:underline;
+        }
+        @media only screen and (max-width: 480px){
+            body,table,td,p,a,li,blockquote{
+                -webkit-text-size-adjust:none !important;
+            }
+            body{
+                width:100% !important;
+                min-width:100% !important;
+            }
+            td[id=bodyCell]{
+                padding:10px !important;
+            }
+            table[class=mcnTextContentContainer]{
+                width:100% !important;
+            }
+            table[class=mcnBoxedTextContentContainer]{
+                width:100% !important;
+            }
+            table[class=mcpreview-image-uploader]{
+                width:100% !important;
+                display:none !important;
+            }
+            img[class=mcnImage]{
+                width:100% !important;
+            }
+            table[class=mcnImageGroupContentContainer]{
+                width:100% !important;
+            }
+            td[class=mcnImageGroupContent]{
+                padding:9px !important;
+            }
+            td[class=mcnImageGroupBlockInner]{
+                padding-bottom:0 !important;
+                padding-top:0 !important;
+            }
+            tbody[class=mcnImageGroupBlockOuter]{
+                padding-bottom:9px !important;
+                padding-top:9px !important;
+            }
+            table[class=mcnCaptionTopContent],table[class=mcnCaptionBottomContent]{
+                width:100% !important;
+            }
+            table[class=mcnCaptionLeftTextContentContainer],table[class=mcnCaptionRightTextContentContainer],table[class=mcnCaptionLeftImageContentContainer],table[class=mcnCaptionRightImageContentContainer],table[class=mcnImageCardLeftTextContentContainer],table[class=mcnImageCardRightTextContentContainer]{
+                width:100% !important;
+            }
+            td[class=mcnImageCardLeftImageContent],td[class=mcnImageCardRightImageContent]{
+                padding-right:18px !important;
+                padding-left:18px !important;
+                padding-bottom:0 !important;
+            }
+            td[class=mcnImageCardBottomImageContent]{
+                padding-bottom:9px !important;
+            }
+            td[class=mcnImageCardTopImageContent]{
+                padding-top:18px !important;
+            }
+            table[class=mcnCaptionLeftContentOuter] td[class=mcnTextContent],table[class=mcnCaptionRightContentOuter] td[class=mcnTextContent]{
+                padding-top:9px !important;
+            }
+            td[class=mcnCaptionBlockInner] table[class=mcnCaptionTopContent]:last-child td[class=mcnTextContent]{
+                padding-top:18px !important;
+            }
+            td[class=mcnBoxedTextContentColumn]{
+                padding-left:18px !important;
+                padding-right:18px !important;
+            }
+            td[class=columnsContainer]{
+                display:block !important;
+                max-width:600px !important;
+                width:100% !important;
+            }
+            table[id=templateContainer],table[id=templateHeader],table[id=templateColumns],table[class=templateColumn],table[id=templateBody],table[id=templateFooter]{
+                max-width:600px !important;
+                width:100% !important;
+            }
+            h1{
+                font-size:24px !important;
+                line-height:125% !important;
+            }
+            h2{
+                font-size:20px !important;
+                line-height:125% !important;
+            }
+            h3{
+                font-size:18px !important;
+                line-height:125% !important;
+            }
+            h4{
+                font-size:16px !important;
+                line-height:125% !important;
+            }
+            table[class=mcnBoxedTextContentContainer] td[class=mcnTextContent]{
+                font-size:18px !important;
+                line-height:125% !important;
+            }
+            table[id=templatePreheader]{
+                display:none !important;
+            }
+            table[id=templateHeader]{
+                border-top:0 !important;
+            }
+            td[class=headerContainer] td[class=mcnTextContent]{
+                font-size:18px !important;
+                line-height:125% !important;
+                padding-right:18px !important;
+                padding-left:18px !important;
+            }
+            td[class=bodyContainer] td[class=mcnTextContent]{
+                font-size:18px !important;
+                line-height:125% !important;
+                padding-right:18px !important;
+                padding-left:18px !important;
+            }
+            td[class=leftColumnContainer] td[class=mcnTextContent]{
+                font-size:18px !important;
+                line-height:125% !important;
+                padding-right:18px !important;
+                padding-left:18px !important;
+            }
+            td[class=rightColumnContainer] td[class=mcnTextContent]{
+                font-size:18px !important;
+                line-height:125% !important;
+                padding-right:18px !important;
+                padding-left:18px !important;
+            }
+            td[class=footerContainer] td[class=mcnTextContent]{
+                font-size:14px !important;
+                line-height:115% !important;
+                padding-right:18px !important;
+                padding-left:18px !important;
+            }
+            td[class=footerContainer] a[class=utilityLink]{
+                display:block !important;
+            }
+        }
+      </style>
+    </head>
+    <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="margin: 0;padding: 0;background-color: #F8F8F5;max-width: 1000px;">
+    <center>
+    <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;background-color: #F8F8F5;height: 100% !important;width: 100% !important;">
+    <tbody><tr>
+    <td align="center" valign="top" id="bodyCell" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 20px;border-top: 0;height: 100% !important;width: 100% !important;">
+    <!-- BEGIN TEMPLATE // -->
+      <img class="mcnImage" align="center" alt="" src="https://www.codewars.com/packs/assets/ink_logo.b1bedbe0.png" width="250" style="max-width: 250px;padding-bottom: 0;display: inline !important;vertical-align: bottom;border: 0;line-height: 100%;outline: none;text-decoration: none;height: auto !important;">
+<br>
+<br>
+
+<div style="margin: 0 5%;color: #333;text-align: left;">
+  <p>Welcome TobinS,</p>
+  <p>It's great to have you as part of the Codewars community and we look forward to keeping you challenged!</p>
+  <p>
+    See the <a href="https://docs.codewars.com">documentation</a> to get started.
+
+    Join our <a href="https://discord.gg/mSwJWRvkHA">Discord</a> server to hang out with and get help from the community.
+    Our open source projects and the issue tracker is on <a href="https://github.com/codewars">GitHub</a>.
+  </p>
+
+  <p>
+    We also built <a href="https://www.qualified.io/?utm_source=codewars&amp;utm_medium=email&amp;utm_campaign=welcomeemail">Qualified.io</a>,
+    which helps companies hire developers faster and more efficiently. If you are hiring engineers Qualified will help
+    you identify great talent. You can also learn more about improving your hiring process on our blog -
+    <a href="https://www.qualified.io/blog?utm_source=codewars&amp;utm_medium=email&amp;utm_campaign=welcomeemail">The Qualified Coder</a>.
+  </p>
+  <p>Best, <br>The Codewars Team</p>
+</div>
+
+    <!-- // END TEMPLATE -->
+    </td>
+    </tr>
+    </tbody></table>
+    </center>
+
+    </body></html>

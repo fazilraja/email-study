@@ -1,0 +1,754 @@
+Received: from IA1PR20MB4875.namprd20.prod.outlook.com (2603:10b6:208:3e5::16)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Wed, 20 Sep 2023
+ 16:23:41 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=NSIO9K7fP8C5MVCtHhh+LUFQnF1OTscVCTJHJfhiLsCkqw87LThNEC9tFO0DL1JINaz3AOsmj21nr4r2CwaP5FwxLBP7FKar3UiUzK9KvO+Wjpdfiitn6G0iDVCfk26Fk6a0efi+JWruqzaVocmqVBa0qNJM2FCWU9dr5z/tKYolsYqgINcMbk87PZGokfoKwFRyWkrMnmkTOEBqLNoWoCtyaokiMxfLOdL+Yea2WyPHLAFpOomQi6kKEtkoYNwKpLO1fhE3s3vF6orh80cWCCMq7i9kZXWBBM7IO+8szhti6HY5S4iC9Hx0mQi1bZQf/1EiOS2B7kCzCC/8jd9SOQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rm3i6TPtV2P85DWVWj0yLRK6TuG+svcYOpQPe/1HbH0=;
+ b=K8BNV98VGNE50Z9hDxqAuCU6jY4bZtdvXvfTFljFq9KWweVXJ4fHjEA+yGNg6KMNQ2Eh8ucyxVxO78Lf4omWUtcjVVkRc30VrdCk6/eJ9ep2tZ3NDNeiP2kH2RaNd1KVS3tOrHrz9YhAnPQSRJ8Uw+wKPjifYE+HHx5HJMLqXpl6lTEUE1AbpXqeoTHceFZ6rtBtyMeaNEbgKXM6mJqHjYyIBMZacMAImargwYzsv7AoYaL93Dmd7RVnOBwXE2Wfg1dVuDjv14KVqJrqClyE/AoAoL6dyWE3FjX6gB1+uxPfG7qfLR8JfLtEAvmKacXL72c7igiIA02ViErLBmkhpg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.216.52) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.emailinfo2.bestbuy.com; dmarc=pass (p=quarantine
+ sp=quarantine pct=100) action=none header.from=emailinfo.bestbuy.com;
+ dkim=pass (signature was verified) header.d=emailinfo.bestbuy.com; arc=pass
+ (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounce-31_html-785363504-1270772-97381-3165050@bounce.emailinfo2.bestbuy.com]
+ dkim=[1,1,header.i=@emailinfo.bestbuy.com]
+ dmarc=[1,1,header.from=emailinfo.bestbuy.com])
+Received: from DBBPR09CA0021.eurprd09.prod.outlook.com (2603:10a6:10:c0::33)
+ by IA1PR20MB4875.namprd20.prod.outlook.com (2603:10b6:208:3e5::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.19; Wed, 20 Sep
+ 2023 16:23:39 +0000
+Received: from DU6PEPF0000B61E.eurprd02.prod.outlook.com
+ (2603:10a6:10:c0:cafe::eb) by DBBPR09CA0021.outlook.office365.com
+ (2603:10a6:10:c0::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.29 via Frontend
+ Transport; Wed, 20 Sep 2023 16:23:39 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.216.52)
+ smtp.mailfrom=bounce.emailinfo2.bestbuy.com; dkim=pass (signature was
+ verified) header.d=emailinfo.bestbuy.com;dmarc=pass action=none
+ header.from=emailinfo.bestbuy.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of
+ bounce.emailinfo2.bestbuy.com does not designate 209.85.216.52 as permitted
+ sender) receiver=protection.outlook.com; client-ip=209.85.216.52;
+ helo=mail-pj1-f52.google.com;
+Received: from mail-pj1-f52.google.com (209.85.216.52) by
+ DU6PEPF0000B61E.mail.protection.outlook.com (10.167.8.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Wed, 20 Sep 2023 16:23:38 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:9729BF94BEB418E91C91500A0E37EF1D4CAE87AFA5B0BB6D99142B6C79F749F0;UpperCasedChecksum:98A4AB6F2E7241454A266AE488F6440973DC350711CBA5F53DCE155CEC91C032;SizeAsReceived:5853;Count:29
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2768239d2f3so2403001a91.1
+        for <tobinsilvestre@outlook.com>; Wed, 20 Sep 2023 09:23:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695227017; x=1695831817;
+        h=x-forwarded-for:message-id:list-id:reply-to:mime-version:list-help
+         :date:subject:to:from:dkim-signature:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Rm3i6TPtV2P85DWVWj0yLRK6TuG+svcYOpQPe/1HbH0=;
+        b=i1zoqkNsWJHGYMz2KHNE+caaqbpbrGQ5Xldtazkt1sLxSDSRMWxv3IuiME5KCPUkuQ
+         g2W6AdZQnZHZPesBmH3GgMIrmJKdamfuIaEOE5bDdIdHIDDCD9tul12x82fcUvG/5wfY
+         P3ooUh7/a/snXzBn9/rGUWQ92DIIDPcDS3M4TjMiF8fEA0W0am+/vAnaypvbKlsG7cAD
+         OlRjdZVWAJLFpR/pfjw4+SyvRm4sVNdL4LY7lTPnbaxxX9gp9PN06zSf2HYpM5/eACkr
+         w0AV3FZ/y7WWMN9g3aUf0rU/cz9WbykhWEnueSqaapVhAMhoL6a2AUMczGqj8dIwLQza
+         bqJw==
+X-Gm-Message-State: AOJu0YwaUdPVttB6J96ovLIS5LznFLI/brVirLBYF8XwykBFwY/x9soY
+	wJJte6VBGxKKYt2bAlyPOoSnUCfIL5EXg/Rg8Q==
+X-Google-Smtp-Source: AGHT+IGJ16eleKiIBebmu2OCYy9cGM0YZM3VERLCkfdP9ohCpsCptNIsbgGw4fiLRdXiGsSxZvkImqncVokX+3J1fT4sFjKCI44=
+X-Received: by 2002:a17:90a:4ec6:b0:268:6339:318 with SMTP id v6-20020a17090a4ec600b0026863390318mr2940951pjl.30.1695227017699;
+        Wed, 20 Sep 2023 09:23:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695227017; cv=none;
+        d=google.com; s=arc-20160816;
+        b=ngmiZRa3swQy17BgDyJOHBdnH8Vx62QmTrr04EircLWkQ4goryR4ewkVaAhb3+6fWk
+         RLMVTkPDT1T4j2Dq6xbEkamOG/D1QCe04bZm8o5U9KObb9TbX4lsDU1Ozd88zdJ+wdcl
+         Oq0wvLtWITG5Ii/uYCXEWgDwADf+ARCC11uxoI/xT2OtDq9FKwX8LvRhTaTl7yQw+y2C
+         bzfjee2e47ix4dOvtm/kchDb/MYASpxpRFSSMNopAYbIFF+ENyfEDlKuqvW+p8apC7CE
+         oHXo0JvtPBrRIvxC0SN3SdGYkkuAMywiI1l5sDD00mRwoI1D8/ji3JoYNZvYl0oZWOO/
+         gpZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=message-id:list-id:reply-to:mime-version:list-help:date:subject:to
+         :from:dkim-signature;
+        bh=Rm3i6TPtV2P85DWVWj0yLRK6TuG+svcYOpQPe/1HbH0=;
+        fh=vdK98Bp9cd7ihUmo3eFeAU6v6M1bmRMW6UbUlPkYoEQ=;
+        b=ump2TFnfyhQ291ZcHLuQwQip6rGdZpjnw1rAulgc/cnMoG26wcrOOoZNS3Tyq2IMDG
+         mI6whXk82tH87fO41OHhqcvUT80t4B+uRGJtHNA9tU2fQa4y+whQchgkdb4r+Q/eGjUx
+         Ee2tB2MVwBnYSXT/p+mq4AoDkhEEPl6dDt1KXzOibbBkaGru+qhB/aB7bnzht87+u57/
+         nvizcub1aT9LJ3ZJwApV8vAngbhIlY3ee6ykXs20/2QMnyYyGAWfNTOgaD+yWqqlcAvn
+         OOGHATR1tkHjD/KWGDxgAYExk0/gCf9v5Pc+vNffadB7+NIwXzag9QMzzU1VVjey3rT+
+         Jsmg==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@emailinfo.bestbuy.com header.s=200608 header.b=xjdyH9FU;
+       spf=pass (google.com: domain of bounce-31_html-785363504-1270772-97381-3165050@bounce.emailinfo2.bestbuy.com designates 136.147.140.129 as permitted sender) smtp.mailfrom=bounce-31_HTML-785363504-1270772-97381-3165050@bounce.emailinfo2.bestbuy.com;
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=emailinfo.bestbuy.com
+Return-Path:
+ bounce-31_HTML-785363504-1270772-97381-3165050@bounce.emailinfo2.bestbuy.com
+Received: from mta44.emailinfo2.bestbuy.com (mta44.emailinfo2.bestbuy.com. [136.147.140.129])
+        by gmr-mx.google.com with ESMTPS id lb13-20020a17090b4a4d00b0027691d39091si214497pjb.2.2023.09.20.09.23.37
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 20 Sep 2023 09:23:37 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-31_html-785363504-1270772-97381-3165050@bounce.emailinfo2.bestbuy.com designates 136.147.140.129 as permitted sender) client-ip=136.147.140.129;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@emailinfo.bestbuy.com header.s=200608 header.b=xjdyH9FU;
+       spf=pass (google.com: domain of
+ bounce-31_html-785363504-1270772-97381-3165050@bounce.emailinfo2.bestbuy.com
+ designates 136.147.140.129 as permitted sender)
+ smtp.mailfrom=bounce-31_HTML-785363504-1270772-97381-3165050@bounce.emailinfo2.bestbuy.com;
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE)
+ header.from=emailinfo.bestbuy.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=200608; d=emailinfo.bestbuy.com;
+ h=From:To:Subject:Date:List-Help:MIME-Version:Reply-To:List-ID:
+ X-CSA-Complaints:Message-ID:Content-Type; i=BestBuyInfo@emailinfo.bestbuy.com;
+ bh=Rm3i6TPtV2P85DWVWj0yLRK6TuG+svcYOpQPe/1HbH0=;
+ b=xjdyH9FUcetAcrnhqV5U/G3KTuhdVbcTUXo+WrGs1yHG/xIw5NYuDG3Bliu5fTUHtHcSqjqlTN7I
+   WNfHgBVIMwEiJoNYw+qbB1ZVfIqBhpXqtbBpsmy+Xm7xRMP3iCD4ncYlxkW1Rhf5kXaB1vzjCZaJ
+   CcuoGHy5tnTlod7qyxI=
+Received: by mta44.emailinfo2.bestbuy.com id h1ce8i2fmd4q for <tobinsilvestre030@sooners.us>; Wed, 20 Sep 2023 16:23:36 +0000 (envelope-from <bounce-31_HTML-785363504-1270772-97381-3165050@bounce.emailinfo2.bestbuy.com>)
+From: "Best Buy" <BestBuyInfo@emailinfo.bestbuy.com>
+To: <tobinsilvestre030@sooners.us>
+Subject: Verify your email address
+Date: Wed, 20 Sep 2023 10:23:36 -0600
+List-Help: <https://click.emailinfo2.bestbuy.com/subscription_center.aspx?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWQiOiI5NzM4MSIsInMiOiI3ODUzNjM1MDQiLCJsaWQiOiIzMSIsImoiOiIxMjcwNzcyIiwiamIiOiIzMTY1MDUwIiwiZCI6IjEwMTcwIn0.xNknTPavqpc-W0viNPPRSNST2G5VDlZ5371nUdWkXrk>
+x-CSA-Compliance-Source: SFMC
+Reply-To: "Best Buy" <reply-1270772-31_HTML-785363504-97381-3165050@emailinfo2.bestbuy.com>
+List-ID: <97338.xt.local>
+X-CSA-Complaints: csa-complaints@eco.de
+X-SFMC-Stack: 1
+x-job: 97381_1270772
+Message-ID: <cf4222d1-739b-4961-a1a9-ddc572b9a734@ind1s01mta1278.xt.local>
+Content-Type: multipart/alternative;
+	boundary="JmBZPClTfzNb=_?:"
+X-Forwarded-For: tobinsilvestre030@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 29
+X-MS-Exchange-Organization-ExpirationStartTime: 20 Sep 2023 16:23:38.9909
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 3d144120-48fe-491a-d7a5-08dbb9f5f283
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DU6PEPF0000B61E:EE_|IA1PR20MB4875:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DU6PEPF0000B61E.eurprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/20/2023 3:50:11 PM
+X-MS-Office365-Filtering-Correlation-Id: 3d144120-48fe-491a-d7a5-08dbb9f5f283
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.216.52
+X-SID-PRA: BESTBUYINFO@EMAILINFO.BESTBUY.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2023 16:23:38.8816
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d144120-48fe-491a-d7a5-08dbb9f5f283
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DU6PEPF0000B61E.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR20MB4875
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.6467961
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPkcsK8LmmzJhaavu76zg7S0PEayVdYa43O/KAmc+Oml2RHWr8CamgffC4zm/fRORVxy276xFIpHoAkwgcPYs4u4snfz6bIFF6XTg54XPRHzx1UYsengLYmk+lKVd+pi/m/nhPGWXVOOha4d/TZPbel/hiKRrIBXooGxiR1uGw158GsG5M0BxnNBb0t6Cul6YHI=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SlgzYm10RTdxRTdaTG4zdGFidDB6VHBSU1BwSGEwN1MvYW0yR1VrYVE0T2tO?=
+ =?utf-8?B?bTBTRFJJY1d3amtyWTFOcWFFZnM5aTRqczE4OC8zWk9vUWtSOEZWT0dsRVJo?=
+ =?utf-8?B?aFdkUW9CTmRyK1Q0eG0vWTltRExueGlBNTBmRDNDbkJRbTJ4ekFKQ3lvdkRJ?=
+ =?utf-8?B?S0NVNXY1a1N0TzFqZW96bm5YdytBRURBSU5wdzdrWFZKOW9IeEtrQzk4aUlO?=
+ =?utf-8?B?dU9ZZnVyU2pES2JIME51VTJJemlnUXU5YmpyTS9xOVdwV2pzOTdIRGk3dWhk?=
+ =?utf-8?B?N3lXLyt2RlNYalFtK0FISzMxN3k5UVB1Q1dxYkFHd0szZDQrb2tJeVBpQnQx?=
+ =?utf-8?B?RmNnelJMbVFFRnFWNGJnVGt4UytzN3NieFlFQ1VnRSt6UzhLbXJCSDBydkEv?=
+ =?utf-8?B?QzYxSmxaaEZtbm9nbGltU29ZWXhVSytOZjY3YlAzYXcyOGpHeko3K1duWFd1?=
+ =?utf-8?B?YjR2dzJkU2xPckxYWnk0Z0dQS0Vqa3cxRW5jUmRmR0I1dmpNTS8xOTdJYW53?=
+ =?utf-8?B?QkNuZE1mSGJqYTEyVFZ1VHhZWEFUQUJGcUo1Umg1UVArZ1p0dXladUJhWjZo?=
+ =?utf-8?B?Q2RubmlVOHpvMnR1K01kR3lXRnVXZUZpV0RtUzNzQUZPVkg5KzUwR1FNZ0wr?=
+ =?utf-8?B?bEtCVEdMZndZRXBsbGtDMVpXaTZzZGZrZjg2L3BERjZMenhEZ2ppaDlUSmYz?=
+ =?utf-8?B?TVYzamZ5K2xmc1hmT1VJdTdpdjgyWU9JaE1ZTTBtTnBQM2R5TWpWanl3UHBG?=
+ =?utf-8?B?YXZtRTZEWG12YUtVRkk1Y0VNNEp3M0tiVytzYTFuMm5EazJzSzYrUmJmTkp6?=
+ =?utf-8?B?WllXZ1d6OGNSWC9qNFdhS3F5RDdPVDRTelhUWUNVV3Z1TmpLZVp0RnVuWXhB?=
+ =?utf-8?B?akhCV1J0YW1pVG1XTE9XdXhKeklvd2JoZ1MzRjY0RUE4N2dDVmo2bnU2M2ZH?=
+ =?utf-8?B?U2tWOXBQSDNBaGpmcVd5Q3M2RjB0WkovM3dwMHhYSDBqTDRHbSt3L2RjdCtj?=
+ =?utf-8?B?ZWRQUEkwWVI1RVNtV1N0TGdwN2xsQytvZXhzaG9mN2I3L09TSm9ZRExVVFd5?=
+ =?utf-8?B?REplaFpGUUhQQzF2S1JRSlorV3lwSG5RQ0swMk1IQUJHSXVMSmZWa0dVaUp5?=
+ =?utf-8?B?eldyVFZLNVp2TE53WUZrMFN0d2w3UFB5RGl3bzJHRUxUdEpXU08zY1lXNUFm?=
+ =?utf-8?B?dDBhanZZVWpuR1dMamkvQ044WndpN1M3bFd1ek4vRHVMMlJSaXFxc0N0S2ts?=
+ =?utf-8?B?R1RKUk8vKzRhd2d5eFQwSFNOVFU0M0FpVUFaN3VoaWh2dHBIY3ZlTlR4bkFz?=
+ =?utf-8?B?bDNzTnUwS09UY0VLbXNSdGtUOXlzcy9uV2I4VXU2M2VsMFNHVFcyaU1pNkFo?=
+ =?utf-8?B?Vlh3RzkwZGoyN1VrVStlT0RXM09GNVkwV0FheTNJbW5VZFpTVXBLWm8xaW1O?=
+ =?utf-8?B?U1hXb0VMaVdXZStDTVBQRDExd2VzbGM2RUYzMnlzZjRXUS8zQ0REK2R5RFdX?=
+ =?utf-8?B?eXpwbUJDenVTeU1TQXAvTnhURVBHR25VMWk4VXBsLzVjT1lNMUJYZk1acmJY?=
+ =?utf-8?B?ZGZiMHk1ZjJYMlpRRlh3MlJOTG8vU3Iyd21BakVpM3FzUG1tTEZ0V2xDWXBm?=
+ =?utf-8?B?NEVqSWE5djVCNTBVTHdjdXhtMysxKzBWUlhuQ2J6aFpFblkra3duS0ZzRXYz?=
+ =?utf-8?B?MXdiVXpyamF3K0FhNWhXNnFOZ09KQjNaTVpUMVBFSWtUc0hXZkpUaXVyd3Nq?=
+ =?utf-8?B?V3gxS3kwRVNhZnJGTlUrR1RXMWluZCt0cHZBVlNGM09PRUNoN05kZFlKRUYw?=
+ =?utf-8?B?NUUyQnZKbzIrK0VRNmdSejFPbDFOZnRzMVFQZ3AwcTdvTkRyVGVXZG5ZR1JW?=
+ =?utf-8?B?d2FxWmhLNklDTXNVZ3lOeStFczByKzZlVWxET3NuVm8ydGxyeERhODNDK3pH?=
+ =?utf-8?B?UHdHSXBRTlNOM0RiSlFDSWptbVRkK0lkU3BDZTBUZFl1aWJzU3lYazV2eEgw?=
+ =?utf-8?B?VjV2NUNvNzBYSWFOZ3g4azJ0WTlJd2Q4a25yUzROb0pBMzNtZEtPOEV1dEhn?=
+ =?utf-8?B?NnVPenhPakljOTRjMnJrVXlyOGo0bk1uYTVXd2hHMUN6UlF3K1RDR2lBNVV5?=
+ =?utf-8?B?TjhDeXh6V0ZmQVR2d0xIc2pzZW9zNXRQY1hlSnI5RHlEUGZhN01PWCtQb21m?=
+ =?utf-8?B?MkVkdDdPTTZ4bDZiNzI4TkNwbjVveUF4aE5sMHVxeklIMGhOblVzdkk2OG9T?=
+ =?utf-8?Q?WUrrmDi6AmJuB9DYgfmVVcmGamBquTit+tOgA6fDAg=3D?=
+MIME-Version: 1.0
+
+--JmBZPClTfzNb=_?:
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+View as a Web page:
+https://view.emailinfo2.bestbuy.com/?qs=af159327142dbeea99355f674aa38ca3cfd2c9ed3675f538a9abd9d53f56df30a99a99f6ef6ee37ab8592aed70784211d4e733a0a01c0775218f2ff6249a421734cebfae28befd3b1a82b9e15dc1be77
+
+
+==================================================
+
+
+BEST BUY
+
+
+==================================================
+
+
+View full message:
+https://view.emailinfo2.bestbuy.com/?qs=af159327142dbeea99355f674aa38ca3cfd2c9ed3675f538a9abd9d53f56df30a99a99f6ef6ee37ab8592aed70784211d4e733a0a01c0775218f2ff6249a421734cebfae28befd3b1a82b9e15dc1be77
+
+
+==================================================
+
+--JmBZPClTfzNb=_?:
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <!--[if !mso]><!-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <!--<![endif]-->
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Best Buy</title>
+
+ <!-- OLS_Acct_Create_Confirm :  -->
+
+ <!--[if (gte mso 9)|(IE)]>  <style type="text/css">   table {border-collapse: collapse !important;}  </style>  <![endif]-->
+ <style type="text/css">
+  img{outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;margin:0}
+
+  @-ms-viewport{width:device-width}
+  a:link,a:visited,a:active,a:hover{color:#1646a8}
+  .appleLinks a{color:#1d252c;text-decoration:none}
+  .appleLinks_gray a{color:#49494a;text-decoration:none}
+  body{margin:0 !important;padding:0;background-color:#ffffff}
+  table{border-spacing:0;font-family:sans-serif;color:#333333}
+  td{padding:0}
+  img{border:0}
+  div[style*="margin: 16px 0"]{margin:0 !important}
+  .wrapper{width:100%;table-layout:fixed;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;background-color:#eef0f3}
+  .webkit{max-width:640px;margin:0 auto;background-color:#eef0f3}
+  .outer{margin:0 auto;width:100%;max-width:640px}
+  .full-width-image img{width:100%;max-width:640px;height:auto}
+  .inner{padding:0px}
+  a{color:#1646a8;text-decoration:none}
+  .contents{width:100%}
+  .one-column .contents{text-align:left}
+  .one-column .column{width:100%;max-width:640px;display:inline-block;vertical-align:top}
+  .one-column img{width:100%;max-width:640px;height:auto}
+  .two-column{text-align:center;font-size:0}
+  .two-column .column{width:100%;max-width:320px;display:inline-block;vertical-align:top}
+  .VPEheadline-text{font-size:35px !important}
+  .VPEbody-text{font-size:17px !important}
+  .FTEtext-width{padding:0 16% 15px 16%}
+  .two-column .two-column60{width:100%;max-width:320px;display:inline-block;vertical-align:top}
+  .two-column .two-column40{width:100%;max-width:320px;display:inline-block;vertical-align:top}
+
+  @media screen and (min-width: 415px) and (max-width: 660px)
+  {
+  .one-column .column{max-width:100% !important}
+  .two-column .column{max-width:50% !important}
+  .two-column .creative{width:100% !important;max-width:100% !important;height:auto !important}
+  .three-column img{max-width: 50% !important; width: 50% !important; max-width: 50% !important; height: auto !important;}
+  .three-column .column{max-width:33% !important}
+  .three-column .creative{width:100% !important;max-width:100% !important;height:auto !important}
+  .three-column .column-footer{max-width:33% !important}
+  .four-column .column{max-width:25% !important}
+  .four-column .creative{width:100% !important;max-width:100% !important;height:auto !important}
+  .VPEheadline-text{font-size:35px !important}
+  .VPEbody-text{font-size:17px !important}
+  .FTEtext-width{padding:0 16% 15px 16%}
+  .two-column .two-column60{max-width:60% !important}
+  .two-column .two-column40{max-width:40% !important}
+  }
+
+  @media screen and (max-width: 414px)
+  {
+  .button{width:374px !important;max-width:374px !important}
+  .button a{display:block !important;padding-left:0 !important;padding-right:0 !important}
+  .one-column .column{max-width:100% !important}
+  .two-column .column{max-width:100% !important}
+  .two-column .two-column60{max-width:100% !important}
+  .two-column .two-column40{max-width:100% !important}
+  .three-column .column{max-width:100% !important}
+  .three-column .column-footer{max-width:100% !important}
+  .four-column .column{max-width:100% !important}
+  .full-width-image img{width:100% !important;max-width:100% !important;height:auto !important}
+  .one-column img{width:100% !important;max-width:100% !important;height:auto !important}
+  .two-column .creative{width:100% !important;max-width:100% !important;height:auto !important}
+  .three-column .creative{width:100% !important;max-width:100% !important;height:auto !important}
+  .three-column .column-footer img{width:100% !important;max-width:100% !important;height:auto !important}
+  .three-column .column-footer-social img{width:50% !important;max-width:50% !important;height:auto !important}
+  .four-column .creative{width:100% !important;max-width:100% !important;height:auto !important}
+  .VPEheadline-text{font-size:25px !important}
+  .VPEbody-text{font-size:14px !important}
+  .FTEtext-width{padding:0 20px 15px 20px}
+  .two-buttons-left {display: table-header-group;}
+  .two-buttons-left table {max-width: 280px;}
+  .two-buttons-right {display: table-footer-group;}
+  .two-buttons-right table {max-width: 280px;}
+  }
+
+
+  @media screen and (max-width: 640px) 
+  {
+  .headernav { width: 100% !important; box-sizing: border-box; }
+  .headernav td {width: auto; padding: 0px 10px;}
+  .footernav2 > tbody > tr > td { border-bottom: none; }
+  .footernav2 .column-footer { width: 50% !important; max-width: 100% !important; border-bottom: solid 1px #c3c4c4;}
+  }
+  @media screen and (max-width: 414px) 
+  {
+  .m-hide { display: none !important; font-size: 0 !important; line-height: 0 !important; }
+  .m-12h { font-size: 12px !important; line-height: 12px !important; }
+  }
+
+ </style>
+</head>
+<body style="margin-top:0px !important;margin-bottom:0px !important;margin-right:0px !important;margin-left:0px !important;padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;background: #f4f4f6;background-color:#f4f4f6;" bgcolor="#f4f4f6">
+
+<span style="display: block; color: red;"></span>
+
+
+<style type="text/css">
+div.preheader 
+{ display: none !important; } 
+</style>
+<div class="preheader" style="font-size: 1px; display: none !important;">Please verify your email address</div>    
+
+
+<img src="https://click.emailinfo2.bestbuy.com/open.aspx?ffcb10-fe9515727264037a77-fdf61570716d047d7d127870-fef31d77766c05-ff9b1771-fe2613787067027e701474-fe9b17717361047875&amp;d=10170&amp;bmt=0" width="1" height="1" alt="">
+
+<!-- SFMC.F.September.2023 -->
+<center class="wrapper" style="width:100%;table-layout:fixed;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;background-color:#f4f4f6;">
+ <div class="webkit" style="max-width:640px;margin-top:0px;margin-bottom:0px;margin-right:auto;margin-left:auto;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+   <tr>
+     <td bgcolor="#f4f4f6" style="padding:5px 0px 20px 0px;">
+  
+     <!--[if (gte mso 9)|(IE)]>      <table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;font-family: Arial, sans-serif;color:#333333;">      <tr>      <td bgcolor="#ffffff" style="padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;">      <![endif]-->
+     <table class="outer" align="center" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;font-family: Arial, sans-serif;color:#333333;Margin:0 auto;width:100%;max-width:640px;" bgcolor="#ffffff">
+
+      
+      
+	<!-- BEGIN Gmail Enhancements Logo -->
+	<div itemscope="" itemtype="http://schema.org/Organization">
+
+		<meta itemprop="name" content="Best Buy">
+		<meta itemprop="logo" content="https://realtime.bestbuy.com/service/rte?kind=liveimage&amp;id=1546407975">
+
+	</div>
+	<!-- END Gmail Enhancements Logo -->
+	
+
+	
+<!-- BEGIN:  250ok Tracking Pixel -->
+<!– X-250ok-CID: OLS_Acct_Create_Confirm_20230920–>
+<tr>
+	<td align="left" style="display: none;">
+		<style> @media print{ #_two50 { background-image:url('http://analytics.bestbuy.com/ea/ClOtRzLHiM/?t=p&e=785363504&c=OLS_Acct_Create_Confirm_20230920'); } } blockquote #_two50, #mailContainerBody #_two50, div.OutlookMessageHeader, table.moz-email-headers-table { background-image:url('http://analytics.bestbuy.com/ea/ClOtRzLHiM/?t=f&e=785363504&c=OLS_Acct_Create_Confirm_20230920'); } </style><div id="_two50"></div><img id="_two50_img" src="http://analytics.bestbuy.com/ea/ClOtRzLHiM/?&amp;e=785363504&amp;c=OLS_Acct_Create_Confirm_20230920" width="1" height="1" style="margin:0 !important; padding:0 !important; border:0 !important; height:1px !important; width:1px !important;">
+	</td>
+</tr>
+<tr>
+	<td align="left" style="display: none;">	
+		
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	
+<!-- BEGIN:  Marketing Evolution Tracking Pixel (LiveRamp) -->
+<tr>
+	<td align="left" style="display: none;">
+		
+		<img src="https://di.rlcdn.com/456459.gif?pdata=job_id%3D1270772%2Cemail_id%3D" width="1" height="1" border="0" style="display: block;">
+	</td>
+</tr>
+</table>
+		
+	</td>
+</tr>
+
+	
+
+
+
+
+		<!-- Top Header -->
+		<tr>
+			<td align="left" valign="top">
+				<table border="0" cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+						<td align="left" valign="bottom" bgcolor="#f4f4f6">
+							<table border="0" cellpadding="0" cellspacing="0" width="100%">
+								<tr>
+									<td align="left" valign="bottom" style="padding: 5px 5px 7px 15px; font: 10px Arial; color: #1d252c;">
+										View:&nbsp;&nbsp;<a href="https://view.emailinfo2.bestbuy.com/?qs=af159327142dbeea99355f674aa38ca3cfd2c9ed3675f538a9abd9d53f56df30a99a99f6ef6ee37ab8592aed70784211d4e733a0a01c0775218f2ff6249a42172980d7a8ee1472a9e09f3a2a7e8b3b47" target="_blank" style="text-decoration: none; color: #0046be;">Web</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+
+		<!-- Brand bar -->
+		<tr>
+			<td align="left" valign="middle" width="640" bgcolor="#0046bf" style="background-color:#0046bf;">
+				<table border="0" cellpadding="0" cellspacing="0" style="width:174px;">
+					<tr>
+						<td width="87" align="left" valign="top" style="font: 14px Arial; font-weight: bold; color: #ffffff;">
+							<a href="https://click.emailinfo2.bestbuy.com/?qs=bee2f886fd082348e7e1d273f6fba1024071b7c104406dbfa87f5b1b2ca3fd0825893cb7a82a1a0af2070bb388a6825d3f0fa2b7f07f4b8186230048b7232164" target="_blank" style="color: #ffffff; text-decoration: none;">
+								<img alt="BEST BUY" src="https://image.emailinfo2.bestbuy.com/lib/fef31d77766c05/m/6/6e372fbc-63a9-4ff5-a173-dcae321273c4.jpg" width="87" height="66" border="0" style="border-width:0;width:100%;max-width:87px;min-width:87px;height:auto;display:block;">
+							</a>
+						</td>
+						<td width="87" align="left" valign="top" style="font: 14px Arial; font-weight: bold; color: #ffffff;">
+							<a href="https://click.emailinfo2.bestbuy.com/?qs=8b51479d8a16ec6bf55c1a68a7cdf33c0661ccf9635b773cc7217616f9aceaf488483ffa96e6c501bbbfa8333ef97f03d3308c461715a663ba36f0a2e6d0c6f7" target="_blank" style="color: #ffffff; text-decoration: none;">
+								<img alt="GEEK SQUAD" src="http://image.emailinfo2.bestbuy.com/lib/fef41d77766c04/m/69/BBYGS_DUAL_TOPNAV2.jpg" width="87" height="66" border="0" style="border-width:0;width:100%;max-width:87px;min-width:87px;height:auto;display:block;">
+							</a>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td bgcolor="#ffffff">
+				<div style="font-size: 6px; line-height: 6px; mso-line-height-rule: exactly;">&nbsp;</div>
+			</td>
+		</tr>
+	
+
+		
+
+	
+
+      <!-- Full Width Text Scale -->
+      <tr>
+       <td bgcolor="#ffffff" class="one-column">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;">
+        <tr>
+         <td class="tableBlock" align="center" valign="top" bgcolor="#ffffff">
+          
+          <span style="display:none;">
+					
+
+						          
+						
+						
+						
+						
+						
+						
+						
+						
+						
+				
+						
+				
+						
+						
+							
+
+								  
+								        
+							
+							
+						
+					
+					
+					
+						
+						
+						
+							       
+						
+						
+						
+							  
+						
+					
+					</span>
+	
+		<!-- VPE B2-->
+		<tr>
+			<td bgcolor="#ffffff" class="one-column" style="padding:0px;text-align:center;font-size:0;" title="False - VPE B2 - Variation:2f3af0df-cd92-4e9e-9c02-c7ca0bf816a4- EmailType:VPE B2- Source System:AEM &lt;module&gt;&lt;attributes name=&quot;Banner&quot; key=&quot;OLS_ACCT_CREATE_CONFIRM&quot; width=&quot;640&quot; mWidth=&quot;320&quot; hasMobile=&quot;Y&quot; queryString=&quot;ref=&amp;loc=BODY&amp;CampaignID=1270772&amp;SubscriberID=785363504&amp;eut=&quot; alias=&quot;OLS_ACCT_CREATE_CONFIRM&quot; /&gt;&lt;/module&gt;">
+				<!--[if (gte mso 9)|(IE)]>
+				<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;">
+				<tr>
+				<td width="100%" valign="top" style="padding:0px;">
+				<![endif]-->
+				<div class="column" style="text-align:center;display:inline-block;width:100%;max-width:640px;vertical-align:top;">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;">
+						<tr>
+							<td class="inner" style="padding:0px; background-color: #ffffff;" bgcolor="#ffffff">
+								<table class="contents" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;width:100%;font-size:14px;text-align:left;">
+									<tr>
+									   <td style="padding:0px;">
+											<a href="https://click.emailinfo2.bestbuy.com/?qs=4a835860ff55494c1a87e32a736d8816b2b7126bc8d6b812526185d7043a764d4bf18d8cdc34bbbec4f9d8c360d15eb985e187d7845247cce621e005e53291b6" style="display:block; text-decoration: none; color: #000000;" target="_blank"><img src="https://pisces.bbystatic.com/image2/BestBuy_US/dam/OLS_ACCT_CREATE_CONFIRM_DER-b2b32a00-54f5-4032-b501-27c1a617863e.png" width="640" alt="Confirm" style="border-width:0;width:100%;max-width:640px;height:auto;display:block;" class="creative"></a>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!--[if (gte mso 9)|(IE)]>
+				</td>
+				</tr>
+				</table>
+				<![endif]-->
+			</td>
+		</tr>
+
+         </td>
+        </tr>
+         <tr>
+          <td align="left" valign="top" bgcolor="#ffffff" style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; line-height: 20px; color:#1d252c; padding: 10px 40px 20px 40px;">
+
+           <span style="font: bolder 25px/25px Arial; color: #0046be;">Verify your email address.</span>
+           <br><br>
+           Hi Tobin,
+           <br><br>
+           Verify your email address, and you'll be good to go.
+           <br><br>
+          </td>
+         </tr>
+         <tr>
+          <td class="tableBlock" align="center" valign="top" bgcolor="#ffffff">
+           
+           <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+             <td class="button" align="center" bgcolor="#fff200" width="240"><a href="https://click.emailinfo2.bestbuy.com/?qs=1b01a1f1a321a4031fd01749dd608ee138e6da7d134f67407bd1045286344fbb32df7088a80b62cdb43f5f2b78d2a99e9a21519d051b6d4a569c06478161dfaf" target="_blank" style="font-size: 14px; font-family: Arial, sans-serif; font-weight: bold; color: #1d252c; text-decoration: none; padding: 10px 15px 10px 15px; border: 1px solid #fbe27e; display: block;">Verify Email</a></td>
+            </tr>
+           </table>
+           <br><br><br>
+          </td>
+         </tr>
+        </table>
+       </td>
+      </tr>  
+      <!-- End Full Width Text Scale -->
+      
+      
+		<!-- START Footer -->
+
+		<tr>
+			<td bgcolor="#ffffff">
+				<div style="font-size: 6px; line-height: 6px; mso-line-height-rule: exactly;">&nbsp;</div>
+			</td>
+		</tr>
+		
+		<!-- Second footer nav -->
+
+			<tr>
+				<td bgcolor="#0046be" class="four-column">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;" class="footernav2">
+						<tr>
+
+							<td bgcolor="#0046be" style="text-align:center; font-size:0; mso-hide: all;">
+								<!--[if (gte mso 9)|(IE)]>
+								<td bgcolor="#0046be" style="text-align:center; font-size:0; border-bottom: none;">
+								<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;">
+								<tr>
+								<td width="160" valign="top" style="padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;">
+								<![endif]-->
+								<div class="column-footer" style="text-align:center;display:inline-block;width:50%;max-width:160px;min-width:160px;vertical-align:top; border-bottom: solid 1px #E0e6ef; mso-hide: all; text-align:center;">
+									<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;text-align:center;">
+										<tr>
+											<td align="center" style="font-family: Arial, sans-serif;color:#ffffff;width:160px;font-size:13px; padding-top: 12px; padding-bottom: 13px; font-weight:bold;">
+												<a href="https://click.emailinfo2.bestbuy.com/?qs=ff5b9c0eba6d8e8253f9fe4fc873bb5a8ee11b27ff6f169a84110110875294f3a54a3a28440a3e387e0b1cdf1151be85852dcabb423751f461196ada331cfe0a" target="_blank" style="text-decoration: none; color: #ffffff; text-align:center;">Deal of the Day</a>
+											</td>
+										</tr>
+									</table>
+								</div>
+								<!--[if (gte mso 9)|(IE)]>
+								</td><td width="160" valign="top" style="padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;">
+								<![endif]-->
+								<div class="column-footer" style="text-align:center;display:inline-block;width:50%;max-width:160px;min-width:160px;vertical-align:top; border-bottom: solid 1px #E0e6ef; mso-hide: all; text-align:center;">
+									<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;text-align:center;">
+										<tr>
+											<td align="center" style="font-family: Arial, sans-serif;color:#ffffff;width:160px;font-size:13px; padding-top: 12px; padding-bottom: 13px; font-weight:bold;">
+												<a href="https://click.emailinfo2.bestbuy.com/?qs=62b94611a9f4d50654d391ad1a55d0656609141712378150907c2469e7365703de2f98be1c65cf4546fe27e7d15edcea24ed9956f3bf4cce8d8c3eb0b966462f" target="_blank" style="text-decoration: none; color: #ffffff; text-align:center;">Mobile App</a>
+											</td>
+										</tr>
+									</table>
+								</div>
+								<!--[if (gte mso 9)|(IE)]>
+								</td><td width="160" valign="top" style="padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;">
+								<![endif]-->
+								<div class="column-footer" style="text-align:center;display:inline-block;width:50%;max-width:160px;min-width:160px;vertical-align:top; border-bottom: solid 1px #E0e6ef; mso-hide: all; text-align:center;">
+									<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;text-align:center;">
+										<tr>
+											<td align="center" style="font-family: Arial, sans-serif;color:#ffffff;width:160px;font-size:13px; padding-top: 12px; padding-bottom: 13px; font-weight:bold;">
+												<a href="https://click.emailinfo2.bestbuy.com/?qs=bbeb08a057261a2233ea1885f90c3fdfa7a54ae6ed5d0d1e3fc68101c8c2bf76d083683f856fa85f4513f77ba4504822f46c61b2ea15d564020a5dd06be2546a" target="_blank" style="text-decoration: none; color: #ffffff; text-align:center;">Credit Cards</a>
+											</td>
+										</tr>
+									</table>
+								</div>
+								<!--[if (gte mso 9)|(IE)]>
+								</td><td width="160" valign="top" style="padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;">
+								<![endif]-->
+								<div class="column-footer" style="text-align:center;display:inline-block;width:50%;max-width:160px;min-width:160px;vertical-align:top; border-bottom: solid 1px #E0e6ef; mso-hide: all; text-align:center;">
+									<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;text-align:center;">
+										<tr>
+											<td align="center" style="font-family: Arial, sans-serif;color:#ffffff;width:160px;font-size:13px; padding-top: 12px; padding-bottom: 13px; font-weight:bold; text-align:center;">
+												<a href="https://click.emailinfo2.bestbuy.com/?qs=5f55ca947244bda7cc510f585a77d6141b85ee29af934e1570f4db1fce9801397e462b8206e964b58e5893ed579b35913ac78cab73e5edab5aaedf7b23ea246c" target="_blank" style="text-decoration: none; color: #ffffff;">Support Center</a>
+											</td>
+										</tr>
+									</table>
+								</div>
+								<!--[if (gte mso 9)|(IE)]>
+								</td>
+								</tr>
+								</table>
+								<![endif]-->
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+		<!-- Social media -->
+
+			<tr>
+				<td bgcolor="#0046be">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0; mso-hide: all;" class="footersocial">
+					<!--[if (gte mso 9)|(IE)]>
+					<table width="430" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;" align="center">
+					<![endif]-->
+						<tr>
+							<td bgcolor="#0046be" style="text-align:center;font-size:0;">
+								<div class="column-footer" style="text-align:center;display:inline-block;width:100%;max-width:235px;min-width:235px;vertical-align:top; overflow:hidden;">
+									<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;text-align:left;">
+										<tr>
+											<td class="" align="center" style="font-family: Arial, sans-serif;color:#ffffff;width:640px;font-size:13px;font-weight:bold;">
+												<div style="font-size: 12px; line-height: 12px; mso-line-height-rule: exactly;">&nbsp;</div>
+												Follow us and share your story
+												<div style="font-size: 12px; line-height: 12px;" class="m-hide">&nbsp;</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+							<!--[if (gte mso 9)|(IE)]>
+							</td><td valign="top" style="text-align:center;font-size:0;">
+							<![endif]-->
+								<div class="column-footer" style="text-align:center;display:inline-block;width:50%;max-width:180px;min-width:180px;vertical-align:top; overflow:hidden;">
+									<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing:0;text-align:left;">
+										<tr>
+											<td align="center" style="font-family: Arial, sans-serif;color:#ffffff;width:320px; font-size: 14px;">
+												<div style="font-size: 8px; line-height: 8px;">&nbsp;</div>
+												<a href="https://click.emailinfo2.bestbuy.com/u/?qs=6b448c922e03862b75963b33f58fade6a63ba77f0771c36f87bc7d3823b4e13eb364191e1f7169af3c88684556f392ef5188ce776d2530bc0925226b0c2700cc" target="_blank" style="text-decoration: none; color: #ffffff;"><img src="http://image.emailinfo2.bestbuy.com/lib/fef31d77766c05/m/6/icon-social-fb.gif" width="24" height="24" align="absmiddle" alt="Facebook" style="width: 24px; height: 24px;"></a>&nbsp;
+												<a href="https://click.emailinfo2.bestbuy.com/u/?qs=34501cd2482a4b723a183813680f41d0707b0c9eb4599580673f4cca3ce8129f625546e5262d406013e180141cd744628c4e2b19d6e74235df055644f859d5d7" target="_blank" style="text-decoration: none; color: #ffffff;"><img src="http://image.emailinfo2.bestbuy.com/lib/fef31d77766c05/m/6/icon-social-tw.gif" width="24" height="24" align="absmiddle" alt="Twitter" style="width: 24px; height: 24px;"></a>&nbsp;
+												<a href="https://click.emailinfo2.bestbuy.com/u/?qs=9715989024d9669cde65f727b8853a3861badbeb826cf93fbf231f2845389340674fd172a200063f73ff695914984c8adac0ed4e99655afb345a8868204f76ac" target="_blank" style="text-decoration: none; color: #ffffff;"><img src="http://image.emailinfo2.bestbuy.com/lib/fef31d77766c05/m/6/icon-social-ig.gif" width="24" height="24" align="absmiddle" alt="Instagram" style="width: 24px; height: 24px;"></a>&nbsp;
+												<a href="https://click.emailinfo2.bestbuy.com/u/?qs=791e6c80adad753c8e2b4b7a21c5ae67e362df06ba760b9d6b791f10353eb3b631943a4a8308004ee003af0eb5623e7e3705bd4304b2891ec95aa5f74fcd5365" target="_blank" style="text-decoration: none; color: #ffffff;"><img src="http://image.emailinfo2.bestbuy.com/lib/fef31d77766c05/m/6/icon-social-pi.gif" width="24" height="24" align="absmiddle" alt="Pinterest" style="width: 24px; height: 24px;"></a>&nbsp;
+												<a href="https://click.emailinfo2.bestbuy.com/u/?qs=8f45468032be5568aac7989849a6f28210c0b556990fbe602595cd39c5d45f213b69dc0410c60fdc802442bde228c4f6febd0379edce37ea991fc899c80a07b6" target="_blank" style="text-decoration: none; color: #ffffff;"><img src="http://image.emailinfo2.bestbuy.com/lib/fef31d77766c05/m/6/icon-social-in.gif" width="24" height="24" align="absmiddle" alt="LinkedIn" style="width: 24px; height: 24px;"></a>
+												<div style="font-size: 8px; line-height: 8px;" class="m-12h">&nbsp;</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+		<!-- Map -->
+
+      <!-- Begin Disclaimers -->
+      
+      
+<tr>
+	<td class="block" align="left" valign="top" bgcolor="#ffffff" style="padding-bottom:20px;">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		
+
+			
+			<!-- Marketing Disclaimer -->
+			
+				<tr>
+					<td align="left" valign="top" bgcolor="#ffffff" style="font-family: Arial, Helvetica, sans-serif; font-size: 10px; color: #1d252c; padding: 10px 10px 0px 10px;">
+							Your privacy is important to Best Buy. For more information on how Best Buy protects your privacy, steps you can take to protect your personal information and alerts on privacy risks facing consumers, please visit the <a href="https://click.emailinfo2.bestbuy.com/?qs=42255e502f0298507977ec571141d284e631e07b95c38701f70805b659baef22c0643df0e80629097e92e473a94cb95c7d0b8c10156a6917df52a8c90c2b3e07" target="_blank" style="color:#1d252c; text-decoration:underline;">Best Buy Privacy Hub</a>.
+					</td>
+				</tr>
+			
+
+			<!-- New Vendors Disclaimers -->
+			
+			<!-- End of New Vendors Disclaimers -->
+
+			<!-- TSH_PROO Microsoft non-vendor automatic renewal Disclaimers -->
+			
+			<!-- End of TSH_PROO non-vendor automatic renewal Disclaimers -->
+			
+			
+			
+			
+			
+			
+								
+			<!-- Begin CMS Disclaimers -->
+			
+			<!-- End CMS Disclaimers -->
+			<tr>
+				<td class="disclaimer-text" align="left" valign="top" bgcolor="#ffffff" style="font-family: Arial, Helvetica, sans-serif; font-size: 10px; color: #1d252c; padding: 10px 10px 0px 10px;">
+					BEST BUY, the BEST BUY logo, the tag design, GEEK SQUAD and the GEEK SQUAD logo are trademarks of Best Buy and its affiliated companies.
+				</td>
+			</tr>			
+			<tr>
+				<td class="disclaimer-text" align="left" valign="top" bgcolor="#ffffff" style="font-family: Arial, Helvetica, sans-serif; font-size: 10px; color: #1d252c; padding: 10px 10px 0px 10px;">
+					Best Buy 7601 Penn Avenue South, Richfield, MN 55423-3645
+				</td>
+			</tr>
+			<tr>
+				<td class="disclaimer-text" align="left" valign="top" bgcolor="#ffffff" style="font-family: Arial, Helvetica, sans-serif; font-size: 10px; color: #1d252c; padding: 10px 10px 0px 10px;">
+					©2023 Best Buy. All rights reserved.
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+      <!-- End Disclaimers -->
+     </table>
+     <!--[if (gte mso 9)|(IE)]>      </td>      </tr>      </table>      <![endif]-->
+    </td>
+   </tr>
+  </table>
+ </div>
+</center>
+</body>
+</html>
+
+--JmBZPClTfzNb=_?:--

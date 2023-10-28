@@ -1,0 +1,986 @@
+Received: from SJ2PR20MB6330.namprd20.prod.outlook.com (2603:10b6:a03:502::11)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Thu, 21 Sep 2023
+ 14:46:00 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=gCb8z+yE9Jqbo0I0jG0u8YlJ673YHhCYNivkHP983jcIdgFwJ2REh/4kw3kZPFdiBjVu7p1hwLmUFjXcexN33NztDz9aid6C8n213RjC5B+pioOwX7rmOQvWhsY0lGStnH3DLDuFHigx8HeSKc1YuAB0S952FYyuoxQdDseDbJ42ZGgr9igGvLXvlnSRNwucr8a4CMXLBrpeLkQmYL7egt3Pbt/wuLi94RD6YZWNlmsBHQ/04X+PRu84Pd7y3JnOB3pEGa7gWK6YdEIka+bbQ/m/ae3lG953g8/hteU7zFbdf4Sg9shZJGSOzCpJSsBF5pNT2bBac1DqJQBid9G6Vw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vHDeB6eZqvTf7w5FHlLM8CcTJE4wBguhKWy3oyS7QIs=;
+ b=H6bv7PHVY85U6Dz9cqiAu2jcJPKz+a2oUcWKYszLrEcF6Kthq3R/acM0L5VGgg8TGCEUrpyxfn0MENHU/B1VDAnBEgI8/BmcQdKXMRQNrjjjJYe3i5JOY097wTf3JGn8NhPXKZqyq71nt576PLlIp+EpJ21CnkOxxk+AbZw1yVkRKjC9KGQvztY8+pvQO1cSZEjwjfH8M1jZNNxv/f7zYDLrB7vcCqkpO1fNvtHqcU8ZlTHEYAOC1uSgdqVsA3w32/yEN1p7ySLwFE3OWN3Lr4ByKlQv0+KlMFVZ3SAGwqcnne10JFc5b2v+d6eMbO9K/IbFyEo84eXFSo0v3PZVrQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.221.172) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.email.vimeo.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=email.vimeo.com; dkim=pass (signature was verified)
+ header.d=email.vimeo.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounce-268294_html-619914242-4903631-520002684-12480@bounce.email.vimeo.com]
+ dkim=[1,1,header.i=@email.vimeo.com] dmarc=[1,1,header.from=vimeo.com])
+Received: from BL6PEPF00013E0F.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:22e:400:0:1001:0:13) by SJ2PR20MB6330.namprd20.prod.outlook.com
+ (2603:10b6:a03:502::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26; Thu, 21 Sep
+ 2023 14:45:57 +0000
+Received: from BL6PEPF0001AB73.namprd02.prod.outlook.com
+ (2a01:111:f403:f903::) by BL6PEPF00013E0F.outlook.office365.com
+ (2603:1036:903:4::4) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.19 via Frontend
+ Transport; Thu, 21 Sep 2023 14:45:57 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.221.172)
+ smtp.mailfrom=bounce.email.vimeo.com; dkim=pass (signature was verified)
+ header.d=email.vimeo.com;dmarc=pass action=none
+ header.from=email.vimeo.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of bounce.email.vimeo.com
+ does not designate 209.85.221.172 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.221.172;
+ helo=mail-vk1-f172.google.com;
+Received: from mail-vk1-f172.google.com (209.85.221.172) by
+ BL6PEPF0001AB73.mail.protection.outlook.com (10.167.242.166) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.19 via Frontend Transport; Thu, 21 Sep 2023 14:45:57 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:A505DDECBE2F03692EC1417A9E71BB1167AA752EA8732506C604A06C1F8E9FF8;UpperCasedChecksum:FA62B2C70616808350ABB734E33B3A8C23A04B5EA794D15F6EA8ABB94BC33DAF;SizeAsReceived:6054;Count:30
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-496d3e18f19so420260e0c.2
+        for <tobinsilvestre@outlook.com>; Thu, 21 Sep 2023 07:45:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695307557; x=1695912357;
+        h=x-forwarded-for:message-id:list-id:reply-to:mime-version
+         :list-unsubscribe-post:list-unsubscribe:date:subject:to:from
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vHDeB6eZqvTf7w5FHlLM8CcTJE4wBguhKWy3oyS7QIs=;
+        b=vaZ0wfXBTgBefqdv7/c2YsXXA0/Mho4tAnJdWvNkMXsga/jzH/gQkhafWiS0a4ymcU
+         CYBvm9i3FcXI6pNS2/tujpS/pOIA/kXS75+onmufN9M47udoB/NFVDak5+HHcLJ4u7OU
+         tlCXBvPHlp+LBp1vD1TCXASirq6c+3OvVxVQvEbVYoCjC8U+nacRAvmRgM95zh5GiYgN
+         /w8+1XmJAwEN3Pr6Ca8q9e6oOPJx9/3if4qj7gqo63ekIX7BHHfK7dkJtDyKRc8dlLjH
+         9xRPCA0kStemIdht2jQeX+jCimvXpKCrFQlBJn9rBV/1CpO4Vz4BBTB/wW7yqa+Ontm7
+         d9LA==
+X-Gm-Message-State: AOJu0Yz0xrqUqrboVIJBeBJ3eZomuBA7ffJ/ucdWdjvbaBTlweovd3Ui
+	JOEfszWojTunyN9mOcpFdHzo9xr7brq4NIfoIA==
+X-Google-Smtp-Source: AGHT+IF3RGZ4whK3cOs56h1AtgdGl/gUO599kxxhtmoNU4T3eQVMAMi/SPx4YkN3LezQLol+CRgdzpJYzoC3d2SyvFAp8rNau0s=
+X-Received: by 2002:a05:6102:210:b0:452:8953:729e with SMTP id z16-20020a056102021000b004528953729emr5700020vsp.13.1695307557097;
+        Thu, 21 Sep 2023 07:45:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695307557; cv=none;
+        d=google.com; s=arc-20160816;
+        b=gkOboOYy6g8g7IVifw5K8MJATl4qOwzGCyhH9Msbz0emyG7T04wIUvYGthQpVXNAyS
+         KvR8V+HjnaI83bf3AChN3ljaANAdRbxo/8SAy+oK/rubzeB0G0zq9ZHI8e/ydlHo8dXv
+         tWBF8t4VjwMbY8e3CRjAC5sdHo8QdNwohGT6u3hX2bz40B9iLDb3nceL+snbRSlzz2Zi
+         46HtEPzBKg8D8vTwmH9b9IhwB0UkIChiRX7vh07k3CPvF/mx7HRUdGPwAsplo6rrEPAo
+         Tmhg8DWyYKMsxow+EbamNrio7dWQIq/PD803g5TohL0VN8MCfxpZi8WPzEQ+JNgGbuTG
+         m6JQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=message-id:list-id:reply-to:mime-version:list-unsubscribe-post
+         :list-unsubscribe:date:subject:to:from:dkim-signature;
+        bh=vHDeB6eZqvTf7w5FHlLM8CcTJE4wBguhKWy3oyS7QIs=;
+        fh=igDn7WP5fqLcjHQyucm6tC+IvL4I2ooLxlesvFG75nY=;
+        b=sdYO1POp3ebkcaU6f3y9+Mx+oBI2fxR8LdVMT8ZaAPjNyhbHhXJMfi13+qCa7V4PMx
+         tXRlr/V5r/0tJt4XtQPxcNysDChZf5DaAJl5mFQDnTsmlueXUA9ECjGDpSZx2aFryECo
+         bbKL3eNoMLH55xE/z5C9cBT6Y6TDY983A1d5KHzKq/ZcJ1Bc2LlOFxJ9LY8wE0rhUB9r
+         uK9W6CasESB6Qt2CVOQX4rkaFU+qbtEHC1cBKbMHu+V5QN+ZYs5tpyF++olri89zh3uK
+         FzNME8PNS926DoIqhC3B0xSGDEzV67unVnZRD/UqUzjWa/Wub0/sZxYynzGZy/OmCMRD
+         qhhg==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@email.vimeo.com header.s=200608 header.b=O4Z+GFVZ;
+       spf=pass (google.com: domain of bounce-268294_html-619914242-4903631-520002684-12480@bounce.email.vimeo.com designates 199.122.125.171 as permitted sender) smtp.mailfrom=bounce-268294_HTML-619914242-4903631-520002684-12480@bounce.email.vimeo.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=vimeo.com
+Return-Path:
+ bounce-268294_HTML-619914242-4903631-520002684-12480@bounce.email.vimeo.com
+Received: from mta.email.vimeo.com (mta.email.vimeo.com. [199.122.125.171])
+        by gmr-mx.google.com with ESMTPS id e17-20020a0561020dd100b00450f3f7cd09si300329vst.0.2023.09.21.07.45.56
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Sep 2023 07:45:57 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-268294_html-619914242-4903631-520002684-12480@bounce.email.vimeo.com designates 199.122.125.171 as permitted sender) client-ip=199.122.125.171;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@email.vimeo.com header.s=200608 header.b=O4Z+GFVZ;       spf=pass
+ (google.com: domain of
+ bounce-268294_html-619914242-4903631-520002684-12480@bounce.email.vimeo.com
+ designates 199.122.125.171 as permitted sender)
+ smtp.mailfrom=bounce-268294_HTML-619914242-4903631-520002684-12480@bounce.email.vimeo.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=vimeo.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=200608; d=email.vimeo.com;
+ h=From:To:Subject:Date:List-Unsubscribe:List-Unsubscribe-Post:MIME-Version:
+ Reply-To:List-ID:X-CSA-Complaints:Message-ID:Content-Type;
+ i=vimeo@email.vimeo.com;
+ bh=vHDeB6eZqvTf7w5FHlLM8CcTJE4wBguhKWy3oyS7QIs=;
+ b=O4Z+GFVZNdFpEnU3AmIYb1aD5LjCPnxYmnVDDEPfozdCAmNUxjYQ09i0WaUpIHjU/db3nv9lgQey
+   YQGYx2GsCduOGCGuKZDs+nBHaPtVa+nd1ArZ4XvHg8CJrmhEKlP/Pmx6rvJJeE0//oDRjgqFvuF7
+   6Bo8mVPuydlCe82ebKo=
+Received: by mta.email.vimeo.com id h1hbia2fmd40 for <tobinsilvestre060@sooners.us>; Thu, 21 Sep 2023 14:45:56 +0000 (envelope-from <bounce-268294_HTML-619914242-4903631-520002684-12480@bounce.email.vimeo.com>)
+From: "Vimeo" <vimeo@email.vimeo.com>
+To: <tobinsilvestre060@sooners.us>
+Subject: Final chance to save 20%.
+Date: Thu, 21 Sep 2023 08:45:56 -0600
+List-Unsubscribe: <https://click.email.vimeo.com/subscription_center.aspx?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWQiOiI1MjAwMDI2ODQiLCJzIjoiNjE5OTE0MjQyIiwibGlkIjoiMjY4Mjk0IiwiaiI6IjQ5MDM2MzEiLCJqYiI6IjEyNDgwIiwiZCI6IjYwMjI5In0.mTuiFX3_4AXjwLkjZPssTiXwaU8AyNx5Y67fTeMEOkk>, <mailto:leave-fcac16767d660d791a4c342838-fe2912717c6d0579771072-fe9510797567027e74-fe3411727564047f731c74-ff001572716c04@leave.email.vimeo.com>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+x-CSA-Compliance-Source: SFMC
+Reply-To: "Vimeo" <reply-fe9510797567027e74-268294_HTML-619914242-520002684-12480@email.vimeo.com>
+List-ID: <520002647.xt.local>
+X-CSA-Complaints: csa-complaints@eco.de
+X-SFMC-Stack: 6
+x-job: 520002684_4903631
+Message-ID: <d896d103-d221-4edc-82d1-a6254d199f05@ind1s06mta1330.xt.local>
+Content-Type: multipart/alternative;
+	boundary="9LgZ74VibqWc=_?:"
+X-Forwarded-For: tobinsilvestre060@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 30
+X-MS-Exchange-Organization-ExpirationStartTime: 21 Sep 2023 14:45:57.3108
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ d73d09d2-09dc-44b4-3097-08dbbab17718
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ BL6PEPF0001AB73:EE_|SJ2PR20MB6330:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ BL6PEPF0001AB73.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/21/2023 2:27:22 PM
+X-MS-Office365-Filtering-Correlation-Id: d73d09d2-09dc-44b4-3097-08dbbab17718
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.221.172
+X-SID-PRA: VIMEO@EMAIL.VIMEO.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:2;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Sep 2023 14:45:57.2796
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d73d09d2-09dc-44b4-3097-08dbbab17718
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL6PEPF0001AB73.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR20MB6330
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.9459401
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90012020)(91020020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPlSFW2Fo45bmJP55dAW7XOkBNdUlKMutc0XLfwRzd0QClcJz4DeYEiPFtbodmjSCUzEWMw3AtcFJK+5a2ffuAMpIn2PizxJPticxAD7MNNneguKYelbeqzQH3MOX9IYaq/Nv9lZoz6K9AOttkDwH3ynbyqDFW6xWAB9gaoWurxVSr9J0olk9VyK1iO2yQCW1J0CpPEbo86JTw==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TytmWEk2WmZ3Vm1xYUpwWENGQjB6ZUxtQUdKUjNPa0szWHdXMWJlRExvenVT?=
+ =?utf-8?B?bjZwUjErYjhBcjBWa293S29qYjVuVTMrNWFEaVJsVGpkSFZ1cGRpS3R5Z1Ns?=
+ =?utf-8?B?RnlzWTY2UmEvQ2ZlOVk4NStXQ1BWRXp4cHhIMVBFQjhZSHArVnJlT1BsVmlC?=
+ =?utf-8?B?dWZmanpueHlaSDVRWFJUTUlHUkQ0YjZaZmdkUjliV0lMM0FXa2d4eisrMDFm?=
+ =?utf-8?B?cWwxVmZhTHAyR1lRLzdIb2pLRS9rb0R4R01PQk9HdWNwME9Ia21PeVJBRWh0?=
+ =?utf-8?B?eDNwWk1xQkh6Y29UY0Z4cFZnWkFabzBWbUFyVm9Yd0xkeUgxMUZ3WjRRK1Q3?=
+ =?utf-8?B?ZEVuRThXM2l6WmpIWjRnd0tJdVo0dTFLZW9Ec01uK1pnK0dzbTMva2xLTnhG?=
+ =?utf-8?B?eHh0a0JQb1JRUldpaDJvMHJkc3U3U3djSEUyOE1nejhIYjFWWFUrbVFzaE9t?=
+ =?utf-8?B?OUFDMXRHUGJmU0R5dWE0L2Fyc080Q0loRml0Vjluc01zTkFSZ3prTlF5YVhr?=
+ =?utf-8?B?Q25ZYmNIQ0FPZmhWYitqSVdld1R3SmZuRDhORTdGUlY4b09PYUFqbWpnRVRz?=
+ =?utf-8?B?Qm13TDc5b2o4R3BJZTZOMC92aHhnSnFMMVdJUHV0c1BCOFZja2VjSFh6TzdK?=
+ =?utf-8?B?NHhmS1NUaFNCL00valBRTkdNRzIyTks0VTcyMm9hbmlDcldZc2xJQW9XYStZ?=
+ =?utf-8?B?ZG1vTGZwdmRILzdqR3JvVll1dXMzVy8zdnZCTEYxdjhvVDJVNjg4RkRVNzd5?=
+ =?utf-8?B?dDBmaEQ0YmxrNG1VY2Nqc0pyMEhwYXJVREF5aGdQUTFjNkFDTVZ1Z2l5R0Vp?=
+ =?utf-8?B?cFNrUXNLQlcyRjczMFluZUdUanV4cmp4dzk3STJ5Z2lJR0ZuenN3cklYNHZL?=
+ =?utf-8?B?ZXRoQUZuK3dQVllabC9qVmh6TkVDYkkxbEx4TTZpTEJYdnBBajRsMXBTTjdn?=
+ =?utf-8?B?bkp2VmoyS2Vadm1QNW8wYjBVMlRpN0dzSWxQWkhIVCtTUE9KeVhpenBMcXFO?=
+ =?utf-8?B?dXloV0I5NEZwbkVMd0RCTDJ0U2RGRzFKWHBIZ0ZoSERtV25sVUVzdCtYaVN3?=
+ =?utf-8?B?YmQrRkRXa1ZiRXBSMm9oT2hPSmFoMTdhczhGL2VGVXVRZEJzT1BhRVlxWmxL?=
+ =?utf-8?B?VG1xZ3pFZGFnSkxrVXlnL0RvU0loRmJIS0x5QmkxRXcrSUhXTlphRzB5N0p3?=
+ =?utf-8?B?T3oyUXZwZTJsWmh2OURJYWErdHhOVFJJdWIyQW5RSHRMWVE0c2xIalFINVZ5?=
+ =?utf-8?B?bVEwR2FMUEZVOWUwNHI5MXdzdUVIOWtvNWhLWmg3QXpPdkp4NUNDUnYxa0Ux?=
+ =?utf-8?B?MERnTG1EcTNrU2szV0hJOEx6L0lUdnN5YnRiQVZnRDJHenhDR1Z1bmlzMERj?=
+ =?utf-8?B?bE43OXA1Sy9lN3hqM2lENWlnWU9BK1JiMStVdHgvaXFiV3F0UXVDbld0MEly?=
+ =?utf-8?B?cWQwbzNVT0t4aTk0T3FKN210ZWsxNTRYSTJJcnFsMkFQYzFzQm1kdERmdmxN?=
+ =?utf-8?B?SGFjQ1hEaGNQUkJHS0RhdGNaNks0V1R5U1k3blhmUjlkc01jZkJnVG1nTG5h?=
+ =?utf-8?B?NWNzNUx3TFBjZS9Qayt0aERJSGtOL0F6WkVqczIwdVJUdzg0ZnpDdmY0MHBP?=
+ =?utf-8?B?Y3ViNFVhM2w5U28vR2o1Vy9sMjYvVTNHVHkraVBXd2dTcXdnVllrRzQySmFa?=
+ =?utf-8?B?cW5vRVlTdnBpallxRFUyNU8vTzJqK3lSbmcxYktzdG1jM1VzQU5DQ0ZodTBW?=
+ =?utf-8?B?N0lsNFpMbGdHWmZYd3Q3cmxpbEExdDd5ZGN2YnErdWxKcDdyYkNmRXZpZGRh?=
+ =?utf-8?B?cE11bEM2SmtIMmU4OUtpRDRVNURYNmRtcW41bEhRS3cva0NuMThoOEtVd0ZB?=
+ =?utf-8?B?cjdiMHpFUTVqdVQ5M3JHZE1CU2srVXN5anRaNkNJYWJOZTA2ZmhVbXphSVZI?=
+ =?utf-8?B?aDVkOU0xYW1YQ2graG5TejIrb1Nnd1pLWFFRajdJS1lXSjVrZFU2blc2aWRl?=
+ =?utf-8?B?MjJwQzNGc3VkQ3lBYzdHYlhhdXVxekxRQmZreHdkMjJZbnFvQU9tdGVmU2Y1?=
+ =?utf-8?B?MmZpdXZjY0I0U2N1TUZCZ3V4OWZjRXhIU1FMbUtWRmp0dkc0QmpwaGpjeVlr?=
+ =?utf-8?B?dWx6YjlTUlN2L3JHL1Q3YitVaVpvT3dqSzBtVm9zZEplcUpVOWNlUDNqaUJa?=
+ =?utf-8?Q?y/HoI1Z1nPZVOtK88vLByko=3D?=
+MIME-Version: 1.0
+
+--9LgZ74VibqWc=_?:
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+
+  &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj;
+ &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj;
+ 
+
+https://click.email.vimeo.com/?qs=df737c0290d08bba01078eafe05b0c4245e6373291457d7d2ef97dd3ffbc0c3233c8b8962744f270e295ae6ae8e530354f8d0a3db4292673307de69dd79a9ffd 
+
+https://click.email.vimeo.com/?qs=84f843bd54f30a80c8779ecde7664a29b8f9e0f974d6cd09408677b86ce7b38ea49716c4a537e9d3eb5f1e63fbae688b64c6155651f90911e0ec1088656649a2 
+
+https://click.email.vimeo.com/?qs=84f843bd54f30a80c8779ecde7664a29b8f9e0f974d6cd09408677b86ce7b38ea49716c4a537e9d3eb5f1e63fbae688b64c6155651f90911e0ec1088656649a2 
+
+
+ Last chance to 
+save 20%
+
+
+ Create scripts in seconds with AI script generation. Capture content right from your computer with our built-in teleprompter. And do it all in one take, thanks to video editing&dagger; that’s as simple as editing text.
+
+
+
+Upgrade to a Standard plan today to get all these tools, and save 20% while you’re at it. Now, through September 22nd.*
+
+https://click.email.vimeo.com/?qs=84f843bd54f30a80c8779ecde7664a29b8f9e0f974d6cd09408677b86ce7b38ea49716c4a537e9d3eb5f1e63fbae688b64c6155651f90911e0ec1088656649a2 
+
+https://click.email.vimeo.com/?qs=84f843bd54f30a80c8779ecde7664a29b8f9e0f974d6cd09408677b86ce7b38ea49716c4a537e9d3eb5f1e63fbae688b64c6155651f90911e0ec1088656649a2 
+
+ See plans
+ 
+
+https://click.email.vimeo.com/?qs=84f843bd54f30a80c8779ecde7664a29b8f9e0f974d6cd09408677b86ce7b38ea49716c4a537e9d3eb5f1e63fbae688b64c6155651f90911e0ec1088656649a2 
+
+ *To redeem this offer, you must purchase a new annual Vimeo
+ Standard subscription before September 22, 2023 11:59 PM ET by clicking the
+ link on the offer page. Promotional pricing will be reflected at checkout. Vimeo may
+ end or modify this offer at any time without notice to you. This offer is made to
+ select Vimeo members only and is non-transferable and not applicable to free trials,
+ renewals, additional seats, prior purchases, or Enterprise plans. You may not apply
+ this offer to more than one purchase or combine it with other offers or discounts.
+ Void where restricted or prohibited by law. Promotional pricing applies to the first
+ year only. Your Vimeo subscription will automatically renew at the full price (plus
+ any taxes) until you cancel. You may cancel in your account settings at any time to
+ stop future charges.
+ 
+
+&dagger;Text-based video
+ editing is only available for videos in English.
+ 
+
+https://view.email.vimeo.com/?qs=8334fa5ffb97d1db9646618eea3e727b3a7fcc370b45d5b5d75a24f0660415f2907a4780c1618b57d35d12ae76a6f9b4bdddaaf9a1436d3f7ace7767006c559f7bfd385c73c78c8ce792f58a9b28de03c22762076421f8b6 
+ View this email in your web browser. 
+
+
+ This is a promotional email from Vimeo.com, Inc., 330
+ West 34th Street,
+ 10th Floor, New York, New York 10001 
+
+https://click.email.vimeo.com/?qs=84f843bd54f30a80779d44294825993879d5111c27e3c3f02faac7bd0416ed22d9d8ada762482c95857e7f1b6ac33b611563a84b53e0fd4c2981148f978c97be 
+Terms   |  
+ 
+https://click.email.vimeo.com/?qs=84f843bd54f30a80e4d2c35c4639546daed554e780288d7a3b75747736cdaf2bf509670807378e1f6d39cfd61cfc12555700677acf8178fd1e97212e4f56f9c6 
+Privacy   |  
+ 
+https://click.email.vimeo.com/?qs=84f843bd54f30a803d5c559b380302e1ea7c4afce9701034ee3e34f6d8722277855ac4fc88d76cb735942612f878946c4f778677a690901ecff23bda65179d2d 
+
+ Unsubscribe  
+
+https://click.email.vimeo.com/?qs=df737c0290d08bbac05232d97c10b1cb20dfdab23b37c27d725faeb4ff7cd159e3061a6bc1fea133cd0d17c455737a623261b92fc215eadecbe021c7c3669225 
+
+https://click.email.vimeo.com/?qs=df737c0290d08bba8bbba7abe539e67648bc2229e9c5d0b7c02f3290ae62927d0496779b560c70832e1dd942e9a0117fe625882841d6e18edaf240ec10fb7660 
+
+https://click.email.vimeo.com/?qs=df737c0290d08bba8b36362a0be92b4b1d82e543fb34e1f7ae26ce359731609b931a9c68f151b9542f384279f6742162fac0a8d87cdd2aaa10786ec718d8bd0a 
+
+https://click.email.vimeo.com/?qs=df737c0290d08bbad024a2d721e70c649725c5639a394b7d47bfb8b7e155627963b4a9acd2505a7c2817872b21db5680a8a79ec4efdffbe0b3b238bca9c5c6bb 
+
+ (c) 2023
+ Vimeo.com, Inc. All rights reserved. 
+
+
+
+--9LgZ74VibqWc=_?:
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+<!--  --><!DOCTYPE html><html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x-apple-disable-message-reformatting">
+    <title></title>
+    <!--[if mso]> <style>*{font-family:sans-serif !important;} </style> <![endif]-->
+    <style>
+        html,
+        body {
+            margin: 0 auto !important;
+            padding: 0 !important;
+            height: 100% !important;
+            width: 100% !important;
+        }
+
+        * {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        div[style*="margin:16px 0"] {
+            margin: 0 !important;
+        }
+
+        table,
+        td {
+            mso-table-lspace: 0pt !important;
+            mso-table-rspace: 0pt !important;
+        }
+
+        table {
+            border-spacing: 0 !important;
+            border-collapse: collapse !important;
+            table-layout: fixed !important;
+            margin: 0 auto !important;
+        }
+
+        table table table {
+            table-layout: auto;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            -ms-interpolation-mode: bicubic;
+        }
+
+        *[x-apple-data-detectors],
+            {
+            border-bottom: 0 !important;
+            cursor: default !important;
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
+
+        @media only screen and (min-device-width:320px) and (max-device-width:374px) {
+            u~div .email-container {
+                min-width: 320px !important;
+            }
+        }
+
+        @media only screen and (min-device-width:375px) and (max-device-width:413px) {
+            u~div .email-container {
+                min-width: 375px !important;
+            }
+        }
+
+        @media only screen and (min-device-width:414px) {
+            u~div .email-container {
+                min-width: 414px !important;
+            }
+        }
+    </style>
+    <!--[if mso]> <style type="text/css">  ul,ol{margin:0 !important;}li{margin-left:30px !important;} </style> <![endif]-->
+   <style>
+        .hide {
+            display: none;
+        }
+
+        .dskhide {
+            display: none;
+        }
+
+        @media screen and (max-width:600px) {
+            .dskhide {
+                display: block !important;
+            }
+
+            .hide {
+                display: block !important;
+            }
+
+            .mblhide1 {
+                text-align: left !important;
+            }
+
+            .mblhide {
+                display: none !important;
+            }
+
+            .mblshow {
+                display: block !important;
+            }
+
+            .mblshow2 {
+                display: inline-block !important;
+            }
+            
+              .mblshow3 {
+                display: inline !important;
+            }
+
+            .mblimage {
+                width: 100% !important;
+                display: block !important;
+                height: auto !important;
+            }
+
+            .email-container {
+                width: 100% !important;
+                margin: auto !important;
+            }
+
+            .email-container1 {
+                width: 100% !important;
+                margin: auto !important;
+            }
+
+      .headline {
+                padding: 0px 20px 0px 20px !important;
+                text-align: center !important;
+                font-size: 55px !important;
+                line-height: 60px !important;
+            }
+            
+            
+            .headline2 {
+                padding: 0px 50px 0px 50px !important;
+                text-align: center !important;
+                font-size: 55px !important;
+                line-height: 60px !important;
+            }
+
+            .mblbuttonpad {
+                padding: 12px 40px 12px 40px !important;
+                text-align: left !important;
+                float: none !important;
+            }
+
+            .fluid {
+                max-width: 100% !important;
+                height: auto !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            .fluid2 {
+                max-width: 100% !important;
+                height: auto !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+           .subtext {
+                padding-right: 30px !important;
+                padding-left: 30px !important;
+                font-size: 18px !important;
+                line-height: 23px !important;
+            }
+
+            
+          .subtext1 {
+                padding-right: 40px !important;
+                padding-left: 40px !important;
+               
+            }
+            
+            .subtext2 {
+                padding-right: 40px !important;
+                padding-left: 40px !important;
+                font-size: 18px !important;
+            }
+
+            .stack-column-center {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                direction: ltr !important;
+            }
+
+         .stack-column-center2 {
+            display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                direction: ltr !important;
+                text-align: left !important;
+            }
+    
+
+
+            .subfeature {
+                direction: rtl !important;
+            }
+
+            .email-container p {
+                font-size: 17px !important;
+            }
+
+            .mblcontainfoot {
+                padding: 0px 40px 0px 40px !important;
+            }
+
+            .mblappscontain {
+                width: 200px !important;
+            }
+
+            .mblapps {
+                width: 86px !important;
+                padding: 15px 5px 15px 8px !important;
+            }
+
+            .story1 {
+                padding: 20px 50px 0px 50px !important;
+            }
+
+            .story3 {
+                padding: 20px 50px 0px 50px !important;
+            }
+
+            .subtext5 {
+                padding-right: 25px !important;
+                padding-left: 25px !important;
+            }
+
+            .subtext4 {
+                padding-left: 30px !important;
+                padding-right: 30px !important;
+                font-weight: normal !important;
+            }
+
+            .subtext3 {
+                padding: 30px 50px 0px 50px !important;
+                font-weight: normal !important;
+                font-size: 35px !important;
+                line-height: 40px !important;
+            }
+
+            
+            
+            .padtop {
+                padding-top: 40px !important;
+            }
+
+            .w100 {
+                width: 100% !important;
+                min-width: initial !important;
+            }
+
+            .pad-sides-20 {
+                padding-right: 20px !important;
+                padding-left: 20px !important;
+            }
+
+            .mblbuttonpad1 {
+                width: 100% !important;
+            }
+
+
+            .mblbutton {
+                display: block !important;
+                width: 90% !important;
+                max-width: 90% !important;
+                direction: ltr !important;
+                text-align: left !important;
+                font-size: 16px !important;
+                text-wrap: nowrap !important;
+            }
+            
+                   .mblbutton3 {
+                display: block !important;
+                width: 90% !important;
+                max-width: 90% !important;
+                direction: ltr !important;
+                text-align: center !important;
+                font-size: 16px !important;
+                text-wrap: nowrap !important;
+                   
+            }
+            
+            
+            .mblbutton2 {
+                display: inline-block !important;
+               width: 90% !important;
+                max-width: 90% !important;
+                text-align: left !important;
+                font-size: 16px !important;
+                 float: none !important;
+               text-wrap: nowrap !important;
+            }
+
+            .arrowpadding {
+                float: none !important;
+             text-wrap: nowrap !important;
+                width:90% !important;
+                text-align: center !important;
+                
+            }
+
+            .arrowimg {
+                text-align: center !important;
+                float: none !important;
+               text-wrap: nowrap !important;
+            
+            }
+
+
+
+            .copyright {
+                text-align: center !important;
+                display: inline-block !important;
+                padding: 0px 0px 40px 20px !important;
+            }
+
+      .footer-copy {
+                padding: 30px 10px 20px 10px !important;
+                text-align: left !important;
+            }
+
+            .logo-section {
+                padding: 0px 20px !important
+            }
+
+
+            .fluid-image {
+    width: 100% !important;
+    height: auto !important;
+}
+            
+            .fluid-table {
+    width: 100% !important;
+    padding: 20px 0px 20px 0px!important;
+}
+            
+         .fluid-cell  {
+    width: 100% !important;
+    padding: 20px 0px 20px 0px!important;
+}
+            .mblbanner{
+             padding: 30px 0px 0px 40px !important; 
+                text-align: center !important;
+                    
+            }
+
+    
+            
+            .three-col-cta  {
+             padding-top: 20px !important;
+                padding-left: 50px !important;
+                padding-right: 50px !important;
+                padding-bottom: 50px !important;
+            }
+            
+            .mblctatext {
+              
+                padding: 0px 30px 0px 40px !important;
+            }
+            
+            .stack-column-center4{
+             border-radius: 15px !important;
+             padding: 0px 0px 40px 0px !important;
+                 display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+      
+        
+            }
+            
+             .stack-column-center5{
+             border-radius: 20px !important;
+                 display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+       
+        
+            }
+            
+           
+             .OTF-padding {padding: 0px !important;}
+  .OTFCopy {padding: 40px 30px 15px 40px !important; width: 230px !important;text-align: left!important;}
+ .OTF-copy {padding: 0px 30px 10px 30px !important;text-align: left!important;}
+ .otf-banner {padding: 20px 0px !important;}
+            
+                    
+            
+                    
+                   .stack-column-center3 {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                direction: ltr !important;
+                padding: 0px 0px 40px 0px !important;
+            }
+            
+                      .subtext7 {
+                padding: 0px 50px 0px 0px !important;
+                background-color: #141A20 !important;
+                 font-size: 12px !important; line-height: 16px !important;
+            }
+          
+            .social-icons {
+                padding: 0px 10px 0px 10px !important;
+                margin: 0 !important;
+            }
+          
+          .mblicon {
+                padding: 0px 0px 0px 10px !important;
+            }
+            
+        }
+    </style>
+
+    <style> 
+        @font-face {
+        font-family: 'ABCRepro-Regular.woff2';
+        font-style: normal;
+        src: url('https://f.vimeocdn.com/si/email/2023-rebrand/Fonts/ABCRepro-Regular.woff2) format('woff2');
+    }
+
+    @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500 !important;
+        font-display: swap;
+        src: url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiJ-Ek-_EeA.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    .navbar:hover {
+        background-color: #28313A;
+        padding: 15px;
+        border-radius: 12px;
+    }
+    </style>
+
+    <!--[if gte mso 9]><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml> <![endif]-->
+</head>
+
+<body width="100%" bgcolor="#0A0E12" style="margin:0;padding:0!important;mso-line-height-rule:exactly;background-color:#0A0E12;"><style type="text/css">
+div.preheader 
+{ display: none !important; } 
+</style>
+<div class="preheader" style="font-size: 1px; display: none !important;">One-take video creation is at your fingertips.</div>
+    <span style="display:none !important;visibility:hidden;mso-hide:all;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;"></span>
+    <span style="display:none !important;visibility:hidden;mso-hide:all;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+        <!--COMMENT: This snippet of white space has been added to ensure short preview text does not run into the following text of the email.-->
+       
+ &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;
+‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌
+    </span>
+    
+    
+    <center bgcolor="#0A0E12" style="width:100%;background-color:#0A0E12;">
+        
+        <div bgcolor="#0A0E12" style="background-color:#0A0E12;">
+            <!-- vimeo header starts-->
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse: collapse;">
+                <tr>
+                    <td width="100%">
+                        <table width="800" cellpadding="0" cellspacing="0" border="0" align="center" style="border-left:1px;border-style-left:dotted;" class="email-container">
+                            <tr>
+                                <td height="30">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table width="510" align="left" cellspacing="0" cellpadding="0" class="email-container">
+                                        <tr>
+                                            <td style="padding: 0px 0px 0px 20px" align="left" width="100" height="30" style="color:#99aabb;font:normal 11px Arial,sans-serif;">
+                                                <a href="https://click.email.vimeo.com/?qs=84f843bd54f30a80d368cc0af14b1fb278b6bdb4d13060e3654bce512c555c8495b0897eb7ee1ec37fab4432bb66fb0ec11b1a8d57883dbd53467a50ea4ab731" style="color:#2288cc;text-decoration:none" target="_blank">
+                                                    <img src="https://f.vimeocdn.com/si/email/2023-rebrand/Logonew-vimeo-logo.png" alias="vimeo-logo" alt="Vimeo" width="100" height="auto" border="0" style="border:none;font-family:Arial,sans-serif;color:#000001;font-weight:bold;font-size:42px;font-style:italic;">
+                                                </a>
+                                            </td>
+                                        <tr>
+                                            <td height="30">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <!--vimeo header ends-->
+            <!--[if mso]> <table width="800" align="center" border="0" cellpadding="0" cellspacing="0"><tr><td> <![endif]-->
+            <table bgcolor="#0A0E12" align="center" cellspacing="0" cellpadding="0" border="0" width="800" style="margin:0 auto;border-collapse: collapse;" class="email-container" role="presentation">
+                <tr>
+                    <td bgcolor="#0A0E12">
+                        <!--[if mso]> <table width="800" align="center" border="0" cellpadding="0" cellspacing="0"><tr><td> <![endif]-->
+                        <table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                            <!--Hero image starts-->
+                            <tr class="mblhide">
+                                <td align="center">
+                                    <a href="https://click.email.vimeo.com/?qs=84f843bd54f30a80abd31585b83964a0980cafccc1f9eb63bd61c7e2f9f300bb28c7f95a82385f48348df88d73496e653e4dffcc7103b5daef588fe32a9b513d">
+                                        <img src="https://f.vimeocdn.com/si/email/202309_SeptemberPromo/Email%203%20-%20Last%20Chance/Desktop/Email_3_Last_chance_Desktop.gif" class="fluid" width="800" height="auto" style="display:block;border-radius: 10px;" alt="Outside the frame">  
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr class="mblshow" style="display:none;mso-hide:all;">
+                                <!--[if mso]> <table width="800" align="center" border="0" cellpadding="0" cellspacing="0" style="display:none;"><tr><td> <![endif]-->
+                                <td align="center">
+                                    <a href="https://click.email.vimeo.com/?qs=84f843bd54f30a80abd31585b83964a0980cafccc1f9eb63bd61c7e2f9f300bb28c7f95a82385f48348df88d73496e653e4dffcc7103b5daef588fe32a9b513d">
+                                        <img src="https://f.vimeocdn.com/si/email/202309_SeptemberPromo/Email%203%20-%20Last%20Chance/Mobile/Email_3_Last_chance_Mobile.gif" class="fluid" width="800" height="auto" style="display:block;border-radius: 20px;" alt="Outside the frame"></a>
+                                </td>
+                                <!--[if mso]> </td></tr></table> <![endif]-->
+                            </tr> 
+                            <!--Hero image ends-->
+                            <tr>
+                                <td height="30">
+                                </td>
+                            </tr>
+                            <!--Header start-->
+                            <tr>
+                                <td class="headline" style="font-family:'ABCRepro-Medium.woff2', Inter, helvetica neue, helvetica,arial,sans-serif;font-weight:bold;font-size:70px;color:#FFFFFF;text-align:left;line-height:75px;letter-spacing:-1px;padding: 0px 80px 0px 40px;">
+                                  Last chance to 
+save 20%</td>
+                            </tr>
+                            <!--Header end-->
+                            <tr>
+                                <td height="30">
+                                </td>
+                            </tr>
+                            <!--Main copy starts-->
+                            <tr>
+                                <td class="subtext" style="font-family:'ABCRepro-Regular.woff2', Inter, helvetica neue, helvetica,arial,sans-serif;font-weight:normal;font-size:18px;text-align:left;color:#FFFFFF;line-height:24px;padding: 0px 60px 0px 40px;">
+                                  Create scripts in seconds with AI script generation. Capture content right from your computer with our built-in teleprompter. And do it all in one take, thanks to video editing<span style="font-size: 16px;"><sup>†</sup></span> that’s as simple as editing text.
+<br><br>
+Upgrade to a Standard plan today to get all these tools, and save 20% while you’re at it. Now, through <b>September 22nd.*</b>
+                                    
+                                 
+                                    
+                                    
+                                    
+                                    
+            
+                                </td>
+                            </tr>
+                            <!--Main copy Ends-->
+                            <tr>
+                                <td height="40">
+                                </td>
+                            </tr>
+                            <!--CTA button start-->
+                            <tr>
+                                <td align="left" style="padding: 0px 40px 0px;" class="stack-column-center3"> <a style="text-align: center;margin: 0px auto;text-decoration:none;color:#0A0E12;font-size:18px;line-height:20px;font-family:'ABCRepro-Medium.woff2', Inter, helvetica neue, helvetica,arial,sans-serif;vertical-align: middle;text-wrap: nowrap;white-space: nowrap;" href="https://click.email.vimeo.com/?qs=84f843bd54f30a80634307cabd65f02c7a54a85c775651facbeca0f866be254124ae4401f87e527e3d7fe9de5600f5988065083624af0830776b5b19535a962d">
+                                        <table width="210" align="center" border="0" cellpadding="0" cellspacing="0" style="text-align: left; background-color: #17D5FF; display: inline-block; border-radius: 12px; padding: 10px 15px 10px 15px;" class="mblbutton">
+                                            <tr>
+                                                <td class="arrowpadding" align="left">
+                                                    <table width="142" align="center" border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td align="left" class="mblbutton2">
+                                                                <a style="text-align: center;margin: 0px auto;text-decoration:none;color:#0A0E12;font-size:18px;line-height:20px;font-family:'ABCRepro-Medium.woff2', Inter, helvetica neue, helvetica,arial,sans-serif;vertical-align: middle;text-wrap: nowrap;white-space: nowrap;font-weight: 500;text-align: left;" href="https://click.email.vimeo.com/?qs=84f843bd54f30a80634307cabd65f02c7a54a85c775651facbeca0f866be254124ae4401f87e527e3d7fe9de5600f5988065083624af0830776b5b19535a962d">
+                                                                    <!--[if mso]> <table width="220" align="left" border="0" cellpadding="0" cellspacing="0"> <tr> <td style="text-align: center; text-decoration:none;padding:12px 30px;border-radius:4px;background-color:#17D5FF;color:#0A0E12;font-size:16px;line-height:18px;font-family:'ABCRepro-Medium',helvetica,arial,sans-serif;font-weight:bold;"> <![endif]-->
+                                                                    See plans
+                                                                    <!--[if mso]> </td></tr></table> <![endif]-->
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td class="arrowimg" align="center" width="48" height="30" style="background-color: #00AACF; border-radius: 6px;">
+                                                    <a style="text-align: center;margin: 0px auto; font-weight: bold;text-decoration:none;color:#0A0E12;font-size:16px;line-height:18px;font-family:'ABCRepro-Medium.woff2', Inter, helvetica neue, helvetica,arial,sans-serif;vertical-align: middle;" href="https://click.email.vimeo.com/?qs=84f843bd54f30a80c8779ecde7664a29b8f9e0f974d6cd09408677b86ce7b38ea49716c4a537e9d3eb5f1e63fbae688b64c6155651f90911e0ec1088656649a2"><img src="https://f.vimeocdn.com/si/email/2023-rebrand/Iconographyarrow.png" width="20" height="auto" style="display: inline-block; margin: 0 auto;vertical-align: middle;"></a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </a>
+                                </td>
+                            </tr>
+                            <!--CTA button end-->
+                            <tr>
+                                <td height="60">
+                                </td>
+                            </tr>
+                            <!--[if mso]> </td></tr></table> <![endif]-->
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <!--[if mso | IE]> </td></tr></table> <![endif]-->
+
+            <!-- vimeo footer starts-->
+            <table width="100%" bgcolor="#141A20" cellpadding="0" cellspacing="0" border="0" align="center" class="email-container" style="border-collapse: collapse;">
+                <tr bgcolor="#141A20" class="email-container">
+                    <td width="100%" bgcolor="#141A20">
+                        <table width="800" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse: collapse;" class="email-container">
+                            <tr>
+                                <td style="text-align: center;color: #D1D9E1; font-size: 12px; line-height: 16px; font-family:'ABCRepro-Medium.woff2', Inter, helvetica neue, helvetica,arial,sans-serif;padding: 40px 80px 40px 80px;" class="footer-copy"> *To redeem this offer, you must purchase a new annual Vimeo
+                                    Standard subscription before September 22, 2023 11:59 PM ET by clicking the
+                                    link on the offer page. Promotional pricing will be reflected at checkout. Vimeo may
+                                    end or modify this offer at any time without notice to you. This offer is made to
+                                    select Vimeo members only and is non-transferable and not applicable to free trials,
+                                    renewals, additional seats, prior purchases, or Enterprise plans. You may not apply
+                                    this offer to more than one purchase or combine it with other offers or discounts.
+                                    Void where restricted or prohibited by law. Promotional pricing applies to the first
+                                    year only. Your Vimeo subscription will automatically renew at the full price (plus
+                                    any taxes) until you cancel. You may cancel in your account settings at any time to
+                                    stop future charges.
+                                    <br><br> <span style="font-size: 16px;"><sup>†</sup></span>Text-based video
+                                    editing is only available for videos in English.
+                                </td>
+                            </tr>
+                            <tr bgcolor="#141A20">
+                                <td style="text-align: center;color: #D1D9E1; font-size: 12px; line-height: 16px; font-family:'ABCRepro-Medium.woff2', Inter, helvetica neue, helvetica,arial,sans-serif;padding: 40px 80px 40px 80px;" class="footer-copy"> <a style="color:#D1D9E1;text-decoration:none;font-weight:bold;" href="https://view.email.vimeo.com/?qs=8334fa5ffb97d1db9646618eea3e727b3a7fcc370b45d5b5d75a24f0660415f2907a4780c1618b57d35d12ae76a6f9b4bdddaaf9a1436d3f7ace7767006c559f7bfd385c73c78c8ce792f58a9b28de03c22762076421f8b6"> View this email in your web browser.</a><br>
+                                    <br>
+                                    This is a promotional email from Vimeo.com, Inc., 330<br> West 34th Street,
+                                    10th Floor, New York, New York 10001 <br><br>
+                                    <a style="color:#D1D9E1; text-decoration:none;font-weight:bold;" href="https://click.email.vimeo.com/?qs=84f843bd54f30a80779d44294825993879d5111c27e3c3f02faac7bd0416ed22d9d8ada762482c95857e7f1b6ac33b611563a84b53e0fd4c2981148f978c97be">Terms</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                                    <a style="color:#D1D9E1; text-decoration:none;font-weight:bold;" href="https://click.email.vimeo.com/?qs=84f843bd54f30a80e4d2c35c4639546daed554e780288d7a3b75747736cdaf2bf509670807378e1f6d39cfd61cfc12555700677acf8178fd1e97212e4f56f9c6">Privacy</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                                    <a style="color:#D1D9E1; text-decoration:none;font-weight:bold;" href="https://click.email.vimeo.com/?qs=84f843bd54f30a803d5c559b380302e1ea7c4afce9701034ee3e34f6d8722277855ac4fc88d76cb735942612f878946c4f778677a690901ecff23bda65179d2d">
+                                        Unsubscribe </a>
+                                </td>
+                            </tr>
+                            <tr> </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <!--start of icons-->
+            <table width="100%" class="email-container" bgcolor="#141A20" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse: collapse;">
+                <tr bgcolor="#141A20" class="email-container">
+                    <td width="100%" bgcolor="#141A20">
+                <tr>
+                    <td>
+                        <table style="background-color:#141A20;" width="800" align="center" border="0" cellspacing="0" cellpadding="0" class="email-container">
+                            <tr width="800" align="center" class="email-container">
+
+                                <td class="stack-column-center" style="padding: 10px 0px 50px 0px;" align="center">
+                                    <!---Social icons START--->
+                                    <table width="120" align="left" cellspacing="0" cellpadding="0" class="social-icons">
+                                        <tr class="social-icons">
+                                            <td> <a href="https://click.email.vimeo.com/?qs=84f843bd54f30a8097e1660c9bf2b4e6d2e05e55b255a6c23253ef69dd4bce0e46c1426dd4fa93e3a5737aeecc3157a097d1bec988e4792d6b5ea4acdadc144e">
+                                                    <img src="https://f.vimeocdn.com/si/email/2023-rebrand/Icons/Instagram.png" width="25" height="auto" style="display: inline-block;" class="mblicon"></a>
+                                            </td>
+                                            <td> <a href="https://click.email.vimeo.com/?qs=84f843bd54f30a802d78b6909657dcc81d66cc0bdc490b8a81caed1bffbd024ab8137688f4f35ec2361927c3482b2365f3d1953be94077d664d8d4fbedf50961">
+                                                    <img src="https://f.vimeocdn.com/si/email/202308_Newsletter/Twitter%20Icon/Twitter%402x.png" width="25" height="auto" style="display: inline-block; " class="mblicon"></a>
+                                            </td>
+                                            <td>
+                                                <a href="https://click.email.vimeo.com/?qs=84f843bd54f30a80396702297717558488ee8e7f0baced69acd341610a6493959a5117bb8f9b8b91fcfd06802ea7d7c77e4c31f46ea01259e0b969038b3f50a5"> <img src="https://f.vimeocdn.com/si/email/2023-rebrand/Icons/Facebook.png" width="25" height="auto" style="display: inline-block; " class="mblicon"></a>
+                                            </td>
+                                            <td>
+                                                <a href="https://click.email.vimeo.com/?qs=df737c0290d08bba385762cef170c48e9c3e9cb20b55c2db0026d2ceca971e827b3bc2d4a910f914c3cecdac66959b1450275f4180c78125fae8bcda6e971d3d"><img src="https://f.vimeocdn.com/si/email/2023-rebrand/Icons/LinkedIn2.png" width="25" height="auto" style="display: inline-block; " class="mblicon"></a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <!---Social icons END--->
+                                </td>
+                                <td class="stack-column-center">
+                                    <table width="400" align="center" class="stack-column-center" class="email-container" cellspacing="0" cellpadding="0" style="color: #D1D9E1; font-size: 12px; line-height: 14px; font-family:'ABCRepro-Medium.woff2', Inter, helvetica neue, helvetica,arial,sans-serif;text-align: right;">
+                                        <tr class="email-container">
+                                            <td style="padding: 0px 10px 50px 0px;" class="footer-copy"> © 2023
+                                                Vimeo.com, Inc. All rights reserved. </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                </td>
+                </tr>
+            </table>
+            <!--start of icons-->
+            <!--end of footer-->
+
+        </div>
+    </center>
+</body>
+<img src="https://click.email.vimeo.com/open.aspx?ffcb10-fe9510797567027e74-fdf216747362027571157774-fe3411727564047f731c74-fec016767d660d79-fe2912717c6d0579771072-ff001572716c04&amp;d=60229&amp;bmt=0" width="1" height="1" alt="">
+
+</html>
+
+--9LgZ74VibqWc=_?:--

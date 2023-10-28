@@ -1,0 +1,1447 @@
+Received: from MW5PR20MB4332.namprd20.prod.outlook.com (2603:10b6:303:19e::11)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Mon, 18 Sep 2023
+ 20:07:25 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=FSzTRsVUOLQmWBUiCwje5pT1fs+Mqv85hFxCtYTLfCcwHVOAUzbBPoMiH1JmUygFQjpmt66hexclcHEypMyYU+8ImAi/KC2rvXFVgLZCtI6JftZbbUiT0cqT5aOKbtJxqyohNFyoTGhsPpi25VIfvJI/V1cH76zxzEIWjExU3hU23buxwWfjX7Q1P3JJ8eev41u2jo157FpIL5VL8c3jEDrq27rWRHtSFGsTFL8L1DUn0ZDpowu20ZXW9bdlbHLBAbH7iSjf1SYQaG1/zdsDifrb/SMZckRQhELFNyEXAvIAXPl3ZHa/bRT2UivOAD6xj3V5tFFQDttBZX8FSg7JKw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LHTLi2vmICjiKVlkMEN2Bk+GYB+y0uH+6MsDgRS0JmE=;
+ b=UiShZhut+hUuOdjLvgPGZIIOeHe3o8BIitKGqG4SIIHTgg3AhI3sanaWUorSlkyxV73nau8wikq5XndVgcTenCxN4Vc3/IxyjoYUIZx0YTKOJKz7P2psbwaQntXEcEZ1FarUnmSQrxc+DqhgT8Ljv/VFbAgTagIW/+pdo+0yxLb2/L0HgT3g2ATnsrIx+Ws0VBxzG8bNaAv6W207AqxjSefx4aU5OC7ZgHlfaschpAkN/zeUmuvvtRVqCo30S97IgC54KCd/kTjcezRXNye+Jlby9DeVTgw8o9jqWPYZIsXD6LN+7y2MBrO9OJj2Q2w4AUxi+cEtxBaxy7KANInyBw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.167.177) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=bounce.codepen.io; dmarc=pass (p=quarantine sp=quarantine
+ pct=100) action=none header.from=codepen.io; dkim=pass (signature was
+ verified) header.d=codepen.io; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=msprvs1=19625-hn-06dh=bounces-17534@bounce.codepen.io]
+ dkim=[1,1,header.i=@codepen.io] dmarc=[1,1,header.from=codepen.io])
+Received: from PS2PR04CA0018.apcprd04.prod.outlook.com (2603:1096:300:55::30)
+ by MW5PR20MB4332.namprd20.prod.outlook.com (2603:10b6:303:19e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Mon, 18 Sep
+ 2023 20:07:22 +0000
+Received: from HK2PEPF00006FAE.apcprd02.prod.outlook.com
+ (2603:1096:300:55:cafe::2e) by PS2PR04CA0018.outlook.office365.com
+ (2603:1096:300:55::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27 via Frontend
+ Transport; Mon, 18 Sep 2023 20:07:20 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.167.177)
+ smtp.mailfrom=bounce.codepen.io; dkim=pass (signature was verified)
+ header.d=codepen.io;dmarc=pass action=none
+ header.from=codepen.io;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ bounce.codepen.io discourages use of 209.85.167.177 as permitted sender)
+Received: from mail-oi1-f177.google.com (209.85.167.177) by
+ HK2PEPF00006FAE.mail.protection.outlook.com (10.167.8.4) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Mon, 18 Sep 2023 20:07:20 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:ED8D8288A538C32BA00F752357D71C4B3928BD1F0788B3DCF943FEC451D80041;UpperCasedChecksum:746B43D93A2C31085F6276EA37EAD4AB2875CF5483465BE438331D63F2A82494;SizeAsReceived:5703;Count:26
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3a76d882080so3429154b6e.2
+        for <tobinsilvestre@outlook.com>; Mon, 18 Sep 2023 13:07:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695067639; x=1695672439;
+        h=x-forwarded-for:list-id:list-unsubscribe:from:subject:reply-to
+         :mime-version:date:message-id:to:content-transfer-encoding
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LHTLi2vmICjiKVlkMEN2Bk+GYB+y0uH+6MsDgRS0JmE=;
+        b=r0ihDDyZMuY4OhDKr/k6765Gyt9LNu43fTm/GOsofFKJQUGmEdJRnjYDHXuxJ8KfKJ
+         7Lxhsor7hoIZcrZQCibbZe3tnlyB1Hlgdg2epjytV0u2atcnX8Z7568y0i4nT/IwaUlp
+         5O4udO6KJsTS/S3uACN8rTVZt+yxAlN6fwZg6PWVdSx3T5RsaloA13VRit+ZisKwXta7
+         e24c9KOfQJJboa+YWzMzbPJ/ZEm++0mXZEP6PJR7jhR5pX8ewQJXAN/HUm/Yq84dZ8iG
+         XLETqcdJdgHw4xkNXgALU9DqdRgz6KTu3oVobvvRRWQlXOr3fAN+Xt2fQNVAQTuNPg4F
+         JiNQ==
+X-Gm-Message-State: AOJu0YyA9/7K/0ERY7A/gqiWIm3xtbKbDjuyU9lxCjfe/bENjOAQgZhr
+	Hh3Pjj60S0I2F6PFrOk1qQ1QN+GPIrmJeqr1zQ==
+X-Google-Smtp-Source: AGHT+IFbLKAbQ5eHf6K4ZCaa/U3zCoSR6+OOZIucUoBaRLby/enK2mGc+f4sZCwlZsjgpWgTeKSV7pZjjUalqU9NBGEuOqQD+4o=
+X-Received: by 2002:a05:6870:610d:b0:1bf:50e0:95d9 with SMTP id s13-20020a056870610d00b001bf50e095d9mr12910508oae.26.1695067639115;
+        Mon, 18 Sep 2023 13:07:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695067639; cv=none;
+        d=google.com; s=arc-20160816;
+        b=QMiET9iMB+uDmg+U2b3KD8z7Zy6bPI803gq2GjhSzIDp5+Pqhqcixt2YkSCPFitAQm
+         aaBKw9+PHWbdnR2Q4eLcQxa18di6kb+jAE5/NH9G9nD1fvKN3CvircW+88EEQmNZqdtu
+         1O5wEB39V9LLYN0/7FOwwdRt5hfa1AT0OMb2A/Lv+rny7mAIeD99tEoP2Op5N/1k6UMq
+         IJDxYxqsNm5RMoVnyrdc4Qs5piVBO+6fFxOFkCVsgEW71CYptlGzIxKriA2DuwS44mvF
+         QjAXadJ6Hcl6cCbFdAjxLTnPLU0Az61p4yami4T9Taq+SoFMsME8bLb0pHYzqZaJieyR
+         vE3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-id:list-unsubscribe:from:subject:reply-to:mime-version:date
+         :message-id:to:content-transfer-encoding:dkim-signature;
+        bh=LHTLi2vmICjiKVlkMEN2Bk+GYB+y0uH+6MsDgRS0JmE=;
+        fh=TlBqePmUoP1mo7OtoBHiLsm9ijWYJg6wpq7S5L9t5IQ=;
+        b=kTfVPdqbBzh5WaPKM2wqr3J7ArJNeLd/JQDb4BVFh1buJTiXdtWZd96T/b8SgIXwN8
+         g7A/JVJvSIUnVvX8pmTHTNCYXqGpxsPEb8DkXLB1W08W9eN85LdZKla4cDkNIqLLLVsk
+         Vtomhgue4tXlJbod0/faOuIDJxXKgtngaLuEunYbXmvPh1PMkBUJ49pws+LAaALNyntV
+         +Layny4CNACniASOF6Ol3WXfGyepW+Q3LMlqe79YeF4tk/kHwUaTB6e7iIMBYs4k3GrE
+         G1rIXY8ZQgRDmgdeCtakQ10hmLXTi0RgQNLLtrTOfDgkUxZYcREo8RinF835Ks5SzxlA
+         oNnw==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@codepen.io header.s=scph0416 header.b=SHaYQz99;
+       spf=pass (google.com: domain of msprvs1=19625-hn-06dh=bounces-17534@bounce.codepen.io designates 147.253.215.179 as permitted sender) smtp.mailfrom="msprvs1=19625-hn-06dh=bounces-17534@bounce.codepen.io";
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=codepen.io
+Return-Path: msprvs1=19625-hn-06dh=bounces-17534@bounce.codepen.io
+Received: from mta-253-215-179.smtp-out.sparkpostmail.com (mta-253-215-179.smtp-out.sparkpostmail.com. [147.253.215.179])
+        by gmr-mx.google.com with ESMTPS id dk5-20020a056214092500b0063d2253bb8esi1046136qvb.2.2023.09.18.13.07.18
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 18 Sep 2023 13:07:19 -0700 (PDT)
+Received-SPF: pass (google.com: domain of msprvs1=19625-hn-06dh=bounces-17534@bounce.codepen.io designates 147.253.215.179 as permitted sender) client-ip=147.253.215.179;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@codepen.io header.s=scph0416 header.b=SHaYQz99;       spf=pass
+ (google.com: domain of msprvs1=19625-hn-06dh=bounces-17534@bounce.codepen.io
+ designates 147.253.215.179 as permitted sender)
+ smtp.mailfrom="msprvs1=19625-hn-06dh=bounces-17534@bounce.codepen.io";
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=codepen.io
+X-MSFBL: Cjy2bTqCP334ZCG8x9+aCFF7x9uzksXpQwS8JJp+iQU=|eyJyIjoidG9iaW5zaWx
+	2ZXN0cmUwNDRAc29vbmVycy51cyIsIm1lc3NhZ2VfaWQiOiI2NGY5ZjVhZDA4NjV
+	mM2RkZjA0NCIsInRlbmFudF9pZCI6InNwYyIsInN1YmFjY291bnRfaWQiOiIwIiw
+	iY3VzdG9tZXJfaWQiOiIxNzUzNCJ9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codepen.io;
+	s=scph0416; t=1695067637; i=@codepen.io;
+	bh=LHTLi2vmICjiKVlkMEN2Bk+GYB+y0uH+6MsDgRS0JmE=;
+	h=Content-Type:To:Message-ID:Date:Subject:From:List-Unsubscribe:
+	 From:To:Cc:Subject;
+	b=SHaYQz99YC0pUMGLasev29Tzjo96jPCN1Zc77EguuJ/wwQjojvZr3DUZm8qIO1ra9
+	 gi1QEeeOl6jE9ae7++dGFZOr1ku6pX5wej/AfuFCI7ivFs93og3quTANfjM/UYerXO
+	 Yrc2VBcVZo4de0VXZJKiS61LSb/Q9yo7htSz9cTU=
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="UTF-8"
+To: tobinsilvestre044@sooners.us
+Message-ID: <0F.44.30099.5FDA8056@gj.mta1vrest.cc.prd.sparkpost>
+Date: Mon, 18 Sep 2023 20:07:14 +0000
+Reply-To: CodePen<newsletter@codepen.io>
+Subject: CSS Mask Animations, Three.js Interiors, and a Direction Aware Glow
+From: CodePen<support@codepen.io>
+List-Unsubscribe: <mailto:unsubscribe@unsub.spmta.com?subject=unsubscribe:KdJgCW-DRsxvIvNm-MCSSNtvdM1CDkP-zKx4Y7YrH2o~|eyAicmNwdF90byI6ICJ0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzIiwgInRlbmFudF9pZCI6ICJzcGMiLCAiY3VzdG9tZXJfaWQiOiAiMTc1MzQiLCAibWVzc2FnZV9pZCI6ICI2NGY5ZjVhZDA4NjVmM2RkZjA0NCIsICJzdWJhY2NvdW50X2lkIjogIjAiIH0~>
+List-Id: <spc.17534.0.sparkpostmail.com>
+X-Forwarded-For: tobinsilvestre044@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 26
+X-MS-Exchange-Organization-ExpirationStartTime: 18 Sep 2023 20:07:20.7854
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ aa964df4-cce5-46c2-a3b6-08dbb882ddb3
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ HK2PEPF00006FAE:EE_|MW5PR20MB4332:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ HK2PEPF00006FAE.apcprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/18/2023 6:52:04 PM
+X-MS-Office365-Filtering-Correlation-Id: aa964df4-cce5-46c2-a3b6-08dbb882ddb3
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.167.177
+X-SID-PRA: SUPPORT@CODEPEN.IO
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2023 20:07:20.6135
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa964df4-cce5-46c2-a3b6-08dbb882ddb3
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ HK2PEPF00006FAE.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR20MB4332
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:04.7460981
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPm8XPty+wcISCp+1dVt5VrZkK7ZQ+McDAuKiAVNPpjRHU0Q1TSu6C6pOdvTzrRxhgG9xf7nma6+C//SuP5IGpE91dKm8qOHcfYR7RooGBR6Mfe4TEkoRa/At3oWTpeoyMrSD+4PQNkjYBxMEzPMynH/rMbVYYklmsfmTKd48dEMlwxx626JH+9PadAMQlb9y/RABzX4ELzZ8w==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SE5TRkRtSjBySFdjYmtET3RUcjlsUDM5ZXR2cUl6Y05XMExVNm1uTWo0a0Fo?=
+ =?utf-8?B?QnZSSC9XZjVzR1FFS1hVNjJzUkkzaGZvMFRQVDFVTU1vK3E3dk9nc1NUM0Rv?=
+ =?utf-8?B?VkRVeEdKVWlUcWR4bFVOSHZvcVRGL3RSNXlZcUV3RWFIWjk5UW94ZlI2TzFH?=
+ =?utf-8?B?SGlQQ2NFdHpERzN4VWFTSEZEVlNhbWEyQ0g4ckVkZkg4eHpKdUt5K0V5bHpz?=
+ =?utf-8?B?eStXb3hLMG5tZmRvc29DYk5yYW12TERRckYzVm5rYVFKWW1JMXcyL0lrMUJo?=
+ =?utf-8?B?MDFFbmNWemdRUi8yVmwrKythZUxUOVdpZVA5YlgxZFRYWVV4YWs5ei9yZVNL?=
+ =?utf-8?B?WFpjL1d0bkpsQlpYZW1oQ05sWmJFS2tMT3djN2hWYXdQRGlwNFhoL2NvSG5F?=
+ =?utf-8?B?eXpNV0JNaTkwVW5JdlQ1MWRIR1A2eVE4UmlIOHNoZjE4NjVMUHRNMFN4MGxW?=
+ =?utf-8?B?MUsyZ2VPbGJvVEFiWG1wN0tRS2ZnRk5xSFRqQVZHQ29ZQUhVOGVLMWhvd3Nk?=
+ =?utf-8?B?YlZYSnlFeHdZVjZDUms3azMvMXFuRytrQ3k4NUxUa2NDa09yZWxoY1Y5SldS?=
+ =?utf-8?B?Nk8zdVlKbFQzeHROTHVjUnc2RDRXdm1USWtDVmNnakxZYkNvaFcreCtzeWhD?=
+ =?utf-8?B?eXZCak1IdmJOc1lzK21KMndjVkRzbnR2VFBORXR2VzRGYmNBZk1sTzQvdHc1?=
+ =?utf-8?B?WjdheHRBa0lHcDVhaExnK1VpRm11MjgzL2JLYVlCZXFHTFo3bHI3MGhocXdZ?=
+ =?utf-8?B?cGRFRUxMQmZBMDdxQkY2L3dUK1NXT3l2TStZL3ZjY1hQR3FCUkpyN0pWN0tI?=
+ =?utf-8?B?N05FYXM5OHFMV3NQK0lDbmpPMmVONmRKU0xRcit0dE50cUdxOUdHcG9qZHBR?=
+ =?utf-8?B?TGhYcm5Leis0Z0YyVFNRWXhWcXFEQ1F0a2YrRGtFUlJISHQ3TlFaZXNNS0ZI?=
+ =?utf-8?B?dlM4VHl1eHBMZlpVTzJCUVlHMmFIRzhsdCtIMEFLRW5MdUZLRjRLRThwTDl4?=
+ =?utf-8?B?aUtxaVVCYTZNMExDaHhYblAwMzA4OS92d3RtMkZJT1lRanhZUTE4VVJFb1Rj?=
+ =?utf-8?B?UzFNdlYxeDEwMVpHdThRa3BNdEl4TlN0dDNrMkhSUVJNTnNqd0dXUXN4ejA3?=
+ =?utf-8?B?LzExdTBib255UDlKc2xZbWZPSU0wR3QxdXkyTm52THRhSUQ4a0Z6UFh4a0dK?=
+ =?utf-8?B?QUZ6VEFiZWp4cHZhU0lXcm5Dcld5Q2I1eXhoVHRPTHJDaVpJbmdRc3RTSGZY?=
+ =?utf-8?B?R3VPNTczdDAyVzYvMlBQZEx4QWxoaXh6NUVXTnBwVitCcldQVjdzbndFNVF3?=
+ =?utf-8?B?SkQzbGFPanVSQnlIUE56N0xSMVFhMlN5MXBzNVVMajZvQ2FJQzBRdnJkOTdo?=
+ =?utf-8?B?WWNEV2ZCaEZ4bUxuUGE4dm92MDZiN2lZcS9rQWh1bGw5MTNxK2pDT29xWmtJ?=
+ =?utf-8?B?cWxyZ3dCNmRYdHRRc0QvTEJrR0V6SFZuL3Jzajh4UlBkTWY3UWJYaHNvanBD?=
+ =?utf-8?B?ZWxBazNLZkVIQzR4dHhrVngyQ2hnQ2FvS3phSWt3Zmo0eU9FR3hPU3pTVUVM?=
+ =?utf-8?B?eVllZDI0MFFNTnk3Q2lVcGNYWUFuYTg4ZW1wOVgzdTY3MVdOUnRSNnZqR1Zh?=
+ =?utf-8?B?bzA5RXNZVms2N1JURjJraXMzdDZ5aXRZUzY5M0d0eGZITjdyVjM4Zlo5bXQ3?=
+ =?utf-8?B?QklrWFVwSGtlSkdyc3RWc0RDWGFKYW1ZTGtLLzNLV2FjOVZYajN0RFRVWTZX?=
+ =?utf-8?B?bFdHRUxGeDVzQWZIWWJBMkR1ZENZSFZsTTNGSWdyNmNVS21SckRFWUREbkVm?=
+ =?utf-8?B?azQrdCtGc3E5YVdwRGl5L1B4ajBPeXp2eW5rTXdRZjhnSkR1Ulk1Y2lLOTZI?=
+ =?utf-8?B?RzdraXZVdTltTDlOZGlNQjNXc09WSHh1eGZwSGQzM29HNkF4NlVaTUpXUFdz?=
+ =?utf-8?B?QTRnakdreHlsQk1KZ09hWTlvSE5JUnR2WU5vdndPVElEMWFVRTMzUGVYM25m?=
+ =?utf-8?B?SDBvcHI1WjZTR0hKbHF4dTQ4TkdUNU4ra2k3Yjd0bmtCaUErQ2J0a1ovNnhU?=
+ =?utf-8?B?TmtNNGkyVHdxeXMyMVNqcjJ0LzcyT1h1UCtUYlBBMUUraUllSGR3UERMRTdZ?=
+ =?utf-8?B?di9KWktwamh5ZXExMnBidWsvUitQUUJJMm9qWElQNVNWWWFuR3RQMytacFZk?=
+ =?utf-8?Q?pEqVy4zPnEdhMnw4tmW5vTvQWy0KXkBDkrC/HWrJk/8f?=
+MIME-Version: 1.0
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>
+  </title>
+  <!--[if !mso]><!-->
+  <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+  <!--<![endif]-->
+ =20
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1">
+  <style type=3D"text/css">
+    #outlook a {
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+
+    table,
+    td {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    p {
+      display: block;
+      margin: 13px 0;
+    }
+
+  </style>
+  <!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]-->
+  <!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]-->
+  <!--[if !mso]><!-->
+  <style type=3D"text/css">
+    @import url(https://fonts.googleapis.com/css?family=3DLato:300,400,500,=
+700);
+
+  </style>
+  <!--<![endif]-->
+  <style type=3D"text/css">
+    @media only screen and (min-width:480px) {
+      .mj-column-per-100 {
+        width: 100% !important;
+        max-width: 100%;
+      }
+
+      .mj-column-per-50 {
+        width: 50% !important;
+        max-width: 50%;
+      }
+    }
+
+  </style>
+  <style media=3D"screen and (min-width:480px)">
+    .moz-text-html .mj-column-per-100 {
+      width: 100% !important;
+      max-width: 100%;
+    }
+
+    .moz-text-html .mj-column-per-50 {
+      width: 50% !important;
+      max-width: 50%;
+    }
+
+  </style>
+  <style type=3D"text/css">
+    @media only screen and (max-width:480px) {
+      table.mj-full-width-mobile {
+        width: 100% !important;
+      }
+
+      td.mj-full-width-mobile {
+        width: auto !important;
+      }
+    }
+
+  </style>
+  <style type=3D"text/css">
+    @media screen {
+      @font-face {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Lato Regular'), local('Lato-Regular'),
+          url(https://fonts.gstatic.com/s/lato/v11/qIIYRU-oROkIk8vfvxw6Qves=
+ZW2xOQ-xsNqO47m55DA.woff) format('woff');
+      }
+
+      @font-face {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Lato Bold'), local('Lato-Bold'),
+          url(https://fonts.gstatic.com/s/lato/v11/qdgUG4U09HnJwhYI-uK18wLU=
+uEpTyoUstqEm5AMlJo4.woff) format('woff');
+      }
+
+      @font-face {
+        font-family: 'Lato';
+        font-style: italic;
+        font-weight: 400;
+        src: local('Lato Italic'), local('Lato-Italic'),
+          url(https://fonts.gstatic.com/s/lato/v11/RYyZNoeFgb0l7W3Vu1aSWOvv=
+Din1pK8aKteLpeZ5c0A.woff) format('woff');
+      }
+
+      @font-face {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 900;
+        src: local('Lato Black'), local('Lato-Black'),
+          url(https://fonts.gstatic.com/s/lato/v14/S6u9w4BMUTPHh50XSwiPGQ3q=
+5d0.woff2) format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Telefon Black';
+        font-style: normal;
+        font-weight: 900;
+        src: url(https://assets.codepen.io/t-1/telefon-black.woff2) format(=
+'woff2');
+      }
+    }
+
+    body {
+      font-family: Lato, 'Lucida Grande', 'Lucida Sans Unicode', Tahoma, sa=
+ns-serif;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #e3e4e8;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      max-width: 100%;
+    }
+
+    p,
+    li {
+      color: #e3e4e8;
+      line-height: 1.5;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    blockquote {
+      background: none;
+      border-left: 1px solid gray;
+      padding-left: 10px;
+      margin: 0 0 15px 10px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: white;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-size: 24px;
+      margin: 20px 0 10px 0;
+      line-height: 1.2;
+    }
+
+    .intro-description a,
+    .news-content a,
+    .spark-item a,
+    .subscription-details a,
+    .pro-content a {
+      text-decoration: none;
+      color: #76adff;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      line-height: 1.8;
+      font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, mono=
+space;
+    }
+
+    .view-on-web-link.view-on-web-link {
+      color: #74c5ff;
+      text-transform: uppercase;
+      display: block;
+      padding: 5px 10px;
+      background: #383b43;
+      width: 66%;
+      margin: 0 auto;
+      clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+      text-decoration: none;
+    }
+
+    .dedicated-hero-area-copy {
+      padding: 20px;
+    }
+
+    .dedicated-hero-area-copy h2 {
+      font-family: 'Telefon Black', system-ui, Lato, sans-serif;
+      text-align: center;
+      margin: 0 0 20px 0;
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .spark-item {
+      margin-bottom: 50px;
+    }
+
+    .spark-item[data-type=3D'sponsor'] .spark-item-type {
+      color: #fedd41;
+    }
+
+    .spark-item-type {
+      color: #99a3bc;
+      padding-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 10px;
+    }
+
+    .spark-title {
+      font-weight: bold;
+      color: #505050;
+      padding: 5px 0 5px 0;
+      font-size: 20px;
+    }
+
+    .spark-desc {
+      padding-top: 4px;
+      color: #cccfdc;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .spark-thumb {
+      border: 0;
+      display: block;
+      height: auto;
+      max-width: 100%;
+      outline: none;
+      text-decoration: none;
+      margin: 0 0 10px 0;
+    }
+
+    .news-header {
+      font-family: 'Telefon Black', system-ui, Lato, sans-serif;
+      margin: 0 0 5px 0;
+      font-size: 36px;
+      text-align: left;
+      color: white;
+    }
+
+    .news-bar {
+      height: 5px;
+      border-radius: 100px;
+      background: white;
+      background: linear-gradient(92.63deg,
+          #769aff 8.23%,
+          #ffdd40 25.83%,
+          #f19994 51.91%,
+          #47cf73 68.56%);
+      width: 70%;
+      margin: 0 0 10px 0;
+    }
+
+    .news-content img {
+      display: block;
+      margin: 13px 0;
+    }
+
+    .news-content hr {
+      border: 0;
+      border-top: 4px solid #383b43;
+      margin: 33px auto;
+      width: 200px;
+    }
+
+    .pro-bar {
+      height: 5px;
+      border-radius: 100px;
+      background: #ffdb00;
+      width: 70%;
+      margin: 0 0 10px 0;
+    }
+
+    .pro-header {
+      text-align: left;
+    }
+
+    .pro-header a {
+      color: #ffdb00;
+      text-decoration: none;
+    }
+
+    .footer-bar {
+      height: 10px;
+      background: linear-gradient(92.63deg,
+          #769aff 8.23%,
+          #ffdd40 25.83%,
+          #f19994 51.91%,
+          #47cf73 68.56%);
+    }
+
+    @media only screen and (max-width: 400px) {
+      h1 {
+        font-size: 22px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+
+      .spark-thumb {
+        display: block;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }
+
+  </style>
+</head>
+
+<body style=3D"word-spacing:normal;background-color:#1c1d22;">
+<div style=3D"color:transparent;visibility:hidden;opacity:0;font-size:0px;b=
+order:0;max-height:1px;width:1px;margin:0px;padding:0px;border-width:0px!im=
+portant;display:none!important;line-height:0px!important;"><img border=3D"0=
+" width=3D"1" height=3D"1" src=3D"http://post.spmailtechnolo.com/q/DsFcFBbs=
+wMjPJdBPRwFjLQ~~/AABEfgA~/RgRm6zLyPVcDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc=
+3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA" alt=3D""></div>
+
+  <div style=3D"background-color:#1c1d22;">
+    <!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px;"=
+ width=3D"600" bgcolor=3D"#434857" ><tr><td style=3D"line-height:0px;font-s=
+ize:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"background:#434857;background-color:#434857;margin:0px au=
+to;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"background:#434857;background-color:#434=
+857;width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:0;text-align:c=
+enter;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:600px;" ><![endif]-->
+              <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"vertical-align:top;" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td align=3D"center" style=3D"font-size:0px;padding:0=
+;word-break:break-word;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"border-collapse:collapse;border-spaci=
+ng:0px;">
+                          <tbody>
+                            <tr>
+                              <td style=3D"width:600px;">
+                                <img height=3D"auto" src=3D"https://res.clo=
+udinary.com/css-tricks/image/upload/c_scale,f_auto,q_auto,w_1100/v163854529=
+6/codepen-spark-header-2022_oih61t.png" style=3D"border:0;display:block;out=
+line:none;text-decoration:none;height:auto;width:100%;font-size:13px;" widt=
+h=3D"600">
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align=3D"center" style=3D"font-size:0px;padding:0=
+;word-break:break-word;">
+                        <div style=3D"font-family:Lato, system-ui, sans-ser=
+if;font-size:10px;line-height:1;text-align:center;color:#e3e4e8;"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/SUKSOgS0ZFN9x3pl3S2FvQ~~/AABEfgA~/Rg=
+Rm6zLyP0QcaHR0cHM6Ly9jb2RlcGVuLmlvL3NwYXJrLzM1N1cDc3BjQgpk-fWtCGXz3fBEUhx0b=
+2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA" class=3D"view-on-web-link">Vie=
+w this issue on CodePen</a></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align=3D"left" style=3D"font-size:0px;padding:10p=
+x 25px;padding-top:30px;padding-right:35px;padding-bottom:0;padding-left:35=
+px;word-break:break-word;">
+                        <div style=3D"font-family:'Telefon Black', system-u=
+i, sans-serif;font-size:13px;text-align:left;color:#e7f0ff;">
+                          <h1>CSS Mask Animations, Three.js Interiors, and =
+a Direction Aware Glow</h1>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align=3D"left" style=3D"font-size:0px;padding:10p=
+x 25px;padding-top:0;padding-right:35px;padding-left:35px;word-break:break-=
+word;">
+                        <div style=3D"font-family:Lato, system-ui, sans-ser=
+if;font-size:13px;line-height:1;text-align:left;color:white;">
+                          <div class=3D"intro-description">
+                            <p>This week's CodePen community highlights inc=
+lude an in-depth tutorial on animated image reveals with CSS mask animation=
+s from Temani Afif, a new 3D room to explore from Ricardo Oliva Alonso, and=
+ a charming glowing hover effect from finnchillah.</p>=0A=
+<p>Plus, hluebbering shares a recipe card design concept (with a real recip=
+e!), and LoFi takes us to the 70s with a groovy JavaScript pattern.</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" styl=
+e=3D"width:600px;" width=3D"600" bgcolor=3D"#333845" ><tr><td style=3D"line=
+-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"background:#333845;background-color:#333845;margin:0px au=
+to;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"background:#333845;background-color:#333=
+845;width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:20px 0;text-al=
+ign:center;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:300px;" ><![endif]-->
+              <div class=3D"mj-column-per-50 mj-outlook-group-fix" style=3D=
+"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-=
+align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:15px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;line-height:1;text-align:left;color:#e3e4e8;">
+                                  <mj-raw>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/QztFP67HK_ar8uUGt6XOZA~~/AABEfgA~/RgRm6zLyP0QxaHR0cHM6Ly9jb2RlcG=
+VuLmlvL3JpY2FyZG9vbGl2YWFsb25zby9wZW4vS0tiV0dOWlcDc3BjQgpk-fWtCGXz3fBEUhx0b=
+2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/F6oEg91tSJGzmj2KOyF2_3d-room-alonso.png" alt=3D"3D Room - ThreeJS" heig=
+ht=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/QztFP67HK_ar8uUGt6XOZA~~/AABEfgA~/Rg=
+Rm6zLyP0QxaHR0cHM6Ly9jb2RlcGVuLmlvL3JpY2FyZG9vbGl2YWFsb25zby9wZW4vS0tiV0dOW=
+lcDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">3D=
+ Room - ThreeJS</a></div>
+                                        <div class=3D"spark-desc">Ricardo O=
+liva Alonso is back with a new intricately detailed room for you to explore=
+. Drag your pointer around the scene to view it from every angle, and then =
+check out=0A=
+<a href=3D"http://post.spmailtechnolo.com/f/a/-jk9rWPJqaJEbFPTNWH9hg~~/AABE=
+fgA~/RgRm6zLyP0QlaHR0cHM6Ly9jb2RlcGVuLmlvL3JpY2FyZG9vbGl2YWFsb25zb1cDc3BjQg=
+pk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">Ricardo's p=
+rofile for many more</a>.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/hafPxyVlb0_1aEoPODXMSg~~/AABEfgA~/RgRm6zLyP0QqaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2hsdWViYmVyaW5nL3Blbi9keXd6UHJlVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsd=
+mVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/F4G9ec4PQPGJuJ1BSdq7_recipe-card.png" alt=3D"Recipe Card" height=3D"" w=
+idth=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/hafPxyVlb0_1aEoPODXMSg~~/AABEfgA~/Rg=
+Rm6zLyP0QqaHR0cHM6Ly9jb2RlcGVuLmlvL2hsdWViYmVyaW5nL3Blbi9keXd6UHJlVwNzcGNCC=
+mT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">Recipe Car=
+d</a></div>
+                                        <div class=3D"spark-desc">hluebberi=
+ng shares a glassmorphic design concept for an recipe card, complete with a=
+ real, cookable recipe and an interactive ingredient checklist.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"collection">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/EAeSDq1F63WIvh5hgcbe6A~~/AABEfgA~/RgRm6zLyP0QkaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2NvbGxlY3Rpb24vVllacmpRVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlM=
+DQ0QHNvb25lcnMudXNYBAAAAAA~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/kVnKjrnhRZiQlYtnaJrn_cpc-nav-bar.png" alt=3D"#CodePenChallenge: Navigat=
+ion Bars" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">coll=
+ection</div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/EAeSDq1F63WIvh5hgcbe6A~~/AABEfgA~/Rg=
+Rm6zLyP0QkaHR0cHM6Ly9jb2RlcGVuLmlvL2NvbGxlY3Rpb24vVllacmpRVwNzcGNCCmT59a0IZ=
+fPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">#CodePenChallenge:=
+ Navigation Bars</a></div>
+                                        <div class=3D"spark-desc">We built =
+navigation bars during the 2nd week of the September challenge! Navigate yo=
+ur way through our collection from week two, including Pens by <a href=3D"h=
+ttp://post.spmailtechnolo.com/f/a/ZLbHr1JJePz6WEFxHXpFqw~~/AABEfgA~/RgRm6zL=
+yP0QmaHR0cHM6Ly9jb2RlcGVuLmlvL2FsZXgzbzAvcGVuL3ZZdm1YTXdXA3NwY0IKZPn1rQhl89=
+3wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">alex3o0</a>, <a hre=
+f=3D"http://post.spmailtechnolo.com/f/a/v93C1F2MwA3bbp4bwaMWNw~~/AABEfgA~/R=
+gRm6zLyP0QpaHR0cHM6Ly9jb2RlcGVuLmlvL2NsZXZlcnlldGkvcGVuL1BvWG1aanZXA3NwY0IK=
+ZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">Clever Ye=
+ti</a>, <a href=3D"http://post.spmailtechnolo.com/f/a/0onZJMnlLevfeuIS1hllV=
+w~~/AABEfgA~/RgRm6zLyP0QpaHR0cHM6Ly9jb2RlcGVuLmlvL3BpeGVsc2xhdmUvcGVuL09Kcm=
+1OYWdXA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAA=
+A~~">Connie Finkelman</a>, and <a href=3D"http://post.spmailtechnolo.com/f/=
+a/jw_y8MgZ3bBKckEmHZ2icw~~/AABEfgA~/RgRm6zLyP0QnaHR0cHM6Ly9jb2RlcGVuLmlvL3N=
+0b3VtYW5uL3Blbi9XTkxqb2RaVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0QH=
+Nvb25lcnMudXNYBAAAAAA~">Mads Stoumann</a>.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"link">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/qjwH4aXYPiLRJjjkiAsh3A~~/AABEfgA~/RgRm6zLyP0ROaHR0cHM6Ly93d3cuc2=
+1hc2hpbmdtYWdhemluZS5jb20vMjAyMy8wOS9yZXZlYWxpbmctaW1hZ2VzLWNzcy1tYXNrLWFua=
+W1hdGlvbnMvVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNY=
+BAAAAAA~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/cDHclhPiS1KyTKX6N9Aw_revealing-images.png" alt=3D"Revealing Images With=
+ CSS Mask Animations" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">link=
+</div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/qjwH4aXYPiLRJjjkiAsh3A~~/AABEfgA~/Rg=
+Rm6zLyP0ROaHR0cHM6Ly93d3cuc21hc2hpbmdtYWdhemluZS5jb20vMjAyMy8wOS9yZXZlYWxpb=
+mctaW1hZ2VzLWNzcy1tYXNrLWFuaW1hdGlvbnMvVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2ls=
+dmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">Revealing Images With CSS Mask Animat=
+ions</a></div>
+                                        <div class=3D"spark-desc">&quot;The=
+ idea is fairly simple: take a single &lt;img&gt; tag and harness the power=
+ of CSS to accomplish complex hover transitions. Through different demos, y=
+ou will see how CSS masks combined with gradients allow us to create fancy =
+effects =E2=80=94 with efficient, reusable code.&quot; From Temani Afif for=
+ Smashing Magazine.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/UqBlNS_tzvJCXdga-y8U2g~~/AABEfgA~/RgRm6zLyP0QlaHR0cHM6Ly9jb2RlcG=
+VuLmlvL0pvcHppay9wZW4veUxHTXpPS1cDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3RyZ=
+TA0NEBzb29uZXJzLnVzWAQAAAAA">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/JfaZNFxHQviF0dY9WfAf_css-cat-animation.png" alt=3D"Pure CSS Cat Respons=
+ive Animation | CSS Art" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/UqBlNS_tzvJCXdga-y8U2g~~/AABEfgA~/Rg=
+Rm6zLyP0QlaHR0cHM6Ly9jb2RlcGVuLmlvL0pvcHppay9wZW4veUxHTXpPS1cDc3BjQgpk-fWtC=
+GXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">Pure CSS Cat Respo=
+nsive Animation | CSS Art</a></div>
+                                        <div class=3D"spark-desc">Alexis Mo=
+ra Angulo <a href=3D"http://post.spmailtechnolo.com/f/a/mGkqtd45fRzzbqWkozj=
+vOw~~/AABEfgA~/RgRm6zLyP0Q8aHR0cHM6Ly9kcmliYmJsZS5jb20vc2hvdHMvNTc5Nzg2MS1I=
+b3ctdG8tQ2xlYW4tWW91ci1DYXQtMTAxVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJ=
+lMDQ0QHNvb25lcnMudXNYBAAAAAA~">translates a funny Dribbble shot by Petter P=
+entil=C3=A4</a> to CSS in this animated Pen.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"link">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/HWr8iYUm9GERNSgGUzWZzQ~~/AABEfgA~/RgRm6zLyP0QraHR0cHM6Ly93d3cueW=
+91dHViZS5jb20vd2F0Y2g_dj1kb0tiRFRXc010d1cDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpb=
+HZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/Iyg5UbRSsKs5Jzo1UOoe_3d-css-not-real.png" alt=3D"Sunday CSS #10: 3D in =
+CSS is not real" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">link=
+</div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/HWr8iYUm9GERNSgGUzWZzQ~~/AABEfgA~/Rg=
+Rm6zLyP0QraHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g_dj1kb0tiRFRXc010d1cDc3BjQ=
+gpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">Sunday CSS=
+ #10: 3D in CSS is not real</a></div>
+                                        <div class=3D"spark-desc">Learn how=
+ to see through the illusion of 3D in CSS in this YouTube tutorial from Jul=
+ia Miocene, then <a href=3D"http://post.spmailtechnolo.com/f/a/MnU9N0fCEuCU=
+3LnTaqnAcQ~~/AABEfgA~/RgRm6zLyP0QmaHR0cHM6Ly9jb2RlcGVuLmlvL21pb2NlbmUvcGVuL=
+3JOb3lMeU9XA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gE=
+AAAAAA~~">play with the Pen</a>.</div>
+                                      </div>
+                                   =20
+                                  </mj-raw>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td><td class=3D"" style=3D"vertical-align=
+:top;width:300px;" ><![endif]-->
+              <div class=3D"mj-column-per-50 mj-outlook-group-fix" style=3D=
+"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-=
+align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:15px 20px 0 5=
+px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;text-align:left;color:#e3e4e8;">
+                                  <mj-raw>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/Tpjc7ju_9VqhBP3sU_aFdQ~~/AABEfgA~/RgRm6zLyP0QoaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2xvZmljb2Rlcy9wZW4vcUJMamFleVcDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc=
+3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/J3YfnHdRWiAQbQVl1UGM_70s-ovals.png" alt=3D"70s Ovals" height=3D"" width=
+=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/Tpjc7ju_9VqhBP3sU_aFdQ~~/AABEfgA~/Rg=
+Rm6zLyP0QoaHR0cHM6Ly9jb2RlcGVuLmlvL2xvZmljb2Rlcy9wZW4vcUJMamFleVcDc3BjQgpk-=
+fWtCGXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">70s Ovals</a><=
+/div>
+                                        <div class=3D"spark-desc">LoFi brin=
+gs us a little bit of retro cool with this groovy textured JavaScript patte=
+rn,=0A=
+based on a <a href=3D"http://post.spmailtechnolo.com/f/a/utnfr2UFUpqTrxY2vG=
+2jlg~~/AABEfgA~/RgRm6zLyP0QvaHR0cHM6Ly93d3cucGludGVyZXN0LmllL3Bpbi83NjkxMzE=
+wNjEzMjkzODI5NS9XA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy=
+51c1gEAAAAAA~~">Pinterest find</a>.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"sponsor">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/hD2FviJFCo-NHbzyXRgYQA~~/AABEfgA~/RgRm6zLyP0SCaHR0cHM6Ly9zcnYuYn=
+V5c2VsbGFkcy5jb20vYWRzL2xvbmcveC9UNklFQlRESFRUVFRUVDNXVDZETlBUVFRUVFRRWFlUU=
+UtXVFRUVFRUNjRJRVQ3VlRUVFRUVFdCVUM3Wk5FRVpHQzJWTlBSRE5QM01XQ0pMNzJRTE5XQVNI=
+S01KVFcDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAA=
+A">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/WTe0WcGeQZU4qODFjuH7_600x600-p99conf-speaker-agenda-2 (3).png" alt=3D"W=
+atch 50+ low-latency engineering talks" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">spon=
+sor</div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/hD2FviJFCo-NHbzyXRgYQA~~/AABEfgA~/Rg=
+Rm6zLyP0SCaHR0cHM6Ly9zcnYuYnV5c2VsbGFkcy5jb20vYWRzL2xvbmcveC9UNklFQlRESFRUV=
+FRUVDNXVDZETlBUVFRUVFRRWFlUUUtXVFRUVFRUNjRJRVQ3VlRUVFRUVFdCVUM3Wk5FRVpHQzJW=
+TlBSRE5QM01XQ0pMNzJRTE5XQVNIS01KVFcDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3R=
+yZTA0NEBzb29uZXJzLnVzWAQAAAAA">Watch 50+ low-latency engineering talks</a><=
+/div>
+                                        <div class=3D"spark-desc">Obsessed =
+with P99 percentiles, low-latency engineering &amp; performance optimizatio=
+ns? Join your peers at P99 CONF: a highly-technical online conference on al=
+l things performance. Hear from experts at Netflix, Google, Meta, TikTok, S=
+quare + more. Oct 18-19. Register now =E2=80=94 it=E2=80=99s free!</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/Z_ysmJzlpSEo9P8sDT6YQw~~/AABEfgA~/RgRm6zLyP0QqaHR0cHM6Ly9jb2RlcG=
+VuLmlvL2Zpbm5jaGlsbGFoL3Blbi9iR09xclhnVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsd=
+mVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/sutWwCv9TFawbrgn4ejY_glowing-hover-effect.png" alt=3D"Glowing Hover Eff=
+ect" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/Z_ysmJzlpSEo9P8sDT6YQw~~/AABEfgA~/Rg=
+Rm6zLyP0QqaHR0cHM6Ly9jb2RlcGVuLmlvL2Zpbm5jaGlsbGFoL3Blbi9iR09xclhnVwNzcGNCC=
+mT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">Glowing Ho=
+ver Effect</a></div>
+                                        <div class=3D"spark-desc">finnchill=
+ah gives pet portraits a powerful cursor-aware glow with CSS gradients &amp=
+; blend modes, plus a little dash of JS.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"sponsor">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/A0tzdRULnbeJyl6IIkrYiA~~/AABEfgA~/RgRm6zLyP0SCaHR0cHM6Ly9zcnYuYn=
+V5c2VsbGFkcy5jb20vYWRzL2xvbmcveC9UNklPVFRTSFRUVFRUVDNMUkU0Q1BUVFRUVFQ2NFRFU=
+EtXVFRUVFRUNjNIVEM3VlRUVFRUVE1JWlY2WVVXTjRQSzdTVTZXRDVWS1lXVlJENFEyV0NMTURJ=
+UVlBRVcDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAA=
+A">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/VM19Gy6KQcqLSOPX2pgc_Cube image 2 2600x600 (1).jpg" alt=3D"Work smart, =
+not hard. Easily run builds with Kubes" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">spon=
+sor</div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/A0tzdRULnbeJyl6IIkrYiA~~/AABEfgA~/Rg=
+Rm6zLyP0SCaHR0cHM6Ly9zcnYuYnV5c2VsbGFkcy5jb20vYWRzL2xvbmcveC9UNklPVFRTSFRUV=
+FRUVDNMUkU0Q1BUVFRUVFQ2NFRFUEtXVFRUVFRUNjNIVEM3VlRUVFRUVE1JWlY2WVVXTjRQSzdT=
+VTZXRDVWS1lXVlJENFEyV0NMTURJUVlBRVcDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3R=
+yZTA0NEBzb29uZXJzLnVzWAQAAAAA">Work smart, not hard. Easily run builds with=
+ Kubes</a></div>
+                                        <div class=3D"spark-desc">Benefit f=
+rom managed configurations and updates, allowing your team to focus on deve=
+loping =E2=80=94 on secure and scalable infrastructure.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/v8u1ibu6bTWPxAltvsAYMw~~/AABEfgA~/RgRm6zLyP0QnaHR0cHM6Ly9jb2RlcG=
+VuLmlvL3dha2FuYS1rL3Blbi9NV1piVnhtVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsdmVzd=
+HJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/thPy4IfLTy66A363JOSM_wall-poster-animation.png" alt=3D"Wall Poster Anim=
+ation" height=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/v8u1ibu6bTWPxAltvsAYMw~~/AABEfgA~/Rg=
+Rm6zLyP0QnaHR0cHM6Ly9jb2RlcGVuLmlvL3dha2FuYS1rL3Blbi9NV1piVnhtVwNzcGNCCmT59=
+a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">Wall Poster An=
+imation</a></div>
+                                        <div class=3D"spark-desc">Wakana Y.=
+K. continues a series of animated mockups of interior spaces with this livi=
+ng room with poster of rotating trippy animations. For more, check Wakana's=
+ <a href=3D"http://post.spmailtechnolo.com/f/a/7QTHkJF-sbYbugjYU8lI3A~~/AAB=
+EfgA~/RgRm6zLyP0QnaHR0cHM6Ly9jb2RlcGVuLmlvL3dha2FuYS1rL3Blbi9qT1hWclhWVwNzc=
+GNCCmT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~"> Wall =
+poster slideshow</a> and <a href=3D"http://post.spmailtechnolo.com/f/a/zTkL=
+hWOsx3x4wy_jViiRXQ~~/AABEfgA~/RgRm6zLyP0QnaHR0cHM6Ly9jb2RlcGVuLmlvL3dha2FuY=
+S1rL3Blbi96WXlaT1l5VwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25l=
+cnMudXNYBAAAAAA~">window view</a>.</div>
+                                      </div>
+                                   =20
+                                      <div class=3D"spark-item" data-type=
+=3D"pen">
+                                        <a href=3D"http://post.spmailtechno=
+lo.com/f/a/_8zFo9DSraF8iUSAHHd2KQ~~/AABEfgA~/RgRm6zLyP0QmaHR0cHM6Ly9jb2RlcG=
+VuLmlvL3NodWRpbmcvcGVuL1dOTEdRb3JXA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0c=
+mUwNDRAc29vbmVycy51c1gEAAAAAA~~">
+                                          <img class=3D"spark-thumb" src=3D=
+"https://production-codepen-email-assets.s3-us-west-2.amazonaws.com/product=
+ion/SZLPIDY5T4GjkuSjld6b_scroll-timeline.png" alt=3D"Scroll Timeline" heigh=
+t=3D"" width=3D"260">
+                                        </a>
+                                        <div class=3D"spark-item-type">pen<=
+/div>
+                                        <div class=3D"spark-title"><a href=
+=3D"http://post.spmailtechnolo.com/f/a/_8zFo9DSraF8iUSAHHd2KQ~~/AABEfgA~/Rg=
+Rm6zLyP0QmaHR0cHM6Ly9jb2RlcGVuLmlvL3NodWRpbmcvcGVuL1dOTEdRb3JXA3NwY0IKZPn1r=
+Qhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~">Scroll Timelin=
+e</a></div>
+                                        <div class=3D"spark-desc">Scroll sh=
+adows are cool, but the scroll indicators in Shu Ding's Scroll Timelines Pe=
+n are perhaps even more so for showing there's more content to see in a spe=
+cific direction. See also, <a href=3D"http://post.spmailtechnolo.com/f/a/QQ=
+FY5-qDaNgY_gyhSSHXSg~~/AABEfgA~/RgRm6zLyP0QjaHR0cHM6Ly9jb2RlcGVuLmlvL2poM3k=
+vcGVuL09KclJ2RVZXA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy=
+51c1gEAAAAAA~~">Jhey Tompkins' variation on the same concept</a>.</div>
+                                      </div>
+                                   =20
+                                  </mj-raw>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" styl=
+e=3D"width:600px;" width=3D"600" bgcolor=3D"#131417" ><tr><td style=3D"line=
+-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"background:#131417;background-color:#131417;margin:0px au=
+to;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"background:#131417;background-color:#131=
+417;width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:20px 0;padding=
+-top:15px;text-align:center;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:600px;" ><![endif]-->
+              <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:15px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;text-align:left;color:#e3e4e8;">
+                                  <mj-raw>
+                                    <h2 class=3D"news-header" style=3D"marg=
+in: 0 0 5px 0;">
+                                      <img src=3D"https://assets.codepen.io=
+/t-1/chriscorner.png" style=3D"width: 65px;"> Chris=E2=80=99 Corner
+                                    </h2>
+                                    <p style=3D"color: #9dabc9; margin: 0 0=
+ 15px 0;font-size: 16px;">A collection of web design and development news a=
+nd thoughts from CodePen's own Chris Coyier.</p>
+                                    <div class=3D"news-bar"></div>
+                                  </mj-raw>
+                                  <mj-raw>
+                                    <div class=3D"news-content">
+                                      <p>Chrome 117 went stable this past w=
+eek. <a href=3D"http://post.spmailtechnolo.com/f/a/R0zJ-yj0EP3F_MkVNnUH8Q~~=
+/AABEfgA~/RgRm6zLyP0QpaHR0cHM6Ly9jaHJvbWl1bWRhc2guYXBwc3BvdC5jb20vc2NoZWR1b=
+GVXA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAAAA~~=
+">There is a website</a> where you can see what the plan is for Chrome rele=
+ases, by the way, which is handy when you care about such things.</p>=0A=
+<p>Chrome releases a major version about once a month, and I usually don=E2=
+=80=99t feel ultra compelled to write anything about it specifically. Rache=
+l Andrew does a great job covering web platform updates each month on Web.d=
+ev, like this past <a href=3D"http://post.spmailtechnolo.com/f/a/YWndYqFRmj=
+GuiD0zLH_HJg~~/AABEfgA~/RgRm6zLyP0Q9aHR0cHM6Ly93ZWIuZGV2L3dlYi1wbGF0Zm9ybS0=
+wOC0yMDIzLyNzdGFibGUtYnJvd3Nlci1yZWxlYXNlc1cDc3BjQgpk-fWtCGXz3fBEUhx0b2Jpbn=
+NpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">New to the web platform in August</=
+a>.</p>=0A=
+=0A=
+<p>I=E2=80=99m extra excited about this one, though, because it means <code=
+>subgrid</code> has now shipped across all three major browsers. Chrome was=
+ the straggler here:</p>=0A=
+<ul>=0A=
+<li>Firefox shipped subgrid on Dec 2, 2019.</li>=0A=
+<li>Safari shipped subgrid on Sep 11, 2022.</li>=0A=
+<li>Chrome shipped subgrid on Sep 12, 2023.</li>=0A=
+</ul>=0A=
+<p>Caniuse is a great site for not only checking support but also seeing <e=
+m>when</em> versions shipped that have support.</p>=0A=
+<p>Lest I type too many words without explaining what subgrid is=E2=80=A6 i=
+t=E2=80=99s a keyword that works with <code>grid-template-columns</code> an=
+d <code>grid-template-rows</code> that allow you to suck in the grid lines =
+that pass through the element from the parent grid.</p>=0A=
+=0A=
+<pre><code>.parent {=0A=
+  display: grid;=0A=
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;=0A=
+}=0A=
+.child {=0A=
+  grid-column: 2 / 4;=0A=
+  display: grid;=0A=
+  grid-template-columns: subgrid;=0A=
+}</code></pre>=0A=
+=0A=
+<p>Does your browser support it? Probably, but it=E2=80=99s still good to c=
+heck and to code around that check. <a href=3D"http://post.spmailtechnolo.c=
+om/f/a/ygmZuAmMlmWzWk4F0ZrqKw~~/AABEfgA~/RgRm6zLyP0QlaHR0cHM6Ly9jb2RlcGVuLm=
+lvL2JyYW11cy9wZW4vT0phWlZ5ZVcDc3BjQgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0N=
+EBzb29uZXJzLnVzWAQAAAAA">Bramus has a Pen</a> that=E2=80=99s a quicky check=
+. The CSS feature <code>@supports</code> is up for the job:</p>=0A=
+=0A=
+<pre><code>output::after {=0A=
+  content: &quot;=E2=9D=8C Your browser does not support subgrid&quot;;=0A=
+}=0A=
+=0A=
+@supports(grid-template-rows: subgrid) {=0A=
+  output::after {=0A=
+    content: &quot;=E2=9C=85 Your browser supports subgrid&quot;;=0A=
+  }=0A=
+}</code></pre>=0A=
+=0A=
+<img src=3D"https://res.cloudinary.com/css-tricks/image/upload/c_scale,w_84=
+8,h_652,dpr_2/f_auto,q_auto/v1694730037/tests_18539c8c8d.png?_i=3DAA" alt=
+=3D"Two separate browser windows with a CSS subgrid support test open in ea=
+ch window. The window on the left indicates that browser does not support s=
+ubgrid. The window on the right indicates that browser supports subgrid." w=
+idth=3D"550">=0A=
+=0A=
+<p>Perhaps the most classic example is when you set card elements on the gr=
+id, and you want elements with the cards to line up according to =E2=80=9Cs=
+hared=E2=80=9D grid lines. <a href=3D"http://post.spmailtechnolo.com/f/a/D4=
+VcaeXaOTXV7__Ttg8sMw~~/AABEfgA~/RgRm6zLyP0QjaHR0cHM6Ly9jb2RlcGVuLmlvL2poM3k=
+vcGVuL3pZeVlHTHhXA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy=
+51c1gEAAAAAA~~">Jhey has a demo like that</a> of the basics.</p>=0A=
+=0A=
+<img src=3D"https://res.cloudinary.com/css-tricks/image/upload/c_scale,w_80=
+0,h_584,dpr_2/f_auto,q_auto/v1694730517/CleanShot-2023-09-14-at-15.28.09.gi=
+f?_i=3DAA" alt=3D"Animated demo of the subgrid property helping to line up =
+cards on a shared grid line." width=3D"550">=0A=
+=0A=
+<p><a href=3D"http://post.spmailtechnolo.com/f/a/oAfaktpYNLrBV-j4oU1I5g~~/A=
+ABEfgA~/RgRm6zLyP0QqaHR0cHM6Ly9jb2RlcGVuLmlvL2NocmlzY295aWVyL3Blbi9iR1JYbUV=
+lVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">=
+I=E2=80=99ve also played with the cards idea</a>, which is perhaps even mor=
+e obvious where there are natural lines, like background colors running int=
+o each other:</p>=0A=
+=0A=
+<img src=3D"https://res.cloudinary.com/css-tricks/image/upload/c_scale,w_84=
+8,h_517,dpr_2/f_auto,q_auto/v1694797794/Screenshot-2023-09-15-at-10.08.10-A=
+M.png?_i=3DAA" alt=3D"A demo of subgrid in use, showing three cards: one wi=
+th a short title and long text, one with a very long title and short body c=
+opy, and one with a medium title and short body copy." width=3D"550">=0A=
+=0A=
+<p>Sometimes my favorite use cases are <em>little itty bitty tiny</em> thin=
+gs that are otherwise annoying or impossible to pull off well. For example!=
+ The aligning of CSS <code>counters</code> on list items. See below how in =
+the first example the content in the list items is ragged-left, but in the =
+second example, nicely aligned. That happens in this case by using <code>su=
+bgrid</code> to make all those counters essentially <a href=3D"http://post.=
+spmailtechnolo.com/f/a/-hdVqJzS28TbPGlqSrJS0A~~/AABEfgA~/RgRm6zLyP0QqaHR0cH=
+M6Ly9jb2RlcGVuLmlvL2NocmlzY295aWVyL3Blbi9OV3FHTGdqVwNzcGNCCmT59a0IZfPd8ERSH=
+HRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">share a column line from t=
+he parent list item grid</a>.</p>=0A=
+=0A=
+<img src=3D"https://res.cloudinary.com/css-tricks/image/upload/c_scale,w_42=
+1,h_235,dpr_2/f_auto,q_auto/v1694798182/Screenshot-2023-09-15-at-10.16.13-A=
+M.png?_i=3DAA" alt=3D"Two examples of sequentially numbered list items. In =
+the top example, the content in the list items is ragged-left. In the botto=
+m example they are evenly aligned." width=3D"300">=0A=
+=0A=
+<p>That example and several more are from a <a href=3D"http://post.spmailte=
+chnolo.com/f/a/H8GTrlq7f5UWcfwqlYL9sg~~/AABEfgA~/RgRm6zLyP0QwaHR0cHM6Ly93d3=
+cueW91dHViZS5jb20vd2F0Y2g_dj1lbVFjd3p3WU1tRSZ0PTJzVwNzcGNCCmT59a0IZfPd8ERSH=
+HRvYmluc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">video I did with Dave</a> =
+a little while ago looking at all sorts of uses for subgrid.</p>=0A=
+=0A=
+<img src=3D"https://res.cloudinary.com/css-tricks/image/upload/c_scale,w_84=
+8,h_476,dpr_2/f_auto,q_auto/v1694798309/Screenshot-2023-09-15-at-10.17.48-A=
+M.png?_i=3DAA" alt=3D"Still from a livestream of the ShopTalkShow with Chri=
+s Coyier &amp; Dave Rupert. Chris and Dave are screensharing a Pen that dem=
+onstrates form rows with subgrid." width=3D"550">=0A=
+=0A=
+<p>Another of my favorites? <a href=3D"http://post.spmailtechnolo.com/f/a/R=
+yQWw7jQVD0HvEbhDHeyyA~~/AABEfgA~/RgRm6zLyP0QqaHR0cHM6Ly9jb2RlcGVuLmlvL2Nocm=
+lzY295aWVyL3Blbi9ZenhxSmFwVwNzcGNCCmT59a0IZfPd8ERSHHRvYmluc2lsdmVzdHJlMDQ0Q=
+HNvb25lcnMudXNYBAAAAAA~">Lining up web forms that have variable length labe=
+ls</a>. That exactly the use case that Eric Meyer showcased when he said th=
+at <a href=3D"http://post.spmailtechnolo.com/f/a/vFaxbLyRHs_EyfKc1Bmxxw~~/A=
+ABEfgA~/RgRm6zLyP0RLaHR0cDovL21leWVyd2ViLmNvbS9lcmljL3Rob3VnaHRzLzIwMTYvMDE=
+vMTUvc3ViZ3JpZHMtY29uc2lkZXJlZC1lc3NlbnRpYWwvVwNzcGNCCmT59a0IZfPd8ERSHHRvYm=
+luc2lsdmVzdHJlMDQ0QHNvb25lcnMudXNYBAAAAAA~">subgrid is =E2=80=9Cconsidered =
+essential=E2=80=9D</a> <em>seven years ago</em> before subgrid shipped. Eri=
+c might have been a little wrong as grid has proven to be pretty dang usefu=
+l even without subgrid, but there is no doubt that it is even moreso now.</=
+p>=0A=
+=0A=
+<p>MORE VIDEOS, you say? Can do!</p>=0A=
+=0A=
+<ul>=0A=
+  <li>I think of Rachel Andrew as the One True CSS Layout Master and <a hre=
+f=3D"http://post.spmailtechnolo.com/f/a/YwusTAL7nUDnDSKdjwF0sg~~/AABEfgA~/R=
+gRm6zLyP0QraHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g_dj1ybUZfaUUwbE16d1cDc3Bj=
+Qgpk-fWtCGXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">she=E2=80=
+=99s got a whole talk dedicated to CSS subgrid</a>, which gets deeper into =
+the details. One little one you might want to know: subgrids inherit the pa=
+rent grid=E2=80=99s <code>gap</code>, but doesn=E2=80=99t have to!</li>=0A=
+  <li>Kevin Powell did a series of videos he called <strong>=E2=80=9CSubgri=
+d Awareness Month=E2=80=9D</strong> about a year ago. <a href=3D"http://pos=
+t.spmailtechnolo.com/f/a/XcV5lSkIshKHk7XZhVrh4Q~~/AABEfgA~/RgRm6zLyP0QraHR0=
+cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g_dj1JSVFhOWYwUkV0TVcDc3BjQgpk-fWtCGXz3fB=
+EUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">This one about consisten=
+t layouts</a> is a good place to start. CSS grid itself has strong =E2=80=
+=9Ccontrol the layout from the parent=E2=80=9D vibes (unlike flexbox), and =
+subgrid really enhances those powers.</li>=0A=
+</ul>
+                                     =20
+                                    </div>
+                                  </mj-raw>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" styl=
+e=3D"width:600px;" width=3D"600" bgcolor=3D"#333845" ><tr><td style=3D"line=
+-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"background:#333845;background-color:#333845;margin:0px au=
+to;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"background:#333845;background-color:#333=
+845;width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:20px 0;text-al=
+ign:center;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:600px;" ><![endif]-->
+              <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:15px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;line-height:1;text-align:left;color:#e3e4e8;">
+                                  <mj-raw>
+                                    <h2 class=3D"pro-header">
+                                      <a href=3D"http://post.spmailtechnolo=
+.com/f/a/JFHpSHB52lC9nNPkxBHidA~~/AABEfgA~/RgRm6zLyP0QXaHR0cHM6Ly9jb2RlcGVu=
+LmlvL3Byby9XA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1g=
+EAAAAAA~~"> CodePen PRO </a>
+                                    </h2>
+                                    <div class=3D"pro-bar"></div>
+                                    <div class=3D"pro-content">
+                                      <p>If you're ever in a situation wher=
+e you're using CodePen to present something, you should try out <a href=3D"=
+http://post.spmailtechnolo.com/f/a/5qjFCqFLReLn49dZx3lkdA~~/AABEfgA~/RgRm6z=
+LyP0Q4aHR0cHM6Ly9ibG9nLmNvZGVwZW4uaW8vZG9jdW1lbnRhdGlvbi9wcmVzZW50YXRpb24tb=
+W9kZS9XA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gEAAAA=
+AA~~">Presentation Mode</a>. As in, share over Zoom where you have no idea =
+the size of the screens of people watching. Or at a conference or classroom=
+ using an overhead projector. Or you're recording a YouTube video even! =0A=
+=0A=
+<p>Presentation Mode allows you to hide the header, offering more screen re=
+al estate, and allows you quickly change (via options in the footer) visual=
+ things like the colors and how things are sized). From experience, it's of=
+ten <em>very nice</em> to be able to flip to a &quot;light&quot; theme and =
+jack up the font size on-the-fly.</p>
+                                    </div>
+                                  </mj-raw>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" styl=
+e=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-siz=
+e:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style=3D"margin:0px auto;max-width:600px;">
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"width:100%;">
+        <tbody>
+          <tr>
+            <td style=3D"direction:ltr;font-size:0px;padding:20px 0;text-al=
+ign:center;">
+              <!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:600px;" ><![endif]-->
+              <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%">
+                  <tbody>
+                    <tr>
+                      <td style=3D"vertical-align:top;padding:25px;">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"" width=3D"100%">
+                          <tbody>
+                            <tr>
+                              <td align=3D"left" style=3D"font-size:0px;pad=
+ding:10px 25px;word-break:break-word;">
+                                <div style=3D"font-family:Lato, system-ui, =
+sans-serif;font-size:13px;line-height:1;text-align:left;color:#eeeeee;">
+                                  <p class=3D"subscription-details"> You ca=
+n adjust your <a href=3D"http://post.spmailtechnolo.com/f/a/XhVynoPeMk7OvdN=
+e9f6DCw~~/AABEfgA~/RgRm6zLyP0QpaHR0cHM6Ly9jb2RlcGVuLmlvL3NldHRpbmdzL25vdGlm=
+aWNhdGlvbnNXA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1g=
+EAAAAAA~~"> email preferences </a> any time, or <a href=3D"http://post.spma=
+iltechnolo.com/f/a/UeW8H0EDKFcvY2Az8zKX6g~~/AABEfgA~/RgRm6zLyP0TFaHR0cHM6Ly=
+9jb2RlcGVuLmlvL3NldHRpbmdzL25vdGlmaWNhdGlvbnMvb3B0b3V0P191bj1PYmc4QXN0ZUpPV=
+TVmNEo2N211JTJCR2NhZ0lkV1dXT0FqOEt2aTFzdTFsa0UlMkZETGMzYlp6eGNMcnRHN0gwY0lu=
+dkNETFZqdUhmTzVZN0pXcjlxZmVaVlhhTlAzZFZHYVZoSnNudGpSaXA5MXhzZHZQVU9WRU1IbjY=
+5VlZQUzA2cmUzSk9tQVElM0QlM0RXA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwND=
+RAc29vbmVycy51c1gEAAAAAA~~"> instantly opt out </a> of emails of this kind.=
+ Need help with anything? Hit up <a href=3D"http://post.spmailtechnolo.com/=
+f/a/Ro1jywbW6D069qfBY2H4zw~~/AABEfgA~/RgRm6zLyP0QaaHR0cHM6Ly9jb2RlcGVuLmlvL=
+3N1cHBvcnRXA3NwY0IKZPn1rQhl893wRFIcdG9iaW5zaWx2ZXN0cmUwNDRAc29vbmVycy51c1gE=
+AAAAAA~~">support</a>. </p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--[if mso | IE]></td><![endif]-->
+              <div class=3D"footer-bar"></div>
+              <!--[if mso | IE]></tr></table><![endif]-->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--[if mso | IE]></td></tr></table><![endif]-->
+  </div>
+
+<img border=3D"0" width=3D"1" height=3D"1" alt=3D"" src=3D"http://post.spma=
+iltechnolo.com/q/x0SqLhg9wLLv4ZP7JxRaow~~/AABEfgA~/RgRm6zLyPlcDc3BjQgpk-fWt=
+CGXz3fBEUhx0b2JpbnNpbHZlc3RyZTA0NEBzb29uZXJzLnVzWAQAAAAA">
+</body>
+
+</html>
+

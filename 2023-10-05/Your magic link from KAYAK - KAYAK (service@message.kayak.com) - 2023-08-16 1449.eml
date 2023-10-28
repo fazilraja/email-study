@@ -1,0 +1,679 @@
+Received: from MW5PR20MB4353.namprd20.prod.outlook.com (2603:10b6:303:19d::12)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Wed, 16 Aug 2023
+ 19:49:05 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=c2hfLshJD9zv/TfY2T5t9up4uXQ+BeCt9VKNdX8ownoyf12gLGRjrcnoCSEi1cGY18YYBQLMswy8sLL4Ws0w/HBSPnjD7KZbZuEp8zNeEFOJldCzjefM1r0n0qxDMBi5TKRss5rw2CleYM1wVCtXHfsVpuEi29p57+0VFP3wgW9X6L59fkQ8S/0XBIZ9HxkZ8GoZLPMFxFUu3tDkrFvNLwMUqi1sm/38kZaSteyTmQQ5OJP0N/XJ1pSskf/Szyml8laOFRpqFumYfPXsw37bijbGVy+hrRy+JJJjL6BMyrPvgH03hC72xFWqKky0Q1EMsglvo/0kkbiS56JsukfyGw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B8cP9nGcI+L0SUOpACBwv2QhZVZG36f6fi19fpa/96I=;
+ b=GsrlFiRX1WtIHoze49ZvXXrjou8eYoyCYljTkrDQqVP7G9bYbq61Q2ifPZw7W0uoeSIneaGvnyiZk6vyOdYETmGI03bpfc7RvYQlBL6AOA1rO86U31PykQfPnpJ9Yv/rioSp6yMdkH+8EtnQ58n2mKWbzRL0sOTmeFMfJQqyY2ikwF212TY4Oar8NvJxfXrAUd9qtEMANFjdte5BcR7PhT+S74hxvMPg75rsjtvgcCNNScuj4f24Z/RWa5USeUiTdde92UBqjbQWfgMvlo1XZ3BqdZU1+YjK1U0ulNDnplkm8f0nMvCpVL5IaK1kqZNUwnITBUIQZx48+ARKlj/Bww==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.215.170) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=message.kayak.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=message.kayak.com; dkim=pass (signature was verified)
+ header.d=message.kayak.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=service@message.kayak.com]
+ dkim=[1,1,header.i=@message.kayak.com] dmarc=[1,1,header.from=kayak.com])
+Received: from MW4PR03CA0179.namprd03.prod.outlook.com (2603:10b6:303:8d::34)
+ by MW5PR20MB4353.namprd20.prod.outlook.com (2603:10b6:303:19d::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.29; Wed, 16 Aug
+ 2023 19:49:04 +0000
+Received: from CO1PEPF000044FB.namprd21.prod.outlook.com
+ (2603:10b6:303:8d:cafe::ed) by MW4PR03CA0179.outlook.office365.com
+ (2603:10b6:303:8d::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.33 via Frontend
+ Transport; Wed, 16 Aug 2023 19:49:04 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.215.170)
+ smtp.mailfrom=message.kayak.com; dkim=pass (signature was verified)
+ header.d=message.kayak.com;dmarc=pass action=none
+ header.from=message.kayak.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ message.kayak.com discourages use of 209.85.215.170 as permitted sender)
+Received: from mail-pg1-f170.google.com (209.85.215.170) by
+ CO1PEPF000044FB.mail.protection.outlook.com (10.167.241.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6723.6 via Frontend Transport; Wed, 16 Aug 2023 19:49:04 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:57D4120AD6887B31B798BEEA005CC4C571BD85DA7B02858B8CB367B138B31A3E;UpperCasedChecksum:9BE96A193DF33C9BF2089A07591ED57D31C022FDD9FA494C9372C973EFC83334;SizeAsReceived:6161;Count:30
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-55b0e7efb1cso4092714a12.1
+        for <tobinsilvestre@outlook.com>; Wed, 16 Aug 2023 12:49:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692215344; x=1692820144;
+        h=x-forwarded-for:list-id:list-unsubscribe:mime-version:subject
+         :message-id:to:sender:from:date:content-transfer-encoding
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B8cP9nGcI+L0SUOpACBwv2QhZVZG36f6fi19fpa/96I=;
+        b=C8sj945TZG5NeTRN5Ic1ZrZjhxxZa3fDWUVjWRvLCAfa9jn2/s4Fnq7McjSun9GZlA
+         DjeoC0+2p4jLWW8iEm93zK+mjljfR2npCBwjIRlsuKnkXiWybV+KG95G4KS1Z+C3uc4b
+         2POaDeHD9PIwVnCJpGCN+NYpF7TT+s8D0BGQffqpneYamAkfCCqOuoylhXS2iVy9c7Ie
+         IHObDdOGDDXLAzAzWmnClOg7Lwc74OhZXP121x57r7vFCBTJ3ZulLRDWLcxysXkNy4np
+         rYtLhNhUgELkVrAVEZQqbZI21fkE+CwSnpjkTwUc7WBvWomaA9mJA/fpDV/73IBcZa3b
+         +xZg==
+X-Gm-Message-State: AOJu0YzEvN5iLvvCRbL067TIYH7GAU7O6px3viAErwy/aB+oFPNH3i0i
+	3lY07UGvunRkA8tdrsehBZ/zzi6AqoqWHT8UcA==
+X-Google-Smtp-Source: AGHT+IGV9psf3I/SbTaFwldaRs4X04kcSLmJnyPBFmq8RO1H5teYDDs7H21eBjPj/saYqBTF3AnZPxYoQ3eaHDpEo1Ayd6nKPkI=
+X-Received: by 2002:a17:90a:8c01:b0:26d:11ff:1832 with SMTP id a1-20020a17090a8c0100b0026d11ff1832mr683230pjo.27.1692215343981;
+        Wed, 16 Aug 2023 12:49:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1692215343; cv=none;
+        d=google.com; s=arc-20160816;
+        b=Bopiup3p7oji9i/bKqRe7rkuDfSUmZ9DT5Pq5u5qyzLeb75SxPwPZ0YPiFkEX8kwF0
+         b5oxsOzaPWL/pOoNWsRYvips1suul4qm79F1s5U+0oWwMBFXDECMsQ6MueZIM2njapQD
+         EAwjcMqu41E3p70Wff45dMLyLEg4Pi6/boVle+Nycw9yL+OX/kIjaEgrEo3bl3sM93AN
+         g4VWbn9+mfgAfX9f8VA4iubYp4diCCdVhUlB4c2K8Woqq88QZ5XOPQQffeQN0pDw7z1Q
+         m9Lcy0yqAxA65C3CGMnZquz95ps7lOVNxw27Q2FGqENMQD02ZquoUdMZH+HqhZwCKYyf
+         ZoQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=list-id:list-unsubscribe:mime-version:subject:message-id:to:sender
+         :from:date:content-transfer-encoding:dkim-signature;
+        bh=B8cP9nGcI+L0SUOpACBwv2QhZVZG36f6fi19fpa/96I=;
+        fh=0mbYgr56CgM4maAuso4bRHO6k6YrnX+PfPL/au2xcdI=;
+        b=frPf85/yqitN3vNlHOe6lMED9qDaDftLO8x9ikyqxWEG4L/qkNZX692kLkW0MrINFC
+         MQAW66Hcx0g/nrJgMMLnQvMV3cQtER5rA8+Ia2eEkTNp1rkW/1n9abgmR3G830hp/Usz
+         0kFnfLO+qXu93o7AvQUd7ixFCyTIQq+TL+V7kJ/JZwTk1EABOtifXaR4mU/AOhzSMKp5
+         IA4jlYY0mpFcCGFg8OpR+iXd9xGPxhIeOn6AhbseQ6PWVZkTjluez3dKRKW6JGSZMs2I
+         LAjaX613rc5/mp8n1Xw+xqlgEOXxy+a2X+fYjR1YL0p+RfStr7JvikW7BLo0W9OLlox6
+         w76Q==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@message.kayak.com header.s=scph0216 header.b=Avgwhrog;
+       spf=pass (google.com: domain of service@message.kayak.com designates 192.174.83.196 as permitted sender) smtp.mailfrom=service@message.kayak.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=kayak.com
+Return-Path: service@message.kayak.com
+Received: from mta-83-196.sparkpostmail.com (mta-83-196.sparkpostmail.com. [192.174.83.196])
+        by gmr-mx.google.com with ESMTPS id si15-20020a17090b528f00b00269342a194bsi10170pjb.1.2023.08.16.12.49.03
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 16 Aug 2023 12:49:03 -0700 (PDT)
+Received-SPF: pass (google.com: domain of service@message.kayak.com designates 192.174.83.196 as permitted sender) client-ip=192.174.83.196;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@message.kayak.com header.s=scph0216 header.b=Avgwhrog;
+       spf=pass (google.com: domain of service@message.kayak.com designates
+ 192.174.83.196 as permitted sender) smtp.mailfrom=service@message.kayak.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=kayak.com
+X-MSFBL: DfPkRS47xDYqS3eFKSMaD9Za3wP+Om6LzmRKVxjwU2g=|eyJjdXN0b21lcl9pZCI
+	6IjEiLCJtZXNzYWdlX2lkIjoiNjRkYjJmMjhkZDY0N2JmNWVhODEiLCJzdWJhY2N
+	vdW50X2lkIjoiMCIsInRlbmFudF9pZCI6ImtheWFrIiwiciI6InRvYmluc2lsdmV
+	zdHJlMDI1QHNvb25lcnMudXMifQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=message.kayak.com;
+	s=scph0216; t=1692215343; i=@message.kayak.com;
+	bh=B8cP9nGcI+L0SUOpACBwv2QhZVZG36f6fi19fpa/96I=;
+	h=Content-Type:Date:From:To:Message-ID:Subject:List-Unsubscribe:
+	 From:To:Cc:Subject;
+	b=AvgwhroglZT7Uz7LPhbEnZdWY8w6HDYjUjOFAw0m9bOzPKFg9Jisqf5eCSoZrFM8x
+	 D7Bf4wl1RKN2ewGsfdHnpmnf2ymLWZI/d9524ROyQRQglkJWC5E4RHcUEHC4iLZSVE
+	 Z1Mz/A8KS1/ZRzDBKlzQKjE1qto+5tZG4et2HLUM=
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="utf-8"
+Authentication-Results-Original: gh.mta2vsmtp.cc.prd.sparkpost
+ smtp.user=<hidden>; auth=pass (LOGIN)
+Received: from [208.94.136.243] ([208.94.136.243:41579] helo=p4hermes003.som.kayak.com)
+	by gh.mta2vsmtp.cc.prd.sparkpost (envelope-from <service@message.kayak.com>)
+	(ecelerity 4.4.1.18015 r(msys-ecelerity:tags/4.4.1.8)) with ESMTPSA (cipher=AES-256-GCM) 
+	id AE/18-42581-F282DD46; Wed, 16 Aug 2023 19:49:03 +0000
+Received: from p4hermes003.som.kayak.com (localhost.localdomain [127.0.0.1])
+	by p4hermes003.som.kayak.com (8.14.7/8.14.7) with ESMTP id 37GJn2eP020348
+	for <tobinsilvestre025@sooners.us>; Wed, 16 Aug 2023 15:49:02 -0400
+Date: Wed, 16 Aug 2023 15:49:02 -0400 (EDT)
+From: KAYAK <service@message.kayak.com>
+Sender: KAYAK <service@message.kayak.com>
+To: tobinsilvestre025@sooners.us
+Message-ID: <e2.MTAkJDQkTi9BJHVzJHA0LnNvbQ==.1692215342.822171@p4hermes003>
+Subject: Your magic link from KAYAK
+X-R9-Home-URL: http://www.kayak.com
+List-Unsubscribe: <mailto:unsubscribe@kayak-m.sparkpostelite.com?subject=unsubscribe:G0t8YDDXNjhhdsd6CQilVUyyYgQk2Mi0qc-_Fpsucy4~|eyAicmNwdF90byI6ICJ0b2JpbnNpbHZlc3RyZTAyNUBzb29uZXJzLnVzIiwgInRlbmFudF9pZCI6ICJrYXlhayIsICJjdXN0b21lcl9pZCI6ICIxIiwgInN1YmFjY291bnRfaWQiOiAiMCIsICJtZXNzYWdlX2lkIjogIjY0ZGIyZjI4ZGQ2NDdiZjVlYTgxIiB9>
+List-Id: <kayak.1.0.sparkpostmail.com>
+X-Forwarded-For: tobinsilvestre025@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 30
+X-MS-Exchange-Organization-ExpirationStartTime: 16 Aug 2023 19:49:04.2353
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ fe7d53ad-cc03-4bef-a1fe-08db9e91d879
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ CO1PEPF000044FB:EE_|MW5PR20MB4353:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ CO1PEPF000044FB.namprd21.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 8/16/2023 6:12:04 AM
+X-MS-Office365-Filtering-Correlation-Id: fe7d53ad-cc03-4bef-a1fe-08db9e91d879
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.215.170
+X-SID-PRA: SERVICE@MESSAGE.KAYAK.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:5;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2023 19:49:04.1884
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe7d53ad-cc03-4bef-a1fe-08db9e91d879
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1PEPF000044FB.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR20MB4353
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.6751129
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6678.025
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:0;pcwl:0;kl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(2008001134)(2008120430)(4810010)(4910033)(8820095)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPnuPHonQEMEu9e1hUt6szAds3Ri2NxgQY5BL0BmyEnSDf77rSLkqWTeAv7iAfwdPjGiaMWnkxnSuIoAUobjwZ9XK1aHJdkaNGZ1UQAFskH8jfzNiBxFcwurp26nCo1GxRtr0/WLvp9n48HEPU0Iyx0e7zZ5K5HAu9hsakB/m2avhA4C42SNZxfiMakqU7ceYf0=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SWd4RW44dFlUMG9TUHRPREtTU2o5c2ZCNUVJandTTzBjUGpRTTl6SjZDWENh?=
+ =?utf-8?B?ZXBuNUVZajNVMHg5RHNYbVJCeFRKRXdrNkE5SW8zcStwQml3ZkhJNzVabU9E?=
+ =?utf-8?B?blJtdWxTRTZaL1p3d0E5a2RUYTBVaThucllUb2ZMZVNPazBOYkh3VEJnU0Fu?=
+ =?utf-8?B?OWR6RmtKWkRGaVZRNDl6TVpIYno5WWkya3poSEtMd0hRRXZJT1ZvUGRiMWRZ?=
+ =?utf-8?B?T3BwYTUyaEQyWVNWeGgwSUdNWXFhSU1xZlBQVTd1Vkc2Z0tPa1o0LzhxL3NL?=
+ =?utf-8?B?MjZYaGhjb2RiMHBqOUQ1L1NTTWE1c2pac3RIbmloMk52NU1uVGlBem1xTXlB?=
+ =?utf-8?B?cE5DdkVsSmVlN3A4UkNnb080OUFPUGo2SHRQT3F2d3ZnZm0wemtLT1ZkcmxZ?=
+ =?utf-8?B?c0syNks5TkNIU0Z5aVUvRHUrQUdiRjM1aU4vSXp1Rm1YYXRuOGlOc002Nm4w?=
+ =?utf-8?B?TzRKMWs0KzI2THlxYUVibFZpL2lrVTR2cTR3RFc2TGFvNkxjRzZBekZSRW9T?=
+ =?utf-8?B?bWh5YkllT1I1YWpyVW5KZmtYai81bkQvdisvSkZrUy9udlcwS0VxRkdKOTlm?=
+ =?utf-8?B?SDFwNXlaYkRINURCcVRUdDZrbUZySDh2Tk9yc2Nwam5yN0xTNFE5NkpXTFgw?=
+ =?utf-8?B?amUyYmdKa3FTeTVuNzlnNUdqM0dlNlhjR1EweEx4dVNoeVBISlU3UCt1U0dC?=
+ =?utf-8?B?VVNUSE9UT2grM0pSQi9FcW5NaG9ZKzVuMGpCVDA2UG1tQlBlWHYxekNCV1hP?=
+ =?utf-8?B?MGpEdmpHUzR6UElEbS9KUzQ4bStXbndnV2JjZVhnT0kwMHpTRXFMWFJZYmt3?=
+ =?utf-8?B?Sk52RTJ1d0R3UEhIZTA5RXh2ZkUvQ0NjT1ZYbll1Wnp1alk0Vkt3STRCL3lB?=
+ =?utf-8?B?RUhpd0c4N3VxUGVibUVFVmh0bytJYThwSnRHeEZwengraDNKYjZVWURxOTNS?=
+ =?utf-8?B?b0ZJQ2Z5QVFueGtPY3VBM3hLSlFSVWhucGFGbFEweVQrOWtmRHhnT0RFQ2Ew?=
+ =?utf-8?B?ZHZHQWowcEJaYVNqbjZqYlFaQnU3cUtvVng2UTF4bWx0dy8zRGtwazRFMElS?=
+ =?utf-8?B?dThIR1FhQUN0bWQ2UHJpd1V6Um5WTDRobU5SZnFONWtQTmpBOXpnWURKL1Uw?=
+ =?utf-8?B?UTBkY3NZbDlCaHpBZHpwb2wxQVpYaitzUTA4MVNqV0c3eDIzY0h3LzYvMjZU?=
+ =?utf-8?B?dXIvOC9zOFJIRkFQR2t0aHE3dGF4T2Zzc1ZlZ0xpY1A3d3J4Q1BJRnc3bEJC?=
+ =?utf-8?B?OVZTMUJUL1lpZ3dFTU0vUml6cnZTVGFZY0gyY2JWN3pqOHp4NWliajdsSGxL?=
+ =?utf-8?B?NUVPWklyVHBqYVlKZzArMnBOVGh2STVyMkhpT3N4NTNoVy80dlUwdFQyekNm?=
+ =?utf-8?B?R24yT2JYenY4NFF5aHdudVNTYURQQWNZUkJLcXV5YkNjWVNnUEJjVksveGNO?=
+ =?utf-8?B?bmJCTUpYQjFaRVVwWk9ISEtXNmFXRUtaUUZoYzFuWmRZeEQ1SWdRUVdrd0pT?=
+ =?utf-8?B?dUxzb3FIbkd2NXRkTSt6Vm82aW5mUXZDenBqZGx3SDYza1NON1JQUHR6R3Vj?=
+ =?utf-8?B?MnZOSXIxdXlnZ01iUHlOa2dZTnowREFmU081bnBueG1YTTR5N0xFNVk3Y01Z?=
+ =?utf-8?B?VVdjVjRwY00yeVlmTTFoOWRDOVZQNldRUmZiL0tzMzN5anFsSG40cUY5OVAw?=
+ =?utf-8?B?UkVyQzQxaitobmRlOUZHVUZ3RXAyaGxsajhxVDB3bTJGSVdCNjc2T1dQTVZu?=
+ =?utf-8?B?Y2F6SU9sbDNWVE13d2txc1ZlL2x0WnlLZ2xiaGFNQzhwaVpGQm03ZDVpMzBZ?=
+ =?utf-8?B?NldmVEhnaC9iUHIzaHE0akhHczhhTlYwNEtkdkVkblJ6YVBGM2tLZnJYY2Ir?=
+ =?utf-8?B?VzZLU04xZXlvYVovYVc4WjB6SVAzdER2eW9jVmtzSk9XTTYzZlpoUHQzZTVu?=
+ =?utf-8?B?U1k4NHhYSytwdmdhenRxVVJsVTBaakt5S3VRVldyNVlrUUpBSmVzVm9FdW9o?=
+ =?utf-8?B?L0p5dFlQa0s4OEhPeGR3Mkg0TDE3K242bURyR1dHUmlOaWZxajA2Sk5ZNnpW?=
+ =?utf-8?B?S0lHUWN3ZGFUcWVLTk9TVGE0RTRjRG1HU0RaZmFHZ3p1UW9CaCtCdGtIeFJn?=
+ =?utf-8?Q?qiZE=3D?=
+MIME-Version: 1.0
+
+<!DOCTYPE html><html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"> <=
+meta name=3D"x-apple-disable-message-reformatting"> <style type=3D"text/css=
+"> @media (prefers-color-scheme: dark ) { /* Custom Dark Mode Text Link Col=
+or */ [data-ogsc] .link { color: #ffffff !important; } [data-ogsb] .link { =
+color: #ffffff !important; } [data-ogsc] .dmBorder {border:1px solid #7B838=
+9 !important; border-radius:12px; -moz-border-radius:12px;-webkit-border-ra=
+dius:12px;-khtml-border-radius:12px; } [data-ogsb] .dmBorder {border:1px so=
+lid #7B8389 !important; border-radius:12px; -moz-border-radius:12px;-webkit=
+-border-radius:12px;-khtml-border-radius:12px; } } .flexible {max-width:600=
+px !important;} td, span, div, a {text-decoration: none; font-family:'TT Ho=
+ves','Helvetica Neue',Helvetica,Arial,'DejaVuSansBook',sans-serif;} a[x-app=
+le-data-detectors] {color: inherit !important;text-decoration: none !import=
+ant;font-size: inherit !important;font-family: inherit !important;font-weig=
+ht: inherit !important;line-height: inherit !important;} .suppressGoogleSty=
+le a {color: inherit !important;text-decoration: none !important;} .showOnM=
+obile { display: none !important;} .desktopHide {display:none !important;} =
+.dkleftmobright {align:left!important; text-align:right!important} .display=
+BlockMobile{display:inline !important;} @media screen and (max-width:480px)=
+ { .mainFrame {min-width:320px !important;} .mobile-padding16 {padding: 16p=
+x 16px !important;} .logo-icon{height: 20px !important;padding:0px 0px} .me=
+nu-icons {height: 20px !important;padding:0px 0px} .logo-header-padding {pa=
+dding: 16px 0px 16px 16px !important; font-size:12px !important;} .icon-hea=
+der-padding {padding:16px 16px 16px 0px !important; font-size:12px !importa=
+nt;} .menu-icons-kyk-miami-beach {height: 20px !important;padding:0px 0px 0=
+px 7px !important;} .wrapper {min-width:320px !important;} .flexible {width=
+:100% !important;} .flexibleCenter {width:100% !important; align:center !im=
+portant;} .center { align:center !important; text-align:center !important;}=
+ .mobileSocialIcons {height:50% !important;} .mobileAppButtons {height:35px=
+ !important;} .flexibleImage {width:100% !important;height:auto !important;=
+} .flexibleImageHalf { width:70% !important; height:auto !important; paddin=
+g:0px 0px 0px 20px;} .soloLogoImage {max-width:290px !important;} .module {=
+width:100% !important;} #solo-banner {width:100% !important;height:auto !im=
+portant;} .curvedImage{border-radius:12px 12px 0px 0px !important;} .deskto=
+pHide {display:block !important;} .fallbackCentre	{text-align: center !impo=
+rtant;align: center !important;} .dkleftmobright {align:right!important; te=
+xt-align:left!important} .makeitleft {align:left!important;text-align:left!=
+important;} .mobileLeft {align:left !important; text-align:left !important;=
+ padding-top:20px} .halfWidth {width:50% !important;} .anytimeLogoPadding{p=
+adding: 0px 12px 0px 12px !important;} .anytimePricePadding{padding: 0px 12=
+px 12px 12px !important;} .topTenPadding{padding-bottom:0px !important; pad=
+ding-left:0px !important; text-align:left !important;} .topTenPaddingPrices=
+{padding:6px 0px 21px 0px !important;} .alertCtaLeft{min-width:130px !impor=
+tant; font-size:12px !important;} .alertCtaRight{min-width:145px !important=
+; font-size:12px !important;} .leftRightBlogPad {padding:0px 10px 12px 10px=
+ !important;} .xSellPriceAlerts {padding: 14px 5px 14px 5px !important;} .p=
+riceAlertsMobileText {padding: 4px 24px 12px 24px !important; text-align:le=
+ft !important;} .cbImagePackagePadding {padding:14px !important;} .cbTextPa=
+ckagePadding {padding-left:14px !important; padding-right:14px !important;}=
+ .mobhide {width:0px; display:none !important;} .hot-cta {width:290px !impo=
+rtant;} .padding-cta {padding-bottom: 5px!important;} .fixed {width:100%; m=
+ax-width:310px !important;} .cbMobileFooterPadding {padding:32px 16px !impo=
+rtant;} .cbMobileSpacer {padding-bottom:10px !important;} .cb-mob-padding16=
+ {padding: 16px 16px !important;} .anytimeHeroText {padding-left:24px !impo=
+rtant;padding-right:24px !important;} .anytimeHeroImage{padding: 2px 0px 30=
+px 0px !important; text-align:center !important;} .cb-mob-width33 {width:33=
+% !important;} .hideOnMobile { display: none !important; } .showOnMobile { =
+display: inline !important; } .mobPixelHeight { height:6px !important; max-=
+height:6px !important;line-height: 6px !important; } .leftAlignMobile {text=
+-align: left !important;padding-left: 20px;padding-bottom: 7px;} .PDheight =
+{height: auto !important;min-height: none !important; max-height: none !imp=
+ortant;} .cbMobileFooterPadding {padding:32px 16px !important;} .centerAlig=
+nMobile {align:center !important; text-align:center !important; width:100% =
+!important; padding-bottom:10px !important;text-align:center !important;} .=
+centerAlignMobileTopPadding {align:center !important; text-align:center !im=
+portant; width:100% !important; padding:0px 0px 10px 0px !important;} .cbTo=
+pBlogPadding {padding-top: 15px !important;} .rightAlignMobile {text-align:=
+ right !important;} .mobileWhiteBackground {background-color: white !import=
+ant;padding-top:0px !important;} .mobileTextSize22 {font-size:22px !importa=
+nt;} .mobileTextSize20 {font-size:20px !important;} .mobileTextSize17 {font=
+-size:17px !important;} .mobileTextSize16 {font-size:16px !important;} .mob=
+ileTextSize15 {font-size:15px !important;} .mobileTextSize14 {font-size:14p=
+x !important;} .mobileTextSize13 {font-size:13px !important;} .mobileTextSi=
+ze12 {font-size:12px !important;} .mobileTextSize11 {font-size:11px !import=
+ant;} .mobileTextSize10 {font-size:10px !important;} .mobileTextSize9 {font=
+-size:9px !important;} .mobileTextSize8 {font-size:8px !important;} .mobile=
+CarsPadding {padding-top: 11px !important;padding-bottom: 10px !important;p=
+adding-left: 11px !important;padding-right: 11px !important;} .mobileCarSty=
+le {padding-bottom:3px !important;font-size:12px !important;} .mobilePaddin=
+g{padding-top:10px !important;padding-left:10px !important;padding-right:10=
+px !important;} .mobileSmallPadding{padding-top:10px !important;padding-lef=
+t:5px !important;padding-right:5px !important;} .mobileSmallBottomPadding {=
+padding-bottom: 5px !important;} .mobpadding{padding-bottom:15px !important=
+;} .paddingTop20 {padding-top:20px !important;} .paddingLeft20 {padding-lef=
+t:20px !important;} .paddingRight20 {padding-right:20px !important;} .paddi=
+ngBottom20 {padding-bottom:20px !important;} .centerAlignMobile16 {align:ce=
+nter !important; text-align:center !important; width:100% !important; paddi=
+ng:0px 16px 30px 16px !important;text-align:center !important;} .essentialI=
+mage{width:100% !important; height:auto !important; padding:0px 0px !import=
+ant;} .flexibleEssential{width:100% !important; height:auto;border-right:0p=
+x !important; border-bottom:1px solid #E5EBF0 !important;} .essentialsCente=
+rBorder{width:100% !important; border-right:0px !important; height:auto !im=
+portant;padding:0 10px 15px 10px;} .essentialsCenterText{border-bottom:1px =
+solid #E5EBF0;align:center !important; text-align:center !important; width:=
+100% !important;text-align:center !important;height:auto !important;} .esse=
+ntialsCenter{align:center !important; text-align:left !important; width:80%=
+ !important; padding:0px 15px 8px 20px !important;height:auto !important;} =
+.essentialsButton{width:90% !important;} .viewAllEssentials {width:100% !im=
+portant; align:center !important;padding-bottom:10px} .centerAlignMobile2 {=
+align:center !important; text-align:center !important; width:100% !importan=
+t; padding:8px 0px 5px 0px !important;} .lineBreak{display:block !important=
+;} .displayBlockMobile{display:block !important;} } @media print { .showOnM=
+obile { display: none !important; } } </style> <!--[if !mso]><!--> <!--<![e=
+ndif]--> </head> <body width=3D"100%" class=3D"mobilePadding" style=3D"font=
+-family:'TT Hoves','Helvetica Neue',Helvetica,Arial,'DejaVuSansBook',sans-s=
+erif; background-color:#E4E5EA">
+<div style=3D"color:transparent;visibility:hidden;opacity:0;font-size:0px;b=
+order:0;max-height:1px;width:1px;margin:0px;padding:0px;border-width:0px!im=
+portant;display:none!important;line-height:0px!important;"><img border=3D"0=
+" width=3D"1" height=3D"1" src=3D"https://track.kayak.com/q/rU_ciVr8aihof1i=
+uXK8YSA~~/AAAAAQA~/RgRmvluvPVcFa2F5YWtCCmTbLyjdZHv16oFSHHRvYmluc2lsdmVzdHJl=
+MDI1QHNvb25lcnMudXNYBAAAAAA~" alt=3D""></div>
+
+<style type=3D"text/css"> @media (prefers-color-scheme: dark ) { /* Custom =
+Dark Mode Text Link Color */ [data-ogsc] .link { color: #ffffff !important;=
+ } [data-ogsb] .link { color: #ffffff !important; } [data-ogsc] .dmBorder {=
+border:1px solid #7B8389 !important; border-radius:12px; -moz-border-radius=
+:12px;-webkit-border-radius:12px;-khtml-border-radius:12px; } [data-ogsb] .=
+dmBorder {border:1px solid #7B8389 !important; border-radius:12px; -moz-bor=
+der-radius:12px;-webkit-border-radius:12px;-khtml-border-radius:12px; } } t=
+d, span, div, a {text-decoration: none; font-family:'TT Hoves','Helvetica N=
+eue',Helvetica,Arial,'DejaVuSansBook',sans-serif;} a[x-apple-data-detectors=
+] {color: inherit !important;text-decoration: none !important;font-size: in=
+herit !important;font-family: inherit !important;font-weight: inherit !impo=
+rtant;line-height: inherit !important;} .suppressGoogleStyle a {color: inhe=
+rit !important;text-decoration: none !important;} .showOnMobile { display: =
+none !important;} .flexible {max-width:600px !important;} .desktopHide {dis=
+play:none !important;} .dkleftmobright {align:left!important; text-align:ri=
+ght!important} .displayBlockMobile{display:inline !important;} @media scree=
+n and (max-width:480px) { .mainFrame {min-width:320px !important;} .mobile-=
+padding16 {padding: 16px 16px !important;} .logo-icon{height: 20px !importa=
+nt;padding:0px 0px} .menu-icons {height: 20px !important;padding:0px 0px} .=
+logo-header-padding {padding: 16px 0px 16px 16px !important; font-size:12px=
+ !important;} .icon-header-padding {padding:16px 16px 16px 0px !important; =
+font-size:12px !important;} .menu-icons-kyk-miami-beach {height: 20px !impo=
+rtant;padding:0px 0px 0px 7px !important;} .wrapper {min-width:320px !impor=
+tant;} .flexible {width:100% !important;} .flexibleCenter {width:100% !impo=
+rtant; align:center !important;} .center { align:center !important; text-al=
+ign:center !important;} .mobileSocialIcons {height:50% !important;} .mobile=
+AppButtons {height:35px !important;} .flexibleImage {width:100% !important;=
+height:auto !important;} .flexibleImageHalf { width:70% !important; height:=
+auto !important; padding:0px 0px 0px 20px;} .soloLogoImage {max-width:290px=
+ !important;} .module {width:100% !important;} #solo-banner {width:100% !im=
+portant;height:auto !important;} .desktopHide {display:block !important;} .=
+fallbackCentre	{text-align: center !important;align: center !important;} .d=
+kleftmobright {align:right!important; text-align:left!important} .makeitlef=
+t {align:left!important;text-align:left!important;} .mobileLeft {align:left=
+ !important; text-align:left !important; padding-top:20px} .halfWidth {widt=
+h:50% !important;} .anytimeLogoPadding{padding: 0px 12px 0px 12px !importan=
+t;} .anytimePricePadding{padding: 0px 12px 12px 12px !important;} .curvedIm=
+age{border-radius:12px 12px 0px 0px !important;} .topTenPadding{padding-bot=
+tom:0px !important; padding-left:0px !important; text-align:left !important=
+;} .topTenPaddingPrices{padding:6px 0px 21px 0px !important;} .alertCtaLeft=
+{min-width:130px !important; font-size:12px !important;} .alertCtaRight{min=
+-width:145px !important; font-size:12px !important;} .leftRightBlogPad {pad=
+ding:0px 10px 12px 10px !important;} .xSellPriceAlerts {padding: 14px 5px 1=
+4px 5px !important;} .priceAlertsMobileText {padding: 4px 24px 12px 24px !i=
+mportant; text-align:left !important;} .cbImagePackagePadding {padding:14px=
+ !important;} .cbTextPackagePadding {padding-left:14px !important; padding-=
+right:14px !important;} .mobhide {width:0px; display:none !important;} .hot=
+-cta {width:290px !important;} .padding-cta {padding-bottom: 5px!important;=
+} .fixed {width:100%; max-width:310px !important;} .cbMobileFooterPadding {=
+padding:32px 16px !important;} .cbMobileSpacer {padding-bottom:10px !import=
+ant;} .cb-mob-padding16 {padding: 16px 16px !important;} .anytimeHeroText {=
+padding-left:24px !important;padding-right:24px !important;} .anytimeHeroIm=
+age{padding: 2px 0px 30px 0px !important; text-align:center !important;} .c=
+b-mob-width33 {width:33% !important;} .hideOnMobile {display: none !importa=
+nt; } .showOnMobile {display: inline !important; } .mobPixelHeight {height:=
+6px !important; max-height:6px !important;line-height: 6px !important; } .l=
+eftAlignMobile {text-align: left !important;padding-left: 20px;padding-bott=
+om: 7px;} .PDheight {height: auto !important;min-height: none !important; m=
+ax-height: none !important;} .cbMobileFooterPadding {padding:32px 16px !imp=
+ortant;} .centerAlignMobile {align:center !important; text-align:center !im=
+portant; width:100% !important; padding-bottom:10px !important;text-align:c=
+enter !important;} .centerAlignMobileTopPadding {align:center !important; t=
+ext-align:center !important; width:100% !important; padding:0px 0px 10px 0p=
+x !important;} .cbTopBlogPadding {padding-top: 15px !important;} .rightAlig=
+nMobile {text-align: right !important;} .mobileWhiteBackground {background-=
+color: white !important;padding-top:0px !important;} .mobileTextSize22 {fon=
+t-size:22px !important;} .mobileTextSize20 {font-size:20px !important;} .mo=
+bileTextSize17 {font-size:17px !important;} .mobileTextSize16 {font-size:16=
+px !important;} .mobileTextSize15 {font-size:15px !important;} .mobileTextS=
+ize14 {font-size:14px !important;} .mobileTextSize13 {font-size:13px !impor=
+tant;} .mobileTextSize12 {font-size:12px !important;} .mobileTextSize11 {fo=
+nt-size:11px !important;} .mobileTextSize10 {font-size:10px !important;} .m=
+obileTextSize9 {font-size:9px !important;} .mobileTextSize8 {font-size:8px =
+!important;} .mobileCarsPadding {padding-top: 11px !important;padding-botto=
+m: 10px !important;padding-left: 11px !important;padding-right: 11px !impor=
+tant;} .mobileCarStyle {padding-bottom:3px !important;font-size:12px !impor=
+tant;} .mobilePadding{padding-top:10px !important;padding-left:10px !import=
+ant;padding-right:10px !important;} .mobileSmallPadding{padding-top:10px !i=
+mportant;padding-left:5px !important;padding-right:5px !important;} .mobile=
+SmallBottomPadding {padding-bottom: 5px !important;} .mobpadding{padding-bo=
+ttom:15px !important;} .paddingTop20 {padding-top:20px !important;} .paddin=
+gLeft20 {padding-left:20px !important;} .paddingRight20 {padding-right:20px=
+ !important;} .paddingBottom20 {padding-bottom:20px !important;} .centerAli=
+gnMobile16 {align:center !important; text-align:center !important; width:10=
+0% !important; padding:0px 16px 30px 16px !important;text-align:center !imp=
+ortant;} .essentialImage{width:100% !important; height:auto !important; pad=
+ding:0px 0px !important;} .flexibleEssential{width:100% !important; height:=
+auto;border-right:0px !important; border-bottom:1px solid #E5EBF0 !importan=
+t;} .essentialsCenterBorder{width:100% !important; border-right:0px !import=
+ant; height:auto !important;padding:0 10px 15px 10px;} .essentialsCenterTex=
+t{border-bottom:1px solid #E5EBF0;align:center !important; text-align:cente=
+r !important; width:100% !important;text-align:center !important;height:aut=
+o !important;} .essentialsCenter{align:center !important; text-align:left !=
+important; width:80% !important; padding:0px 15px 8px 20px !important;heigh=
+t:auto !important;} .essentialsButton{width:90% !important;} .viewAllEssent=
+ials {width:100% !important; align:center !important;padding-bottom:10px} .=
+centerAlignMobile2 {align:center !important; text-align:center !important; =
+width:100% !important; padding:8px 0px 5px 0px !important;} .lineBreak{disp=
+lay:block !important;} .displayBlockMobile{display:block !important;} } @me=
+dia print { .showOnMobile { display: none !important; } } </style> <!-- X-2=
+50ok-CID:magiclink_20230816--> <!--crossbrand framework --> <table class=3D=
+"wrapper" width=3D"100%" cellspacing=3D"0" cellpadding=3D"0" border=3D"0" b=
+gcolor=3D"#E4E5EA" style=3D"background-color: #E4E5EA; padding-bottom:20px;=
+"> <tbody> <tr> <td align=3D"center" width=3D"100%"><span style=3D"display:=
+ none !important; visibility: hidden; opacity: 0; color: transparent; heigh=
+t: 0; width: 0;" class=3D"preheader"></span> <table class=3D"flexible" widt=
+h=3D"600" align=3D"center" cellspacing=3D"0" cellpadding=3D"0" border=3D"0"=
+ bgcolor=3D"#FFFFFF" style=3D"#FFFFFF"> <tbody> <!-- Start Tracking pixels =
+-->
+<tr style=3D"background-color:#E4E5EA"> <td class=3D"mobPixelHeight" style=
+=3D"height:20px"> <!--Preheader--><span id=3D"preheader" style=3D"color: #f=
+fffff;display:none;font-size:1px;line-height:1px;font-family:'Helvetica Neu=
+e',Helvetica,Arial,'DejaVuSansBook',sans-serif;;max-height:0px;max-width:0p=
+x;opacity:0;overflow:hidden;mso-hide:all;">Sign into your KAYAK account</sp=
+an> <img src=3D"https://www.kayak.com/h/hermes/pixel/email/any?token=3D&amp=
+;affiliate=3Dmagiclink&amp;uid=3D555307870613&amp;brand=3Dkayak&amp;campaig=
+n=3DmagicLinkInitial&amp;type=3Dmagiclink&amp;senddate=3D2023-08-16&amp;buc=
+ket=3D4194304" width=3D"1" height=3D"1" border=3D"0"> <a href=3D"https://ww=
+w.kayak.com/h/hermes/redirect/in?a=3Dmagiclink&amp;uid=3D555307870613&amp;p=
+=3D%2Femail%2FmagicLinkInitial%2F%2F555307870613%2Fheader%2F%2F%2FbotClickI=
+dentifier%2F%2F%2F%2F&amp;brand=3Dkayak&amp;campaign=3DmagicLinkInitial&amp=
+;setlc=3Den&amp;emailToken=3DfMsw86yXxXeC3hZljtups3&amp;url=3D%2F&amp;bucke=
+t=3D4194304" style=3D"font-size:0px;line-height:0px;height:0px;display:none=
+"></a> </td>
+</tr>
+<!-- End Tracking pixels --> <!-- Start Header -->
+<tr id=3D"crossbrand-header"> <td class=3D"flexible" bgcolor=3D"#FFFFFF" st=
+yle=3D"background-color:#FFFFFF;min-width:100%"> <table cellspacing=3D"0" c=
+ellpadding=3D"0" border=3D"0" role=3D"presentation" aria-hidden=3D"true" wi=
+dth=3D"100%"> <tr> <td class=3D"logo-header-padding" align=3D"left" style=
+=3D"padding:15px 20px 15px 20px"> <a href=3D"https://www.kayak.com/h/hermes=
+/redirect/in?a=3Dmagiclink&amp;uid=3D555307870613&amp;emailToken=3DfMsw86yX=
+xXeC3hZljtups3&amp;p=3D%2Femail%2FmagicLinkInitial%2F%2F555307870613%2Fhead=
+er%2F%2F%2Flogo%2F%2F%2F%2F&amp;brand=3Dkayak&amp;campaign=3DmagicLinkIniti=
+al&amp;senddate=3D2023-08-16&amp;bucket=3D4194304&amp;url=3D%2F"><img class=
+=3D"logo-icon" src=3D"https://www.kayak.com/eimg/coreImages/Crossbrand-foot=
+er-kyk-logo.png" border=3D"0" height=3D"24" style=3D"vertical-align:middle"=
+></a> </td> <td class=3D"icon-header-padding" align=3D"right" style=3D"padd=
+ing:10px 20px 10px 20px;font-size:22px;"> <a href=3D"https://www.kayak.com/=
+h/hermes/redirect/in?a=3Dmagiclink&amp;uid=3D555307870613&amp;emailToken=3D=
+fMsw86yXxXeC3hZljtups3&amp;p=3D%2Femail%2FmagicLinkInitial%2F%2F55530787061=
+3%2Fheader%2Fflights%2F%2F%2F%2F%2F%2F&amp;brand=3Dkayak&amp;campaign=3Dmag=
+icLinkInitial&amp;senddate=3D2023-08-16&amp;bucket=3D4194304&amp;url=3D%2Ff=
+lights" style=3D"text-decoration:none;"><img class=3D"menu-icons" src=3D"ht=
+tps://www.kayak.com/eimg/coreImages/Crossbrand-2020-header-flights.png" ali=
+gn=3D"center" valign=3D"middle" alt=3D"Flights" border=3D"0" height=3D"24">=
+</a><!--[if mso]>&nbsp;&nbsp;&nbsp;<![endif]--> <a href=3D"https://www.kaya=
+k.com/h/hermes/redirect/in?a=3Dmagiclink&amp;uid=3D555307870613&amp;emailTo=
+ken=3DfMsw86yXxXeC3hZljtups3&amp;p=3D%2Femail%2FmagicLinkInitial%2F%2F55530=
+7870613%2Fheader%2Fhotels%2F%2F%2F%2F%2F%2F&amp;brand=3Dkayak&amp;campaign=
+=3DmagicLinkInitial&amp;senddate=3D2023-08-16&amp;bucket=3D4194304&amp;url=
+=3D%2Fhotels" style=3D"text-decoration:none;"><img class=3D"menu-icons" src=
+=3D"https://www.kayak.com/eimg/coreImages/Crossbrand-2020-header-hotels.png=
+" align=3D"center" valign=3D"middle" alt=3D"Hotels" border=3D"0" height=3D"=
+24" style=3D"padding-left:20px"></a><!--[if mso]>&nbsp;&nbsp;&nbsp;<![endif=
+]--> <a href=3D"https://www.kayak.com/h/hermes/redirect/in?a=3Dmagiclink&am=
+p;uid=3D555307870613&amp;emailToken=3DfMsw86yXxXeC3hZljtups3&amp;p=3D%2Fema=
+il%2FmagicLinkInitial%2F%2F555307870613%2Fheader%2Fcars%2F%2F%2F%2F%2F%2F&a=
+mp;brand=3Dkayak&amp;campaign=3DmagicLinkInitial&amp;senddate=3D2023-08-16&=
+amp;bucket=3D4194304&amp;url=3D%2Fcars" style=3D"text-decoration:none;"><im=
+g class=3D"menu-icons" src=3D"https://www.kayak.com/eimg/coreImages/Crossbr=
+and-2020-header-cars.png" align=3D"center" valign=3D"middle" alt=3D"Cars" b=
+order=3D"0" height=3D"24" style=3D"padding-left:20px"></a><!--[if mso]>&nbs=
+p;&nbsp;&nbsp;<![endif]--> <a href=3D"https://www.kayak.com/h/hermes/redire=
+ct/in?a=3Dmagiclink&amp;uid=3D555307870613&amp;emailToken=3DfMsw86yXxXeC3hZ=
+ljtups3&amp;p=3D%2Femail%2FmagicLinkInitial%2F%2F555307870613%2Fheader%2Fpa=
+ckages%2F%2F%2F%2F%2F%2F&amp;brand=3Dkayak&amp;campaign=3DmagicLinkInitial&=
+amp;senddate=3D2023-08-16&amp;bucket=3D4194304&amp;url=3D%2Fpackages" style=
+=3D"text-decoration:none;"><img class=3D"menu-icons" src=3D"https://www.kay=
+ak.com/eimg/coreImages/Crossbrand-2020-header-packages.png" align=3D"center=
+" valign=3D"middle" alt=3D"Packages" border=3D"0" height=3D"24" style=3D"pa=
+dding-left:20px"></a><!--[if mso]>&nbsp;&nbsp;&nbsp;<![endif]--> </td> </tr=
+> </table> </td>
+</tr> <tr> <td class=3D"mobile-padding16" style=3D"font-family:'TT Hoves','=
+Helvetica Neue',Helvetica,Arial,'DejaVuSansBook',sans-serif;;font-size: 16p=
+x;color: #545456;letter-spacing: 0px; text-align: $leftAlign_OR_RTL; line-h=
+eight: 22px; padding: 20px 20px;"> You're getting this email because we rec=
+eived a request to sign in to KAYAK: <table width=3D"600" class=3D"flexible=
+" style=3D"background-color:#FFFFFF;padding-left:20px;padding-right:20px"> =
+<tr> <td style=3D"font-family:'TT Hoves','Helvetica Neue',Helvetica,Arial,'=
+DejaVuSansBook',sans-serif;;font-size: 15px;color: #545456;letter-spacing: =
+0px; padding-top:15px; padding-left: 10px; padding-right: 10px"> <b>Locatio=
+n:</b> Near Norman, OK<br> </td> </tr> <tr> <td style=3D"font-family:'TT Ho=
+ves','Helvetica Neue',Helvetica,Arial,'DejaVuSansBook',sans-serif;;font-siz=
+e: 15px;color: #545456;letter-spacing: 0px; padding-top:15px; padding-left:=
+ 10px; padding-right: 10px"> <b>IP Address:</b> 72.211.1.222<br> </td> </tr=
+> <tr> <td style=3D"font-family:'TT Hoves','Helvetica Neue',Helvetica,Arial=
+,'DejaVuSansBook',sans-serif;;font-size: 15px;color: #545456;letter-spacing=
+: 0px; padding-top:15px; padding-left: 10px; padding-right: 10px"> <b>Devic=
+e:</b> Firefox on Windows<br> </td> </tr> </table> <br><br>Click below to s=
+ign in without entering your password again. This link will expire in 10 mi=
+nutes and can only be used once. </td> </tr> <tr> <td id=3D"mainCTA" style=
+=3D"text-align: $leftAlign_OR_RTL; padding-bottom: 25px; padding-left:20px;=
+ padding-right:20px;"> <div><!--[if mso]> <v:roundrect xmlns:v=3D"urn:schem=
+as-microsoft-com:vml" xmlns:w=3D"urn:schemas-microsoft-com:office:word" hre=
+f=3D"https://www.kayak.com/h/hermes/redirect/in?a=3Dmagiclink&uid=3D5553078=
+70613&p=3D%2Femail%2FmagicLinkInitial%2F%2F555307870613%2FmagicCtaButton%2F=
+%2F%2FmagicLinkCta%2F%2F%2F%2F&brand=3Dkayak&campaign=3DmagicLinkInitial&se=
+tlc=3Den&emailToken=3DfMsw86yXxXeC3hZljtups3&url=3D%2Flogin%2Fm%2FeyJraWQiO=
+iJLWUsxIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJzdWIiOiI1NTUzMDc4NzA2MTMiL=
+CJyZXF1ZXN0SWQiOiJDTmdvaFB2ZGRFTWhFbWc1aFdiV0ZMTGJWTXlkTUY4QzRhVSQwd2hqd1FZ=
+WGJLVVJFSk10OGJHYVBPT0NfIiwiaXNzIjoiaHR0cHM6Ly93d3cua2F5YWsuY29tIiwiZXhwIjo=
+xNjkyMjE1OTQyLCJpYXQiOjE2OTIyMTUzNDJ9.__V1knqFhIdr9Knpe2kywjw7IwCUjtMB6ZwPj=
+eNK_uvtghM-ToqVydRAwmvn1NStDH7B0OAxqY-2XXmge2MkHg%3Fcluster%3D4%26skipapp%3=
+Dtrue&bucket=3D4194304" style=3D"height:50px;v-text-anchor:middle;width:300=
+px;color:#FFFFFF;" stroke=3D"f" fillcolor=3D"#FF690F"> <w:anchorlock/> <cen=
+ter> <![endif]--> <a href=3D"https://www.kayak.com/h/hermes/redirect/in?a=
+=3Dmagiclink&amp;uid=3D555307870613&amp;p=3D%2Femail%2FmagicLinkInitial%2F%=
+2F555307870613%2FmagicCtaButton%2F%2F%2FmagicLinkCta%2F%2F%2F%2F&amp;brand=
+=3Dkayak&amp;campaign=3DmagicLinkInitial&amp;setlc=3Den&amp;emailToken=3DfM=
+sw86yXxXeC3hZljtups3&amp;url=3D%2Flogin%2Fm%2FeyJraWQiOiJLWUsxIiwidHlwIjoiS=
+ldUIiwiYWxnIjoiRVMyNTYifQ.eyJzdWIiOiI1NTUzMDc4NzA2MTMiLCJyZXF1ZXN0SWQiOiJDT=
+mdvaFB2ZGRFTWhFbWc1aFdiV0ZMTGJWTXlkTUY4QzRhVSQwd2hqd1FZWGJLVVJFSk10OGJHYVBP=
+T0NfIiwiaXNzIjoiaHR0cHM6Ly93d3cua2F5YWsuY29tIiwiZXhwIjoxNjkyMjE1OTQyLCJpYXQ=
+iOjE2OTIyMTUzNDJ9.__V1knqFhIdr9Knpe2kywjw7IwCUjtMB6ZwPjeNK_uvtghM-ToqVydRAw=
+mvn1NStDH7B0OAxqY-2XXmge2MkHg%3Fcluster%3D4%26skipapp%3Dtrue&amp;bucket=3D4=
+194304" style=3D"background-color:#FF690F;color:#FFFFFF;display:inline-bloc=
+k;font-family:'TT Hoves','Helvetica Neue',Helvetica,Arial,'DejaVuSansBook',=
+sans-serif;;font-size:17px;font-weight:400;line-height:50px;text-align:cent=
+er;text-decoration:none;width:300px;-webkit-text-size-adjust:none;border-ra=
+dius:5px;;">Sign into KAYAK </a> <!--[if mso]> </center> </v:roundrect> <![=
+endif]-->
+</div> </td> </tr> <tr> <td class=3D"mobile-padding16" style=3D"font-family=
+:'TT Hoves','Helvetica Neue',Helvetica,Arial,'DejaVuSansBook',sans-serif;;f=
+ont-size: 16px;color: #545456;letter-spacing: 0px; text-align: $leftAlign_O=
+R_RTL; line-height: 27px; padding:0px 20px 25px 20px;"> If you did not make=
+ this request, please ignore this email. </td> </tr> <!--Footer - mobile ap=
+p section--> <tr id=3D"appBlock"> <td class=3D"paddingRight20 paddingLeft20=
+" style=3D"padding:5px 20px 0px 20px;background-color:#ffffff"> <table clas=
+s=3D"flexible" width=3D"100%" cellspacing=3D"0" cellpadding=3D"0" border=3D=
+"0" role=3D"presentation" aria-hidden=3D"true"> <tr> <td style=3D"backgroun=
+d-color:#ffffff;border-top: 2px solid #D9E2E8;" align=3D"center"> <table cl=
+ass=3D"flexible" width=3D"560" cellspacing=3D"0" cellpadding=3D"0" border=
+=3D"0" role=3D"presentation" aria-hidden=3D"true"> <tr> <td valign=3D"top" =
+width=3D"100%" style=3D"background-color:#ffffff;"> <!--[if mso]><table cla=
+ss=3D"flexible" width=3D"342" align=3D"right" cellspacing=3D'0' cellpadding=
+=3D'0' border=3D'0' role=3D'presentation' aria-hidden=3D'true' ><tr><td><![=
+endif]--> <table class=3D"flexible" width=3D"360" align=3D"right" cellspaci=
+ng=3D"0" cellpadding=3D"0" border=3D"0" role=3D"presentation" aria-hidden=
+=3D"true"> <tr> <td class=3D"paddingTop20" width=3D"100%" valign=3D"top" st=
+yle=3D"padding-top:30px; font-family:'TT Hoves','Helvetica Neue',Helvetica,=
+Arial,'DejaVuSansBook',sans-serif; font-size: 18px; line-height: 24px; colo=
+r: #363F45; font-weight: 700;">Discover your next amazing trip</td> </tr> <=
+tr> <td class=3D"paddingBottom20" width=3D"100%" valign=3D"top" style=3D"pa=
+dding-top:12px; font-size: 14px;line-height: 20px; color: #363F45; font-wei=
+ght:400; font-family:'TT Hoves','Helvetica Neue',Helvetica,Arial,'DejaVuSan=
+sBook',sans-serif;">Let our app bring the world to you. Choose your next ad=
+venture, access mobile-only deals, and receive alerts when your trip change=
+s.</td> </tr> <tr> <td class=3D"centerAlignMobile2" align=3D"left" width=3D=
+"100%" style=3D"padding-top:16px;"> <a href=3D"https://www.kayak.com/h/herm=
+es/redirect/out?a=3Dmagiclink&amp;p=3D%2Femail%2FmagicLinkInitial%2F%2F5553=
+07870613%2Ffooter%2F%2F%2FiosAppLink%2F%2F%2F%2F&amp;brand=3Dkayak&amp;uid=
+=3D555307870613&amp;emailToken=3DfMsw86yXxXeC3hZljtups3&amp;h=3DluRN_8HaF6x=
+smdKu0-bRA90eFMQ&amp;campaign=3DmagicLinkInitial&amp;bucket=3D4194304&amp;u=
+rl=3Dhttps%3A%2F%2Fapp.adjust.com%2Fp313csu%3Fcampaign%3DK-Brand-NA-US-EN-O=
+ther%26fallback%3Dhttps%253A%252F%252Fwww.kayak.com%252Fmobile%26redirect_m=
+acros%3Dhttps%253A%252F%252Fwww.kayak.com%252Fmobile" style=3D"text-decorat=
+ion:none;"><img height=3D"40" src=3D"https://www.kayak.com/eimg/coreImages/=
+Crossbrand-footer-kyk-appleapp.png" style=3D"border:0px; display:inline;"><=
+/a>&nbsp;<span class=3D"mobhide">&nbsp;&nbsp;</span> <a href=3D"https://www=
+.kayak.com/h/hermes/redirect/out?a=3Dmagiclink&amp;p=3D%2Femail%2FmagicLink=
+Initial%2F%2F555307870613%2Ffooter%2F%2F%2FandroidAppLink%2F%2F%2F%2F&amp;b=
+rand=3Dkayak&amp;uid=3D555307870613&amp;emailToken=3DfMsw86yXxXeC3hZljtups3=
+&amp;h=3DSye0uBob8wCfcV9wnrJi0C5IYlo&amp;campaign=3DmagicLinkInitial&amp;bu=
+cket=3D4194304&amp;url=3Dhttps%3A%2F%2Fapp.adjust.com%2F472q0cv%3Fcampaign%=
+3DK-Brand-NA-US-EN-Other%26fallback%3Dhttps%253A%252F%252Fwww.kayak.com%252=
+Fmobile%26redirect_macros%3Dhttps%253A%252F%252Fwww.kayak.com%252Fmobile" s=
+tyle=3D"text-decoration:none;"><img height=3D"40" src=3D"https://www.kayak.=
+com/eimg/coreImages/Crossbrand-footer-kyk-googleapp.png" style=3D"border:0p=
+x; display:inline;"></a> </td> </tr> </table> <!--[if mso]></td><td><![endi=
+f]--> <!--[if !mso]><!--><table align=3D"left" cellspacing=3D"0" cellpaddin=
+g=3D"0" border=3D"0" role=3D"presentation" aria-hidden=3D"true" width=3D"5"=
+ height=3D"1" style=3D"height:1px;line-height:1px;max-height:1px;" class=3D=
+"hideOnMobile"><tbody><tr><td>&nbsp;</td></tr></tbody></table><!--<![endif]=
+--> <table class=3D"flexible center" width=3D"190" align=3D"left" valign=3D=
+"bottom" style=3D"vertical-align:bottom" cellspacing=3D"0" cellpadding=3D"0=
+" border=3D"0" role=3D"presentation" aria-hidden=3D"true"> <tr> <td class=
+=3D"center" align=3D"left" valign=3D"bottom" style=3D"vertical-align:bottom=
+;"> <img class=3D"center" valign=3D"bottom" width=3D"190" height=3D"auto" s=
+rc=3D"https://www.kayak.com/eimg/coreImages/app-crosssell-iconv2-kayak.png"=
+ style=3D"display:inline-block;border:0px; margin:0px;"> </td> </tr> </tabl=
+e> <!--[if mso]></td><td></td></tr></table><![endif]--> </td> </tr> </table=
+> </td> </tr> </table> </td>
+</tr> <!-- Social Media Plug -->
+<tr id=3D"crossbrand-footer-socialStrip"> <td style=3D"padding:0px 20px;bac=
+kground-color: #FAFAFC" bgcolor=3D"#FAFAFC"> <table class=3D"flexible" widt=
+h=3D"100%" cellspacing=3D"0" cellpadding=3D"0" border=3D"0" role=3D"present=
+ation" aria-hidden=3D"true"> <tr> <td style=3D"text-align:left; align:left;=
+ padding:15px 0px; border-bottom: 1px solid #E4E5EA;"> <a href=3D"https://w=
+ww.kayak.com/h/hermes/redirect/out?a=3Dmagiclink&amp;p=3D%2Femail%2FmagicLi=
+nkInitial%2F%2F555307870613%2Ffooter%2F%2F%2Ffacebook%2F%2F%2F%2F&amp;brand=
+=3Dkayak&amp;uid=3D555307870613&amp;emailToken=3DfMsw86yXxXeC3hZljtups3&amp=
+;h=3Do-NVoNcSgKaQoEGyt3QmAbW0oIc&amp;campaign=3DmagicLinkInitial&amp;bucket=
+=3D4194304&amp;url=3Dhttps%3A%2F%2Fwww.facebook.com%2Fkayak" style=3D"text-=
+decoration:none;"><img alt=3D"facebook" src=3D"https://www.kayak.com/eimg/c=
+oreImages/Crossbrand-footer-kyk-facebook.png" style=3D"display: inline-bloc=
+k;vertical-align: middle" border=3D"0" height=3D"32"></a>&nbsp;&nbsp; <a hr=
+ef=3D"https://www.kayak.com/h/hermes/redirect/out?a=3Dmagiclink&amp;p=3D%2F=
+email%2FmagicLinkInitial%2F%2F555307870613%2Ffooter%2F%2F%2Ftwitter%2F%2F%2=
+F%2F&amp;brand=3Dkayak&amp;uid=3D555307870613&amp;emailToken=3DfMsw86yXxXeC=
+3hZljtups3&amp;h=3DRBh_-wSQ40EDoJ-dFR9F-xxSxmg&amp;campaign=3DmagicLinkInit=
+ial&amp;bucket=3D4194304&amp;url=3Dhttps%3A%2F%2Ftwitter.com%2FKAYAK" style=
+=3D"text-decoration:none;"><img alt=3D"Twitter" src=3D"https://www.kayak.co=
+m/eimg/coreImages/Crossbrand-footer-kyk-twitter.png" style=3D"display: inli=
+ne-block; vertical-align: middle" border=3D"0" height=3D"32"></a>&nbsp;&nbs=
+p; <a href=3D"https://www.kayak.com/h/hermes/redirect/out?a=3Dmagiclink&amp=
+;p=3D%2Femail%2FmagicLinkInitial%2F%2F555307870613%2Ffooter%2F%2F%2Finstagr=
+am%2F%2F%2F%2F&amp;brand=3Dkayak&amp;uid=3D555307870613&amp;emailToken=3DfM=
+sw86yXxXeC3hZljtups3&amp;h=3Dffyy3Swhq1x7bfZZf1PJwXPTt5c&amp;campaign=3Dmag=
+icLinkInitial&amp;bucket=3D4194304&amp;url=3Dhttps%3A%2F%2Fwww.instagram.co=
+m%2FKAYAK" style=3D"text-decoration:none;"><img alt=3D"Instagram" src=3D"ht=
+tps://www.kayak.com/eimg/coreImages/Crossbrand-footer-kyk-instagram.png" st=
+yle=3D"display: inline-block;vertical-align: middle" border=3D"0" height=3D=
+"32"></a>&nbsp;&nbsp; </td> </tr> </table> </td>
+</tr> <!-- main footer section -->
+<tr id=3D"crossbrand-footer-textLinks"> <td bgcolor=3D"#FAFAFC" style=3D"ba=
+ckground-color: #FAFAFC; padding:0px 20px;"> <table class=3D"flexible" widt=
+h=3D"100%" cellspacing=3D"0" cellpadding=3D"0" border=3D"0" role=3D"present=
+ation" aria-hidden=3D"true"> <tr> <td style=3D"text-align:left; padding:15p=
+x 0px; font-family:'Helvetica Neue',Helvetica,Arial,'DejaVuSansBook',sans-s=
+erif; font-size:14px; color:#131a1f; line-height:26px; white-space:nowrap; =
+font-weight:bold; text-align:left;"><h>Compare hundreds of travel sites at =
+once</h></td> </tr> <tr> <td style=3D" font-size:12px; line-height:26px; fo=
+nt-weight:bold; padding-bottom:5px; text-align:left; font-family:'Helvetica=
+ Neue',Helvetica,Arial,'DejaVuSansBook',sans-serif;"> <a class=3D"link" sty=
+le=3D"color: #131a1f; text-decoration:none;white-space:nowrap;" href=3D"htt=
+ps://www.kayak.com/h/hermes/redirect/in?a=3Dmagiclink&amp;uid=3D55530787061=
+3&amp;emailToken=3DfMsw86yXxXeC3hZljtups3&amp;p=3D%2Femail%2FmagicLinkIniti=
+al%2F%2F555307870613%2Ffooter%2F%2F%2Fpreferences%2F%2F%2F%2F&amp;brand=3Dk=
+ayak&amp;campaign=3DmagicLinkInitial&amp;senddate=3D2023-08-16&amp;bucket=
+=3D4194304&amp;url=3D%2Fprofile%2Fnotifications"><h>Email Preferences</h></=
+a>&nbsp;&nbsp; <a class=3D"link" style=3D"color: #131a1f; text-decoration:n=
+one;white-space:nowrap;" href=3D"https://www.kayak.com/h/hermes/redirect/in=
+?a=3Dmagiclink&amp;uid=3D555307870613&amp;emailToken=3DfMsw86yXxXeC3hZljtup=
+s3&amp;p=3D%2Femail%2FmagicLinkInitial%2F%2F555307870613%2Ffooter%2F%2F%2Ff=
+eedback%2F%2F%2F%2F&amp;brand=3Dkayak&amp;campaign=3DmagicLinkInitial&amp;s=
+enddate=3D2023-08-16&amp;bucket=3D4194304&amp;url=3D%2Ffeedback"><h>Feedbac=
+k</h></a>&nbsp;&nbsp; <a class=3D"link" style=3D"color: #131a1f; text-decor=
+ation:none;white-space:nowrap;" href=3D"https://www.kayak.com/h/hermes/redi=
+rect/in?a=3Dmagiclink&amp;uid=3D555307870613&amp;emailToken=3DfMsw86yXxXeC3=
+hZljtups3&amp;p=3D%2Femail%2FmagicLinkInitial%2F%2F555307870613%2Ffooter%2F=
+%2F%2Fprivacy%2F%2F%2F%2F&amp;brand=3Dkayak&amp;campaign=3DmagicLinkInitial=
+&amp;senddate=3D2023-08-16&amp;bucket=3D4194304&amp;url=3D%2Fprivacy"><h>Pr=
+ivacy Policy</h></a>&nbsp;&nbsp; </td> </tr> <tr> <td dir=3D"ltr" style=3D"=
+padding:40px 0px 20px 0px; font-size:12px; color:#131a1f; opacity:0.6; text=
+-align:left; font-family:'Helvetica Neue',Helvetica,Arial,'DejaVuSansBook',=
+sans-serif;"> <a class=3D"link" name=3D"address" rel=3D"nofollow" class=3D"=
+suppressGoogleStyle" style=3D"text-decoration:none; color:#131a1f"> =C2=A9&=
+nbsp;2023 KAYAK Software Corporation<br> 7 Market Street<br>Stamford, CT 06=
+902<br>USA <br> </a> </td> </tr> </table> </td>
+</tr> </tbody> </table> </td> </tr> </tbody> </table>=20
+<img border=3D"0" width=3D"1" height=3D"1" alt=3D"" src=3D"https://track.ka=
+yak.com/q/3J54A0UbE8bQEXKzLGlvrg~~/AAAAAQA~/RgRmvluvPlcFa2F5YWtCCmTbLyjdZHv=
+16oFSHHRvYmluc2lsdmVzdHJlMDI1QHNvb25lcnMudXNYBAAAAAA~">
+</body> </html>
+

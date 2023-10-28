@@ -1,0 +1,462 @@
+Received: from MN0PR20MB4570.namprd20.prod.outlook.com (2603:10b6:208:371::17)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Wed, 20 Sep 2023
+ 16:45:23 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=cTEosypHjGrWDMcW06BqFU0yvydKRVZbhH3iXOqYrx7Cj0bwBg+zD4KEK/lsqIFyubaRkXay9Bz8WgtVgH4J9gwZvRJI328ow/LLLo6rAUeJMKQxn2iOEJBs4uaPpmkRkaS8KcL++94Oim5TgditvWhqGb/3RqOOuKc+y3nvycCmLUa6lfWT2MEPi5WHbdqb6FMxJ1z9SSjexBMfgId0XEbtElcOw37v5xKA+YgNxRlW1u30Yhmy0CPOinMAG0HGfmqDaOIGgt++ZIwLMmE9QKcxfh0mJ7243bPvWtQISES8a7ZeXGhCC57BjhMFCwUs/ap9dUt7O23gcEzeG3nCLQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=frpIPYHx6KzKvad6/hnzCeb5Ib35Lt1pceiMjJkFCTw=;
+ b=N8xF1+8UnaBeI2MvUYc96877yfN0E7rZ+zMcSZzCBfnY9AjJ0U8juCNkwrS6RPEocbCRp8fqa60Uykj0xLIKouru5lOgeexJ1DcCAIpJVC17gzXJXYrxtxrrCC09nWsvYCFrz1NBz7bpB5n8L6K+UxiKu3qawVo0Q7KKxCL0G1Z8hLZrAUEZAVhtfstbxGWuLr1RVjrwe1ANze8SGUYhxdalVWO80dlmGofqG7olaR+Skyriw9HpIOR23AeESe95rVo/iCoICxbAnwUNAYjhximEitZJIYNDD+ya4ASOpoCJjx0MHPdjEtztaxU8UAaUwQ+9nEggdvItJJIOFvkdcA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.214.179) smtp.rcpttodomain=outlook.com smtp.mailfrom=oracle.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=oracle.com;
+ dkim=pass (signature was verified) header.d=oracle.com; arc=pass (0 oda=1
+ ltdi=1 spf=[1,1,smtp.mailfrom=oracle-acct_ww@oracle.com]
+ dkim=[1,1,header.i=@oracle.com] dmarc=[1,1,header.from=oracle.com])
+Received: from DM5PR07CA0070.namprd07.prod.outlook.com (2603:10b6:4:ad::35) by
+ MN0PR20MB4570.namprd20.prod.outlook.com (2603:10b6:208:371::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.28; Wed, 20 Sep
+ 2023 16:45:21 +0000
+Received: from DS3PEPF000099DE.namprd04.prod.outlook.com
+ (2603:10b6:4:ad:cafe::3) by DM5PR07CA0070.outlook.office365.com
+ (2603:10b6:4:ad::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.28 via Frontend
+ Transport; Wed, 20 Sep 2023 16:45:21 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.214.179)
+ smtp.mailfrom=oracle.com; dkim=pass (signature was verified)
+ header.d=oracle.com;dmarc=pass action=none
+ header.from=oracle.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ oracle.com discourages use of 209.85.214.179 as permitted sender)
+Received: from mail-pl1-f179.google.com (209.85.214.179) by
+ DS3PEPF000099DE.mail.protection.outlook.com (10.167.17.200) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Wed, 20 Sep 2023 16:45:21 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:9B81468F52A4288CB08ADE328189950B9EEA560B4B0EAADF297CC23FF1AD91F8;UpperCasedChecksum:C2A0BFC0B98E29221C0F2991EE47FAF90CA70439389F01CBFA42E26F93060C58;SizeAsReceived:6937;Count:34
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1c44c0f9138so37173335ad.2
+        for <tobinsilvestre@outlook.com>; Wed, 20 Sep 2023 09:45:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695228321; x=1695833121;
+        h=x-forwarded-for:organization:content-transfer-encoding:mime-version
+         :subject:message-id:to:reply-to:from:date:dkim-signature
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=frpIPYHx6KzKvad6/hnzCeb5Ib35Lt1pceiMjJkFCTw=;
+        b=mdhz8g4/fB0d0phwVH6yIC9clg2mfcud3zBOJNx5RecionY6kiVfjnAr8fo84Rx+lW
+         7TZXgtGd5I4ofgV7KbFWdueNrdzYGcurYJwvXd3uykR7OZ5mMppRyxBT76+jNR8ckIr7
+         xE0bKffy/MnWTyNXAqplsSlKlxbg309lqxSr5baR0WOaKbyantG692l+JJ4pLMH9G/RS
+         B/SzFiqqFBLMmT2WTj1aE8dxMxzs+4Udx3fyWDsVonCAdEsjElf9N//PiSxeGS+72ktr
+         +pgs8D+qvQtTv/3dYRjgteOebf1JNEW0DdvvmkFdgTyKVoLacMXxRXohm2bHN0vZLk61
+         MIvg==
+X-Gm-Message-State: AOJu0Yyop8CfvkGZZ4+A6h3nCuPuVhZyabwyXWjlIgExtWu8xDYreBt6
+	ihwWREtEHZbAt1kG65mOQYjtITh+hUCIgocYiw==
+X-Google-Smtp-Source: AGHT+IH0789iK7h89clTFbXmbXrCAIIaRO3HsV2LNWUuDcH7YEI3a7sOwaRaCN5YUvHtcJ4WuiVugHedkQdtq6mFkyRnDUgMPHU=
+X-Received: by 2002:a17:90a:6c05:b0:26b:698f:dda7 with SMTP id x5-20020a17090a6c0500b0026b698fdda7mr3250009pjj.32.1695228321269;
+        Wed, 20 Sep 2023 09:45:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695228321; cv=none;
+        d=google.com; s=arc-20160816;
+        b=ttmLaohKKf9/Wx40sG7VcpWTiB9tLt2u0/rQQWKBar6Tsf7MnORb8ifW9mLhNiTrQR
+         wAjeOSn1U8p+PWGHLTAzUJ/9UnYu6rPccph5Xl6uFvYE0SjL6LjpbM+sX9ZiufGoL0+Y
+         /rwClpa/7o1pKElZXc/YCpUq1ZPVZ7dHzD85HOBR8y3+c3h67NQ4s9TJMhKHwLILgZ3b
+         /DlSXeU0buEkHbwf9rXJ11pdyHrAsTtSKn+mFFAB+FCVe3PLs9EkQPNOc0A/RBRv/FlA
+         bOWTX95Cl8ajfCBQ4dqOJHtN0xMW3TkTH/1rl3hbolkMP8BKqZKWJRYb8UCjHUEPVhq8
+         pWcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=organization:content-transfer-encoding:mime-version:subject
+         :message-id:to:reply-to:from:date:dkim-signature;
+        bh=frpIPYHx6KzKvad6/hnzCeb5Ib35Lt1pceiMjJkFCTw=;
+        fh=roxu1gXY5nSMDK/GPYXunlLw6Id3o6SfISrnPIuQJdA=;
+        b=QkN+tV0Or6Uz1CHD8XYzrssVByYibxOC8xEHMqQs9c800ImAMH1UyiZwlVhc+1A40Z
+         L6+Pss4NxHj74rbfezDv5m3Z1SgN1MK7B0etwj6Ou0QF9MKsKaiTf346kG+avLllqRHV
+         bPJxz0mmEhOGQPXhiwHWuhaR3U9+lZcbqkb1haQG4AJ0MMxmbL9VKzcO72X/fmpwyfuu
+         CBMrMZD0FsepQ6QhrUIJbCelFZK+B/VEhdPVkO220EBTzhtPATFjBqIJrpw80VTYIywg
+         lPtnNSAALtrT2DwcipLAQ9NTMOVKcI+buooIXEML47iAv4E6IcpjPQ69KnsCCf101nE3
+         0aYw==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@oracle.com header.s=corp-2023-03-30 header.b=L4Y+CZW9;
+       spf=pass (google.com: domain of oracle-acct_ww@oracle.com designates 205.220.165.32 as permitted sender) smtp.mailfrom=oracle-acct_ww@oracle.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=oracle.com
+Return-Path: oracle-acct_ww@oracle.com
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com. [205.220.165.32])
+        by gmr-mx.google.com with ESMTPS id lb13-20020a17090b4a4d00b0027691d39091si221078pjb.2.2023.09.20.09.45.20
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 20 Sep 2023 09:45:21 -0700 (PDT)
+Received-SPF: pass (google.com: domain of oracle-acct_ww@oracle.com designates 205.220.165.32 as permitted sender) client-ip=205.220.165.32;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@oracle.com header.s=corp-2023-03-30 header.b=L4Y+CZW9;
+       spf=pass (google.com: domain of oracle-acct_ww@oracle.com designates
+ 205.220.165.32 as permitted sender) smtp.mailfrom=oracle-acct_ww@oracle.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=oracle.com
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38KGiXqW019665
+	for <tobinsilvestre026@sooners.us>; Wed, 20 Sep 2023 16:45:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from :
+ reply-to : to : message-id : subject : mime-version : content-type :
+ content-transfer-encoding; s=corp-2023-03-30;
+ bh=frpIPYHx6KzKvad6/hnzCeb5Ib35Lt1pceiMjJkFCTw=;
+ b=L4Y+CZW9ez7/FkT70+AFu1UZgK9JZM6vN20c2cQwocA/Mio8Hvb/ruLY2OCXJgoPapsl
+ yJtCMe/zlbwXBI8mwvYWmEfFbuy2cJX39cUvOpuXEPTasTETfztgPiU0ohavqxKAQx2X
+ Zg4OryENj4Nz+Azrv9u7/BMjunTPxqhT2B3mLU+hGpCtmzVi2HRwrt8ye4fl3/jkdCxq
+ 8rbZp0gziwxJpos2fc43xJ7YznG4oINf0YZYTxjVRnQE+vVFgSW1oQY1artcXXFVH6dK
+ K3KjnZJoDZkHj4T9jVkN1oO+RQtJldc/6+mlvNjD9bKlIC028WZ4bNNnzfTOj58kvAYg HQ== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3t548bfrqu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+	for <tobinsilvestre026@sooners.us>; Wed, 20 Sep 2023 16:45:17 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 38KGeq9a030060
+	for <tobinsilvestre026@sooners.us>; Wed, 20 Sep 2023 16:45:15 GMT
+Received: from phxpaprofileprdmt01.localdomain (phxpaprofileprdmt01.mtprodaephx.prodappphxaev1.oraclevcn.com [100.114.32.53])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3t52t7bv2d-1
+	for <tobinsilvestre026@sooners.us>; Wed, 20 Sep 2023 16:45:15 +0000
+Received: from phxpaprofileprdmt01.mtprodaephx.prodappphxaev1.oraclevcn.com (localhost [127.0.0.1])
+	by phxpaprofileprdmt01.localdomain (Postfix) with ESMTP id 5966CC09CD04
+	for <tobinsilvestre026@sooners.us>; Wed, 20 Sep 2023 16:45:15 +0000 (GMT)
+Date: Wed, 20 Sep 2023 16:45:15 +0000 (UTC)
+From: oracle-acct_ww@oracle.com
+Reply-To: oracle-acct_ww@oracle.com
+To: tobinsilvestre026@sooners.us
+Message-ID: <1975283928.218566.1695228315364@oracle.com>
+Subject: Your Oracle Account - Verify Your Email Address
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Organization: Oracle Corporation
+X-Proofpoint-ORIG-GUID: qLOwou2tAYkMnPyXh0KKEhS3yQ3Zcvkm
+X-Proofpoint-GUID: qLOwou2tAYkMnPyXh0KKEhS3yQ3Zcvkm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-20_06,2023-09-20_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ phishscore=0 malwarescore=0 suspectscore=0 spamscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309200138
+X-Forwarded-For: tobinsilvestre026@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 34
+X-MS-Exchange-Organization-ExpirationStartTime: 20 Sep 2023 16:45:21.4849
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ bba49e45-3a2c-4e28-a3f4-08dbb9f8fadc
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DS3PEPF000099DE:EE_|MN0PR20MB4570:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DS3PEPF000099DE.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/20/2023 4:27:54 PM
+X-MS-Office365-Filtering-Correlation-Id: bba49e45-3a2c-4e28-a3f4-08dbb9f8fadc
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.214.179
+X-SID-PRA: ORACLE-ACCT_WW@ORACLE.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:1;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2023 16:45:21.4692
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bba49e45-3a2c-4e28-a3f4-08dbb9f8fadc
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS3PEPF000099DE.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR20MB4570
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.2067626
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPnI3BvaFLA62pEjuKk8p2LvdhCgSbCc916E+s/curZAEKdG3O2LZiXZ5sJJUMZzr7ASMuGRB5Jmppjz2kWUlR9NlgvAgJXCTKRrFCCd0VYyKXxH4dE5IdIFEUR7QpLQ+1Ex3pZBAS7QH8nG225YxVYxR9REmeE+aLxrCW8Bw99xtynNRgle5glB5bQGd0OTeJw=
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VDhRcjhmb1hiSldkQUNPT3RoWjEyV1U0STZlOVF5djBFUjdPMDI2YmVNYnJl?=
+ =?utf-8?B?STZGTTBlVEdKZW4veFU0YTR4ZjhsSE1ad0h0VVpTZXc5RmlUUDZlRWNCbWdO?=
+ =?utf-8?B?aDFnY2dVaFhQb2Zhc25ZUldJSmJ6dDI2QlJHdXJLREkwWW1BMGYxY2N5ci9L?=
+ =?utf-8?B?Mk5rQVVCYWxrZlpwLzg4SDhHa2FZQTM5RE9kb2pwOHdGWjcwRXk4akRQeXp5?=
+ =?utf-8?B?a0NKTlVaamhVS0xkNEtyOFRoSDk0YVVhZ2Fkc0tsRXdjamUraFo0RkljcmlQ?=
+ =?utf-8?B?aWtaalZ1c0NmN21NKzQxRE1HTEdYQUpxYUozNC9MSG4vbzBtL05DY0V2aUNM?=
+ =?utf-8?B?bWpMRU5rQmNqa1VwSFYvWkVUOGdJUGVSZXY5WndYaW1zb0hjWU5PQXJValk2?=
+ =?utf-8?B?Qmh5eGp6ZU1iSVhPbUQ1YnI3Rk5Qb1F2S1dxeVNpZ2VPZ3NoeWVVYyt0QkMz?=
+ =?utf-8?B?RXd5cXRlb1hDQzBia0dCT1VyVmxkelhCUkovVFc5QkZzVUVWcnB3ZDhVK2xP?=
+ =?utf-8?B?Y0Via3VSWTdkQW5JcDY0NCs0MUhPdjNRQzh3ZnhGQnZmQXBHb3dWcElEZ1Nz?=
+ =?utf-8?B?TnVqUkh1VDRHYnczQjNOc25ZV0g1aU0ya0RJUGw1ZE9BWFhWNEV2N2svQ25n?=
+ =?utf-8?B?ckJ6RWRqTmM0eWdRbWJmRTFLenV0dVU4SmFwZWxiWmxSR3gxYzVXYmF5aU9z?=
+ =?utf-8?B?bVA3bUNMb3hXWW5KS2FsTTBJQzJNOERXQytMaXBhcU1IVGdNdmwxSk9QNmJq?=
+ =?utf-8?B?SmcrK0hOQ2ZaYWQ3YTlIV2lGZHlEajNJc1RUVi96dGZkcWU5ZWlHVW1HWjl1?=
+ =?utf-8?B?RHUrUHplZk1PTXluUUo4WGk1L0R0a2tHdHV6Z0MyWjVZTXVrMFhnK0tIOG91?=
+ =?utf-8?B?SEthVXRVL1lQSTVOMlNjME1sanVEVW9kR0J2Umdiekpyc2lQY2hkSGFhMC9Y?=
+ =?utf-8?B?dWo2UTFvRXVsZWMzY1o3TzhjVmkvSndlaTlnK2E1U0NBWjJwNDRLeTl5bEts?=
+ =?utf-8?B?Z2tPN3h0STlrSFpzUVFZOVh5YlI5MW9yT3BoOE9yY01GV2lkaUtpN1FNaTA4?=
+ =?utf-8?B?cVd3cHdTMXFqbE9sR0FheWJEaUc5czg5Z0ZaVzUwTEw4TDRERHl5aDIwRytH?=
+ =?utf-8?B?NTB2dWI3b0Fwckdocm1pMDdRZytCT3FRMisrYjhCeit5WFA1b0t5aTh2WjRL?=
+ =?utf-8?B?Q2JjbEhqSWF3VlE5emFwRE1FcGZHQ2xZY2RwMWV3WlNPU2FuNmtZenpKdG81?=
+ =?utf-8?B?dDU1R1M1YWhUaUxod1RWYTJZS1NKZkNoS0p6YTI3cGx4RDFuaWkvUXByVEhL?=
+ =?utf-8?B?RVpDY2FUR0hsbERwZEVWdUFaUkRNY3pIVm9WMVN5OVBUUVNoYjh0UWRYQStK?=
+ =?utf-8?B?MXRaY3BTaDVBSjQrTFZUMy9iMVQ4Zk14NWJINnNFY1lrRDVHV2M3SFBoL1lU?=
+ =?utf-8?B?dHVGZ0lEbm1XWGhpOUkzOXMrY01WWnlSN0lNdDk4TnRGcVNZM2lqeHJkT0Zq?=
+ =?utf-8?B?YmJzazIvaFJUSmxrUGFKbzREeEFoOUhYbkY3NzZOM01FdTJCSHlxZ1Q2eWRY?=
+ =?utf-8?B?SGhJeTlXSlRRV2NVcWdiMnArSTltUHBiYjZ6a0t0T2xSUExTd0NOSXdaa3JP?=
+ =?utf-8?B?RXFpNGRhSndxSGx6VjJrTXRxd0psZzkxZC8zMlpvaExndW8wdmFCSEVZaTV6?=
+ =?utf-8?B?U1dOek16bFVzRFZhT05UY1dJRnpSZGJqQVNrNjhGc3l1ZDI4M0h3aHZ6VmdS?=
+ =?utf-8?B?Qk0xSVE3REh4Q3B6VXVyV1hQTGYwSUwxUlhnVHFWTVhEWWVNaThuVHlJdmgv?=
+ =?utf-8?B?MU5FUFk3UjFTTXJub0p0b2owYzZxdjloTmFFdWNWMkE0ZTdqT1hsc21jUzdG?=
+ =?utf-8?B?Uk5OU080Q1ZLdm5ibCtiNHNmRVhyeWd5YnlaczRlVW5UditrbE9JYjdFcG5k?=
+ =?utf-8?B?TXEybW1Mei9KSklnSkMrM3EwcTJmL3hQbW96Yk14Ti9IVFRVSDlVWmUyTDZ4?=
+ =?utf-8?B?OEVLWDUrVVJwUC8xOG1zekt4dENpUFQ2TkNlMEN0SjFpblZTd0YwM3RXUnZX?=
+ =?utf-8?B?cXE2K0kveUR4TXM2M21qcmd0QXQ3UmZBRi9FS2M0MEE5L2thcGtwRVFnRWky?=
+ =?utf-8?B?UFdOeXl1MzA1RGpWemoxbmg1TlRGNDM2NlhRZDRKaUw4NkFacTlET3c5WHkv?=
+ =?utf-8?B?VTdFYUU5SXZMdjNCNEFadHNnbVFrOU5TYjFxYmdjQVhEckJ3VlZRcERCMlpU?=
+ =?utf-8?B?NEU1SVBNMndiRit4V3ZOMEw1TDh2R3g5Kzl2UWJhNlJ6bWVGRXlITUlCZkVJ?=
+ =?utf-8?Q?4mMkRluieWSfNo8M3a?=
+MIME-Version: 1.0
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="format-detection" content="telephone=no"> 
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;">
+	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+
+	<title>Verify Account Email</title>
+
+	<style type="text/css">
+		@font-face {
+			font-family: 'Oracle Sans';
+			src: url('http://static.oracle.com/cdn/oraclesans.woff') format('woff'), 
+			url('http://static.oracle.com/cdn/oraclesans.woff2') format('woff2'),
+			/*url('fonts/OracleSans.ttf') format('truetype');*/
+		}
+		*{box-sizing: border-box!important;}
+		body{ font-family:"Oracle Sans", Arial; width:100% !important; -webkit-text; size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0; }
+		table td {border-collapse: collapse;}
+		.header-bg{background:url(https://www.oracle.com/a/ocom/img/profile-email/header-bg.jpg) no-repeat;}
+		.footer-bg{background:url(https://www.oracle.com/a/ocom/img/profile-email/footer-bg.jpg) no-repeat;}
+
+        @media only screen and (max-width:540px) {
+            .devicewidthinner {
+                text-align: center!important;
+                padding-right: 0px !important;
+                width: 100% !important;
+                padding-left: 0px !important;
+            }
+            td["header-table"]{display: block!important;}
+            .header-mobile{padding:10px!important;width:100% !important; height:auto !important;text-align: center!important;display: block!important;}
+            .footer_mobile{padding:10px 20px!important;}
+            .footer_mobile1{padding-bottom:0!important;}
+            .hide {display:none !important;}          
+            .w100 {width:100% !important; height:auto !important;text-align: center!important;}
+            .center {text-align:center !important; width:100% !important; height:auto !important;}
+            .padleftright100 {width:100% !important; padding:0 20px 0 20px!important;} 
+            .padtopbottom100 {width:100% !important; padding:20px 0px 20px 0px!important;}
+        }
+
+	</style>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+</head>
+
+<body style="padding:0; margin:0;">
+
+<table border="0" cellpadding="0" align="center" cellspacing="0" style="margin: 0 auto; padding: 0" width="600" class="w100">
+        <tr>
+            <td background="https://www.oracle.com/a/ocom/img/profile-email/header-bg.jpg" width="600" height="90" valign="top" class="w100 header-bg" style="background: url(https://www.oracle.com/a/ocom/img/profile-email/header-bg.jpg) no-repeat;">
+            <!--[if gte mso 9]>
+                <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:450pt;height:67pt;">
+                <v:fill type="tile" src="https://www.oracle.com/a/ocom/img/profile-email/header-bg.jpg"  />
+                <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+            <![endif]-->
+    
+    <table border="0" cellpadding="0" align="center" cellspacing="0" style="margin: 0 auto; padding: 0" width="600" class="devicewidthinner">
+        <tr>
+                    <td align="left" class="header-mobile devicewidthinner header-table" width="150" style="padding-top:36px;padding-right:0;padding-bottom:20px;padding-left:56px;width:150px;">
+                        <img src="https://www.oracle.com/a/ocom/img/profile-email/oracle-logo.png" alt="Oracle" border="0">
+                    </td>
+           
+           
+                    <td class="header-mobile devicewidthinner header-table" width="338" style="font-size:13px; color:#fcfbfa;padding-top:36px;padding-right:0;padding-bottom:20px;padding-right:56px;width:338px;text-align: right;">
+                        <font face="'Oracle Sans', Arial">
+                            <a href="https://profile.oracle.com/myprofile/account/secure/update-account.jspx?section=subscriptions" style="color:#fcfbfa; text-decoration:none;font-family:Oracle Sans, Arial;">Subscribe</a> &nbsp; | &nbsp;
+                            <a href="https://profile.oracle.com/myprofile/account/secure/update-account.jspx?section=account" style="color:#fcfbfa; text-decoration:none;font-family:Oracle Sans, Arial;">My Account</a> &nbsp; | &nbsp; 
+                            <a href="https://www.oracle.com/corporate/contact/help.html" style="color:#fcfbfa; text-decoration:none;font-family:Oracle Sans, Arial;">Help</a>
+                        </font>
+                    </td>
+        </tr>      
+    </table>
+            <!--[if gte mso 9]>
+                </v:textbox>
+                </v:rect>
+            <![endif]-->
+        </td>
+    </tr>
+
+    <tr>
+        <td width="600" valign="top" class="w100">
+
+         <!--[if gte mso 9]>
+        <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:450pt;">
+        <v:fill type="tile" src="https://www.oracle.com/a/ocom/img/profile-email/top-texture.png" />
+        <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+    <![endif]-->
+    <table width="600" background="https://www.oracle.com/a/ocom/img/profile-email/top-texture.png" valign="top" class="w100" style="background: url(https://www.oracle.com/a/ocom/img/profile-email/top-texture.png) no-repeat;">
+        <tr>
+            <td height="48"></td>
+        </tr>
+    </table>
+    <!--[if gte mso 9]>
+        </v:textbox>
+        </v:rect>
+    <![endif]-->
+	
+
+    <table border="0" cellspacing="0" cellpadding="0" width="600" class="w100">
+    	<tr>
+    		<td align="center" class="w100 padleftright100" bgcolor="#ffffff" style="background: #fff;padding:0 56px;width:100%" width="600">
+
+    			<table border="0" cellspacing="0" cellpadding="0" width="100%" class="w100">
+
+    				<tr>
+    					<td style="padding:0 0 15px 0;">
+    						Dear <strong>Tobin</strong>,
+    					</td>
+    				</tr>
+    				<tr>
+    					<td style="padding:0;">
+    						Please verify your email address to complete your Oracle Account.
+    					</td>
+    				</tr>
+    				
+
+    				<tr>
+    					<td style="padding:24px 0;">
+    						<table border="0" cellspacing="0" cellpadding="10" align="center">
+    							<tr>
+    								<td align="center" bgcolor="#312d2a" style="color:#FFFFFF; font-size:14px;border-radius: 4px;" valign="top">
+    									<font face="'Oracle Sans', sans-serif">
+    										<a href="https://profile.oracle.com/myprofile/account/verify.jspx?key=DACBA1D0557DE59AEF21232EC7A09E60EF88BF0FDA95E9231FAE680E63D21BA05C33206A06497BCDD4A9F13E624F0C42ADD0337EBEA3E2DD604701580529F202" style="color:#FFFFFF; text-decoration:none;display: inline-block;">Verify Email Address &nbsp;&nbsp; <img src="https://www.oracle.com/a/ocom/img/profile-email/right-arrow.png" alt="" border="0" style="display:inline-block"></a>
+    									</font>
+    								</td>
+    							</tr>
+                               
+    						</table>
+                          
+    					</td>
+    				</tr>
+
+                    <tr>
+                        <td style="font-size:14px;">
+                            Alternately, you could use the url below to complete your action.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p style="word-break:break-all;font-size:14px;width:488px;">https://profile.oracle.com/myprofile/account/verify.jspx?key=DACBA1D0557DE59AEF21232EC7A09E60EF88BF0FDA95E9231FAE680E63D21BA05C33206A06497BCDD4A9F13E624F0C42ADD0337EBEA3E2DD604701580529F202</p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                          <td style="padding:0 0 15px 0;font-size:14px;">
+                                This link will expire in 24 hours. If it has expired, try to <a href="https://profile.oracle.com/myprofile/account/request-verification.jspx" style="color:#41727E;">request a new verification email</a>.
+                            </td>
+                    </tr>
+
+    				<tr>
+    					<td style="padding:0 0 15px 0;">
+    						We received a request for an Oracle Account using your email address. If you did not make this request, <a href="https://go.oracle.com/LP=49780?elqCampaignId=60550" style="color:#41727E;">submit a help request</a> or email <a href="mailto:profilehelp_ww@oracle.com" style="color:#41727E;">profilehelp_ww@oracle.com</a>.
+    					</td>
+    				</tr>
+
+    				<tr>
+    					<td style="padding:0;">
+    						Thank you, <br>
+                            <strong style="color:#766f6e;">The Oracle Account Team</strong>
+    					</td>
+    				</tr>	
+
+    			</table>
+    		</td>
+    	</tr>
+    </table>
+
+
+<!--[if gte mso 9]>
+    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px;">
+    <v:fill type="tile" src="https://www.oracle.com/a/ocom/img/profile-email/bottom-texture.png" />
+    <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">
+<![endif]-->
+<table width="600" background="https://www.oracle.com/a/ocom/img/profile-email/bottom-texture.png" valign="bottom" class="w100" style="background: url(https://www.oracle.com/a/ocom/img/profile-email/bottom-texture.png) no-repeat top center;">
+    <tr>
+        <td height="48"></td>
+    </tr>
+</table>
+<!--[if gte mso 9]>
+    </v:textbox>
+    </v:rect>
+<![endif]-->
+
+
+</td>
+</tr>
+
+<tr>
+    <td align="center" valign="bottom" style="vertical-align:bottom;">
+        <table border="0" cellpadding="0" cellspacing="0" class="devicewidthinner">
+            <tr>
+                <td background="https://www.oracle.com/a/ocom/img/profile-email/footer-bg.jpg" width="600" height="90" valign="bottom" class="devicewidthinner footer-bg" style="background-image: url(https://www.oracle.com/a/ocom/img/profile-email/footer-bg.jpg);background-repeat: no-repeat;background-position: center;height: 90px;vertical-align:bottom;">
+                                <!--[if gte mso 9]>
+                                    <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:450pt;height:70pt;">
+                                    <v:fill type="tile" src="https://www.oracle.com/a/ocom/img/profile-email/footer-bg.jpg" />
+                                    <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,-14pt">
+                                <![endif]-->
+                                <table border="0" cellspacing="0" cellpadding="0" width="600" class="devicewidthinner">
+                                    <tr>
+                                        <td class="footer_mobile footer_mobile1" style="font-family:'Oracle Sans', sans-serif;font-size: 12px;color:#a4a2a1;padding:15px 48px 0 56px;" width="100%">Copyright © 2023, Oracle and/or its affiliates. All rights reserved.</td>
+                                    </tr>
+                                
+                                    <tr>
+                                        <td class="devicewidthinner">
+                                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                <tr>
+                                                    <td class="footer_mobile" style="font-size:12px; color:#ccc;font-weight: bold;padding-top:0;padding-right:10px;padding-bottom:0;padding-left:56px;">
+                                                    
+                                                        <a href="https://www.oracle.com/corporate/contact/help.html" style="font-family:'Oracle Sans', Arial;color:#d0cfce; text-decoration:none;">Account Help</a> | 
+                                                        
+                                                        <a href="https://www.oracle.com/legal/terms.html" style="font-family:'Oracle Sans', Arial;color:#d0cfce; text-decoration:none;">Terms of Use</a> | 
+                                                        <a href="https://www.oracle.com/legal/privacy/" style="font-family:'Oracle Sans', Arial;color:#d0cfce; text-decoration:none;">Privacy</a>
+                                                    </td>
+                                                    <td valign="bottom" align="right" class="hide" height="48" style="padding-right:48px;padding-bottom:0;vertical-align:bottom;height: 48px;">
+                                                        <img src="https://www.oracle.com/a/ocom/img/profile-email/logo-tag.png" alt="" style="display: block;width:48px;height: 48px;">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <!--[if gte mso 9]>
+                                    </v:textbox>
+                                    </v:rect>
+                                <![endif]-->
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+</table>
+</body>
+</html>

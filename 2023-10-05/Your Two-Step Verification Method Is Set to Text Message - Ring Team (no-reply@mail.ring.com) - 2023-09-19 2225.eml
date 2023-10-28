@@ -1,0 +1,955 @@
+Received: from SN7PR20MB5138.namprd20.prod.outlook.com (2603:10b6:806:272::20)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Wed, 20 Sep 2023
+ 03:25:39 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=FV6PnfJQb6sOJOYzLKxSszUVxxQ2sbd2CafD94139WioJeZMlh8v0ipC9rcUGO7jttZ7x5TZcLJDB0lMSfVdzfnf3qWdR8GwP8m+JOYlSe7a/w1iEd2cSs9BQzCKVrORDb0CxRV9fpd0fWhUtYegxSmfxGQZJ5BpMjzvsseHgBHFkiGf/Br6wg73T7sMnKRMKsTr1JxpbcVPahhag2QZcIPcnjvKiCVY7iqfqJTiqy5k/hDR3a3y0gxTIBa830t15Ios5pCkWzVy4ceY1ZgCThHRRKPCTUxxzdY2IJv0lcIiN5saExXuJlWhzCaMLX590PJ8dLvc11vismP+O6PcHA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZPTuI1wrOqWP7ymD+F1dXlnsZKJOsYoDRG+Fz9s73gs=;
+ b=JD/N3Zy1cF8H0fB9Ni2oFwpQlfP5Ed1xvZoTyJCsawkuRk9BoKDIBU7jRNY0YkiiOn6P1iXJcEhrY0eYN4SlKRdd56FYOgxtcsbCb7OCMFIcgamd0ChmTJIep08W3pKJMZxvM6VYL9FeJn6GO/4b3kSRXv1kg2htVQzz+eMzp4phj4/PSV1h9D4ri/a6PfdzzzFouuGKWikZJvATmn2/K3gPfe2uv9IRyUgKgCcHWtHPW/S5V/wY69hzvTmz38/ibHhuCZaLOe301X6fbqKGiiUbymUDGWqA+dlvu0PwnQRZrjToFvf2LICyzwF2fQIpOtol7QhrYLh/bLzNSEaVwA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=fail (sender ip is
+ 209.85.208.173) smtp.rcpttodomain=outlook.com smtp.mailfrom=em.mail.ring.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=mail.ring.com; dkim=pass (signature was verified)
+ header.d=mail.ring.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=bounces+13771244-32cc-tobinsilvestre110=sooners.us@em.mail.ring.com]
+ dkim=[1,1,header.i=@mail.ring.com] dmarc=[1,1,header.from=ring.com])
+Received: from DU2PR04CA0059.eurprd04.prod.outlook.com (2603:10a6:10:234::34)
+ by SN7PR20MB5138.namprd20.prod.outlook.com (2603:10b6:806:272::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Wed, 20 Sep
+ 2023 03:25:36 +0000
+Received: from DB5PEPF00014B89.eurprd02.prod.outlook.com
+ (2603:10a6:10:234:cafe::1) by DU2PR04CA0059.outlook.office365.com
+ (2603:10a6:10:234::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.29 via Frontend
+ Transport; Wed, 20 Sep 2023 03:25:35 +0000
+Authentication-Results: spf=fail (sender IP is 209.85.208.173)
+ smtp.mailfrom=em.mail.ring.com; dkim=pass (signature was verified)
+ header.d=mail.ring.com;dmarc=pass action=none
+ header.from=mail.ring.com;compauth=pass reason=100
+Received-SPF: Fail (protection.outlook.com: domain of em.mail.ring.com does
+ not designate 209.85.208.173 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.208.173;
+ helo=mail-lj1-f173.google.com;
+Received: from mail-lj1-f173.google.com (209.85.208.173) by
+ DB5PEPF00014B89.mail.protection.outlook.com (10.167.8.197) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Wed, 20 Sep 2023 03:25:35 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:FB31E45E020719214CB9D1FD7B33A050A7C5BEB7D9BD2DE7D60177F536FEF589;UpperCasedChecksum:A71FEF13318BAEB5461B0928E146AA27DFF87A24B21255DDC0686C67E5DB3151;SizeAsReceived:6557;Count:26
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b95d5ee18dso105668021fa.1
+        for <tobinsilvestre@outlook.com>; Tue, 19 Sep 2023 20:25:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695180335; x=1695785135;
+        h=x-forwarded-for:to:subject:message-id:mime-version:from:date
+         :dkim-signature:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZPTuI1wrOqWP7ymD+F1dXlnsZKJOsYoDRG+Fz9s73gs=;
+        b=QghAFI9LM3Nbw491WAeIoBYYpGRH3Avn5bMbtYYOm5pXgacJytPwFjvZgVMqPnqNpH
+         JdaMLis0rX5zcQj7t+bBopxtdb45SbC3RF0bNwg2Gb+L/SCvtpL1PNVko5PFEHtmKKlj
+         wr4yYb1c0KvDqMr66bd5o+pW0QntPRgmur5f1mB8HRyfSjDHNExTqDKh1DpovF61xAaZ
+         Nu/qBqgK/QN/y0O8G8op+Wjx2ayuK8ovGwbkrQQcsO+83gwdG/mWgsEpV5eV5OsuQxTw
+         Ravts65V450dhf4twkArxiTCh4hs/UmCF25B/ubaetrWzfW8OyLHuswc0HOecwHp0Cf1
+         unRw==
+X-Gm-Message-State: AOJu0YzcDKV0HXa1Mnw+qPgxOg5loqUkSCzGWAg7WjvROtuIiNeYu+1D
+	TJSmhEPBz4+MiteGDj+0xNT79rv9KavaHq61rQ==
+X-Google-Smtp-Source: AGHT+IGIJmoSLtYTeme6tZsWslgiYhp96Uk4q6Vzkq0LT9yzZsU+O+rrPzE3r8V96diK8/t0E2m6RvJUrxpz+dNYKQapajwp3kA=
+X-Received: by 2002:a2e:9317:0:b0:2c0:293c:ad12 with SMTP id e23-20020a2e9317000000b002c0293cad12mr920361ljh.17.1695180335518;
+        Tue, 19 Sep 2023 20:25:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695180335; cv=none;
+        d=google.com; s=arc-20160816;
+        b=jFxwGm+IhsXuK+JBPQXBo+tqch/uwE9oHzLvbMg9k5SUlUpZlJhvHL71dsEy+cAXss
+         4dMePEff7PIZIa3JW/OS1JV07EGGoXMjK+ldBbv5layqn15T7CCo0+O9H9vM4VNBrQP2
+         j2JBT0T8VbAvcZ7stItaW/hWLx5VUFukxqjD6gcpE8fgxGIc80bkCNgENvMF8sZP2nJU
+         K1LgjS5qkBn8BWRPpULgy672a63c8tEXD/YQAgDz6PYLDC2kDFGRdIQXuLpLsYaAb5zs
+         lIkjyq95dizr//NvW03EQUha7cOaQ8y28ZbpKjBMi2tZvstaYzgZKwt4aPBbjWiO8rby
+         gpOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=to:subject:message-id:mime-version:from:date:dkim-signature;
+        bh=ZPTuI1wrOqWP7ymD+F1dXlnsZKJOsYoDRG+Fz9s73gs=;
+        fh=JuHetrVBSxAFE2DRLnDaLbFj9OcXHtaI1ch6I3hLP7U=;
+        b=LKf7bTKMdb5GlIFZXB6b3+A6pEi3jo1M3vbp29rMyV8rQBpj0kTBVmRZCFLqR9wION
+         UMn2W0ty2SAgAy/XNYOWDGY1VhPLrZ+H6DHv/hr7itDHTynmh8UfP8l+SLHhQW116fTE
+         unJtd6tn5iGNtjOKpXsH3nog9i7JowVs4Alw03Gz7DzKZacGJD+NvhyLsA69Zoz84kMt
+         9B02/JaTB5dCdxFTik0f4AyqDKTcmY0OxzyqAWum+71n7k1dujz7nNFd9nAqTBpBOGqC
+         iMHsg0OTaYCm556hNUHljp6q8mNLVFaLbzfI3SyHbY+3/MsY2sYNx9G4KZbFYKO9ydyu
+         KwRg==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@mail.ring.com header.s=s1 header.b=uYH6ZXI7;
+       spf=pass (google.com: domain of bounces+13771244-32cc-tobinsilvestre110=sooners.us@em.mail.ring.com designates 50.31.48.95 as permitted sender) smtp.mailfrom="bounces+13771244-32cc-tobinsilvestre110=sooners.us@em.mail.ring.com";
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=ring.com
+Return-Path:
+ bounces+13771244-32cc-tobinsilvestre110=sooners.us@em.mail.ring.com
+Received: from o3266.em.mail.ring.com (o3266.em.mail.ring.com. [50.31.48.95])
+        by gmr-mx.google.com with ESMTPS id hq16-20020a1709073f1000b009ae3e884341si201248ejc.0.2023.09.19.20.25.34
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Sep 2023 20:25:35 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounces+13771244-32cc-tobinsilvestre110=sooners.us@em.mail.ring.com designates 50.31.48.95 as permitted sender) client-ip=50.31.48.95;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@mail.ring.com header.s=s1 header.b=uYH6ZXI7;       spf=pass
+ (google.com: domain of
+ bounces+13771244-32cc-tobinsilvestre110=sooners.us@em.mail.ring.com
+ designates 50.31.48.95 as permitted sender)
+ smtp.mailfrom="bounces+13771244-32cc-tobinsilvestre110=sooners.us@em.mail.ring.com";
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=ring.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mail.ring.com;
+	h=content-type:from:mime-version:subject:to:cc:content-type:from:
+	subject:to;
+	s=s1; bh=ZPTuI1wrOqWP7ymD+F1dXlnsZKJOsYoDRG+Fz9s73gs=;
+	b=uYH6ZXI7uYRXMlSeR1eo16O4BqzVtGDHLQ3nJTnGkm9d8Ek1eYxTPZ04UVeP2MB9xiyR
+	AOgTfWdRhXoVm3xNcUdVBlbCK6wZGJWTcvWoImM87hxE46whbwyTGXnjpSQnfb+47g1D1t
+	oZBA0C2Ec/+HzD9UoLXUwDTpWDZW8YL+COAGMITzeWMO2AhxPNVxVyjv3ZOkct2uHxZ/aI
+	SMs/8ZeSgb66cee3VkdL0PdONs0RLOUO701TwbkFhhAm0FoYMeUbVYI0Qooj6+mZTE7n8e
+	VZEIgngmTjNP8YoDNkIvba3qOKvL0Fi5PF9ShkOneGklp7LUTOVA3v7MWlzOgccA==
+Received: by filterdrecv-9c566959b-t5fdk with SMTP id filterdrecv-9c566959b-t5fdk-1-650A662B-28
+        2023-09-20 03:25:31.880815958 +0000 UTC m=+7884292.627239769
+Received: from MTM3NzEyNDQ (unknown)
+	by geopod-ismtpd-33 (SG) with HTTP
+	id JOHuX5lzSwCtE45yRVyFQg
+	Wed, 20 Sep 2023 03:25:31.733 +0000 (UTC)
+Content-Type: multipart/alternative; boundary=8a1884fbca035a3c9060e9ff4138d70ad8c65f657fdba9074f2fb37aafdb
+Date: Wed, 20 Sep 2023 03:25:31 +0000 (UTC)
+From: Ring Team <no-reply@mail.ring.com>
+Message-ID: <JOHuX5lzSwCtE45yRVyFQg@geopod-ismtpd-33>
+Subject: Your Two-Step Verification Method Is Set to Text Message
+X-SG-EID:
+ =?us-ascii?Q?H6dMX5BZ6+rG3Vc5jsVyxtJfn+2KYkj010di87wnLES+WwBijwhf3u78RWbG3X?=
+ =?us-ascii?Q?aGSmXn5KMQ7+dnLxQd8y7BtP=2FmO2O9Dez1kLOpK?=
+ =?us-ascii?Q?eEyggSS42vwOXmHzA=2FeW0KHY7vfY1UaidrZt42d?=
+ =?us-ascii?Q?qfpfRfzbWQ9fFw+Qpnrtl6vUKH7HsZ5oEql5df9?=
+ =?us-ascii?Q?hX=2FyHEIT2Bkp86Ez+4BukEs0W2l3JYlkM47nRuM?=
+ =?us-ascii?Q?VlITHrT=2FTD+fVv5XcvoS=2FOdw=2Fou0BM49IMMaU0?=
+X-SG-ID:
+ =?us-ascii?Q?N2C25iY2uzGMFz6rgvQsb8raWjw0ZPf1VmjsCkspi=2FKvUYPFb2vwyNNeBc9bJi?=
+ =?us-ascii?Q?ChzmGccnJJsX1eDoMADfyabbiDm=2FsjMEgH65wl3?=
+ =?us-ascii?Q?g3vUNOPKpLQODKx8j+iS3zjpYuOWZ3=2Fz9spSSQN?=
+ =?us-ascii?Q?3ElyntudIQ=2FGNRYVHZehTXTN0VUWRAcBKqdZqiI?=
+ =?us-ascii?Q?NE0Vxob9QZ575fztdDq+mxECfyC67jezEshaV36?=
+ =?us-ascii?Q?dHflvszLVQylYaRjW9KQevtVPh5m4ZATtgPhGUJ?=
+ =?us-ascii?Q?TbDK706teg9=2F1MCPWuJ34sTrNGF3UD6x1oNBaDE?=
+ =?us-ascii?Q?X+ldgToL4FA4A8Bp7bq1PaDuwCfKo=2FFuZ=2FOMElV?=
+ =?us-ascii?Q?ykFPo5CPX++n9B2XkFBYs2rgExVzSj6WpGsQYWT?=
+ =?us-ascii?Q?6OdLoSlezwY7XpAszpOpwJIX++ngV5vdtSBu+EY?=
+ =?us-ascii?Q?BMrFHemzdesqcgnHdKP04wr7zyyk8qbHLyr8zw8?=
+ =?us-ascii?Q?VdnLpSieBRoQFvQ=2FDvPE30xk0BFMl0k1dI6YwX0?= =?us-ascii?Q?=3D?=
+To: tobinsilvestre110@sooners.us
+X-Entity-ID: wmaWjc0xyamCWSTgLeXrbA==
+X-Forwarded-For: tobinsilvestre110@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 26
+X-MS-Exchange-Organization-ExpirationStartTime: 20 Sep 2023 03:25:35.7981
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ dc02d6bc-7988-4efd-eadb-08dbb9894129
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DB5PEPF00014B89:EE_|SN7PR20MB5138:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DB5PEPF00014B89.eurprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/20/2023 3:22:26 AM
+X-MS-Office365-Filtering-Correlation-Id: dc02d6bc-7988-4efd-eadb-08dbb9894129
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.208.173
+X-SID-PRA: NO-REPLY@MAIL.RING.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 2
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2023 03:25:35.6887
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc02d6bc-7988-4efd-eadb-08dbb9894129
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DB5PEPF00014B89.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR20MB5138
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.3571723
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90005022)(91005020)(91035115)(9050020)(9100341)(944500132)(4810010)(4910033)(9910022)(9545005)(10170022)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPmBy9mi5+o0Qkr00OzkvnT2qYlWE69vACoVpg1PYmkp2IOb39BzBxHxT4avQBgiKAjTWu2vVG6VdGPMQYgSBSgSdHQasT4EWniH+/iFdzK5M/TR1ep9xH60Jxa5rBHoMoMtDm4SK7tE99wVQ0Ha0LB7ty4Qw82GALjeduOKpXW4OEQIyTZaInP/jK/1RnFjaKJS7Dhfeq8PXg==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0tMQ==
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?THI4ME5MM0N6SzVwWFRFZDVnMzZuZnRTSU1Sd29Gc0NvM1J4SnVyOGQzZnpz?=
+ =?utf-8?B?NnZuT25VQjUzZ0ZERjcrWmZFQ0NuT1NVUkJpZmJzd0hFbjZBeEJQVkIzVlls?=
+ =?utf-8?B?K0dadnZZWE1BUDZCWEQ2SHJKeW8rRzFnMG45Kzl3bGdGQVp2c2YzVkFRME02?=
+ =?utf-8?B?YkZEQXdNSk92djJLRFd0b0UxbjdrR1QvU1UranJnbWxYaDMzZ1E0VzRzSXM2?=
+ =?utf-8?B?RG5DRWNQWDlTdHFqRTRVa1J5VmE5azlnM1hncCtmOEJCc0VXTG44K2Q0MVU3?=
+ =?utf-8?B?cGxmMnZMbFR3a3R6TmgvcUpnaXBkVCtFOVBmYkxPdkhuZ1EvUFNKNGl4OWRF?=
+ =?utf-8?B?bEU1bzRIbDJRR1ZvNXdobzc5ZlEvcTBPMWIvemhHQW92THkwdEtWNHpaNFU5?=
+ =?utf-8?B?cEk0L1c4SWxobzRXL29JZUdRQjh5UHV2WXNjMk9NSnFsUTh6aWRLRFRiaHhZ?=
+ =?utf-8?B?Mzk0MndtMkdHOXI0aWFTZTdzb000MEVaU2x6eVZrMGhhQ0FZV1VCK2phaGlp?=
+ =?utf-8?B?ZjZORWdnNTVDYmJSRHFEbjhGOWVzdmRUZm1CTktVNGtzTHJubVlnQkRTcHRN?=
+ =?utf-8?B?YUNvQXMzVTVXbndZSzExeG5jRTVwSUdmUmt0czBMVVFzUnNmYktuVnBxOExI?=
+ =?utf-8?B?QjhQV0NlS3oxdjgvN2JGM1lBcWNBTWkwUjQ2UTZxWHBPYXJYdWZJd0cyQUpm?=
+ =?utf-8?B?NnFQaE9VbEZ0ZjZxU0F4NElZM2c2dEJLYjBWRkdZWERPT3oxdmYvSWlGVXd3?=
+ =?utf-8?B?eWdqOU0raFRwbDZsVkZzMDc0clFEMHpKYlZDdzkybHRGQktFVVdoWUZ3VlY1?=
+ =?utf-8?B?M0N4UHNZbjBuYy9obE54RGRKV2t3OUtrVDhJeUtNbFhYdVczMHlnZUU4RzdZ?=
+ =?utf-8?B?cEJrUGtVMWVkY1d4ait4cFA1anFjdEl3K2FjRVYxS0cyUGVDYlBIU3ZFMWtm?=
+ =?utf-8?B?MUtiY0dzU0JmTVJiQjRQZUpCaVh2aURaUmx5ejJXdEo3QlhwcGJvL1N6dmU0?=
+ =?utf-8?B?TEVMbzVLdEc5MDQ0R2NhbWt2cTFFYWZUcFVpUEs2NzRXTnk3dnZlYWVUNmJp?=
+ =?utf-8?B?SDZ5dGp5UEZwYy92M0FPZktWOVdrcXlZYmw1MUNLR0R0aXZieFhOUzl1d3o3?=
+ =?utf-8?B?L1E3U3FRSktRMms0UzZKanBXSUdpdm1EblVPaWN0eU5xcUlVTWRrYVRORFhu?=
+ =?utf-8?B?MmpqUWluQ2FlQ3NGN1FPNjZ3VXo2aEhOTkNRRjV0NXlwZDA1VFhPQXp5RzFS?=
+ =?utf-8?B?MHJkd3BHcjFxSXlnSUlNamx2SDhmWm93SUZCeTdIRmNhQWE5aDdQYWpRY2Ew?=
+ =?utf-8?B?VmxsVkxRZGY2WmQ4WUVQdXNFMEpQaGJ0aGJlaUloU2dsSHhTblAreDdFcWQ5?=
+ =?utf-8?B?ZVlPeVQ5Rk9kS1hjNWdVN0ZBTXRMRkxuS2tRb2hJK2I5RVZLbXVzb2IwTHR6?=
+ =?utf-8?B?cEY3c2VxYms1dWFpczZjbTJBbjltY1BteXUzcys2V1ZJSVp0S2NLa0FqSnZp?=
+ =?utf-8?B?MGhnSjBjN3lXOUZmU0o1VTNleXFPaFUwVTZyNzNGeFdmSlJsYmYwd3VVb1J0?=
+ =?utf-8?B?Uk83bmRyYW9SYmpTcXBzbmRzOHJHbHl6L2huZkVaWktad2ZTeXN1dmJ5RVlh?=
+ =?utf-8?B?UFRHV1RZbVpLWHJ1ODBZSkRrcnJvemhwcjdXWXF3ZXFOWUJDUXdBWUtrbFRh?=
+ =?utf-8?B?c2lVVSt5RnF3c3FOV1lQTTgvaGphalBoTHg5dk5GSkpFQXpUTjJPWDROTTVn?=
+ =?utf-8?B?dFppTWNwZEw0WVhCRjh5bkZaWG05Yjg1T1I0TjJla0FBOWNhVFNiWlBkb09V?=
+ =?utf-8?B?dUZOWmtGS2VoYTBLTUhHR0JDYnRlSDlib1Q5ZThFMk9XZXVrYTc3UXIxcWhr?=
+ =?utf-8?B?UTY0T3AzbWpkcjhLMWYyamFWUlRFNDFhMmpFcGZLRFZ3Q00xOGtmVUhlN2NF?=
+ =?utf-8?B?cU5DcGlVcjR3U2JRck1wVlhxMzI2WUVtSnNQYUZvb0luUEFEQlh0VFhyUFIw?=
+ =?utf-8?B?bmF4dnljdHpuSFQ0eFBaYjdjNFg3b24yVlFSdjNXeStDaVJEZjkzKzFYTWVX?=
+ =?utf-8?B?UlRPYkRsQ1BoL0g2U21ISStma0ZidGs2OFd1TlJXS2o2UlIyekpOSVZicnZE?=
+ =?utf-8?B?UGRCSEtDM3hwUU9MR1JYNW9IVUlnOTNRbExvdExKVnhRcUZVVklpa0J5Qkta?=
+ =?utf-8?B?bUZWVENsWnU3L01CSEhiU0lVVXhBSVdTNnBybVVRUUFZMVlrS3JwMEJYeDJX?=
+ =?utf-8?B?YkVOZTdBSDhGSU9HWFdZTHEycVZwSDlEVzc3YmFvZ1c0ZHlUcSs0Zzl3SGt2?=
+ =?utf-8?B?cExCWE8yNGRGZ2VCSUZEWklYOVErR0tTdHFIS2MxSS9ycDdqb1dwWEpYeXBw?=
+ =?utf-8?B?ZlVPZTlJOUhWeExRdGFyckFNcVQwMksvVm9TQ0FIY29nZ2JDVkpHSG5ycVpK?=
+ =?utf-8?B?TUUxc0xBZndPemswNWRJSVZMRjBxbnYyNDZtMVllZU5zaTFMd3d4OURRKzQ4?=
+ =?utf-8?B?Z0VjSUltZ2dDZWJidEQ1bXdreVhPNi8vOHloS2RGK1I0R2hpdVpJcTdkcFR3?=
+ =?utf-8?B?cEl4dkp1NEhYWitTWE0rTGkrQngvK0hZV0FzNVJQeFgrR241NEgvZ1ZwNmpi?=
+ =?utf-8?B?YWlXK3Q4QjRqWjNlb280WVd3Qi9XUWprYUh6SXY1eitmMXVUT1JEUzRJaGxm?=
+ =?utf-8?Q?LMeY?=
+MIME-Version: 1.0
+
+--8a1884fbca035a3c9060e9ff4138d70ad8c65f657fdba9074f2fb37aafdb
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+
+ You=E2=80=99ll Now Receive Your
+Verification Codes by Text Message
+ =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C  =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C  =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C  =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C  =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=
+=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C  =E2=80=8C =E2=80=
+=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C =
+=E2=80=8C =E2=80=8C =E2=80=8C =E2=80=8C
+
+
+
+
+
+
+
+
+
+
+
+
+Ring logo ( https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8=
+js0RPMXz-2FEm54EFqR-2B-2BJZQw-3D6vY4_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2=
+Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U=
+9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP=
+9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2=
+B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0r=
+pRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0b=
+tT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eB=
+MQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbwGnGa=
+7pbCIwZHmzhe-2Fv2gkehPshTeHBwRDmYzimbeqygTGtugyzjLvo0xPxaNgF4ue0Tp125-2FhON=
+FCsaFkaznoc6B-2Bp8-2FzYxpbAPa7UUzinnpBy7xIROSNLYUbChwQnI1-2FxA4YoD5QY6PbgyG=
+btvBCZZ9noJQ-3D )
+        Hi
+Tobin,
+   We=E2=80=99re confirming that you
+chose to receive your Two-Step Verification codes by text
+message.     Now, whenever you log in with your Ring password,
+just enter your verification code, and you=E2=80=99re in.
+   Safety first,
+The Ring Team     Ring Community ( # )
+
+
+
+
+
+
+
+
+
+
+
+
+
+      Facebook (
+https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jsNjtndfS5uJ=
+uPkPYfGG6gIKBLHXkcuR9snoMbPbrTKbwO2O_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2=
+Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U=
+9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP=
+9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2=
+B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0r=
+pRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0b=
+tT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eB=
+MQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbwGnGa=
+7pVeQcN9qoRp2tLebjL6DLv36kc30-2FAUeoa-2BUYr0BrqEetPHJVvgUjhEuza-2BlaM9A8o2P=
+MHjzMWAh68ksCB8HhWxNedfRyK1tCghL18hghaD-2FoTvGWaAeJiZuwf4Cbh01sUcxQonX8hSSq=
+CaKniKEmrQ-3D )   Instagram (
+https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jmXIvEC55Y1y=
+z4XPhec2NAUnWcpvabaWlkKAj3SmVP-2FvWVTg_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3=
+D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn=
+6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7=
+MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0=
+-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg=
+0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe=
+0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82=
+eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbwGn=
+Ga7pRoFkJEaLnm3aeTLfLzAbWz57qO-2BJhZyc8AMZAnTAoqoUoK4G-2B82YwBQ1sxSyZGNhr1B=
+0RywQn10dGHG-2BhnmZDxb0F4xe3MogQP0YV2vc6ZdeJGWoXkgs9E-2FDyqGoDyJYDPPOMw5aDp=
+FEcoq06E7n7Q-3D )   Twitter (
+https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jo6-2BDAe24r=
+ttM-2F1LgW28VSvBi9Z4ppAHJP5FKW3GvYIYSJ00_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoN=
+W3D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0K=
+Zn6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tc=
+f7MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6=
+h0-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPn=
+Jg0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5l=
+De0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ=
+82eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbw=
+GnGa7pXpucc6z6VqbQSTUykGjOIEUNSu-2BIM0gnu4eW3MwYucLh9pZ0XAwh-2FuIJGVVXOjlJU=
+tmvzhShu9CHAYLBHxX1n3rp7uFa3qbHKAwkuwy2gz2T-2FX-2Fo6WX8MUFvS8oQlU5UeKxwnXXl=
+vFmpSVpDpkwou8-3D )   YouTube (
+https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jkuNvLIFHgSS=
+KtdyoSGl0b5h-2B4mYlktYFtfuUWcrE5KSwQ-Y_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3=
+D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn=
+6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7=
+MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0=
+-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg=
+0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe=
+0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82=
+eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbwGn=
+Ga7pcccHKJ-2BxPFALXeDPqViKfzqUEtxwCZzDmeba5QL-2FNnzIRhs3Vvp5hVFteXlar20zrRk=
+W-2BkPcGKILO1Po9WokZghAw9P0rhDQeElMyTZWvD7jFwiWpSSl0v0c7MBLl5E5OEXJeCOyYO-2=
+FEBS-2F-2F71ltNg-3D )
+
+
+
+=C2=A92023
+Ring LLC or its affiliates.
+12515 Cerise Avenue, Hawthorne, CA 90250.
+Ring and all related marks are trademarks of<br>Ring LLC or its affiliates.
+
+Update Your Email Preferences=20
+( https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jtNR-2B6xT=
+-2FLQQOrA94TCjnwrUPPIGNeo6cH-2BCwTC0eDdykDpDBy8vMVpd3IBnSL-2ByOsQX9LwI65TnQ=
+j5BJrdeJ8I-3DgczT_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pLy-2BmrrS=
+2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVAXQD0OtrM=
+cQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MML-2F1zXn=
+cLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-2FokyQn3=
+ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fjt9jph9d8=
+bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsOef4i2dVh=
+IbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bthnGSswsE=
+GY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbwGnGa7pTQsdcKjIe3ToCapdY=
+72MOr4zKv1RG6a2FT-2FsXy093-2Ffx594NX-2FrNv1-2F-2BIHf4K1f7Vf8hiHtN3DvG9TfaQy=
+eYzCd4mGkCkpIhCwCIA3nSWWMHAlGgrNpPxlb2j7PBVTmhRwldAup-2BwAYP46oMubT8B0-3D )
+
+Unsubscribe
+( https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jlIFWwTdeZ=
+sNvc12TJMBoGiGUT5CAlhZ4zTmBLM6eqmgz7chgugHfAshI40tvhPOvzo7w1ebqB4z8TkcmZKR-=
+2FGsMheoFu6f-2FFma0gqGQMlMC8FkvlXngX4djLWjQUm-2FFrm76jZbmyG-2FCL1I9MVpLJ-2B=
+-2BWEl3BO-2Fee-2FQ5x6kXtNzz6WxjKfYdIb8Ra-2FLV-2ByOtdW09-2BKilfML4v5P-2BAzWN=
+K26IR-2F5sGl-2Fb6KEMLVp1DwGSMBdxqKa5VDl1aR4VlbpwsxlTVG2yAsYwu4pGpJfLzFo72O4=
+HEpfQPZ8BjbGP8vXlOBMQ0KS1exG-2F86XV5DNbabbnY2orRamdQtO924H3NUMhmz630slgrafc=
+-2B80-2FDzluB1Q62JttGIU12-2BXR5-2BGT3Ui0uwlZ1JlsUldnax2sVCCBjWZKRZFriFUrt9A=
+6PeyxiEjOYCkEPMMS2XN6SaZvmG8eX7cnf0g4IkO-2Ff2ExzSSQ6ufKSZ87H2Kl0gQJ2GANcKkr=
+AYrCJzOBbO91as2DrHVvUQxKkRPkK7CaBZIxXfdc1cQ7vDUevtD-2BXkunsEsjfLLI-2BObU7dH=
+N96BvTV-2B7AX0Rh3Omc-2Btksz9N5NuycFCpARyxw9VNOjY8uQ2XP-2Bd3I2qCr_nm1feaUEy6=
+z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8c=
+Ta5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k=
+8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSD=
+OgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBp=
+khAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx=
+0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug=
+70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff=
+5FZX-2B8w4vG-2Fbnv88bFbwGnGa7pTgaAnOYfj9rxttgnbv7DGwE2neoJtJj0LGl4BN1L6Rx6i=
+kvatSOxTc4VjHd24Kbb1P5HLJ1Pp-2ByfFn-2F0s9KlYodkzhFAMH6aOtUFS8733MjVootlAQOh=
+xFvcBkM9dygt63drxfxYpwIQSer-2FG7z4r0-3D ) |
+Privacy
+( https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jiaVcKSUdf=
+Ie1Xm6F0MXoJEr7AXJO9nyB9FmqJ-2BLgwUv5S2Z_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoN=
+W3D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0K=
+Zn6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tc=
+f7MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6=
+h0-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPn=
+Jg0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5l=
+De0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ=
+82eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbw=
+GnGa7pRTp5W-2FySsgHMfvGGDKrcGzeipOVOt9-2FFxgPAwi8-2BEJNGnpyQ0cueS4kMYdFZbmA=
+peoPTsI19qRn5h7MI3BloH5ppDQOODH3B12Qu2SNpKguOvzP7mPFSD33JfZIYD-2BImuJRn1AAV=
+OkliCXva1MzfLM-3D
+) |
+Licenses (
+https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jot8Am1BAdHD=
+qfYDCvPjWe8-2FkE-2BKSc4x5AdCazffZJqCiRUf_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoN=
+W3D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0K=
+Zn6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tc=
+f7MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6=
+h0-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPn=
+Jg0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5l=
+De0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ=
+82eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbw=
+GnGa7pTl9MFjQpW8Tf1O6gcSbzgXEUHc7Ddv6XLgWF56AKGI-2F-2Fwmdui-2BkoEUxA612iF4K=
+BAenUjk-2FTFl3Sh7ZmxmJqN4UwFgFXTypFGlQFjCmS29Rpv5fn7rVjpqjuGt59PCo9VD9zRprb=
+TvCsuBwBqLh24w-3D
+) |
+Support (
+https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jkBtgXDDTz2V=
+05Bsp3OdlkH-2FHabjK3fBfpzSWoiBodxZGzgD_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3=
+D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn=
+6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7=
+MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0=
+-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg=
+0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe=
+0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82=
+eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbwGn=
+Ga7pTHsqbkooj61ylyxCfedTuvX2STpKTzE5Ar54gAy7J6FW4PfUULIzW86ArMroxD4kFmb1cqj=
+z2m9PzzUWz-2BzF4lVspSi0md90gtD57EW3zYTy-2F9PndtXpZN5UpPZ4BRnHJ7LEIrNKqlPlWt=
+aVgEZzI0-3D ) |
+Terms of Service (
+https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jhrBRABQPShK=
+Zh3IIxoR3AE-3DY_wo_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pLy-2Bmrr=
+S2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVAXQD0Otr=
+McQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MML-2F1zX=
+ncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-2FokyQn=
+3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fjt9jph9d=
+8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsOef4i2dV=
+hIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bthnGSsws=
+EGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2B8w4vG-2Fbnv88bFbwGnGa7pf-2BHZSMYprVcFFu=
+i48CXV9UisH-2BUzubfQBEfu1xWsFSsKONyLCA0-2B8-2B9uxPj07w9OFpMLQdeMNaTA-2Bfnz8=
+ElpZqjevtgbjKcBItwSEftYc59gjwrmu-2FGSIcZInMlTyZJShlumc9EmUdih0chd-2Fj8HLY-3=
+D )
+
+--8a1884fbca035a3c9060e9ff4138d70ad8c65f657fdba9074f2fb37aafdb
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=utf-8
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
+w3.org/TR/html4/loose.dtd"><!--=20
+
+rpcampaign:=20
+ring5456131128314114194315113232181111
+
+--><html lang=3D"en"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><m=
+eta name=3D"x-apple-disable-message-reformatting">
+        <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-sc=
+ale=3D1">
+       =20
+        <meta name=3D"format-detection" content=3D"date=3Dno">
+        <meta name=3D"format-detection" content=3D"address=3Dno">
+        <meta name=3D"format-detection" content=3D"email=3Dno">
+        <title>Ring</title>
+
+        <!--[if gte mso 9]><xml>
+            <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+            </xml>
+        <![endif]-->
+
+        <style type=3D"text/css">
+            #outlook a{padding:0;}
+            .ReadMsgBody{width:100%;} .ExternalClass{width:100%;}
+            .ExternalClass{width:100%;}
+            .ExternalClass, .ExternalClass p, .ExternalClass span, .Externa=
+lClass font, .ExternalClass td, .ExternalClass div, .ExternalClass * {line-=
+height: 100%;}
+            body, table, td, p, a, li, blockquote{-webkit-text-size-adjust:=
+100%; -ms-text-size-adjust:100%;}
+            table{border-collapse:collapse;border-spacing:0;mso-table-lspac=
+e:0pt; mso-table-rspace:0pt;}
+            table td{border-collapse:collapse;border-spacing:0;mso-table-ls=
+pace:0pt;mso-table-rspace:0pt;}
+            img{-ms-interpolation-mode:bicubic;}
+            a:link, a:active, a:visited, a .yshortcuts{color:#1998D5;}
+            body{height:100% !important; margin:0; padding:0; width:100% !i=
+mportant;background-color:#f2f2f2;}
+            a[x-apple-data-detectors] {
+                color: inherit !important;
+                text-decoration: none !important;
+                font-size: inherit !important;
+                font-family: inherit !important;
+                font-weight: normal !important;
+                line-height: inherit !important
+            }
+            img{border:0; line-height:100%; outline:none; text-decoration:n=
+one;}
+            /* Disables image downloader icon in Gmail */
+            img.g-image {pointer-events:none;}
+            img.g-image + div {display:none;}
+        </style>
+    </head>
+    <body bgcolor=3D"#f2f2f2" leftmargin=3D"0" marginheight=3D"0" marginwid=
+th=3D"0" offset=3D"0" topmargin=3D"0" style=3D"-ms-text-size-adjust:100%; -=
+webkit-text-size-adjust:100%; text-size-adjust:100%; min-width:100%; paddin=
+g: 0; width:100%; height:100% !important;">
+<div style=3D"display:none !important;visibility:hidden;mso-hide:all;font-s=
+ize:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:=
+0;overflow:hidden;">
+You=E2=80=99ll Now Receive Your Verification Codes by Text Message
+</div>
+        <img src=3D"https://pixel.app.returnpath.net/pixel.gif?r=3Df85464b2=
+b037712ef91fdbdd6e310b5d68a60ce2&amp;c=3DCRM3307_2SV_CodeNotification_Email=
+_or_SMS_TRANS_N_Q419" width=3D"1" height=3D"1" border=3D"0" style=3D"displa=
+y:block;">
+        <div style=3D"padding: 0px; margin: 0px; font-family: Helvetica, Ar=
+ial, sans-serif; font-weight: 300; vertical-align: top; color: #424242; dis=
+play: none;" class=3D"preheader">
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+            &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;
+        </div>
+        <table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" align=3D"ce=
+nter" width=3D"100%" style=3D"border-collapse:collapse; border-spacing: 0;"=
+>
+            <tr>
+                <td align=3D"center" valign=3D"top" bgcolor=3D"#f2f2f2">
+                    <table cellpadding=3D"0" cellspacing=3D"0" border=3D"0"=
+ align=3D"center" width=3D"640" bgcolor=3D"#ffffff" style=3D"border-collaps=
+e:collapse; border-spacing:0;">
+                        <tr>
+                            <td align=3D"center" valign=3D"top" style=3D"pa=
+dding-left:20px;padding-right:20px;padding-top:20px;padding-bottom:50px;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" width=3D"100%" align=3D"center" bgcolor=3D"#F6F8FA" style=3D"b=
+order-collapse:collapse; border-spacing:0;">
+                                    <!-- Header Logo -->
+                                    <tr>
+                                        <td align=3D"left" valign=3D"top" s=
+tyle=3D"padding-left:32px; padding-top:40px;padding-bottom:40px;">
+                                            <table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" align=3D"left">
+                                                  <tr>
+                                                    <td align=3D"left" vali=
+gn=3D"middle">
+                                                       =20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a href=3D"https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8j=
+s0RPMXz-2FEm54EFqR-2B-2BJZQw-3D1yWG_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2S=
+n22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U9=
+YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP9=
+wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2B=
+39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0rp=
+RTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0bt=
+T5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eBM=
+QL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2Bo4Yfjib2if99SdaA76EtVb=
+1dytUJH-2FQ9vmS98RFOSU6WJisvd9-2FQItWs1Pq7qwGfQmk5Ww-2BB0OsErax-2BCkh4uVY2K=
+zv43pyYIIlgd4fqEqPZnLcPQD9bfJeJMqW7AHb-2B4fd1sKyMqro2kO-2BaLGdp22N6s-2BYuuP=
+7ZZCBVINPd5-2FM-3D" target=3D"_blank">
+  <img class=3D"header__logo" alt=3D"Ring logo" src=3D"https://embed.widenc=
+dn.net/img/ring/hry1fwkgzu/101px@2x/Ring_Logo_4x.png?crop=3Dfalse&amp;posit=
+ion=3Dc&amp;u=3Dippv2m" width=3D"101" border=3D"0" style=3D"display:block;h=
+eight:auto;">
+</a>
+
+
+                                                    </td>
+                                                   =20
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <!-- // Header Logo -->
+                                    <tr>
+                                        <td align=3D"left" valign=3D"top" s=
+tyle=3D"color:#424242;font-family:Helvetica, Arial, sans-serif;font-size:24=
+px;font-weight:300;line-height:1.1;padding-top:10px;padding-bottom:30px;pad=
+ding-left:32px;padding-right:32px;mso-line-height-rule:exactly;">
+                                            Hi Tobin,
+                                        </td>
+                                    </tr>
+                                   =20
+                                    <tr>
+                                        <td align=3D"left" valign=3D"top" s=
+tyle=3D"color:#424242;font-family:Helvetica, Arial, sans-serif;font-size:24=
+px;font-weight:300;line-height:1.4;padding-top:0px;padding-bottom:30px;padd=
+ing-left:32px;padding-right:32px;mso-line-height-rule:exactly;">
+                                            We=E2=80=99re confirming that y=
+ou chose to receive your Two-Step Verification codes by text message.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align=3D"left" valign=3D"top" s=
+tyle=3D"color:#424242;font-family:Helvetica, Arial, sans-serif;font-size:24=
+px;font-weight:300;line-height:1.4;padding-top:0px;padding-bottom:30px;padd=
+ing-left:32px;padding-right:32px;mso-line-height-rule:exactly;">
+                                            Now, whenever you log in with y=
+our Ring password, just enter your verification code, and you=E2=80=99re in=
+.
+                                        </td>
+                                    </tr>
+                                   =20
+                                    <tr>
+                                        <td align=3D"left" valign=3D"top" s=
+tyle=3D"color:#424242;font-family:Helvetica, Arial, sans-serif;font-size:24=
+px;font-weight:300;line-height:1.4;padding-top:0px;padding-bottom:40px;padd=
+ing-left:32px;padding-right:32px;mso-line-height-rule:exactly;">
+                                            Safety first,<br>
+                                            The Ring Team
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align=3D"center" valign=3D"bott=
+om">
+                                            <a href=3D"#" target=3D"_blank"=
+>
+                                                <img alt=3D"Ring Community"=
+ class=3D"g-image" src=3D"https://embed.widencdn.net/img/ring/lso9iow98p/60=
+0px@2x/ring-community.png?position=3Dc&amp;crop=3Dno&amp;u=3Dxjnebi" width=
+=3D"600" border=3D"0" style=3D"display:block; -ms-interpolation-mode:bicubi=
+c;">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align=3D"center" valign=3D"top" style=3D"pa=
+dding-bottom:40px;">
+                               =20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Begin Footer -->
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" align=3D"center" va=
+lign=3D"top" width=3D"100%">
+   =20
+    <tr>
+      <td align=3D"center" valign=3D"top" style=3D"padding-bottom:40px;" di=
+r=3D"ltr">
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" align=3D"ce=
+nter" width=3D"336" class=3D"social-icons">
+          <tr>
+            <td align=3D"center " valign=3D"top" style=3D"padding:0 10px 0 =
+10px">
+              <a href=3D"https://links.mail.ring.com/ls/click?upn=3DYhodEM4=
+mIr0rr6D5WVM8jsNjtndfS5uJuPkPYfGG6gKTvAWQ145NOfw5mrcz-2Bu9Ncjac-2FTos4DWN-2=
+BtDBFJg45AG-2BuZif3LH5rogSE-2FvRdtlSRFY2PxZ1XsNo6pQX8pOdnX1Om7yAaXenic3SY2v=
+QiYrSZ0pR9Oi4Fy-2FnrgKY1ICpb8SWYOz8wH3lX9ezK3EFklWM7EvpRY6pWBqNYKwjGHCNM9qt=
+-2Bi-2BWTiJBLrHxtvilsNoAV7zRbYin9il2Xlkn9MJRaE3-2BwjAGJYWZHzzJPwX-2FoZvgAXu=
+NzFQp6bukivM-3D4qhn_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pLy-2Bmr=
+rS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVAXQD0Ot=
+rMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MML-2F1z=
+XncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-2FokyQ=
+n3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fjt9jph9=
+d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsOef4i2d=
+VhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bthnGSsw=
+sEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2Bo4Yfjib2if99SdaA76EtVRPIwZO8DCgCd6AeEW=
+b2u4P2zlT2M9FiD-2BXe0pCOmZX4XvVENER5ejHwuqv8G1Z9rLPIZ5waoGYqCmsw5poF4-2BOkk=
+cXQdYSjAffJu9Oqi-2Bp3fhRnBK8-2BoMQRuNzPr4bp263DjZSbZ4pn3aEB23eKHAw-3D" targ=
+et=3D"_blank"><img class=3D"social-list__image" alt=3D"Facebook" src=3D"htt=
+ps://ring.widen.net/content/z7itpva9wh/png/CRM3149_Alarm_BOS_fb.png?crop=3D=
+false&amp;position=3Dc&amp;u=3Dwtqkf8&amp;w=3D120&amp;h=3D120" width=3D"64"=
+ height=3D"64" border=3D"0" style=3D"display:block;"></a>
+            </td>
+            <td align=3D"center " valign=3D"top" style=3D"padding:0 10px 0 =
+10px">
+              <a href=3D"https://links.mail.ring.com/ls/click?upn=3DYhodEM4=
+mIr0rr6D5WVM8jmXIvEC55Y1yz4XPhec2NAUdZserADYYAaW7q2gj-2FkTJu3atQw4HycqGhjA-=
+2Bp1zEnT1vcGf0-2B4IX15RIT2YMPWB8ZDj35rn2H3LesnN-2BTEbEQq-2B4Z-2FpVV9wvOQHPr=
+bqiawtZtP6uQybc7gQgA2ifrohjMeH6-2Flx6TIYXt6-2BDjjtnHv8-2Bppfr79sZksPR-2BDwb=
+RKz276tjoXCNnNWEKeK5cwzHW6y1-2BUJvKN4qoaG-2B9PfgeUc5W2XmPJeJ7OjXPVz3PuwSj4O=
+CR-2BYYWeVbuOeigJ0-3DSTrn_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pL=
+y-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVA=
+XQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MM=
+L-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-=
+2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fj=
+t9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsO=
+ef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bt=
+hnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2Bo4Yfjib2if99SdaA76EtVVrnVFHOsIVT=
+3Y9bX7-2FGDS48wI9yoxk2x-2BVrKAXv03KorqZKF4hB44s2Zr-2F54uQevJ8dY1T2388Xwwhzv=
+jJD3TsuxkEoknehLnG-2BZDGdNmsK02-2Bl4eGdsU23NZzTzh6vnUcplLzeMhMOxNGN6bO-2Flv=
+w-3D" target=3D"_blank"><img class=3D"social-list__image" alt=3D"Instagram"=
+ src=3D"https://ring.widen.net/content/lzeeztdxyr/png/CRM3149_Alarm_BOS_ig.=
+png?crop=3Dfalse&amp;position=3Dc&amp;u=3Dwtqkf8&amp;w=3D120&amp;h=3D120" w=
+idth=3D"64" height=3D"64" border=3D"0" style=3D"display:block;"></a>
+            </td>
+            <td align=3D"center " valign=3D"top" style=3D"padding:0 10px 0 =
+10px">
+              <a href=3D"https://links.mail.ring.com/ls/click?upn=3DYhodEM4=
+mIr0rr6D5WVM8jo6-2BDAe24rttM-2F1LgW28VSthbj22oXf91hwT64v0188P5AzOsllLo6g6Zt=
+60oZSOwh3lPkt1FiWdQVDXXnordVSI0O6myDkLCdqBNSifVNaWM277lzdmQozysTwui1AcJAZa8=
+f3H4wyU1RmiSgAsDcxuxVhuTi2x20iCPfF-2FtOjlZaBLuHXUXsR2jWyuqvBUz1voBOdqauFagw=
+YZzQwdaQVpWllgLZfDWHkp-2FOzPQiUB1XRp9FtXHZe3nu8z95vU4w-3D-3DnxSD_nm1feaUEy6=
+z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8c=
+Ta5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k=
+8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSD=
+OgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBp=
+khAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx=
+0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug=
+70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff=
+5FZX-2Bo4Yfjib2if99SdaA76EtVeoWvwQJsRQbm8-2BdTQ3cRJGjOk0y6y966hfOUqdmY8-2F0=
+bDW0lkx4VnxCAxfHUq8t-2B-2Fgq912nY5RCwNoiie0ntRkE3Skp7dQx-2FTWt3fXi-2F7AmYn3=
+2bsAoZLaarvp30w26x5OA5hgBLuux-2F8ur0G8gYJc-3D" target=3D"_blank"><img class=
+=3D"social-list__image" alt=3D"Twitter" src=3D"https://ring.widen.net/conte=
+nt/n9wyyattyr/png/CRM3149_Alarm_BOS_tw.png?crop=3Dfalse&amp;position=3Dc&am=
+p;u=3Dwtqkf8&amp;w=3D120&amp;h=3D120" width=3D"64" height=3D"64" border=3D"=
+0" style=3D"display:block;"></a>
+            </td>
+            <td align=3D"center " valign=3D"top" style=3D"padding:0 10px 0 =
+10px">
+              <a href=3D"https://links.mail.ring.com/ls/click?upn=3DYhodEM4=
+mIr0rr6D5WVM8jkuNvLIFHgSSKtdyoSGl0b5xrHpZOqr5py6bYeccneh3U46rUAT9p5py1hCzg9=
+3R-2B-2F4Q8SaG2Fxd9FuL08yAiXOAUs1-2FG0p0GBR6qH82qc0fTkkjtJLOhl3j1K9XVg7dQLc=
+UQ29eXbAHDpKJnUT6ZTLbLMnBYJattxHbh5FNbwrYnfQZ22d0PlHRXceB-2BQWBNVKyDdnkV6ci=
+wWS1UsFqnfQOGCphlYjF3QD0lvwOrKs7Nmp1GxRYQ-2BVqlkDIrWcP-2BRRIkCR5bincMwKTPhg=
+8gZA-3DPB3O_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pLy-2BmrrS2tg4zy=
+K2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVAXQD0OtrMcQuqL7=
+djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MML-2F1zXncLd8Ua=
+ioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-2FokyQn3ibgO-2=
+ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fjt9jph9d8bL-2F8=
+C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsOef4i2dVhIbGkwN=
+g-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bthnGSswsEGY-2Bt=
+-2Bu42JuVYCWbH79tw-2Ff5FZX-2Bo4Yfjib2if99SdaA76EtVXwDfZjjyqKX-2B-2FVLzwbUTU=
+gQ29GiW-2BGWMxgb-2B2MoNCvrnTJu9qC1eHTxa8k0bX8I-2BAD4A9kHxVfsbN92fliradn-2FA=
+An2zkTS9aLrmfuCCu0gaAIaO75C51LqETWL0UjK3UrceE0TTr8X6Y4oUoIRQ9M-3D" target=
+=3D"_blank"><img class=3D"social-list__image" alt=3D"YouTube" src=3D"https:=
+//ring.widen.net/content/xqhh1z6npz/png/CRM3149_Alarm_BOS_yt.png?crop=3Dfal=
+se&amp;position=3Dc&amp;u=3Dwtqkf8&amp;w=3D120&amp;h=3D120" width=3D"64" he=
+ight=3D"64" border=3D"0" style=3D"display:block;"></a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+   =20
+   =20
+    <tr>
+      <td align=3D"center" valign=3D"top">
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" align=3D"ce=
+nter">
+         =20
+          <tr>
+            <td align=3D"center" valign=3D"top" class=3D"p-small" style=3D"=
+color: #424242; font-family: Helvetica, Arial, sans-serif; font-size: 18px;=
+ font-weight:300; line-height:1.6; mso-line-height-rule:exactly;">
+              =C2=A92023 Ring LLC or its affiliates.<br>
+              <span class=3D"contact">12515 Cerise Avenue, Hawthorne, CA 90=
+250.</span>
+            </td>
+          </tr>
+          <tr>
+            <td align=3D"center" valign=3D"top" class=3D"p-small" style=3D"=
+color: #424242; font-family: Helvetica, Arial, sans-serif; font-size:18px; =
+font-weight:300; line-height:1.6; padding-top:15px; mso-line-height-rule:ex=
+actly;">
+              Ring and all related marks are trademarks of<br>Ring LLC or i=
+ts affiliates.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+   =20
+    <tr>
+      <td align=3D"center" valign=3D"top" style=3D"padding-top:26px;">
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" align=3D"ce=
+nter" width=3D"100%" class=3D"p-small">
+          <tr>
+            <td align=3D"center" valign=3D"middle" style=3D"color:#424242; =
+font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:300;lette=
+r-spacing:0; line-height:1.2;">
+              <a href=3D"https://links.mail.ring.com/ls/click?upn=3DYhodEM4=
+mIr0rr6D5WVM8jiaVcKSUdfIe1Xm6F0MXoJEJf9XAsRgBbeXhOdERQ9D2vqQGsH5PrD1UxDkHq3=
+DfvZigd2IGF9eLCjYe94prMx5-2BEnc042Mw4oKTkuFjWoEBv7ToQ3DWcHDB5aFzhWB-2FqVKpw=
+pTaAVWjTkHLc4mMypmFu3YRVu7k17qkCq6GOVrCCDKccNgjhSTxP9aoG4CFUWhHlyriSHNyTOAJ=
+vyFHEb7-2BFcaWvJ95tJ35oX4OUENGW8nWXANj8CIRbW1rlxf-2FHA-3D-3Dw6ar_nm1feaUEy6=
+z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8c=
+Ta5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k=
+8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSD=
+OgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBp=
+khAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx=
+0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug=
+70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff=
+5FZX-2Bo4Yfjib2if99SdaA76EtVVAsWQvE8MD4LmGt9lLnKb3utdG1dc0DDJMxFhOrS4sVdGEM=
+qFu3w94w62ZRa2doWt4Ekg58SzgdCykYn7aT3omkJdJ11LG9BADvpnq5IFNzyfJcHlSNkGdjpl-=
+2FTou0Ts-2B7GepMczr2ubRczfN6mohg-3D" style=3D"color:#424242; font-size:16px=
+; font-family:Helvetica, Arial, sans-serif; font-weight:300; text-decoratio=
+n: none;">Privacy</a>&nbsp; | &nbsp;<a href=3D"https://links.mail.ring.com/=
+ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jot8Am1BAdHDqfYDCvPjWe9ng9riiRtmAcMoQHO-=
+2FRLJGFQLh4dnlVGuRPOyWqAxdG03UBjma-2FZUTATO7fo6SSok45HVuBvq3p0jXrDSYMgTiQiU=
+X4Pk-2F-2B76V6OSwBfsVFBYVnptAy0UQYCSqqLjZ6Ly0d3fv9EuppZ-2BcedjdB5jFb2s7x9As=
+0BiBSBZ-2BYrbcw3BMzCaqF1rE-2BaxOPoaiyde5zPtPjQKjDZyj6T5S3-2BwwJGr3JAgcXUlHD=
+hQPt7pPYw-3D-3DkHQr_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pLy-2Bmr=
+rS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVAXQD0Ot=
+rMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MML-2F1z=
+XncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-2FokyQ=
+n3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fjt9jph9=
+d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsOef4i2d=
+VhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bthnGSsw=
+sEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2Bo4Yfjib2if99SdaA76EtVYCrHtyinNO-2Bd184=
+A17ccIdclYLuqJoxer54ocUdarOjeqjRwsRHhJGXhnF-2BJLVz-2F4FsSt2MY0PH8-2BsvIg4xL=
+WRcn0NDDn19RvjZgJr95V2LQOziqelghSUUujp4e-2Fu5HiG1Lp9ztozJpoU1VTldUOA-3D" st=
+yle=3D"color:#424242; font-size:16px; font-family:Helvetica, Arial, sans-se=
+rif; font-weight:300; text-decoration: none;">Licenses</a>&nbsp; | &nbsp;<a=
+ href=3D"https://links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jkB=
+tgXDDTz2V05Bsp3OdlkHbOsIedbBE1iRc613LFPOOrW5iUyYRaRbeM-2FUwlA7F0wyspO4ABO9e=
+MhD2fQ7N0kGq-2BLGnroApX3AVyCH4ibiHes0Oz9K2av-2BMvzAs9ITK-2BCRJPpKa1yBbqppsg=
+JOXoXWMmy7G-2FucGiY8oyje84OLtTFkbRSTXCCn2H7aFEGMEbwwF9w8lA4XLm2OQLCT3dkrC7e=
+-2FF3-2BDGlXmT8qKDZfInehVfHI7BMzto3Eyv-2BFudRtQhIyJVymmbfyu3nn0W01Y-3DwH6T_=
+nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2Sn22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55Kz=
+vtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U9YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3q=
+KDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP9wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85g=
+J4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2B39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6=
+LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0rpRTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54=
+k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0btT5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjG=
+j1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eBMQL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCW=
+bH79tw-2Ff5FZX-2Bo4Yfjib2if99SdaA76EtVafdap-2FpeYDdK9eWuKf-2F4qCZMyoNhP8DHm=
+hdLnl0M5OYRDrvoZDNBugrmPH38NAeh2cBdMq7-2Fz86XnCf-2FywGrAgv3TUNQTGV-2FR92yMs=
+3HJ3bvxk9UmInX-2FZ5KP9LEWmdb6aNTwujJmqv1cdMi4Lo-2BL4-3D" style=3D"color:#42=
+4242; font-size:16px; font-family:Helvetica, Arial, sans-serif; font-weight=
+:300; text-decoration: none;">Support</a>&nbsp; | &nbsp;<a href=3D"https://=
+links.mail.ring.com/ls/click?upn=3DYhodEM4mIr0rr6D5WVM8jpkzbVK04kieaZyEKSiu=
+cSrxOHj2OU3QjdLNBT3usx8B9j-2FBzQfv-2BQIJGBNEO3KpeC8Z5iZTIjhxMMXq3ryYHfjhZTw=
+-2BtK4an6B1NlwPk4dXeKx48nny4JPiaopI1XMvjx4d2gScrkVh-2BB1FGK1J8EShjAPmpJXKcQ=
+8WXzC-2Fg17okfvdxVMRvrIyXoDELZgJC9G0LHHYKyIDYIyOaAIVM5p-2FMTZNGVcWnSdOpVpJ5=
+drZFzZp1EFDstvjIM9GzrdXPQ-3D-3D00lL_nm1feaUEy6z79DRyvvWDprh9OQJemSDEoNW3D2S=
+n22JpFI0pLy-2BmrrS2tg4zyK2Wn-2Bk55KzvtipiqOA8cTa5xE1vyrNNs1vtVY5jxNN0KZn6U9=
+YzPCE-2BVAXQD0OtrMcQuqL7djvEabQsDs3qKDGikmmw8k8oGLqrWBB8CK5ypBgMOw71tcf7MP9=
+wX5Vl6n6MML-2F1zXncLd8UaioKmwwhwD85gJ4Ojw3MLSDOgJPUtKhdsRfi3PDkfweSaW6h0-2B=
+39cGvZ9Md-2FokyQn3ibgO-2ByylgmFMncm6LJekUGtUBpkhAbBC3tnlNZ-2Bx1O0lptPnJg0rp=
+RTV0gw-2Fjt9jph9d8bL-2F8C8MIPCFier54k6kJqkc8fx0vtQ1EPjHQPx8Gv0Ue2QMP5lDe0bt=
+T5YJVXTtsOef4i2dVhIbGkwNg-2Fi2eokHjGj1el0260ug70uqLM1u0WDrZhofm8j7WriZ82eBM=
+QL8HYyg0bthnGSswsEGY-2Bt-2Bu42JuVYCWbH79tw-2Ff5FZX-2Bo4Yfjib2if99SdaA76EtVX=
+teXi-2FF1Lz6gBZ0WpbaU20qMduDV56uC-2F4KmIuu87VO30zgWXd37Iqv7zebRLZdBE6wuJior=
+Oda4eXqO0Zu6QP2J-2BJGmqW1mSJSqczTu0GeHMvcpQwo25LzdO3iTN2ewhzyyDf0cVfU5jFSPP=
+3Ag0M-3D" style=3D"color:#424242; font-size:16px; font-family:Helvetica, Ar=
+ial, sans-serif; font-weight:300; text-decoration: none;">Terms of Service<=
+/a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+   =20
+</table>
+<!-- End Footer -->
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    <img src=3D"https://links.mail.ring.com/wf/open?upn=3DFvUHYnu4r807c3Vu1=
+k5Na3X5frQcAUxpyapa7w0jE9p-2BF3LDJ6RGtMw48Ga6Xv1sDOLp9PAuYtqUKyRyd7cYN73x3n=
+xrS8WY4QeEDMtWwKSo-2FAGUl3UPq1gLECB-2B8GxEoKQDP9Xm3zRuVzbn-2B9akpDOrh-2F9iG=
+e8hOwSK2qPXdMk5El0E-2FvbPzyKW-2BLYN0Vq709Qh9y-2F49fbex5yoks7h0D5G23lkxQsqGg=
+BFw1q4IC85jX58TJF2-2BQtjvihwXVwtTH1hOpbKHOfqAGtMQNtbQ-2BTJQ-2BLNpOSdRVovWAr=
+fiWnul9LJUzXLe-2F0zofGGQsNyji4YB8KpSc6nBxYjqbW1bjoGGNLRgS3-2FAHfztTA18QB7wB=
+q3h8Un0LrRcu4Hw3XM-2BBiBO95oslB5w-2FFm8wcYxhmZMnr81RJlNHOP7mZF0xZOGobhKh97-=
+2BgDndQl2O8mHwl9vRYz-2Bt9Fyvv06XMzm9Lbgntriw25bKdFO80K7iOnDcPLatvSdIw-2Fbl7=
+nn-2FSXAR3Yus7vOzMhHJkAfRmPzBQ9pE9FLgfnGiYotmj1aZeC3zWUCfjxE-2FirvXUuFpfoYZ=
+ByTVXpL7aSOFWNdmhrpFR1pfj2GomSvxuhMnhdxCuKAQ8qIK3Y1gAze0qwwoPCzccU32W4P212f=
+raLEQpioA4d4kmdc4IJp6uqMjOxoeO4-3D" alt=3D"" width=3D"1" height=3D"1" borde=
+r=3D"0" style=3D"height:1px !important;width:1px !important;border-width:0 =
+!important;margin-top:0 !important;margin-bottom:0 !important;margin-right:=
+0 !important;margin-left:0 !important;padding-top:0 !important;padding-bott=
+om:0 !important;padding-right:0 !important;padding-left:0 !important;"></bo=
+dy>
+</html>
+
+--8a1884fbca035a3c9060e9ff4138d70ad8c65f657fdba9074f2fb37aafdb--

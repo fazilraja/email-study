@@ -1,0 +1,298 @@
+Received: from PH7PR20MB5832.namprd20.prod.outlook.com (2603:10b6:510:272::8)
+ by MW4PR20MB5373.namprd20.prod.outlook.com with HTTPS; Sun, 17 Sep 2023
+ 21:46:36 +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=T+2pLLWKmjXbCxZ+0bnDffDqXQVF9fuF2s3Vi48RPESBQDJrlK0tJFzPtTk2U6cTDZ2N/+qkfDoEnKb5a7qVxmCtqGTeyGtYld1qV+Q6Gvr1OWBO2GsNE+JxQtrpCoXTg1ZnxPEqL1TCcwhIO0K4RA5LBYpW77vRZrMVaQvU9OW+qH6aOvJZ3N6wJlX6odnuPKcw5AfjywNhhljwPEHYLGrZeE5aOYynamF1/gZ4x4q87W1gEHGC3B6/ftmu+A4HW7q3PXlywLdnPEk0uAOFT07aWlTE8goBhe3h2P0k1hVbWfj8z0BRenH165KwjLO4YgNPxZq0vtI59LdHru0hjg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Lhwl0FYzfhIUferfXwT18+tBscK4KYbuSQWeFA5Y5Ro=;
+ b=dsKc3Jj1peuGI13/pvAQAZqocev/AUzRAeftuYba0qVPuWXLlUpRa5ZzoOSXtQlGjUy0x9zybi6wMpBJ9scpOTIyfE1YmHg/C/R5dZCz2ZpgnYCSKmIJVBlYxAIGcuvcnbXsEk/xrLzYB7bifX8A0mH+ukclItlzzme5mqFGVHkK6hH1O9Qp4z2H7vcqFTfKsZXY3/8rxm8GfEtTuL0lAZjy/6JSeu8XHuM8S+4Dow8lf/gIkocVtyCnnI9Skf2vZZF48WRDVCK1X1SveBwo6tZVX/aFFbu9Ax48KsFUWIXQnqkxwGvcbfgXf4lW3yl0b5vjfOY/Wn7czw4InKTCUg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 209.85.167.181) smtp.rcpttodomain=outlook.com
+ smtp.mailfrom=mandrillapp.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=tm.openai.com; dkim=pass (signature was verified)
+ header.d=tm.openai.com; dkim=pass (signature was verified)
+ header.d=mandrillapp.com; arc=pass (0 oda=1 ltdi=1
+ dkim=[1,1,header.i=@tm.openai.com] dmarc=[1,1,header.from=openai.com])
+Received: from AM4PR05CA0005.eurprd05.prod.outlook.com (2603:10a6:205::18) by
+ PH7PR20MB5832.namprd20.prod.outlook.com (2603:10b6:510:272::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.31; Sun, 17 Sep 2023 21:46:35 +0000
+Received: from AM3PEPF00009B9F.eurprd04.prod.outlook.com
+ (2603:10a6:205:0:cafe::df) by AM4PR05CA0005.outlook.office365.com
+ (2603:10a6:205::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26 via Frontend
+ Transport; Sun, 17 Sep 2023 21:46:33 +0000
+Authentication-Results: spf=softfail (sender IP is 209.85.167.181)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=tm.openai.com;dmarc=pass action=none
+ header.from=tm.openai.com;compauth=pass reason=100
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ mandrillapp.com discourages use of 209.85.167.181 as permitted sender)
+Received: from mail-oi1-f181.google.com (209.85.167.181) by
+ AM3PEPF00009B9F.mail.protection.outlook.com (10.167.16.24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Sun, 17 Sep 2023 21:46:33 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:682318DA0CD73BF7BDF9D8A2686EF89B7CC6F2C8E9E4EEE12FBC59FC2ACD20A0;UpperCasedChecksum:E0CE34627B7571B0736471AD1BA4C53BE61103B04346ABF11512464D63A1292C;SizeAsReceived:6478;Count:28
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3ab2a0391c0so2866994b6e.1
+        for <tobinsilvestre@outlook.com>; Sun, 17 Sep 2023 14:46:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694987193; x=1695591993;
+        h=x-forwarded-for:mime-version:date:feedback-id:to:message-id:subject
+         :from:dkim-signature:dkim-signature:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lhwl0FYzfhIUferfXwT18+tBscK4KYbuSQWeFA5Y5Ro=;
+        b=E95IWp2YeGhju8yZV39TZkGIUhQEljREF1vTGRPzhY+6uFcElmyFkSAwvdQaxWsRma
+         ZdmWeHA9+KflwhlsxAMPLoTxfqT7PfOp/Lz3Oa0BfsOOdl98g5EouFQAfg3nKYEZjpIh
+         FBdOh6pvynnlYPl0jdoZntnEGFJS3liB9G3qYvLvmiBjCadKIeZGh+GaCz6W3+U2yyXG
+         lXBW2m+nV4+qTYSiKHTJyjt9BRjZ14o76FNk5DyQt+BRBapNQe9Mf/zQ77lUpkj1uVUv
+         KWirIIO42AuDHwzYLTaVHsgHdHt8lG1I+o+wHO+KfsbqI6i6M7QQIzaoLLpSlq769k23
+         xc5g==
+X-Gm-Message-State: AOJu0YyfpRefCFKIHOpKkp/lmVPkZnMLA5PGLwHUuY+j8QF+AXFeN4po
+	Ci+HVDmTTc4TMEAneA3Ojpa0rYcDGyEmPE7/dQ==
+X-Google-Smtp-Source: AGHT+IHYGOF4jyynz6rIj4lFgBVwmJL9pnGEAsn5wRmXAaYbb3UyjQuSPZuYN4HZh7ufZDQKO/U4hc4zLmb3SQ3Xv8ZZT7Bbso8=
+X-Received: by 2002:a05:6870:659e:b0:1d5:cba4:a6d6 with SMTP id fp30-20020a056870659e00b001d5cba4a6d6mr9533702oab.4.1694987193459;
+        Sun, 17 Sep 2023 14:46:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1694987193; cv=none;
+        d=google.com; s=arc-20160816;
+        b=XJSBGM4/ghQhBEeAnfrPq5q0Mxw7O+pOXitKjgZCh9JmBuBwpCmwgRe8ORLhTiqTJu
+         zNssFmBsl4zm3ArbCIriWcKb+oiIdVFZ2bIZOjtHnrJzDb8ilEhaKU4x8rh6+M803ydO
+         tCtomDMnTy7Zsc6f+pse9v3S2peIXocTHg+KBN/2dxVfdA6zwQAic6aFSerGNKCc7oo9
+         95n8jBxOM/cjD5CC/gh1kdvTdx0re3Z35JqF7hoXMS/oNwCTkO3zLMRZgen8EtkJeAOn
+         jlvWuTaNt4j6E6HtYP5EBFwms8Mt18O8TGXnKr7+7SmvRd+XBC40s3pOCsutKKorseK/
+         YzsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=mime-version:date:feedback-id:to:message-id:subject:from
+         :dkim-signature:dkim-signature;
+        bh=Lhwl0FYzfhIUferfXwT18+tBscK4KYbuSQWeFA5Y5Ro=;
+        fh=nS2s1gafsjL/Nq5SEB7EG9z6kjayFFRPJT9pq/tycag=;
+        b=ixZE9MTGXV1nukzIHfJiw94kmhhbofv1HZyIIA4hrbUByJkQu7PbYDfSr1Cmu2ormz
+         LKZX8kXHxCf38l9ZZpoiEISLZ+jGgFk2FlCQFERdbQ3OK+sLqhJjAwj6P9nyxuqSM0/i
+         1gKHbvACbOO+RJjSZEQbdFHI3joKBdXX/dIUqSZYiy4cotpos4lUfnXeNemUpgkbAOXb
+         9B9j8/11vrj1hmLrtUaawIqr+w5lxHMAUE/fYnkyGtFCx1UBgud2Sg3SXei650YenjlL
+         iNp1w3gemH7BSh//vXXp9txqmz3eHb7O8fVdyyEC2ifW3YGqhoE0YkPsERBGK3mK55jX
+         EiXw==
+ARC-Authentication-Results: i=1; gmr-mx.google.com;
+       dkim=pass header.i=@tm.openai.com header.s=mandrill header.b=gz4CVZp+;
+       dkim=pass header.i=@mandrillapp.com header.s=mandrill header.b=ZOX6zTid;
+       spf=pass (google.com: domain of bounce-md_31165340.650773b8.v1-5f04474895274cb08639cc34e941bd3a@mandrillapp.com designates 198.2.132.21 as permitted sender) smtp.mailfrom=bounce-md_31165340.650773b8.v1-5f04474895274cb08639cc34e941bd3a@mandrillapp.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=openai.com
+Return-Path:
+ bounce-md_31165340.650773b8.v1-5f04474895274cb08639cc34e941bd3a@mandrillapp.com
+Received: from mail132-21.atl131.mandrillapp.com (mail132-21.atl131.mandrillapp.com. [198.2.132.21])
+        by gmr-mx.google.com with ESMTPS id pc2-20020a17090b3b8200b0027134f803e2si766058pjb.1.2023.09.17.14.46.33
+        for <tobinsilvestre@outlook.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Sep 2023 14:46:33 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bounce-md_31165340.650773b8.v1-5f04474895274cb08639cc34e941bd3a@mandrillapp.com designates 198.2.132.21 as permitted sender) client-ip=198.2.132.21;
+Authentication-Results-Original: gmr-mx.google.com;       dkim=pass
+ header.i=@tm.openai.com header.s=mandrill header.b=gz4CVZp+;       dkim=pass
+ header.i=@mandrillapp.com header.s=mandrill header.b=ZOX6zTid;       spf=pass
+ (google.com: domain of
+ bounce-md_31165340.650773b8.v1-5f04474895274cb08639cc34e941bd3a@mandrillapp.com
+ designates 198.2.132.21 as permitted sender)
+ smtp.mailfrom=bounce-md_31165340.650773b8.v1-5f04474895274cb08639cc34e941bd3a@mandrillapp.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=openai.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tm.openai.com;
+	s=mandrill; t=1694987192; x=1695247692; i=noreply@tm.openai.com;
+	bh=Lhwl0FYzfhIUferfXwT18+tBscK4KYbuSQWeFA5Y5Ro=;
+	h=From:Subject:Message-Id:To:Feedback-ID:Date:MIME-Version:
+	 Content-Type:CC:Date:Subject:From;
+	b=gz4CVZp+kdxTfEeBDtCs2SriKmKcyNC4cxS7H8F7OalfW9LKvNqeyDx9IahKNTxeo
+	 cFYgCaQMQ6riAgYq4zcmxTNUELulKl/nBb4GhMnEv0XY3VuvbKiFtjlP4BPJY/C0V4
+	 7hAyva27loMzHcG7ro1oVki/hhNTWpNTph78Y9JU=
+Received: from pmta09.mandrill.prod.atl01.rsglab.com (localhost [127.0.0.1])
+	by mail132-21.atl131.mandrillapp.com (Mailchimp) with ESMTP id 4RphMX4gQ2z1XLFJj
+	for <tobinsilvestre107@sooners.us>; Sun, 17 Sep 2023 21:46:32 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandrillapp.com; 
+ i=@mandrillapp.com; q=dns/txt; s=mandrill; t=1694987192; h=From : 
+ Subject : Message-Id : To : Date : MIME-Version : Content-Type : From : 
+ Subject : Date : X-Mandrill-User : List-Unsubscribe; 
+ bh=Lhwl0FYzfhIUferfXwT18+tBscK4KYbuSQWeFA5Y5Ro=; 
+ b=ZOX6zTidNieBeDqhuq4rFrBgIKOKh2RW/Wicz14Oju2GK2Y3gT1gKIeUEkEonJ1NCGClCG
+ RwLKbegTKLOJmkeTJKYvEzcvMLlj7fc2clvgoKkH0JC3yAkvsz7LjCOaLzfOvkUeZ1pqGpe0
+ nlQjFo+JjE1QC0O21A0qHLERAAuuY=
+From: OpenAI <noreply@tm.openai.com>
+Subject: =?utf-8?Q?OpenAI=20-=20Verify=20your=20email?=
+Received: from [3.12.93.238] by mandrillapp.com id 5f04474895274cb08639cc34e941bd3a; Sun, 17 Sep 2023 21:46:32 +0000
+Message-Id: <bb8f6510-1e89-6eb8-8a6e-c9233daff24a@tm.openai.com>
+To: tobinsilvestre107@sooners.us
+X-Native-Encoded: 1
+X-Report-Abuse: =?UTF-8?Q?Please=20forward=20a=20copy=20of=20this=20message,=20including=20all=20headers,=20to=20abuse@mandrill.com.=20You=20can=20also=20report=20abuse=20here:=20https://mandrillapp.com/contact/abuse=3Fid=3D31165340.5f04474895274cb08639cc34e941bd3a?=
+X-Mandrill-User: md_31165340
+Feedback-ID: 31165340:31165340.20230917:md
+Date: Sun, 17 Sep 2023 21:46:32 +0000
+Content-Type: multipart/alternative; boundary="_av-9FFueJASNMF4a8kVPXdhWQ"
+X-Forwarded-For: tobinsilvestre107@sooners.us tobinsilvestre@outlook.com
+X-IncomingHeaderCount: 28
+X-MS-Exchange-Organization-ExpirationStartTime: 17 Sep 2023 21:46:33.8490
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 5144ed72-e974-4458-5182-08dbb7c78f97
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ AM3PEPF00009B9F:EE_|PH7PR20MB5832:EE_|MW4PR20MB5373:EE_
+X-MS-Exchange-Organization-AuthSource:
+ AM3PEPF00009B9F.eurprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 9/17/2023 9:40:04 PM
+X-MS-Office365-Filtering-Correlation-Id: 5144ed72-e974-4458-5182-08dbb7c78f97
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.167.181
+X-SID-PRA: NOREPLY@TM.OPENAI.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:3;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2023 21:46:33.7240
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5144ed72-e974-4458-5182-08dbb7c78f97
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ AM3PEPF00009B9F.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR20MB5832
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.6875535
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+	qZelhIiYnPlfDQZdfDHWopMBcsghAS4+qBe9VM8rRhK3tzlbMxC4+oRZ9xEROt6wzs2ovcrxGRquFV8rzXnSfcYPBI7CCWXoi8FYdaGoUMxov7DzW+tMyeYnH8Xw163u/pmHjk6QNDH6qiQYjfR4aSqmqb5YgKd69wX+87Kq1sTuVnIArKfvdxPF5a55SZkfdYWhmj5J2UAgPEeQJ1qQmQ==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cmZ3SXI1eHBmelNzUERuTVg3dStYbDd3aExVb3dXMFVYckY1YUo0bDZKNHpv?=
+ =?utf-8?B?L2cxUGFMb0NVdFcyOEtzY0RXNnJzRjRCbnBQUXkzVFh1bm8zdGpWR05KR2Fi?=
+ =?utf-8?B?aE1GYzZQcHk3UlN2dFMvTHZrSUZwQnl0YTZ1L2F5R3l1b3BOcCtaMk55UWds?=
+ =?utf-8?B?eHpUL1F6Z2hBZys2UitlM1VDT3M1b2JzS3NkTjM2UmNQd0g0eXl2bzlyY3Vv?=
+ =?utf-8?B?NnI1aU0rYkgveDdGMStQTUFsMktPdDQySkh2VnAySWd0UVZ3QkdWVFlwWVRI?=
+ =?utf-8?B?dnRVY21JVk9VWGhaMEM3emNJbGZNRlFlTExnTzZEb3pYajh0YllabkplM1Bo?=
+ =?utf-8?B?OVMyMUxvcVNHME5oTmNXTjNIWlloSzJqM2tNWjBpc253YVFoNW1VRUxKdG5S?=
+ =?utf-8?B?b2p4WGlVMkVnSWo4QUk2ZHZNUU5HbDFvVUQ2aFJieEVqR0IzZmhYWWltQ05p?=
+ =?utf-8?B?Z3dzeXRkVGFSdHlCYlYzMk1iUUpvRUlMbmZRNFVNREQyNURsbkdQUDdtZmxX?=
+ =?utf-8?B?NFh5MUxaMmtGcFM5N24zNCtVdlR0ajBMNE1ISDF6eGZRcS9SNHBEL0RoMEpw?=
+ =?utf-8?B?bGlBTDZlaldvZ2wwZUlYV2dPakZhYjlzV3hGc0ZoQmVoTXErNEJTNjNhaCto?=
+ =?utf-8?B?a2xCRXFTZ25OOHEwUUxtZ1V5c0Raa0F3NFU2eVppL3hmclVqbVdDcXVQb2FT?=
+ =?utf-8?B?NXhSYzl2VTREdkxnTVEwbFZ3NVNORGptSVBvTG94b0hBNSswNEIwdHMvMnNP?=
+ =?utf-8?B?YUh6cncxdFNhS2FlMGFiQk5SckNZbTVNWHpUaDhuaUhCeGxwMVBCSEYwODhJ?=
+ =?utf-8?B?QmhxbGVwbHJIdXRkNU5BV0drc3ZST210ckt0VlI5UUZJQjViSklQS0dVL29F?=
+ =?utf-8?B?ZnpmVmlJM0VNU0ZKcXpOOWlLaHNaejNHRjh3cmE0U3FjZytFeU5mZlNzd0Q2?=
+ =?utf-8?B?MXZYZXo1OVEyQ1VUcVdxY1NWN1BxOFEvdkhKU0ZBakdSaXl0cUxDVXFGanJF?=
+ =?utf-8?B?Q1pKRkFaWXpsdGJvR1lVOVJ5RFRmY1NzbnZqS01OZEttQ0o1SWdGZlhxbTQ0?=
+ =?utf-8?B?emlDU1RPSDJmWFFjdE9iVUZtVG1XQWZlS1p6SkpRUlJyS0pCRnJ1SGt6eE90?=
+ =?utf-8?B?eUk0dW4yYllzWTFuOGtITlB4YVZwSlo1RXFCOUgwSG0ySVlrcHJ0Y1ZYb25E?=
+ =?utf-8?B?Nm9RWUFTYkU3UVdNbEI5MjJhdmNLcGlVMDFTRTUvRDdDdy9Ucnh4anNYY2ow?=
+ =?utf-8?B?Uk1udEZLSytPOXgrdmgzbEVKNmgvZTlzd21kMU53THBhNzVwemYwNldldWQ3?=
+ =?utf-8?B?SkZKbjcvSkRoTmhUcklqbmZGekdMREpUNkUvbXN0VnBaR0x0dHBlTnhwV3JV?=
+ =?utf-8?B?aG43V2lYSHRWTDlwMTRnT1ViSnVvdzJoeW40OFQ2TTJBaXE0dndyNjVWQ29Y?=
+ =?utf-8?B?OE9GcHNFKzRzZzJsMW4ySUZPRHl2RUsxS3ZLTFA0OWxHZ2k0TmtvWkRUSDRu?=
+ =?utf-8?B?a1h0bjllaTJRRmJnaVJPUzR3MSszRHgvM29QNnZkR2dxM2hMR1l6bkFGU0VE?=
+ =?utf-8?B?bW95TnY0L1JaaldZM0ZMNmc3ZFJRek5xY0JTbFJOcnNoSVpwb0llNHF5L0Vj?=
+ =?utf-8?B?TTJSdDZJaUhxVEFtWjBKMTVBa29CS1Vha2RlOTArNFE2NENLMFRYc2Z0cTVE?=
+ =?utf-8?B?QitRVnNYa1A1ZUgyRmtva1NQaG1yZ296ZE9oUHBaaVZhZi9XeUJUemhWbGdZ?=
+ =?utf-8?B?aTIydU9NV29WVzRKYllnSUdqZENxUWF4My9NZ3p0WEt1SEMrdDA3RXRCeHRm?=
+ =?utf-8?B?MXJtZTBlZHB0dGtPc3ovdkttNVZFbFl3NG5BYTVYZDFVR2pBUzg0Y2xaNHBr?=
+ =?utf-8?B?Q2VERFJRcXRTajB1QmgrTUNmMVgwUUJENFFYZVlvMkpoelZLZDFTdXU4ampQ?=
+ =?utf-8?B?V2JjUU16Y2t5Zm5wRjZDSkxGS3NyNnV4UDhZc0k4c1IrbjFLbFNNUWM3YjJS?=
+ =?utf-8?B?eTh3UmNxVnZFWGU2eUtmWGRhMmo1cVdEaU82aHNTUU9ORnhMbmg5ZFVGQ00v?=
+ =?utf-8?B?OGswU3JzVTZZODhQWXpudHMvL1NNM1JKSWo4Y2I2NGNsN1B2SERxVDFsUit2?=
+ =?utf-8?B?YVU0d01xYzNiNm5HM2E5RmowNkIzK2hCQktyeURPMkV2cml4Ti9kaFlJdEhn?=
+ =?utf-8?Q?wql+YSjbvQ3mrV4A2i7nhm4AFzpYrMLev1/i5d5o7GD8?=
+MIME-Version: 1.0
+
+--_av-9FFueJASNMF4a8kVPXdhWQ
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+
+  
+  
+    
+	
+		
+		
+            
+			
+				
+			
+			
+            
+              Verify your email address
+
+              
+                To continue setting up your OpenAI account, please verify that this is your email address.
+              
+              
+              
+                
+                    Verify email address
+                 ( https://auth0.openai.com/u/email-verification?ticket=w7UaZLzqALS1IlymkvdYa6ZQQqufreaU# ) 
+                
+            
+			
+				
+                This link will expire in 5 days. If you did not make this request, please disregard this email. For help, contact us through our Help center ( https://help.openai.com ) .
+				
+            
+          
+        
+      
+    
+  
+
+
+--_av-9FFueJASNMF4a8kVPXdhWQ
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style type="text/css">
+      .ExternalClass,.ExternalClass div,.ExternalClass font,.ExternalClass p,.ExternalClass span,.ExternalClass td,img {line-height: 100%;}#outlook a {padding: 0;}.ExternalClass,.ReadMsgBody {width: 100%;}a,blockquote,body,li,p,table,td {-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;}table,td {mso-table-lspace: 0;mso-table-rspace: 0;}img {-ms-interpolation-mode: bicubic;border: 0;height: auto;outline: 0;text-decoration: none;}table {border-collapse: collapse !important;}#bodyCell,#bodyTable,body {height: 100% !important;margin: 0;padding: 0;font-family: Helvetica, Arial, sans-serif;}#bodyCell {padding: 20px;}#bodyTable {width: 560px;}@media only screen and (max-width: 480px) {#bodyTable,body {width: 100% !important;}a,blockquote,body,li,p,table,td {-webkit-text-size-adjust: none !important;}body {min-width: 100% !important;}#bodyTable {max-width: 560px !important;}#signIn {max-width: 280px !important;}}
+    </style>
+  </head>
+  <body style="background-color: #ffffff;">
+    <center>
+	<table style="width: 560px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;font-family: Helvetica, Arial, sans-serif;border-collapse: collapse !important;height: 100% !important;background-color: #ffffff;" align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+		<tr>
+		<td align="center" valign="top" id="bodyCell" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;font-family: Helvetica, Arial, sans-serif;height: 100% !important;">
+            <div class="top" style="background-color: #ffffff;color:#202123; padding: 27px 20px 0 15px;">
+			<p style="text-align: left;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%; margin: 0;">
+				<img src="https://cdn.openai.com/API/logo-assets/openai-logo-email-header-1.png" width="560" height="168" alt="OpenAI" title="" style="width:140px;height:auto;-ms-interpolation-mode: bicubic;border: 0;line-height: 100%;outline: none;text-decoration: none;">
+			</p>
+			</div>
+            <div class="main" style="background-color: #ffffff;color:#353740; padding: 40px 20px;text-align: left; line-height:1.5;">
+              <h1 style="color:#202123;font-size: 32px; line-height: 40px; margin: 0 0 20px;">Verify your email address</h1>
+
+              <p style="font-size: 16px; line-height: 24px;">
+                To continue setting up your OpenAI account, please verify that this is your email address.
+              </p>
+              
+              <p style="margin: 24px 0 0; text-align: left;">
+                <a href="https://mandrillapp.com/track/click/31165340/auth0.openai.com?p=eyJzIjoiRnVkSWFsZUl1dzB2Z0JxYWhFTUJ3b3drWkFVIiwidiI6MSwicCI6IntcInVcIjozMTE2NTM0MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL2F1dGgwLm9wZW5haS5jb21cXFwvdVxcXC9lbWFpbC12ZXJpZmljYXRpb24_dGlja2V0PXc3VWFaTHpxQUxTMUlseW1rdmRZYTZaUVFxdWZyZWFVI1wiLFwiaWRcIjpcIjVmMDQ0NzQ4OTUyNzRjYjA4NjM5Y2MzNGU5NDFiZDNhXCIsXCJ1cmxfaWRzXCI6W1wiMWM3OTUyMjNiMmQ0YmUwMjBmZDJhNTBmMmM5YzQxZjEwMThlNDU0Y1wiXX0ifQ" style="display:inline-block;text-decoration:none;background:#10A37F;border-radius:3px;color:white;font-family: Helvetica, sans-serif;font-size:16px;line-height: 24px;font-weight:400;padding:12px 20px 11px;margin:0px;" target="_blank">
+                    Verify email address
+                </a>
+                </p>
+            </div>
+			<div class="footer" style="text-align: left;background: #ffffff;color:#6e6e80; padding: 0 20px 20px;font-size: 13px;line-height: 1.4;">
+				<p style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%; margin: 0;">
+                This link will expire in 5 days. If you did not make this request, please disregard this email. For help, contact us through our <a href="https://mandrillapp.com/track/click/31165340/help.openai.com?p=eyJzIjoiWkVXQzJubzhpTWduRWRndlpjdUdOam5SSTNBIiwidiI6MSwicCI6IntcInVcIjozMTE2NTM0MCxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL2hlbHAub3BlbmFpLmNvbVwiLFwiaWRcIjpcIjVmMDQ0NzQ4OTUyNzRjYjA4NjM5Y2MzNGU5NDFiZDNhXCIsXCJ1cmxfaWRzXCI6W1wiZTdhNGY4ZGRlNGRmZWMyZmIwNDA3NmZiNjlhZTFmYTFkOWY4ZmQ3M1wiXX0ifQ">Help center</a>.
+				</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </center>
+  <img src="https://mandrillapp.com/track/open.php?u=31165340&amp;id=5f04474895274cb08639cc34e941bd3a" height="1" width="1" alt=""></body>
+</html>
+
+--_av-9FFueJASNMF4a8kVPXdhWQ--
