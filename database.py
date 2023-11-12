@@ -14,7 +14,7 @@ def extract_spf_result(eml_file):
         client_ip = spf_result = dkim_result = None
         if spf_headers:
             last_spf_header = spf_headers[-1]
-            client_ip_match = re.search(r'client-ip=([\d.]+)', last_spf_header)
+            client_ip_match = re.search(r'client-ip=([:\w.]+)', last_spf_header)
             spf_result_match = re.search(r'\b(pass|fail)\b', last_spf_header, re.I)
 
             if client_ip_match:
